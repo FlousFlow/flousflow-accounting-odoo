@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="res_partner_form_flousflow_statements" model="ir.ui.view">
+        <field name="name">res.partner.form.flousflow.statements</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_customer_statement" type="object"
+                        class="oe_stat_button" icon="fa-file-text-o"
+                        string="Customer Statement"
+                        groups="account.group_account_invoice,account.group_account_readonly"
+                        invisible="customer_rank == 0"/>
+                <button name="action_open_vendor_statement" type="object"
+                        class="oe_stat_button" icon="fa-file-text-o"
+                        string="Vendor Statement"
+                        groups="account.group_account_invoice,account.group_account_readonly"
+                        invisible="supplier_rank == 0"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Follow-up configuration -->
+    <record id="flousflow_followup_action" model="ir.actions.act_window">
+        <field name="name">Follow-up Levels</field>
+        <field name="res_model">flousflow.account.followup</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="flousflow_followup_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.followup.form</field>
+        <field name="model">flousflow.account.followup</field>
+        <field name="arch" type="xml">
+            <form string="Follow-up Levels">
+                <sheet>
+                    <group>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="automatic"/>
+                    </group>
+                    <group string="Levels">
+                        <field name="followup_line_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="sequence" readonly="1"/>
+                                <field name="name"/>
+                                <field name="delay"/>
+                                <field name="send_email"/>
+                                <field name="send_letter"/>
+                                <field name="manual_action"/>
+                                <field name="repeat_every_days" optional="show"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flousflow_followup_line_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.followup.line.form</field>
+        <field name="model">flousflow.account.followup.line</field>
+        <field name="arch" type="xml">
+            <form string="Follow-up Level">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="delay"/>
+                            <field name="send_email"/>
+                            <field name="send_letter"/>
+                        </group>
+                        <group>
+                            <field name="manual_action"/>
+                            <field name="manual_action_note"
+                                   invisible="not manual_action"/>
+                            <field name="manual_action_responsible_id"
+                                   invisible="not manual_action"/>
+                            <field name="email_template_id"/>
+                            <field name="repeat_every_days"/>
+                        </group>
+                    </group>
+                    <group string="Printed Message">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Follow-up process wizard -->
+    <record id="flousflow_followup_wizard_action" model="ir.actions.act_window">
+        <field name="name">Run Follow-up</field>
+        <field name="res_model">flousflow.account.followup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="flousflow_followup_wizard_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.followup.wizard.form</field>
+        <field name="model">flousflow.account.followup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Run Follow-up">
+                <group>
+                    <group>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_process" type="object" string="Process"
+                            class="btn-primary"/>
+                    <button name="action_print_letters" type="object"
+                            string="Print Letters"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Follow-up report: partners with overdue -->
+    <record id="flousflow_followup_partner_action" model="ir.actions.act_window">
+        <field name="name">Follow-up Report</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('total_overdue', '!=', 0)]</field>
+    </record>
+
+    <record id="flousflow_followup_partner_view_list" model="ir.ui.view">
+        <field name="name">res.partner.followup.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Follow-up Report">
+                <field name="name"/>
+                <field name="total_overdue"/>
+                <field name="latest_followup_level_id"/>
+                <field name="latest_followup_date"/>
+                <field name="payment_next_action"/>
+                <field name="payment_responsible_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_followup_history_action" model="ir.actions.act_window">
+        <field name="name">Follow-up History</field>
+        <field name="res_model">flousflow.account.followup.history</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <record id="flousflow_followup_history_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.followup.history.list</field>
+        <field name="model">flousflow.account.followup.history</field>
+        <field name="arch" type="xml">
+            <list string="Follow-up History" create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="move_line_id"/>
+                <field name="level_id"/>
+                <field name="email_sent"/>
+                <field name="letter_requested"/>
+                <field name="manual_action_created"/>
+                <field name="user_id"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+</odoo>

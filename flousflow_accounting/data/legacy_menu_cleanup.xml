@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Keep legacy modules and data, hide only duplicate navigation roots. -->
+    <function model="ir.ui.menu" name="_flousflow_hide_legacy_account_roots"/>
+</odoo>

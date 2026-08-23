@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <!-- Asset Model -->
+    <record id="flousflow_asset_category_action" model="ir.actions.act_window">
+        <field name="name">Asset Models</field>
+        <field name="res_model">flousflow.account.asset.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="flousflow_asset_category_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.category.list</field>
+        <field name="model">flousflow.account.asset.category</field>
+        <field name="arch" type="xml">
+            <list string="Asset Models">
+                <field name="name"/>
+                <field name="recognition_type"/>
+                <field name="group_id" optional="show"/>
+                <field name="method"/>
+                <field name="method_number"/>
+                <field name="method_period"/>
+                <field name="journal_id"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_category_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.category.form</field>
+        <field name="model">flousflow.account.asset.category</field>
+        <field name="arch" type="xml">
+            <form string="Asset Model">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Model name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="journal_id"/>
+                            <field name="active"/>
+                            <field name="recognition_type"/>
+                            <field name="group_id" invisible="recognition_type != 'asset'"/>
+                            <field name="auto_create_asset" invisible="recognition_type != 'asset'"/>
+                        </group>
+                        <group>
+                            <field name="method"/>
+                            <field name="method_number" invisible="method == 'degressive'"/>
+                            <field name="method_period"/>
+                            <field name="method_progress_factor" invisible="method != 'degressive'"/>
+                            <field name="prorata"/>
+                            <field name="prorata_computation_type"/>
+                        </group>
+                    </group>
+                    <group string="Accounts">
+                        <group>
+                            <field name="asset_account_id"
+                                   invisible="recognition_type == 'revenue'"
+                                   required="recognition_type in ('asset', 'expense')"/>
+                            <field name="depreciation_account_id"
+                                   invisible="recognition_type != 'asset'"
+                                   required="recognition_type == 'asset'"/>
+                            <field name="expense_account_id"
+                                   invisible="recognition_type == 'revenue'"
+                                   required="recognition_type in ('asset', 'expense')"/>
+                            <field name="deferred_revenue_account_id" invisible="recognition_type != 'revenue'" required="recognition_type == 'revenue'"/>
+                            <field name="revenue_account_id" invisible="recognition_type != 'revenue'" required="recognition_type == 'revenue'"/>
+                            <field name="disposal_loss_account_id" invisible="recognition_type != 'asset'"/>
+                            <field name="disposal_gain_account_id" invisible="recognition_type != 'asset'"/>
+                            <field name="disposal_clearing_account_id" invisible="recognition_type != 'asset'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter>
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+
+    <!-- Asset -->
+    <record id="flousflow_asset_action" model="ir.actions.act_window">
+        <field name="name">Assets</field>
+        <field name="res_model">flousflow.account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('recognition_type', '=', 'asset')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first fixed asset
+            </p>
+        </field>
+    </record>
+
+    <record id="flousflow_deferred_expense_action" model="ir.actions.act_window">
+        <field name="name">Deferred Expenses</field>
+        <field name="res_model">flousflow.account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('recognition_type', '=', 'expense')]</field>
+        <field name="context">{'default_recognition_type': 'expense'}</field>
+    </record>
+
+    <record id="flousflow_deferred_revenue_action" model="ir.actions.act_window">
+        <field name="name">Deferred Revenues</field>
+        <field name="res_model">flousflow.account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('recognition_type', '=', 'revenue')]</field>
+        <field name="context">{'default_recognition_type': 'revenue'}</field>
+    </record>
+
+    <record id="flousflow_asset_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.list</field>
+        <field name="model">flousflow.account.asset</field>
+        <field name="arch" type="xml">
+            <list string="Assets" decoration-danger="state == 'draft'" decoration-success="state == 'close'">
+                <field name="name"/>
+                <field name="code" optional="hide"/>
+                <field name="category_id" string="Model"/>
+                <field name="group_id" optional="show"/>
+                <field name="recognition_type"/>
+                <field name="date"/>
+                <field name="value"/>
+                <field name="value_residual" optional="show"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.form</field>
+        <field name="model">flousflow.account.asset</field>
+        <field name="arch" type="xml">
+            <form string="Asset">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="post_depreciation_lines" type="object"
+                            string="Post Due Entries" class="oe_highlight"
+                            invisible="state != 'open'"/>
+                    <button name="action_pause" type="object" string="Pause"
+                            invisible="state != 'open'"/>
+                    <button name="action_resume" type="object" string="Resume"
+                            class="oe_highlight" invisible="state != 'paused'"/>
+                    <button name="action_close" type="object" string="Close"
+                            invisible="state not in ('open', 'paused')"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            confirm="Posted recognition entries will be reversed. Continue?"
+                            invisible="state == 'cancelled'"/>
+                    <button name="action_open_disposal_wizard" type="object"
+                            string="Dispose" groups="account.group_account_manager"
+                            invisible="state not in ('open', 'paused')"/>
+                    <button name="action_open_modify_wizard" type="object"
+                            string="Modify" groups="account.group_account_manager"
+                            invisible="state not in ('open', 'paused')"/>
+                    <button name="action_reverse_disposal" type="object"
+                            string="Reverse Disposal" groups="account.group_account_manager"
+                            confirm="The disposal entry will be reversed. Continue?"
+                            invisible="not disposal_move_id or disposal_reversal_move_id"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,open,paused,close,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="compute_depreciation_board" type="object"
+                                string="Recompute Board" class="oe_link"
+                                confirm="Recompute the depreciation board?"
+                                invisible="state != 'draft'"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Asset name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="category_id" string="Model"/>
+                            <field name="group_id"/>
+                            <field name="source_move_line_id"/>
+                            <field name="source_move_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="disposal_move_id" readonly="1" invisible="not disposal_move_id"/>
+                            <field name="disposal_reversal_move_id" readonly="1" invisible="not disposal_reversal_move_id"/>
+                            <field name="disposal_source_move_id" readonly="1" invisible="not disposal_source_move_id"/>
+                            <field name="date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                        <group>
+                            <field name="value"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="company_value" readonly="1" groups="base.group_multi_currency"/>
+                            <field name="salvage_value"/>
+                            <field name="value_residual"/>
+                            <field name="method"/>
+                            <field name="method_number" invisible="method == 'degressive'"/>
+                            <field name="method_period"/>
+                            <field name="method_progress_factor" invisible="method != 'degressive'"/>
+                            <field name="prorata"/>
+                            <field name="prorata_computation_type"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"/>
+                        </group>
+                    </group>
+                    <group string="Depreciation Board">
+                        <field name="depreciation_line_ids" nolabel="1">
+                            <list>
+                                <field name="sequence" optional="hide"/>
+                                <field name="date"/>
+                                <field name="amount"/>
+                                <field name="move_id"/>
+                                <field name="reversal_move_id" optional="show"/>
+                                <field name="move_check"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group string="Modification History" invisible="not modification_ids">
+                        <field name="modification_ids" nolabel="1" readonly="1">
+                            <list create="0" edit="0" delete="0">
+                                <field name="date"/>
+                                <field name="reason"/>
+                                <field name="old_salvage_value"/>
+                                <field name="new_salvage_value"/>
+                                <field name="old_remaining_periods"/>
+                                <field name="new_remaining_periods"/>
+                                <field name="user_id"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group string="Disposal History" invisible="not disposal_ids">
+                        <field name="disposal_ids" nolabel="1" readonly="1">
+                            <list create="0" edit="0" delete="0">
+                                <field name="date"/>
+                                <field name="disposal_type"/>
+                                <field name="percentage"/>
+                                <field name="company_gross_value"/>
+                                <field name="company_accumulated_value"/>
+                                <field name="proceeds"/>
+                                <field name="move_id"/>
+                                <field name="reversal_move_id"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <chatter>
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_disposal_wizard_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.disposal.wizard.form</field>
+        <field name="model">flousflow.account.asset.disposal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Dispose Asset">
+                <group>
+                    <field name="asset_id" readonly="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="date"/>
+                    <field name="reason"/>
+                    <field name="disposal_type"/>
+                    <field name="disposal_percentage"/>
+                    <field name="sale_move_line_id" invisible="disposal_type != 'sale'"
+                           required="disposal_type == 'sale'"/>
+                </group>
+                <footer>
+                    <button name="action_dispose" type="object" string="Dispose"
+                            class="btn-primary" confirm="Post the asset disposal entry?"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_modify_wizard_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.modify.wizard.form</field>
+        <field name="model">flousflow.account.asset.modify.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Modify Asset">
+                <group>
+                    <field name="asset_id" readonly="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="date"/>
+                    <field name="remaining_periods"/>
+                    <field name="new_salvage_value"/>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="action_modify" type="object" string="Modify"
+                            class="btn-primary" confirm="Rebuild future depreciation lines?"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Asset depreciation line views -->
+    <record id="flousflow_asset_dep_line_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.depreciation.line.list</field>
+        <field name="model">flousflow.account.asset.depreciation.line</field>
+        <field name="arch" type="xml">
+            <list string="Depreciation Lines">
+                <field name="asset_id"/>
+                <field name="sequence"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="move_id" optional="show"/>
+                <field name="reversal_move_id" optional="show"/>
+                <field name="move_check"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_dep_line_view_pivot" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.depreciation.line.pivot</field>
+        <field name="model">flousflow.account.asset.depreciation.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Depreciation Schedule">
+                <field name="asset_id" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_dep_line_action" model="ir.actions.act_window">
+        <field name="name">Depreciation Schedule</field>
+        <field name="res_model">flousflow.account.asset.depreciation.line</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="context">{'search_default_group_by_asset': 1}</field>
+    </record>
+
+    <record id="flousflow_asset_group_action" model="ir.actions.act_window">
+        <field name="name">Asset Groups</field>
+        <field name="res_model">flousflow.account.asset.group</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="flousflow_asset_group_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.group.list</field>
+        <field name="model">flousflow.account.asset.group</field>
+        <field name="arch" type="xml">
+            <list string="Asset Groups">
+                <field name="complete_name"/>
+                <field name="parent_id" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_group_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.group.form</field>
+        <field name="model">flousflow.account.asset.group</field>
+        <field name="arch" type="xml">
+            <form string="Asset Group">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="parent_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

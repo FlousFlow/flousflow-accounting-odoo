@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting - internal paired transfers -->
+<odoo>
+    <record id="flousflow_view_account_payment_form_inherit_transfer" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.transfer</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_type']" position="after">
+                <field name="is_internal_transfer" readonly="state != 'draft'"/>
+                <field name="destination_journal_id"
+                       invisible="not is_internal_transfer"
+                       required="is_internal_transfer"
+                       readonly="state != 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
+                <attribute name="invisible">partner_type != 'customer' or is_internal_transfer</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
+                <attribute name="invisible">partner_type != 'supplier' or is_internal_transfer</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="flousflow_account_journal_dashboard_kanban_view_inherit" model="ir.ui.view">
+        <field name="name">account.journal.dashboard.kanban.inherit</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='bank_customer_payment']" position="after">
+                <div name="bank_internal_transfer" t-if="journal_type == 'bank' or journal_type == 'cash'">
+                    <a role="menuitem" type="object" name="create_internal_transfer">Internal Transfer</a>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="flousflow_action_account_payments_transfer" model="ir.actions.act_window">
+        <field name="name">Internal Transfers</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,kanban,form,graph</field>
+        <field name="context">{'default_payment_type': 'outbound', 'default_is_internal_transfer': True}</field>
+        <field name="domain">[('is_internal_transfer', '=', True)]</field>
+    </record>
+
+    <menuitem id="flousflow_menu_account_payments_transfer"
+              name="Internal Transfers"
+              parent="account.menu_finance_entries"
+              action="flousflow_action_account_payments_transfer"
+              sequence="20"
+              groups="account.group_account_readonly"/>
+</odoo>

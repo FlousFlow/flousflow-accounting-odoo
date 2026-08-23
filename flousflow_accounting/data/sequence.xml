@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="seq_flousflow_payment_batch" model="ir.sequence">
+        <field name="name">Payment Batch</field>
+        <field name="code">flousflow.account.payment.batch</field>
+        <field name="prefix">PAYB/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="sequence_flousflow_tax_return" model="ir.sequence">
+        <field name="name">Tax Return Review</field>
+        <field name="code">flousflow.account.tax.return</field>
+        <field name="prefix">TAX/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_flousflow_account_period_close" model="ir.sequence">
+        <field name="name">Accounting Period Close</field>
+        <field name="code">flousflow.account.period.close</field>
+        <field name="prefix">CLOSE/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_flousflow_account_recurring" model="ir.sequence">
+        <field name="name">FlousFlow Recurring Payment</field>
+        <field name="code">flousflow.account.recurring</field>
+        <field name="prefix">REC/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_flousflow_account_loan" model="ir.sequence">
+        <field name="name">Accounting Loan</field>
+        <field name="code">flousflow.account.loan</field>
+        <field name="prefix">LOAN/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_flousflow_account_working_file" model="ir.sequence">
+        <field name="name">Accounting Working File</field>
+        <field name="code">flousflow.account.working.file</field>
+        <field name="prefix">AWF/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

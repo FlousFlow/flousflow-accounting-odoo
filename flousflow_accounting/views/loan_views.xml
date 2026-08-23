@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="flousflow_loan_list_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.list</field>
+        <field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'closed'" decoration-muted="state == 'cancelled'">
+                <field name="name"/><field name="description"/><field name="lender_id"/>
+                <field name="principal_amount" sum="Principal"/><field name="total_interest" sum="Interest"/>
+                <field name="outstanding_principal" sum="Outstanding"/><field name="currency_id" optional="hide"/>
+                <field name="start_date"/><field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="flousflow_loan_form_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.form</field>
+        <field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml">
+            <form string="Loan">
+                <header>
+                    <button name="action_generate_schedule" type="object" string="Generate Schedule" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Confirm &amp; Receive" class="btn-primary" invisible="state != 'draft'" groups="account.group_account_manager"/>
+                    <button name="action_close" type="object" string="Close" invisible="state != 'running'" groups="account.group_account_manager"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state not in ('draft', 'running')" groups="account.group_account_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,closed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(account.action_move_journal_line)d" type="action" class="oe_stat_button" icon="fa-book" invisible="not disbursement_move_id" context="{'search_default_id': disbursement_move_id}">
+                            <field name="disbursement_move_id" string="Disbursement" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1><h2><field name="description" placeholder="Loan purpose"/></h2></div>
+                    <group>
+                        <group>
+                            <field name="lender_id"/><field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id"/><field name="principal_amount"/>
+                            <field name="annual_interest_rate"/><field name="computation_method"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/><field name="first_payment_date"/>
+                            <field name="installment_count"/><field name="payment_frequency"/>
+                            <field name="paid_installments" readonly="1"/><field name="outstanding_principal" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Amortization Schedule">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" decoration-success="state == 'posted'" decoration-muted="state == 'reversed'">
+                                    <field name="sequence"/><field name="date"/><field name="opening_balance"/>
+                                    <field name="principal_amount" sum="Principal"/><field name="interest_amount" sum="Interest"/>
+                                    <field name="payment_amount" sum="Payment"/><field name="closing_balance"/>
+                                    <field name="state" widget="badge"/><field name="move_id" optional="show"/>
+                                    <button name="action_post" type="object" string="Post" icon="fa-check" invisible="state != 'draft' or parent.state != 'running'" groups="account.group_account_user"/>
+                                    <button name="action_reverse" type="object" string="Reverse" icon="fa-undo" invisible="state != 'posted'" groups="account.group_account_manager"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Accounting">
+                            <group><group><field name="journal_id"/><field name="cash_account_id"/></group>
+                            <group><field name="liability_account_id"/><field name="interest_account_id"/></group></group>
+                            <field name="analytic_distribution" widget="analytic_distribution"/>
+                        </page>
+                        <page string="Totals"><group><field name="total_interest" readonly="1"/><field name="total_payable" readonly="1"/></group></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="flousflow_loan_search_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.search</field><field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml"><search><field name="name"/><field name="description"/><field name="lender_id"/>
+            <filter name="running" string="Running" domain="[('state','=','running')]"/>
+            <filter name="closed" string="Closed" domain="[('state','=','closed')]"/>
+            <separator/>
+            <filter name="group_lender" string="Lender" context="{'group_by':'lender_id'}"/><filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+        </search></field>
+    </record>
+    <record id="flousflow_loan_pivot_view" model="ir.ui.view"><field name="name">flousflow.account.loan.pivot</field><field name="model">flousflow.account.loan</field><field name="arch" type="xml"><pivot string="Loan Analysis"><field name="lender_id" type="row"/><field name="state" type="col"/><field name="principal_amount" type="measure"/><field name="total_interest" type="measure"/><field name="outstanding_principal" type="measure"/></pivot></field></record>
+    <record id="flousflow_loan_graph_view" model="ir.ui.view"><field name="name">flousflow.account.loan.graph</field><field name="model">flousflow.account.loan</field><field name="arch" type="xml"><graph string="Loan Analysis"><field name="lender_id"/><field name="outstanding_principal" type="measure"/></graph></field></record>
+    <record id="flousflow_loan_action" model="ir.actions.act_window"><field name="name">Loans</field><field name="res_model">flousflow.account.loan</field><field name="view_mode">list,form,pivot,graph</field><field name="search_view_id" ref="flousflow_loan_search_view"/></record>
+</odoo>

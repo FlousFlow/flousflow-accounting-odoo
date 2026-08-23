@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="res_config_settings_view_form_accounting_icon" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.accounting.icon</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='account']" position="attributes">
+                <attribute name="logo">/flousflow_accounting/static/description/accounting_icon_v2.png</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

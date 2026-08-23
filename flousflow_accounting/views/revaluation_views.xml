@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="flousflow_revaluation_action" model="ir.actions.act_window">
+        <field name="name">Revaluate Currencies</field>
+        <field name="res_model">flousflow.account.revaluation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="flousflow_revaluation_wizard_form" model="ir.ui.view">
+        <field name="name">flousflow.account.revaluation.wizard.form</field>
+        <field name="model">flousflow.account.revaluation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Revaluate Currencies">
+                <group>
+                    <group>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="currency_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="journal_id" options="{'no_create': True}"/>
+                        <field name="mode"/>
+                        <field name="reversal_date"
+                               invisible="mode != 'adjustment'"/>
+                    </group>
+                </group>
+                <field name="line_ids" colspan="2" nolabel="1">
+                    <list string="Lines" editable="bottom">
+                        <field name="account_id" options="{'no_create': True}"/>
+                        <field name="partner_id" options="{'no_create': True}"/>
+                        <field name="currency_id"/>
+                        <field name="amount_residual_currency" string="Residual"/>
+                        <field name="currency_rate"/>
+                        <field name="adjustment_amount" string="Adjustment"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_revaluate" type="object" string="Revaluate"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

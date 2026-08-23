@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="flousflow_dashboard_action" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">flousflow.account.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <record id="flousflow_dashboard_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.dashboard.form</field>
+        <field name="model">flousflow.account.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Dashboard" create="false" edit="false">
+                <header>
+                    <button name="action_refresh" type="object" string="Refresh"
+                            class="btn-primary"/>
+                    <field name="company_id" options="{'no_create': True}"/>
+                </header>
+                <sheet>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="text-muted">Bank &amp; Cash</div>
+                                    <h3 class="mb-0"><field name="total_bank"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="text-muted">Receivable</div>
+                                    <h3 class="mb-0"><field name="total_receivable"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="text-muted">Payable</div>
+                                    <h3 class="mb-0"><field name="total_payable"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-muted">Income (YTD)</div>
+                                    <h3 class="mb-0 text-success"><field name="total_income"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-muted">Expenses (YTD)</div>
+                                    <h3 class="mb-0 text-danger"><field name="total_expense"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-muted">Net Profit (YTD)</div>
+                                    <h3 class="mb-0"><field name="net_profit"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-muted">Open Invoices</div>
+                                    <h3 class="mb-0"><field name="open_invoices_count"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-muted">Open Bills</div>
+                                    <h3 class="mb-0"><field name="open_bills_count"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-muted">Overdue Invoices</div>
+                                    <h3 class="mb-0 text-warning"><field name="overdue_invoices_count"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <!-- ===================== Profit & Loss ===================== -->
+    <record id="template_profit_loss" model="flousflow.account.report.template">
+        <field name="name">Profit &amp; Loss</field>
+        <field name="code">profit_loss</field>
+    </record>
+
+    <record id="pl_revenue" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="name">Revenue</field>
+        <field name="code">revenue</field>
+        <field name="sequence">10</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="pl_operating_revenue" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_revenue"/>
+        <field name="name">Operating Revenue</field>
+        <field name="code">operating_revenue</field>
+        <field name="account_types">income</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">11</field>
+    </record>
+    <record id="pl_other_revenue" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_revenue"/>
+        <field name="name">Other Revenue</field>
+        <field name="code">other_revenue</field>
+        <field name="account_types">income_other</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">12</field>
+    </record>
+    <record id="pl_total_revenue" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_revenue"/>
+        <field name="name">Total Revenue</field>
+        <field name="code">total_revenue</field>
+        <field name="formula">operating_revenue +other_revenue</field>
+        <field name="sequence">13</field>
+    </record>
+
+    <record id="pl_expenses" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="name">Expenses</field>
+        <field name="code">expenses</field>
+        <field name="sequence">20</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="pl_cost_of_revenue" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_expenses"/>
+        <field name="name">Cost of Revenue</field>
+        <field name="code">cost_of_revenue</field>
+        <field name="account_types">expense_direct_cost</field>
+        <field name="sequence">21</field>
+    </record>
+    <record id="pl_operating_expenses" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_expenses"/>
+        <field name="name">Operating Expenses</field>
+        <field name="code">operating_expenses</field>
+        <field name="account_types">expense</field>
+        <field name="sequence">22</field>
+    </record>
+    <record id="pl_depreciation" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_expenses"/>
+        <field name="name">Depreciation &amp; Amortization</field>
+        <field name="code">depreciation</field>
+        <field name="account_types">expense_depreciation</field>
+        <field name="sequence">23</field>
+    </record>
+    <record id="pl_other_expenses" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_expenses"/>
+        <field name="name">Other Expenses</field>
+        <field name="code">other_expenses</field>
+        <field name="account_types">expense_other</field>
+        <field name="sequence">24</field>
+    </record>
+    <record id="pl_total_expenses" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="parent_id" ref="pl_expenses"/>
+        <field name="name">Total Expenses</field>
+        <field name="code">total_expenses</field>
+        <field name="formula">cost_of_revenue +operating_expenses +depreciation +other_expenses</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <record id="pl_net_profit" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_profit_loss"/>
+        <field name="name">Net Profit</field>
+        <field name="code">net_profit</field>
+        <field name="formula">total_revenue -total_expenses</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <!-- ===================== Balance Sheet ===================== -->
+    <record id="template_balance_sheet" model="flousflow.account.report.template">
+        <field name="name">Balance Sheet</field>
+        <field name="code">balance_sheet</field>
+    </record>
+
+    <record id="bs_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="name">Assets</field>
+        <field name="code">assets</field>
+        <field name="sequence">10</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="bs_current_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_assets"/>
+        <field name="name">Current Assets</field>
+        <field name="code">current_assets</field>
+        <field name="sequence">11</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="bs_bank_cash" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_assets"/>
+        <field name="name">Bank &amp; Cash</field>
+        <field name="code">bank_cash</field>
+        <field name="account_types">asset_cash</field>
+        <field name="sequence">12</field>
+    </record>
+    <record id="bs_receivables" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_assets"/>
+        <field name="name">Receivables</field>
+        <field name="code">receivables</field>
+        <field name="account_types">asset_receivable</field>
+        <field name="sequence">13</field>
+    </record>
+    <record id="bs_current_assets_other" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_assets"/>
+        <field name="name">Current Assets</field>
+        <field name="code">current_assets_other</field>
+        <field name="account_types">asset_current</field>
+        <field name="sequence">14</field>
+    </record>
+    <record id="bs_prepayments" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_assets"/>
+        <field name="name">Prepayments</field>
+        <field name="code">prepayments</field>
+        <field name="account_types">asset_prepayments</field>
+        <field name="sequence">15</field>
+    </record>
+    <record id="bs_total_current_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_assets"/>
+        <field name="name">Total Current Assets</field>
+        <field name="code">total_current_assets</field>
+        <field name="formula">bank_cash +receivables +current_assets_other +prepayments</field>
+        <field name="sequence">16</field>
+    </record>
+
+    <record id="bs_fixed_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_assets"/>
+        <field name="name">Fixed Assets</field>
+        <field name="code">fixed_assets</field>
+        <field name="sequence">17</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="bs_fixed_assets_other" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_fixed_assets"/>
+        <field name="name">Fixed Assets</field>
+        <field name="code">fixed_assets_other</field>
+        <field name="account_types">asset_fixed</field>
+        <field name="sequence">18</field>
+    </record>
+    <record id="bs_non_current_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_fixed_assets"/>
+        <field name="name">Non-current Assets</field>
+        <field name="code">non_current_assets</field>
+        <field name="account_types">asset_non_current</field>
+        <field name="sequence">19</field>
+    </record>
+    <record id="bs_total_fixed_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_fixed_assets"/>
+        <field name="name">Total Fixed Assets</field>
+        <field name="code">total_fixed_assets</field>
+        <field name="formula">fixed_assets_other +non_current_assets</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="bs_total_assets" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_assets"/>
+        <field name="name">Total Assets</field>
+        <field name="code">total_assets</field>
+        <field name="formula">total_current_assets +total_fixed_assets</field>
+        <field name="sequence">21</field>
+    </record>
+
+    <record id="bs_liabilities" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="name">Liabilities</field>
+        <field name="code">liabilities</field>
+        <field name="sequence">30</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="bs_current_liabilities" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_liabilities"/>
+        <field name="name">Current Liabilities</field>
+        <field name="code">current_liabilities</field>
+        <field name="sequence">31</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="bs_payables" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_liabilities"/>
+        <field name="name">Payables</field>
+        <field name="code">payables</field>
+        <field name="account_types">liability_payable</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">32</field>
+    </record>
+    <record id="bs_credit_cards" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_liabilities"/>
+        <field name="name">Credit Cards</field>
+        <field name="code">credit_cards</field>
+        <field name="account_types">liability_credit_card</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">33</field>
+    </record>
+    <record id="bs_current_liabilities_other" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_liabilities"/>
+        <field name="name">Current Liabilities</field>
+        <field name="code">current_liabilities_other</field>
+        <field name="account_types">liability_current</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">34</field>
+    </record>
+    <record id="bs_total_current_liabilities" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_current_liabilities"/>
+        <field name="name">Total Current Liabilities</field>
+        <field name="code">total_current_liabilities</field>
+        <field name="formula">payables +credit_cards +current_liabilities_other</field>
+        <field name="sequence">35</field>
+    </record>
+    <record id="bs_non_current_liabilities" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_liabilities"/>
+        <field name="name">Non-current Liabilities</field>
+        <field name="code">non_current_liabilities</field>
+        <field name="account_types">liability_non_current</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">36</field>
+    </record>
+    <record id="bs_total_liabilities" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_liabilities"/>
+        <field name="name">Total Liabilities</field>
+        <field name="code">total_liabilities</field>
+        <field name="formula">total_current_liabilities +non_current_liabilities</field>
+        <field name="sequence">37</field>
+    </record>
+
+    <record id="bs_equity" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="name">Equity</field>
+        <field name="code">equity_section</field>
+        <field name="sequence">40</field>
+        <field name="is_section" eval="True"/>
+    </record>
+    <record id="bs_equity_accounts" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_equity"/>
+        <field name="name">Equity</field>
+        <field name="code">equity</field>
+        <field name="account_types">equity</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">41</field>
+    </record>
+    <record id="bs_current_year_earnings" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_equity"/>
+        <field name="name">Retained Earnings</field>
+        <field name="code">retained_earnings</field>
+        <field name="account_types">equity_unaffected</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">42</field>
+    </record>
+    <record id="bs_current_year_income" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_equity"/>
+        <field name="name">Current Year Income</field>
+        <field name="code">current_year_income</field>
+        <field name="account_types">income,income_other</field>
+        <field name="sign">reversed</field>
+        <field name="date_scope">fiscal_year</field>
+        <field name="hide_in_report" eval="True"/>
+        <field name="sequence">43</field>
+    </record>
+    <record id="bs_current_year_expenses" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_equity"/>
+        <field name="name">Current Year Expenses</field>
+        <field name="code">current_year_expenses</field>
+        <field name="account_types">expense,expense_depreciation,expense_direct_cost,expense_other</field>
+        <field name="date_scope">fiscal_year</field>
+        <field name="hide_in_report" eval="True"/>
+        <field name="sequence">44</field>
+    </record>
+    <record id="bs_current_fiscal_year_earnings" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_equity"/>
+        <field name="name">Current Year Earnings</field>
+        <field name="code">current_year_earnings</field>
+        <field name="formula">current_year_income -current_year_expenses</field>
+        <field name="sequence">45</field>
+    </record>
+    <record id="bs_total_equity" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_equity"/>
+        <field name="name">Total Equity</field>
+        <field name="code">total_equity</field>
+        <field name="formula">equity +retained_earnings +current_year_earnings</field>
+        <field name="sequence">46</field>
+    </record>
+
+    <record id="bs_unallocated_profit_loss" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="name">Unallocated Profit / Loss</field>
+        <field name="code">unallocated_profit_loss</field>
+        <field name="formula">total_assets -total_liabilities -total_equity</field>
+        <field name="sequence">50</field>
+    </record>
+</odoo>

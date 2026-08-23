@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="flousflow_followup_email_template" model="mail.template">
+        <field name="name">Follow-up Reminder</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="subject">Payment reminder</field>
+        <field name="email_from">{{ (user.email_formatted or '') }}</field>
+        <field name="email_to">{{ object.email_formatted }}</field>
+        <field name="lang">{{ object.lang }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Dear ${object.name},</p>
+                <p>Our records show an overdue balance on your account.
+                Please settle it at your earliest convenience.</p>
+                <p>If your payment has already been sent, please ignore this reminder.</p>
+                <p>Best regards,</p>
+            </div>
+        </field>
+    </record>
+</odoo>

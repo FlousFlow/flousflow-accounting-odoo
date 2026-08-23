@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="flousflow_account_report_preset_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.report.preset.list</field>
+        <field name="model">flousflow.account.report.preset</field>
+        <field name="arch" type="xml">
+            <list string="Saved Report Filters">
+                <field name="name"/>
+                <field name="report_type"/>
+                <field name="company_id"/>
+                <field name="date_filter"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="comparison_mode"/>
+                <field name="target_move"/>
+                <field name="display_mode"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_account_report_preset_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.report.preset.form</field>
+        <field name="model">flousflow.account.report.preset</field>
+        <field name="arch" type="xml">
+            <form string="Saved Report Filter">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Filter name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Scope">
+                            <field name="user_id" readonly="1"/>
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="report_type"/>
+                            <field name="display_mode"/>
+                        </group>
+                        <group string="Period and Entries">
+                            <field name="date_filter"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="comparison_mode"/>
+                            <field name="target_move"/>
+                        </group>
+                    </group>
+                    <group string="Optional Filters" col="2">
+                        <field name="journal_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <field name="account_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <field name="partner_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flousflow_account_report_preset_action" model="ir.actions.act_window">
+        <field name="name">Saved Report Filters</field>
+        <field name="res_model">flousflow.account.report.preset</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('flousflow_account_report_preset_view_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('flousflow_account_report_preset_view_form')})
+        ]"/>
+        <field name="context">{'default_user_id': uid}</field>
+    </record>
+</odoo>

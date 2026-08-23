@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="flousflow_tax_return_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.tax.return.list</field><field name="model">flousflow.account.tax.return</field>
+        <field name="arch" type="xml"><list decoration-success="state == 'closed'" decoration-warning="state == 'review'"><field name="name"/><field name="company_id" groups="base.group_multi_company"/><field name="fiscal_country_id"/><field name="date_from"/><field name="date_to"/><field name="reviewer_id"/><field name="total_amount"/><field name="draft_tax_move_count"/><field name="state" widget="badge"/></list></field>
+    </record>
+    <record id="flousflow_tax_return_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.tax.return.form</field><field name="model">flousflow.account.tax.return</field>
+        <field name="arch" type="xml">
+            <form string="Tax Return Review"><header>
+                <button name="action_prepare" type="object" string="Prepare from Tax Grids" class="btn-primary" invisible="state != 'draft'"/>
+                <button name="action_submit" type="object" string="Submit for Review" class="btn-primary" invisible="state != 'draft'"/>
+                <button name="action_approve" type="object" string="Approve" class="btn-primary" groups="account.group_account_manager" invisible="state != 'review'"/>
+                <button name="action_close" type="object" string="Close Tax Period" class="btn-primary" groups="account.group_account_manager" invisible="state != 'approved'" confirm="This applies the standard tax lock date. Continue?"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,closed"/>
+            </header><sheet>
+                <div class="oe_title"><label for="name"/><h1><field name="name" readonly="state != 'draft'"/></h1></div>
+                <group><group><field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/><field name="fiscal_country_id"/><field name="date_from" readonly="state != 'draft'"/><field name="date_to" readonly="state != 'draft'"/></group><group><field name="responsible_id"/><field name="reviewer_id" readonly="state != 'draft'"/><field name="draft_tax_move_count"/><field name="total_amount"/></group></group>
+                <notebook><page string="Localization Tax Grids"><field name="line_ids" readonly="1"><list><field name="tag_id"/><field name="amount" sum="Total"/></list></field></page>
+                <page string="Evidence &amp; Review"><field name="working_file_ids" widget="many2many_tags" readonly="state == 'closed'"/><field name="notes" placeholder="Review evidence, reconciliations and filing reference..." readonly="state == 'closed'"/><group invisible="state not in ('approved', 'closed')"><field name="approved_by_id"/><field name="approved_date"/><field name="closed_by_id" invisible="not closed_by_id"/><field name="closed_date" invisible="not closed_date"/></group></page></notebook>
+            </sheet><chatter/></form>
+        </field>
+    </record>
+    <record id="flousflow_tax_return_action" model="ir.actions.act_window"><field name="name">Tax Return Reviews</field><field name="res_model">flousflow.account.tax.return</field><field name="view_mode">list,form</field></record>
+</odoo>

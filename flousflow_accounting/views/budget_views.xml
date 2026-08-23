@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="flousflow_budget_action" model="ir.actions.act_window">
+        <field name="name">Budgets</field>
+        <field name="res_model">flousflow.account.budget</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first budget
+            </p>
+        </field>
+    </record>
+
+    <record id="flousflow_budget_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.budget.list</field>
+        <field name="model">flousflow.account.budget</field>
+        <field name="arch" type="xml">
+            <list string="Budgets">
+                <field name="name"/>
+                <field name="user_id" optional="hide"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_budget_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.budget.form</field>
+        <field name="model">flousflow.account.budget</field>
+        <field name="arch" type="xml">
+            <form string="Budget">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,validate,done"/>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            invisible="state != 'draft'"/>
+                    <button name="action_validate" type="object" string="Validate"
+                            invisible="state != 'confirm'"/>
+                    <button name="action_done" type="object" string="Mark as Done"
+                            invisible="state != 'validate'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('done','cancel')"/>
+                    <button name="action_draft" type="object" string="Reset to Draft"
+                            invisible="state not in ('confirm','cancel')"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Budget name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group string="Budget Lines">
+                        <field name="line_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="account_ids" widget="many2many_tags"/>
+                                <field name="analytic_account_ids" widget="many2many_tags"
+                                       optional="show"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="planned_amount"/>
+                                <field name="practical_amount" sum="Total Actual"/>
+                                <field name="theoretical_amount" sum="Total Theoretical"/>
+                                <field name="percentage"/>
+                                <field name="is_above_budget" widget="boolean_toggle" readonly="1"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <chatter>
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+</odoo>

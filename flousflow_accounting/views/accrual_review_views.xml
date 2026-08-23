@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="flousflow_accrual_review_form_view" model="ir.ui.view">
+        <field name="name">flousflow.account.accrual.review.form</field>
+        <field name="model">flousflow.account.accrual.review</field>
+        <field name="arch" type="xml">
+            <form string="Accrual Review">
+                <header><button name="action_generate" type="object" string="Generate" class="btn-primary"/></header>
+                <group><field name="company_id" groups="base.group_multi_company"/><field name="review_type"/><field name="date_to"/><field name="total_amount" readonly="1"/></group>
+                <field name="line_ids" nolabel="1">
+                    <list><field name="document_name"/><field name="partner_id"/><field name="product_id"/><field name="logistics_quantity"/><field name="invoiced_quantity"/><field name="pending_quantity"/><field name="amount" sum="Accrual Amount"/><button name="action_open_source" type="object" icon="fa-external-link" title="Open Source"/></list>
+                </field>
+            </form>
+        </field>
+    </record>
+    <record id="flousflow_accrual_review_action" model="ir.actions.act_window"><field name="name">Accrual Review</field><field name="res_model">flousflow.account.accrual.review</field><field name="view_mode">form</field><field name="target">new</field></record>
+</odoo>

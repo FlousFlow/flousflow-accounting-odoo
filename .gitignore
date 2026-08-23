@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+
+# Odoo
+*.db
+*.sqlite3
+odoo.log
+filestore/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Test / temp
+.coverage
+htmlcov/
+.pytest_cache/

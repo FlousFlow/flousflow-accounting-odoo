@@ -1,0 +1,3 @@
+"id","name","country_id","auto_apply","sequence"
+"flous_template_domestic_fiscal_position","Domestic","","True",10
+"flous_template_export_fiscal_position","Foreign Trade","","True",20

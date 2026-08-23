@@ -1,0 +1,3 @@
+id,name,country_id,tax_payable_account_id,tax_receivable_account_id
+flous_tax_group_15,Tax 15%,base.us,flous_tax_payable,flous_tax_receivable
+flous_tax_group_0,Tax 0%,base.us,flous_tax_payable,flous_tax_receivable

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <!-- Financial report wizard -->
+    <record id="flousflow_account_report_action" model="ir.actions.act_window">
+        <field name="name">Financial Reports</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Dedicated partner statement experience. It intentionally uses the
+         standard Odoo form/list building blocks so it remains Community-safe. -->
+    <record id="flousflow_partner_statement_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.report.partner.statement.form</field>
+        <field name="model">flousflow.account.report</field>
+        <field name="arch" type="xml">
+            <form string="Partner Statement" create="0" delete="0">
+                <header>
+                    <button name="action_generate" string="Refresh" type="object"
+                            class="btn-primary" icon="fa-refresh"/>
+                    <button name="action_print" string="PDF" type="object"
+                            icon="fa-file-pdf-o" invisible="not line_ids"/>
+                    <button name="action_export_xlsx" string="XLSX" type="object"
+                            icon="fa-file-excel-o" invisible="not line_ids"/>
+                    <button name="action_open_all_entries" string="Journal Items"
+                            type="object" icon="fa-list" invisible="not line_ids"/>
+                    <button name="action_apply_preset" string="Apply Filter"
+                            type="object" icon="fa-folder-open-o"/>
+                    <button name="action_save_preset" string="Save Filter"
+                            type="object" icon="fa-save"/>
+                    <button name="action_unfold_all" string="Unfold All" type="object"
+                            icon="fa-plus-square-o" invisible="display_mode == 'expanded'"/>
+                    <button name="action_fold_all" string="Fold All" type="object"
+                            icon="fa-minus-square-o" invisible="display_mode == 'collapsed'"/>
+                </header>
+                <sheet>
+                    <field name="currency_id" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="report_type" nolabel="1" readonly="1"/></h1>
+                        <h3 class="text-muted">
+                            <field name="company_id" nolabel="1" readonly="1"/>
+                        </h3>
+                    </div>
+
+                    <group string="Statement Options" col="4">
+                        <field name="partner_ids" widget="many2many_tags"
+                               required="1" options="{'no_create': True}"/>
+                        <field name="date_filter"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="comparison_mode"/>
+                        <field name="target_move"/>
+                        <field name="display_mode"/>
+                        <field name="journal_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <field name="account_ids" widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                    </group>
+
+                    <group string="Saved Filters" col="4">
+                        <field name="preset_id" options="{'no_create': True}"/>
+                        <field name="preset_name"/>
+                    </group>
+                    <group string="Report Notes">
+                        <field name="report_note" placeholder="Review conclusion, assumptions, or internal explanation..."/>
+                    </group>
+
+                    <separator string="Transactions"/>
+                    <field name="visible_line_ids" nolabel="1" readonly="1">
+                        <list create="0" edit="0" delete="0"
+                              decoration-bf="is_section"
+                              decoration-muted="is_section">
+                            <field name="date"/>
+                            <field name="move_name" string="Entry"/>
+                            <field name="reference" optional="show"/>
+                            <field name="maturity_date" optional="hide"/>
+                            <field name="account_id"/>
+                            <field name="name" string="Description"/>
+                            <field name="journal_id" optional="hide"/>
+                            <field name="debit" sum="Total Debit"/>
+                            <field name="credit" sum="Total Credit"/>
+                            <field name="running_balance" string="Balance"/>
+                            <button name="action_open_move" type="object"
+                                    icon="fa-external-link"
+                                    title="Open Journal Entry" invisible="not move_id"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="flousflow_account_report_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.report.form</field>
+        <field name="model">flousflow.account.report</field>
+        <field name="arch" type="xml">
+            <form string="Financial Report" create="0" delete="0">
+                <header>
+                    <button name="action_generate" string="Generate" type="object"
+                            class="btn-primary"/>
+                    <button name="action_print" string="Print PDF" type="object"
+                            invisible="not line_ids"/>
+                    <button name="action_export_xlsx" string="Export XLSX" type="object"
+                            invisible="not line_ids"/>
+                    <button name="action_open_all_entries" string="Journal Items" type="object"
+                            invisible="not line_ids"/>
+                    <button name="action_apply_preset" string="Apply Filter"
+                            type="object" icon="fa-folder-open-o"/>
+                    <button name="action_save_preset" string="Save Filter"
+                            type="object" icon="fa-save"/>
+                    <button name="action_unfold_all" string="Unfold All" type="object"
+                            icon="fa-plus-square-o" invisible="display_mode == 'expanded'"/>
+                    <button name="action_fold_all" string="Fold All" type="object"
+                            icon="fa-minus-square-o" invisible="display_mode == 'collapsed'"/>
+                </header>
+                <sheet>
+                <div class="oe_title">
+                    <h1><field name="report_type" nolabel="1"/></h1>
+                </div>
+                <group string="Report Options">
+                    <group>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="date_filter"/>
+                        <field name="comparison_mode"/>
+                        <field name="target_move"/>
+                        <field name="display_mode"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="journal_ids" widget="many2many_tags"/>
+                        <field name="account_ids" widget="many2many_tags"
+                               invisible="report_type == 'cash_flow'"/>
+                        <field name="partner_ids" widget="many2many_tags"
+                               invisible="report_type == 'cash_flow'"/>
+                    </group>
+                </group>
+                <group string="Saved Filters" col="4">
+                    <field name="preset_id" options="{'no_create': True}"/>
+                    <field name="preset_name"/>
+                </group>
+                <group string="Report Notes">
+                    <field name="report_note" placeholder="Review conclusion, assumptions, or internal explanation..."/>
+                </group>
+                <field name="visible_line_ids" nolabel="1">
+                    <list create="0" edit="0" delete="0"
+                          decoration-bf="is_total"
+                          decoration-muted="is_section">
+                        <field name="date" optional="show"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="move_name" optional="show"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="name"/>
+                        <field name="code" optional="hide"
+                               column_invisible="parent.report_type not in ('profit_loss','balance_sheet','cash_flow','trial_balance','general_ledger','journal_audit')"/>
+                        <field name="journal_id" optional="show"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','journal_audit','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="account_id" optional="show"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="partner_id" optional="show"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="reference" optional="show"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="maturity_date" optional="hide"
+                               column_invisible="parent.report_type not in ('partner_ledger','customer_statement','vendor_statement')"/>
+                        <field name="tax_id" optional="show"
+                               column_invisible="parent.report_type != 'tax_report'"/>
+                        <field name="tax_base_amount" sum="Total Tax Base"
+                               column_invisible="parent.report_type != 'tax_report'"/>
+                        <field name="debit" sum="Total Debit"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','trial_balance','journal_audit','tax_report','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="credit" sum="Total Credit"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','trial_balance','journal_audit','tax_report','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="opening_balance" sum="Total Opening"
+                               column_invisible="parent.report_type != 'trial_balance'"/>
+                        <field name="balance" sum="Total Balance"
+                               column_invisible="parent.report_type in ('aged_receivable','aged_payable')"/>
+                        <field name="closing_balance" sum="Total Closing"
+                               column_invisible="parent.report_type != 'trial_balance'"/>
+                        <field name="bucket_current" sum="Total Current"
+                               column_invisible="parent.report_type not in ('aged_receivable','aged_payable')"/>
+                        <field name="bucket_1_30" sum="Total 1-30"
+                               column_invisible="parent.report_type not in ('aged_receivable','aged_payable')"/>
+                        <field name="bucket_31_60" sum="Total 31-60"
+                               column_invisible="parent.report_type not in ('aged_receivable','aged_payable')"/>
+                        <field name="bucket_61_90" sum="Total 61-90"
+                               column_invisible="parent.report_type not in ('aged_receivable','aged_payable')"/>
+                        <field name="bucket_90_plus" sum="Total 90+"
+                               column_invisible="parent.report_type not in ('aged_receivable','aged_payable')"/>
+                        <field name="comparison_balance" sum="Comparison"
+                               column_invisible="parent.comparison_mode == 'none'"/>
+                        <field name="variance" sum="Variance"
+                               column_invisible="parent.comparison_mode == 'none'"/>
+                        <field name="variance_percent" string="Variance %" widget="percentage"
+                               column_invisible="parent.comparison_mode == 'none'"/>
+                        <field name="amount_currency" optional="hide"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="currency_id" optional="hide"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <field name="running_balance" sum="Running Balance"
+                               column_invisible="parent.report_type not in ('general_ledger','partner_ledger','customer_statement','vendor_statement','account_statement')"/>
+                        <button name="action_open_move" type="object" icon="fa-file-text-o"
+                                title="Open Journal Entry" invisible="not move_id"/>
+                        <button name="action_open_entries" type="object" icon="fa-external-link"
+                                title="Open Journal Items"
+                                invisible="not account_id and not partner_id and not journal_id and not tax_id"/>
+                    </list>
+                </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Quick actions -->
+    <record id="flousflow_account_report_action" model="ir.actions.act_window">
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+    </record>
+
+    <record id="flousflow_account_report_pnl_action" model="ir.actions.act_window">
+        <field name="name">Profit &amp; Loss</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'profit_loss'}"/>
+    </record>
+
+    <record id="flousflow_account_report_balance_action" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'balance_sheet'}"/>
+    </record>
+
+    <record id="flousflow_account_report_gl_action" model="ir.actions.act_window">
+        <field name="name">General Ledger</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'general_ledger'}"/>
+    </record>
+
+    <record id="flousflow_account_report_aged_rec_action" model="ir.actions.act_window">
+        <field name="name">Aged Receivable</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'aged_receivable'}"/>
+    </record>
+
+    <record id="flousflow_account_report_aged_pay_action" model="ir.actions.act_window">
+        <field name="name">Aged Payable</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'aged_payable'}"/>
+    </record>
+
+    <record id="flousflow_account_report_partner_ledger_action" model="ir.actions.act_window">
+        <field name="name">Partner Ledger</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'partner_ledger'}"/>
+    </record>
+
+    <record id="flousflow_account_report_cash_flow_action" model="ir.actions.act_window">
+        <field name="name">Cash Flow Statement</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'cash_flow'}"/>
+    </record>
+
+    <record id="flousflow_account_report_trial_balance_action" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'trial_balance'}"/>
+    </record>
+
+    <record id="flousflow_account_report_journal_audit_action" model="ir.actions.act_window">
+        <field name="name">Journal Audit</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'journal_audit'}"/>
+    </record>
+
+    <record id="flousflow_account_report_tax_action" model="ir.actions.act_window">
+        <field name="name">Tax Report</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'tax_report'}"/>
+    </record>
+
+    <record id="flousflow_account_report_executive_action" model="ir.actions.act_window">
+        <field name="name">Executive Summary</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'executive_summary'}"/>
+    </record>
+
+    <record id="flousflow_account_report_customer_statement_action" model="ir.actions.act_window">
+        <field name="name">Customer Statement</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_partner_statement_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'customer_statement'}"/>
+    </record>
+
+    <record id="flousflow_account_report_vendor_statement_action" model="ir.actions.act_window">
+        <field name="name">Vendor Statement</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_partner_statement_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'vendor_statement'}"/>
+    </record>
+
+    <record id="flousflow_account_report_account_statement_action" model="ir.actions.act_window">
+        <field name="name">Account Statement</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'account_statement'}"/>
+    </record>
+</odoo>

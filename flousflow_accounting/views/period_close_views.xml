@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="flousflow_period_close_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.period.close.list</field>
+        <field name="model">flousflow.account.period.close</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'closed'" decoration-warning="state == 'review'">
+                <field name="name"/><field name="company_id" groups="base.group_multi_company"/>
+                <field name="close_type"/><field name="date_start"/><field name="date_end"/>
+                <field name="responsible_id"/><field name="reviewer_id"/>
+                <field name="draft_move_count"/><field name="incomplete_task_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_period_close_view_search" model="ir.ui.view">
+        <field name="name">flousflow.account.period.close.search</field>
+        <field name="model">flousflow.account.period.close</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/><field name="responsible_id"/><field name="reviewer_id"/>
+                <filter name="open" string="Open" domain="[('state', '!=', 'closed')]"/>
+                <filter name="closed" string="Closed" domain="[('state', '=', 'closed')]"/>
+                <separator/><filter name="my_closes" string="My Closes" domain="['|', ('responsible_id', '=', uid), ('reviewer_id', '=', uid)]"/>
+                <separator/>
+                <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_end" string="Closing Month" context="{'group_by': 'date_end:month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="flousflow_period_close_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.period.close.form</field>
+        <field name="model">flousflow.account.period.close</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Period Close">
+                <header>
+                    <button name="action_submit" string="Submit for Review" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" groups="account.group_account_manager" invisible="state != 'review'"/>
+                    <button name="action_close" string="Close Period" type="object" class="btn-primary" groups="account.group_account_manager" invisible="state != 'approved'" confirm="This will apply the selected standard Odoo lock dates. Continue?"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" groups="account.group_account_manager" invisible="state not in ('review', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_draft_moves" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
+                            <field name="draft_move_count" widget="statinfo" string="Draft Entries"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="close_type" readonly="state != 'draft'"/>
+                            <field name="date_start" readonly="state != 'draft'"/>
+                            <field name="date_end" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="responsible_id" readonly="state == 'closed'"/>
+                            <field name="reviewer_id" readonly="state != 'draft'"/>
+                            <field name="approved_by_id" invisible="not approved_by_id"/>
+                            <field name="approved_date" invisible="not approved_date"/>
+                            <field name="closed_by_id" invisible="not closed_by_id"/>
+                            <field name="closed_date" invisible="not closed_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Closing Checklist">
+                            <field name="task_ids" readonly="state in ('approved', 'closed')">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="done"/><field name="name"/><field name="required"/>
+                                    <field name="done_by_id"/><field name="done_date"/><field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Lock Dates">
+                            <group>
+                                <field name="apply_tax_lock" readonly="state != 'draft'"/>
+                                <field name="apply_sales_lock" readonly="state != 'draft'"/>
+                                <field name="apply_purchase_lock" readonly="state != 'draft'"/>
+                                <field name="apply_hard_lock" readonly="state != 'draft'"/>
+                            </group>
+                        </page>
+                        <page string="Evidence &amp; Notes">
+                            <field name="working_file_ids" widget="many2many_tags" readonly="state == 'closed'"/>
+                            <field name="notes" placeholder="Closing observations, unresolved items and reviewer notes..." readonly="state == 'closed'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="flousflow_period_close_action" model="ir.actions.act_window">
+        <field name="name">Period Closing</field>
+        <field name="res_model">flousflow.account.period.close</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="flousflow_period_close_view_search"/>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+</odoo>

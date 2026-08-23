@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_followup_letters" model="ir.actions.report">
+        <field name="name">Follow-up Letters</field>
+        <field name="model">flousflow.account.followup.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.report_followup_letters</field>
+        <field name="report_file">flousflow_accounting.report_followup_letters</field>
+        <field name="paperformat_id" ref="paperformat_financial_statement"/>
+    </record>
+
+    <template id="report_followup_letters">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-foreach="doc._letter_partner_data()" t-as="data">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Payment Reminder</h2>
+                            <p>
+                                <strong>To:</strong>
+                                <span t-esc="data['partner'].display_name"/>
+                            </p>
+                            <p>
+                                As of <span t-field="doc.date"/>, the following
+                                receivables remain outstanding:
+                            </p>
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Document</th>
+                                        <th>Date</th>
+                                        <th>Due Date</th>
+                                        <th class="text-end">Days</th>
+                                        <th>Level</th>
+                                        <th class="text-end">Outstanding</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data['lines']" t-as="line">
+                                        <td><span t-esc="line['move_name']"/></td>
+                                        <td><span t-esc="line['date']"/></td>
+                                        <td><span t-esc="line['date_maturity']"/></td>
+                                        <td class="text-end"><span t-esc="line['days_overdue']"/></td>
+                                        <td><span t-esc="line['level_name']"/></td>
+                                        <td class="text-end"><span t-esc="'%.2f' % line['amount']"/></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="fw-bold">
+                                        <td colspan="5">Total Outstanding</td>
+                                        <td class="text-end"><span t-esc="'%.2f' % data['total']"/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <p t-if="data['lines'] and data['lines'][0]['message']">
+                                <span t-esc="data['lines'][0]['message']"/>
+                            </p>
+                            <p>Please arrange payment or contact our accounting team.</p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

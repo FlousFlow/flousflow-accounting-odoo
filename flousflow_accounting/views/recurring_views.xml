@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="flousflow_recurring_action" model="ir.actions.act_window">
+        <field name="name">Recurring Payments</field>
+        <field name="res_model">flousflow.account.recurring</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first recurring payment
+            </p>
+        </field>
+    </record>
+
+    <record id="flousflow_recurring_view_list" model="ir.ui.view">
+        <field name="name">flousflow.account.recurring.list</field>
+        <field name="model">flousflow.account.recurring</field>
+        <field name="arch" type="xml">
+            <list string="Recurring Payments">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="amount"/>
+                <field name="payment_type"/>
+                <field name="recurring_period"/>
+                <field name="recurring_interval"/>
+                <field name="date_begin"/>
+                <field name="date_end"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_recurring_view_form" model="ir.ui.view">
+        <field name="name">flousflow.account.recurring.form</field>
+        <field name="model">flousflow.account.recurring</field>
+        <field name="arch" type="xml">
+            <form string="Recurring Payment">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_generate_schedule" type="object"
+                            string="Generate Schedule" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_reset" type="object" string="Reset to Draft"
+                            invisible="state != 'done'"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="payment_type"/>
+                            <field name="amount"/>
+                            <field name="journal_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="recurring_period"/>
+                            <field name="recurring_interval"/>
+                            <field name="date_begin"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <group string="Scheduled Payments">
+                        <field name="line_ids" nolabel="1">
+                            <list>
+                                <field name="date"/>
+                                <field name="partner_id"/>
+                                <field name="amount"/>
+                                <field name="journal_id"/>
+                                <field name="state" widget="badge"/>
+                                <field name="payment_id"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

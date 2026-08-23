@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_asset_category_company" model="ir.rule">
+            <field name="name">Asset Categories: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_asset_category"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_asset_company" model="ir.rule">
+            <field name="name">Assets: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_asset"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_asset_group_company" model="ir.rule">
+            <field name="name">Asset Groups: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_asset_group"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_asset_depreciation_line_company" model="ir.rule">
+            <field name="name">Asset Depreciation Lines: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_asset_depreciation_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_asset_modification_company" model="ir.rule">
+            <field name="name">Asset Modifications: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_asset_modification"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_asset_disposal_history_company" model="ir.rule">
+            <field name="name">Asset Disposal History: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_asset_disposal"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_budget_company" model="ir.rule">
+            <field name="name">Budgets: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_budget"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_budget_line_company" model="ir.rule">
+            <field name="name">Budget Lines: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_budget_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_followup_company" model="ir.rule">
+            <field name="name">Follow-up: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_followup"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_followup_line_company" model="ir.rule">
+            <field name="name">Follow-up Levels: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_followup_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_followup_history_company" model="ir.rule">
+            <field name="name">Follow-up History: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_followup_history"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_fiscal_year_company" model="ir.rule">
+            <field name="name">Fiscal Years: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_fiscal_year"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_recurring_company" model="ir.rule">
+            <field name="name">Recurring Payments: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_recurring"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_recurring_line_company" model="ir.rule">
+            <field name="name">Recurring Payment Lines: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_recurring_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_report_template_company" model="ir.rule">
+            <field name="name">Financial Report Templates: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_report_template"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_report_template_line_company" model="ir.rule">
+            <field name="name">Financial Report Template Lines: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_report_template_line"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_report_preset_owner_company" model="ir.rule">
+            <field name="name">Saved Report Filters: owner and allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_report_preset"/>
+            <field name="domain_force">[('user_id', '=', user.id), ('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_loan_company" model="ir.rule">
+            <field name="name">Loans: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_loan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_loan_line_company" model="ir.rule">
+            <field name="name">Loan Installments: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_loan_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_working_file_company" model="ir.rule">
+            <field name="name">Audit Working Files: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_working_file"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_period_close_company" model="ir.rule">
+            <field name="name">Period Closes: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_period_close"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_period_close_task_company" model="ir.rule">
+            <field name="name">Period Close Tasks: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_period_close_task"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+        <record id="rule_tax_return_company" model="ir.rule">
+            <field name="name">Tax Returns: allowed companies</field><field name="model_id" ref="model_flousflow_account_tax_return"/><field name="domain_force">[('company_id', 'in', company_ids)]</field><field name="global" eval="True"/>
+        </record>
+        <record id="rule_tax_return_line_company" model="ir.rule">
+            <field name="name">Tax Return Lines: allowed companies</field><field name="model_id" ref="model_flousflow_account_tax_return_line"/><field name="domain_force">[('company_id', 'in', company_ids)]</field><field name="global" eval="True"/>
+        </record>
+        <record id="rule_payment_promise_company" model="ir.rule">
+            <field name="name">Payment Promises: allowed companies</field><field name="model_id" ref="model_flousflow_account_payment_promise"/><field name="domain_force">[('company_id', 'in', company_ids)]</field><field name="global" eval="True"/>
+        </record>
+        <record id="rule_payment_batch_company" model="ir.rule">
+            <field name="name">Payment Batches: allowed companies</field>
+            <field name="model_id" ref="model_flousflow_account_payment_batch"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+    </data>
+</odoo>

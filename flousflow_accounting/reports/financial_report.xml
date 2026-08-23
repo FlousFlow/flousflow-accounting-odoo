@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_financial_statement" model="report.paperformat">
+        <field name="name">FlousFlow Financial Statement</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="header_spacing">10</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_financial_statement" model="ir.actions.report">
+        <field name="name">Financial Statement</field>
+        <field name="model">flousflow.account.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.report_financial_statement</field>
+        <field name="report_file">flousflow_accounting.report_financial_statement</field>
+        <field name="paperformat_id" ref="paperformat_financial_statement"/>
+    </record>
+
+    <template id="report_financial_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">
+                            <span t-field="doc.report_type"/>
+                        </h2>
+                        <p class="text-center">
+                            <span t-field="doc.company_id"/>
+                            — <span t-field="doc.date_from"/> to <span t-field="doc.date_to"/>
+                        </p>
+                        <div t-if="doc.report_note" class="alert alert-light border mb-3">
+                            <strong>Report Notes:</strong>
+                            <span t-field="doc.report_note"/>
+                        </div>
+                        <table class="table table-sm table-bordered">
+                            <t t-set="detailed" t-value="doc.report_type in ('general_ledger', 'partner_ledger', 'customer_statement', 'vendor_statement', 'account_statement')"/>
+                            <thead>
+                                <tr>
+                                    <th t-if="detailed">Date</th>
+                                    <th t-if="detailed">Entry</th>
+                                    <th t-if="detailed">Reference</th>
+                                    <th t-if="detailed and doc.report_type == 'account_statement'">Partner</th>
+                                    <th t-if="detailed and doc.report_type in ('partner_ledger', 'customer_statement', 'vendor_statement')">Account</th>
+                                    <th>Account / Description</th>
+                                    <th t-if="doc.report_type == 'trial_balance'" class="text-end">Opening</th>
+                                    <th t-if="doc.report_type == 'tax_report'" class="text-end">Tax Base</th>
+                                    <th t-if="doc.report_type in ('general_ledger', 'trial_balance', 'journal_audit', 'tax_report', 'customer_statement', 'vendor_statement', 'account_statement')" class="text-end">Debit</th>
+                                    <th t-if="doc.report_type in ('general_ledger', 'trial_balance', 'journal_audit', 'tax_report', 'customer_statement', 'vendor_statement', 'account_statement')" class="text-end">Credit</th>
+                                    <th t-if="doc.report_type == 'trial_balance'" class="text-end">Closing</th>
+                                    <th t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end">Current</th>
+                                    <th t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end">1-30</th>
+                                    <th t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end">31-60</th>
+                                    <th t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end">61-90</th>
+                                    <th t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end">90+</th>
+                                    <th class="text-end">Balance</th>
+                                    <th t-if="detailed" class="text-end">Running Balance</th>
+                                    <th t-if="doc.comparison_mode != 'none'" class="text-end">Comparison</th>
+                                    <th t-if="doc.comparison_mode != 'none'" class="text-end">Variance</th>
+                                    <th t-if="doc.comparison_mode != 'none'" class="text-end">Variance %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.line_ids" t-as="line"
+                                    t-att-class="'fw-bold' if line.is_total else ('text-muted' if line.is_section else '')">
+                                    <td t-if="detailed"><span t-field="line.date"/></td>
+                                    <td t-if="detailed"><span t-esc="line.move_name or ''"/></td>
+                                    <td t-if="detailed"><span t-esc="line.reference or ''"/></td>
+                                    <td t-if="detailed and doc.report_type == 'account_statement'"><span t-esc="line.partner_id.display_name or ''"/></td>
+                                    <td t-if="detailed and doc.report_type in ('partner_ledger', 'customer_statement', 'vendor_statement')"><span t-esc="line.account_id.display_name or ''"/></td>
+                                    <td><span t-esc="line.name"/></td>
+                                    <td t-if="doc.report_type == 'trial_balance'" class="text-end"><span t-esc="'%.2f' % line.opening_balance"/></td>
+                                    <td t-if="doc.report_type == 'tax_report'" class="text-end"><span t-esc="'%.2f' % line.tax_base_amount"/></td>
+                                    <td t-if="doc.report_type in ('general_ledger', 'partner_ledger', 'trial_balance', 'journal_audit', 'tax_report', 'customer_statement', 'vendor_statement', 'account_statement')" class="text-end"><span t-esc="'%.2f' % line.debit"/></td>
+                                    <td t-if="doc.report_type in ('general_ledger', 'partner_ledger', 'trial_balance', 'journal_audit', 'tax_report', 'customer_statement', 'vendor_statement', 'account_statement')" class="text-end"><span t-esc="'%.2f' % line.credit"/></td>
+                                    <td t-if="doc.report_type == 'trial_balance'" class="text-end"><span t-esc="'%.2f' % line.closing_balance"/></td>
+                                    <td t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end"><span t-esc="'%.2f' % line.bucket_current"/></td>
+                                    <td t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end"><span t-esc="'%.2f' % line.bucket_1_30"/></td>
+                                    <td t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end"><span t-esc="'%.2f' % line.bucket_31_60"/></td>
+                                    <td t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end"><span t-esc="'%.2f' % line.bucket_61_90"/></td>
+                                    <td t-if="doc.report_type in ('aged_receivable', 'aged_payable')" class="text-end"><span t-esc="'%.2f' % line.bucket_90_plus"/></td>
+                                    <td class="text-end"><span t-esc="'%.2f' % line.balance"/></td>
+                                    <td t-if="detailed" class="text-end"><span t-esc="'%.2f' % line.running_balance"/></td>
+                                    <td t-if="doc.comparison_mode != 'none'" class="text-end"><span t-esc="'%.2f' % line.comparison_balance"/></td>
+                                    <td t-if="doc.comparison_mode != 'none'" class="text-end"><span t-esc="'%.2f' % line.variance"/></td>
+                                    <td t-if="doc.comparison_mode != 'none'" class="text-end"><span t-esc="'%.2f%%' % line.variance_percent"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
