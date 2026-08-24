@@ -2,7 +2,7 @@
 # Part of FlousFlow Accounting
 {
     'name': 'FlousFlow Accounting',
-    'version': '19.0.36.0.0',
+    'version': '19.0.36.1.0',
     'category': 'Accounting/Localizations/Account Charts',
     'summary': 'Complete Flous Flow accounting suite — country-based chart of '
                'accounts, financial reports, assets & depreciation, budgets, '
