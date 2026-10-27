@@ -14,10 +14,33 @@ class TestPaymentBatch(TransactionCase):
         ], limit=1)
         if not self.journal:
             self.skipTest('A bank or cash journal is required')
+        outstanding_account = (
+            self.journal.suspense_account_id or self.journal.default_account_id)
+        if not outstanding_account:
+            self.skipTest('A payment outstanding account is required')
+        self.journal.inbound_payment_method_line_ids.payment_account_id = outstanding_account
+        self.journal.outbound_payment_method_line_ids.payment_account_id = outstanding_account
+        receivable = self.env['account.account'].search([
+            ('company_ids', 'in', self.company.id),
+            ('account_type', '=', 'asset_receivable'),
+        ], limit=1)
+        payable = self.env['account.account'].search([
+            ('company_ids', 'in', self.company.id),
+            ('account_type', '=', 'liability_payable'),
+        ], limit=1)
+        if not receivable or not payable:
+            self.skipTest('Receivable and payable accounts are required')
+        company_partner = self.company.partner_id
+        company_partner.property_account_receivable_id = receivable
+        company_partner.property_account_payable_id = payable
         method_line = self.journal.outbound_payment_method_line_ids[:1]
         if not method_line:
             self.skipTest('An outbound payment method is required')
-        self.partner = self.env['res.partner'].create({'name': 'Batch Vendor'})
+        self.partner = self.env['res.partner'].create({
+            'name': 'Batch Vendor',
+            'property_account_receivable_id': receivable.id,
+            'property_account_payable_id': payable.id,
+        })
         self.payment = self.env['account.payment'].create({
             'date': '2026-08-22',
             'amount': 125.0,

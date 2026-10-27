@@ -2989,6 +2989,36 @@ msgstr "قرض"
 msgid "Loan Analysis"
 msgstr "تحليل القروض"
 
+#: model:ir.actions.act_window,name:flousflow_accounting.flousflow_account_report_annual_action
+#: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_annual_report
+#. module: flousflow_accounting
+msgid "Annual Report"
+msgstr "التقرير السنوي"
+
+#: model:ir.actions.act_window,name:flousflow_accounting.flousflow_bills_to_receive_action
+#: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_bills_to_receive
+#. module: flousflow_accounting
+msgid "Bills To Receive"
+msgstr "فواتير مستحقة للاستلام"
+
+#: model:ir.actions.act_window,name:flousflow_accounting.flousflow_billed_not_received_action
+#: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_billed_not_received
+#. module: flousflow_accounting
+msgid "Billed Not Received"
+msgstr "مفوتر ولم يتم استلامه"
+
+#: model:ir.actions.act_window,name:flousflow_accounting.flousflow_invoices_to_be_issued_action
+#: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_invoices_to_be_issued
+#. module: flousflow_accounting
+msgid "Invoices To Be Issued"
+msgstr "فواتير مستحقة الإصدار"
+
+#: model:ir.actions.act_window,name:flousflow_accounting.flousflow_invoiced_not_delivered_action
+#: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_invoiced_not_delivered
+#. module: flousflow_accounting
+msgid "Invoiced Not Delivered"
+msgstr "مفوتر ولم يتم تسليمه"
+
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__journal_id
 msgid "Loan Journal"
@@ -4200,7 +4230,7 @@ msgstr "المنتج"
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_report__report_type__profit_loss
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_report_preset__report_type__profit_loss
 #: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_pnl
-msgid "Profit & Loss"
+msgid "Profit and Loss"
 msgstr "الأرباح والخسائر"
 
 #. module: flousflow_accounting
@@ -5788,3 +5818,274 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.report_financial_statement
 msgid "to"
 msgstr ""
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.menu_flousflow_accounting_depreciation_models
+msgid "Depreciation Models"
+msgstr "نماذج الإهلاك"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Accounting Report Line"
+msgstr "بند التقرير المحاسبي"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Expressions"
+msgstr "المعادلات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Computation Engine"
+msgstr "محرك الاحتساب"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Subformula"
+msgstr "صيغة فرعية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Figure Type"
+msgstr "نوع القيمة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Carry Over To"
+msgstr "ترحيل إلى"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "User Group By"
+msgstr "تجميع المستخدم"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Foldability"
+msgstr "قابلية الطي"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Print On New Page"
+msgstr "الطباعة في صفحة جديدة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.flousflow_working_file_search_view
+msgid "To Do"
+msgstr "مهام للبدء"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Options"
+msgstr "الخيارات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Sections"
+msgstr "الأقسام"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Scope and Entries"
+msgstr "النطاق والقيود"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.view_account_report_configuration_form
+msgid "Presentation and Comparison"
+msgstr "العرض والمقارنة"
+
+#. module: flousflow_accounting
+msgid "Journal entry status"
+msgstr "حالة القيود اليومية"
+
+#. module: flousflow_accounting
+msgid "Posted Entries"
+msgstr "القيود المُرحّلة"
+
+#. module: flousflow_accounting
+msgid "Compare"
+msgstr "مقارنة"
+
+#. module: flousflow_accounting
+msgid "Comparison period"
+msgstr "فترة المقارنة"
+
+#. module: flousflow_accounting
+msgid "Print"
+msgstr "طباعة"
+
+#. module: flousflow_accounting
+msgid "Current Period"
+msgstr "الفترة الحالية"
+
+#. module: flousflow_accounting
+msgid "There are"
+msgstr "يوجد"
+
+#. module: flousflow_accounting
+msgid "unposted journal items"
+msgstr "بندًا في قيود يومية غير مُرحّلة"
+
+#. module: flousflow_accounting
+msgid "dated on or before this report date."
+msgstr "مؤرخًا في تاريخ التقرير أو قبله."
+
+#. module: flousflow_accounting
+msgid "Calculated from journal items using the selected report date and entry status."
+msgstr "محسوب من القيود اليومية وفق تاريخ التقرير وحالة القيد المحددين."
+
+#. module: flousflow_accounting
+msgid "Expand section"
+msgstr "توسيع القسم"
+
+#. module: flousflow_accounting
+msgid "Collapse section"
+msgstr "طي القسم"
+
+#. module: flousflow_accounting
+msgid "Loading report…"
+msgstr "جارٍ تحميل التقرير…"
+
+#. module: flousflow_accounting
+msgid "Could not load the report."
+msgstr "تعذر تحميل التقرير."
+
+#. module: flousflow_accounting
+msgid "Same Period Last Year"
+msgstr "نفس الفترة من العام الماضي"
+
+#. module: flousflow_accounting
+msgid "Custom Date"
+msgstr "تاريخ مخصص"
+
+#. module: flousflow_accounting
+msgid "Compare to"
+msgstr "مقارنة مع"
+
+#. module: flousflow_accounting
+msgid "Difference"
+msgstr "الفرق"
+
+#. module: flousflow_accounting
+msgid "Percentage Change"
+msgstr "نسبة التغير"
+
+#. module: flousflow_accounting
+msgid "Custom Dates"
+msgstr "تواريخ مخصصة"
+
+#. module: flousflow_accounting
+msgid "Search accounts or entries"
+msgstr "ابحث في الحسابات أو القيود"
+
+#. module: flousflow_accounting
+msgid "Operating Revenue"
+msgstr "إيرادات التشغيل"
+
+#. module: flousflow_accounting
+msgid "Other Revenue"
+msgstr "إيرادات أخرى"
+
+#. module: flousflow_accounting
+msgid "Total Revenue"
+msgstr "إجمالي الإيرادات"
+
+#. module: flousflow_accounting
+msgid "Cost of Revenue"
+msgstr "تكلفة الإيرادات"
+
+#. module: flousflow_accounting
+msgid "Operating Expenses"
+msgstr "مصروفات التشغيل"
+
+#. module: flousflow_accounting
+msgid "Depreciation & Amortization"
+msgstr "الإهلاك والإطفاء"
+
+#. module: flousflow_accounting
+msgid "Other Expenses"
+msgstr "مصروفات أخرى"
+
+#. module: flousflow_accounting
+msgid "Total Expenses"
+msgstr "إجمالي المصروفات"
+
+#. module: flousflow_accounting
+msgid "Current Assets"
+msgstr "الأصول المتداولة"
+
+#. module: flousflow_accounting
+msgid "Prepayments"
+msgstr "المدفوعات المقدمة"
+
+#. module: flousflow_accounting
+msgid "Total Current Assets"
+msgstr "إجمالي الأصول المتداولة"
+
+#. module: flousflow_accounting
+msgid "Fixed Assets"
+msgstr "الأصول الثابتة"
+
+#. module: flousflow_accounting
+msgid "Non-current Assets"
+msgstr "الأصول غير المتداولة"
+
+#. module: flousflow_accounting
+msgid "Total Fixed Assets"
+msgstr "إجمالي الأصول الثابتة"
+
+#. module: flousflow_accounting
+msgid "Total Assets"
+msgstr "إجمالي الأصول"
+
+#. module: flousflow_accounting
+msgid "Liabilities"
+msgstr "الخصوم"
+
+#. module: flousflow_accounting
+msgid "Current Liabilities"
+msgstr "الخصوم المتداولة"
+
+#. module: flousflow_accounting
+msgid "Credit Cards"
+msgstr "بطاقات الائتمان"
+
+#. module: flousflow_accounting
+msgid "Non-current Liabilities"
+msgstr "الخصوم غير المتداولة"
+
+#. module: flousflow_accounting
+msgid "Total Liabilities"
+msgstr "إجمالي الخصوم"
+
+#. module: flousflow_accounting
+msgid "Equity"
+msgstr "حقوق الملكية"
+
+#. module: flousflow_accounting
+msgid "Retained Earnings"
+msgstr "الأرباح المحتجزة"
+
+#. module: flousflow_accounting
+msgid "Current Year Income"
+msgstr "دخل السنة الحالية"
+
+#. module: flousflow_accounting
+msgid "Current Year Expenses"
+msgstr "مصروفات السنة الحالية"
+
+#. module: flousflow_accounting
+msgid "Current Year Earnings"
+msgstr "أرباح السنة الحالية"
+
+#. module: flousflow_accounting
+msgid "Total Equity"
+msgstr "إجمالي حقوق الملكية"
+
+#. module: flousflow_accounting
+msgid "Unallocated Profit / Loss"
+msgstr "أرباح / خسائر غير موزعة"
+
+#. module: flousflow_accounting
+msgid "Comparison presentation"
+msgstr "طريقة عرض المقارنة"

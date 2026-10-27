@@ -10,12 +10,17 @@ class FlousflowAccountTaxReturn(models.Model):
     _order = 'date_to desc, id desc'
     _check_company_auto = True
 
+    active = fields.Boolean(default=True, tracking=True)
     name = fields.Char(required=True, default=lambda self: _('New'), copy=False, tracking=True)
     company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company, tracking=True)
     fiscal_country_id = fields.Many2one(related='company_id.account_fiscal_country_id', store=True)
     currency_id = fields.Many2one(related='company_id.currency_id')
     date_from = fields.Date(required=True, tracking=True)
     date_to = fields.Date(required=True, tracking=True)
+    date_deadline = fields.Date(string='Filing Deadline', tracking=True)
+    date_submission = fields.Date(string='Review Submission Date', readonly=True, copy=False, tracking=True)
+    date_lock = fields.Date(string='Tax Lock Date', readonly=True, copy=False, tracking=True)
+    days_to_deadline = fields.Integer(compute='_compute_days_to_deadline')
     state = fields.Selection([
         ('draft', 'Draft'), ('review', 'In Review'),
         ('approved', 'Approved'), ('closed', 'Closed'),
@@ -34,6 +39,13 @@ class FlousflowAccountTaxReturn(models.Model):
     approved_date = fields.Datetime(readonly=True, copy=False)
     closed_by_id = fields.Many2one('res.users', readonly=True, copy=False)
     closed_date = fields.Datetime(readonly=True, copy=False)
+
+    @api.depends('date_deadline', 'state')
+    def _compute_days_to_deadline(self):
+        today = fields.Date.context_today(self)
+        for record in self:
+            record.days_to_deadline = (
+                (record.date_deadline - today).days if record.date_deadline else 0)
 
     @api.depends('line_ids.amount', 'company_id', 'date_from', 'date_to')
     def _compute_controls(self):
@@ -71,7 +83,12 @@ class FlousflowAccountTaxReturn(models.Model):
         return records
 
     def write(self, vals):
-        protected = {'company_id', 'date_from', 'date_to', 'reviewer_id', 'line_ids'}
+        protected = {
+            'company_id', 'date_from', 'date_to', 'date_deadline',
+            'reviewer_id', 'line_ids',
+        }
+        if {'date_submission', 'date_lock'}.intersection(vals):
+            raise UserError(_('Submission and tax lock dates are set by the workflow.'))
         if protected.intersection(vals) and any(record.state in ('approved', 'closed') for record in self):
             raise UserError(_('An approved or closed tax return cannot be changed.'))
         return super().write(vals)
@@ -117,7 +134,10 @@ class FlousflowAccountTaxReturn(models.Model):
                 raise UserError(_('Prepare the draft tax return before submitting it.'))
             if record.draft_tax_move_count:
                 raise UserError(_('Post or remove all draft tax entries in this period first.'))
-            record.state = 'review'
+            super(FlousflowAccountTaxReturn, record).write({
+                'state': 'review',
+                'date_submission': fields.Date.context_today(record),
+            })
 
     def action_approve(self):
         self._check_manager()
@@ -136,7 +156,12 @@ class FlousflowAccountTaxReturn(models.Model):
             current_lock = record.company_id.tax_lock_date
             if not current_lock or current_lock < record.date_to:
                 record.company_id.sudo().write({'tax_lock_date': record.date_to})
-            record.write({'state': 'closed', 'closed_by_id': self.env.user.id, 'closed_date': fields.Datetime.now()})
+            super(FlousflowAccountTaxReturn, record).write({
+                'state': 'closed',
+                'date_lock': record.company_id.tax_lock_date,
+                'closed_by_id': self.env.user.id,
+                'closed_date': fields.Datetime.now(),
+            })
 
 
 class FlousflowAccountTaxReturnLine(models.Model):

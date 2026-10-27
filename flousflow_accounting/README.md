@@ -1,5 +1,8 @@
 # FlousFlow Accounting
 
+This `20.0` branch targets **Odoo 20 Community** and builds on the standard
+`account` module.
+
 A complete, self-contained Flous Flow accounting suite. The chart of accounts
 and taxes load automatically based on the **company's country**, using the
 standard `account.chart.template` engine — exactly like standard Odoo.
@@ -21,6 +24,7 @@ standard `account.chart.template` engine — exactly like standard Odoo.
 | Loans | Annuity, fixed-principal and interest-only schedules; disbursement, principal/interest posting, multi-currency amounts, reversals and pivot/graph analysis |
 | Audit working files | Evidence attachments, linked accounts and entries, owners/reviewers, chatter and immutable manager approval |
 | Accrual review | Goods received not billed and goods delivered not invoiced, valued in company currency with source-order drill-down |
+| Open-item reconciliation | Closing > Reconcile filters posted open receivable/payable lines and delegates selected same-company/account/partner items to Odoo's standard reconciliation engine |
 | Period closing | Month/quarter/year close checklist, draft-entry gate, reviewer approval, audit evidence and controlled application of standard Odoo lock dates |
 | Dashboard | Bank/cash, receivable, payable, YTD P&L and open/overdue counters |
 
@@ -49,7 +53,8 @@ synchronization is intentionally excluded.
 ## Install
 
 ```bash
-docker exec odoo_clean_web odoo --db_host=db --db_user=odoo --db_password=odoo \
+python /path/to/odoo20/odoo-bin \
+  --addons-path=/path/to/odoo20/addons,/path/to/flousflow-accounting-odoo \
   -i flousflow_accounting -d <db> --stop-after-init
 ```
 
@@ -67,13 +72,24 @@ Odoo's standard `account.move.line.reconcile()` engine; no parallel ledger is
 created. Only Accounting Managers can undo a completed match. Online bank feeds
 and bank credential storage remain intentionally excluded.
 
+## Open-item reconciliation
+
+Use **Accounting → Closing → Reconcile** to review posted, unreconciled
+receivable and payable lines grouped by account and partner. Select entries from
+at least two journal entries in the same company/account/partner group and
+choose **Reconcile Selected**. The action validates the selection and calls
+Odoo's standard reconciliation method; it does not create journal lines itself.
+Odoo may create exchange-difference or cash-basis tax moves under the company's
+standard configuration. Use Odoo's standard unreconcile action to undo a match.
+
 ## Tax return review and collections
 
-**Reporting → Tax Return Reviews** snapshots posted localization tax tags for a
-company and period, blocks submission while tax entries remain in draft,
-separates preparation from manager approval, and applies only Odoo's standard
-tax lock date when closed. It never invents statutory grids for an unsupported
-country and never creates a tax closing journal entry.
+**Accounting → Closing → Tax Returns** provides Kanban, Calendar, list and form
+views. It snapshots posted localization tax tags for a company and period,
+blocks submission while tax entries remain in draft, separates preparation
+from manager approval, and applies only Odoo's standard tax lock date when
+closed. It never invents statutory grids for an unsupported country and never
+creates a tax closing journal entry.
 
 **Follow-up → Promises to Pay** records customer commitments with amount, due
 date, responsible collector, optional open receivable item, and kept/broken/
@@ -137,8 +153,10 @@ configured transfer account.
 * Asset schedule modifications preserve posted depreciation entries and rebuild
   only future lines. Partial disposals proportionally reduce gross and salvage
   values and retain a separate reversible disposal-history record.
-* The parity workbench and verified reference/local scenario matrix are tracked
-  in `docs/ODOO19_ACCOUNTING_PARITY.md`.
+* The Odoo 20 compatibility and Enterprise navigation parity baseline is tracked
+  in `docs/ODOO20_ACCOUNTING_PARITY.md`; its full route/view matrix is in
+  `docs/ODOO20_ENTERPRISE_PARITY_MATRIX.md`. The Odoo 19 comparison remains in
+  `docs/ODOO19_ACCOUNTING_PARITY.md` as historical evidence.
 * Period closing does not create accounting entries. It verifies that required
   review tasks are signed off and no draft entries remain, then applies Odoo's
   standard fiscal, tax, sales and purchase lock dates. Hard lock is optional

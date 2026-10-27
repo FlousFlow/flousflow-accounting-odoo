@@ -79,7 +79,8 @@ class FlousflowAccountRevaluationWizard(models.TransientModel):
         commands = [(5, 0, 0)]
         for currency in currencies:
             rates = currency._get_rates(self.company_id, self.date)
-            rate = rates.get(currency.id)
+            rate_data = rates.get(currency.id)
+            rate = rate_data[0] if rate_data else False
             if not rate:
                 raise UserError(_(
                     'No rate found for currency %(currency)s on %(date)s.',

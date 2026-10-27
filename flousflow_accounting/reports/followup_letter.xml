@@ -5,7 +5,6 @@
         <field name="model">flousflow.account.followup.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">flousflow_accounting.report_followup_letters</field>
-        <field name="report_file">flousflow_accounting.report_followup_letters</field>
         <field name="paperformat_id" ref="paperformat_financial_statement"/>
     </record>
 

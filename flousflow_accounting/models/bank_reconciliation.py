@@ -146,7 +146,6 @@ class FlousflowAccountBankReconcileSession(models.TransientModel):
             'name': bank_line.payment_ref or _('Bank reconciliation'),
         })
         (suspense_lines + move_lines).reconcile()
-        bank_line.checked = True
         return {'type': 'ir.actions.act_window_close'}
 
 

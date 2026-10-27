@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Part of FlousFlow Accounting
-import base64
 import io
 
 from dateutil.relativedelta import relativedelta
@@ -32,6 +31,7 @@ class FlousflowAccountReport(models.TransientModel):
          ('vendor_statement', 'Vendor Statement'),
          ('account_statement', 'Account Statement'),
          ('executive_summary', 'Executive Summary'),
+         ('annual_report', 'Annual Report'),
          ('aged_receivable', 'Aged Receivable'),
          ('aged_payable', 'Aged Payable')],
         string='Report', required=True, default='profit_loss')
@@ -43,8 +43,10 @@ class FlousflowAccountReport(models.TransientModel):
     comparison_mode = fields.Selection(
         [('none', 'No Comparison'),
          ('previous_period', 'Previous Period'),
-         ('previous_year', 'Previous Year')],
+         ('previous_year', 'Same Period Last Year'),
+         ('custom_date', 'Custom Date')],
         string='Comparison', default='none', required=True)
+    comparison_date = fields.Date(string='Comparison Date')
     date_filter = fields.Selection(
         [('current_month', 'This Month'),
          ('current_quarter', 'This Quarter'),
@@ -118,6 +120,16 @@ class FlousflowAccountReport(models.TransientModel):
             res['date_from'] = today.replace(month=1, day=1)
         if not res.get('date_to'):
             res['date_to'] = today
+        if res.get('report_type') == 'annual_report':
+            company = self.env['res.company'].browse(
+                res.get('company_id') or self.env.company.id)
+            fiscal_year = company.compute_fiscalyear_dates(today)
+            res.update({
+                'date_from': fiscal_year['date_from'],
+                'date_to': fiscal_year['date_to'],
+                'date_filter': 'custom',
+                'comparison_mode': 'previous_year',
+            })
         return res
 
     def _base_domain(self):
@@ -195,6 +207,8 @@ class FlousflowAccountReport(models.TransientModel):
             self._generate_account_statement()
         elif self.report_type == 'executive_summary':
             self._generate_executive_summary()
+        elif self.report_type == 'annual_report':
+            self._generate_annual_report()
         elif self.report_type == 'aged_receivable':
             self._generate_aged(receivable=True)
         elif self.report_type == 'aged_payable':
@@ -215,6 +229,327 @@ class FlousflowAccountReport(models.TransientModel):
             'views': [(view.id, 'form')],
             'target': 'current',
         }
+
+    @api.model
+    def get_interactive_report_data(
+            self, report_type, date_to, date_from=None, target_move='posted',
+            comparison_mode='none', company_id=None, comparison_date=None,
+            date_filter='custom'):
+        """Generate a read-only report payload for the OWL statement screen."""
+        supported_types = {
+            'balance_sheet', 'profit_loss', 'cash_flow', 'trial_balance',
+            'general_ledger',
+        }
+        if report_type not in supported_types:
+            raise ValidationError(_('This report is not available in the interactive viewer.'))
+        if target_move not in {'posted', 'all'}:
+            raise ValidationError(_('Invalid journal entry status filter.'))
+        if comparison_mode not in {
+                'none', 'previous_year', 'previous_period', 'custom_date'}:
+            raise ValidationError(_('Invalid comparison option.'))
+        if date_filter not in {
+                'current_month', 'current_quarter', 'current_year', 'custom'}:
+            raise ValidationError(_('Invalid reporting period.'))
+
+        try:
+            date_to = fields.Date.to_date(date_to)
+            date_from = fields.Date.to_date(date_from) if date_from else None
+            comparison_date = (
+                fields.Date.to_date(comparison_date) if comparison_date else None)
+        except (TypeError, ValueError):
+            raise ValidationError(_('Enter valid report dates.'))
+        if not date_to:
+            raise ValidationError(_('A report date is required.'))
+        company = self.env['res.company'].browse(company_id or self.env.company.id).exists()
+        if not company or company not in self.env.companies:
+            raise AccessError(_('You cannot read accounting reports for this company.'))
+        if date_filter == 'current_month':
+            date_from = date_to.replace(day=1)
+            date_to = date_to + relativedelta(day=31)
+        elif date_filter == 'current_quarter':
+            quarter_month = ((date_to.month - 1) // 3) * 3 + 1
+            date_from = date_to.replace(month=quarter_month, day=1)
+            date_to = date_from + relativedelta(months=3, days=-1)
+        elif date_filter == 'current_year':
+            fiscal_dates = company.compute_fiscalyear_dates(date_to)
+            date_from = fiscal_dates['date_from']
+            date_to = fiscal_dates['date_to']
+        else:
+            date_from = date_from or date_to.replace(month=1, day=1)
+        if date_from > date_to:
+            raise ValidationError(_('The start date must not be later than the report date.'))
+        if comparison_mode == 'custom_date' and not comparison_date:
+            raise ValidationError(_('Choose a date for the comparison.'))
+
+        report = self.create({
+            'company_id': company.id,
+            'report_type': report_type,
+            'date_from': date_from,
+            'date_to': date_to,
+            'comparison_mode': comparison_mode,
+            'comparison_date': comparison_date,
+            'date_filter': date_filter,
+            'target_move': target_move,
+        })
+        report.action_generate()
+        report_lines = report.line_ids.sorted(lambda line: (line.sequence, line.id))
+        draft_count = self.env['account.move.line'].search_count([
+            ('company_id', '=', company.id),
+            ('date', '<=', date_to),
+            ('parent_state', '=', 'draft'),
+        ])
+        arabic_labels = {
+            'Revenue': 'الإيرادات', 'Operating Revenue': 'إيرادات التشغيل',
+            'Other Revenue': 'إيرادات أخرى', 'Total Revenue': 'إجمالي الإيرادات',
+            'Expenses': 'المصروفات', 'Cost of Revenue': 'تكلفة الإيرادات',
+            'Operating Expenses': 'مصروفات التشغيل',
+            'Depreciation & Amortization': 'الإهلاك والإطفاء',
+            'Other Expenses': 'مصروفات أخرى', 'Total Expenses': 'إجمالي المصروفات',
+            'Net Profit': 'صافي الربح', 'Assets': 'الأصول',
+            'Current Assets': 'الأصول المتداولة', 'Bank & Cash': 'البنك والنقدية',
+            'Receivables': 'الذمم المدينة', 'Prepayments': 'المدفوعات المقدمة',
+            'Total Current Assets': 'إجمالي الأصول المتداولة',
+            'Fixed Assets': 'الأصول الثابتة', 'Non-current Assets': 'الأصول غير المتداولة',
+            'Total Fixed Assets': 'إجمالي الأصول الثابتة', 'Total Assets': 'إجمالي الأصول',
+            'Liabilities': 'الخصوم', 'Current Liabilities': 'الخصوم المتداولة',
+            'Payables': 'الذمم الدائنة', 'Credit Cards': 'بطاقات الائتمان',
+            'Non-current Liabilities': 'الخصوم غير المتداولة',
+            'Total Current Liabilities': 'إجمالي الخصوم المتداولة',
+            'Total Liabilities': 'إجمالي الخصوم', 'Equity': 'حقوق الملكية',
+            'Retained Earnings': 'الأرباح المحتجزة',
+            'Current Year Income': 'دخل السنة الحالية',
+            'Current Year Expenses': 'مصروفات السنة الحالية',
+            'Current Year Earnings': 'أرباح السنة الحالية',
+            'Total Equity': 'إجمالي حقوق الملكية',
+            'Unallocated Profit / Loss': 'أرباح / خسائر غير موزعة',
+        } if (self.env.lang or '').startswith('ar') else {}
+        ui_arabic = {
+            'Balance': 'الرصيد', 'Opening Balance': 'الرصيد الافتتاحي',
+            'Debit': 'مدين', 'Credit': 'دائن', 'Closing Balance': 'الرصيد الختامي',
+            'Date': 'التاريخ', 'Partner': 'الشريك', 'Currency': 'العملة',
+            'Month': 'شهر', 'Quarter': 'ربع السنة', 'Fiscal Year': 'السنة المالية',
+            'Custom Dates': 'تواريخ مخصصة', 'From': 'من', 'To': 'إلى', 'As of': 'كما في',
+            'Search accounts or entries': 'ابحث في الحسابات أو القيود',
+            'Posted Entries': 'القيود المُرحّلة', 'All Entries': 'كل القيود',
+            'Compare': 'مقارنة', 'Comparison period': 'فترة المقارنة',
+            'Comparison presentation': 'طريقة عرض المقارنة', 'No Comparison': 'بدون مقارنة',
+            'Previous Period': 'الفترة السابقة', 'Same Period Last Year': 'نفس الفترة من العام الماضي',
+            'Custom Date': 'تاريخ مخصص', 'Compare to': 'مقارنة مع',
+            'Percentage': 'نسبة مئوية', 'Difference': 'الفرق',
+            'Percentage Change': 'نسبة التغير', 'Print': 'طباعة',
+            'PDF': 'PDF', 'XLSX': 'XLSX', 'Fold All': 'طي الكل', 'Unfold All': 'توسيع الكل',
+        } if (self.env.lang or '').startswith('ar') else {}
+        ui_label = lambda value: ui_arabic.get(value, self.env._(value))
+        lines_payload = []
+        for index, line in enumerate(report_lines):
+            next_line = report_lines[index + 1:index + 2]
+            line_name = (line.name or '').strip()
+            if report_type in ('profit_loss', 'balance_sheet', 'cash_flow') and not line.account_id:
+                line_name = arabic_labels.get(line_name, self.env._(line_name))
+            lines_payload.append({
+                'id': line.id,
+                'code': line.code,
+                'name': line_name,
+                'label': (
+                    '%s %s' % (line.code, line_name)
+                    if report_type == 'trial_balance' and line.account_id
+                    else line_name),
+                'level': line.level,
+                'is_section': line.is_section,
+                'is_total': line.is_total,
+                'balance': line.balance,
+                'opening_balance': line.opening_balance,
+                'debit': line.debit,
+                'credit': line.credit,
+                'closing_balance': line.closing_balance,
+                'account_id': line.account_id.id,
+                'date': fields.Date.to_string(line.date) if line.date else False,
+                'partner_name': line.partner_id.display_name or False,
+                'currency_name': line.currency_id.name or False,
+                'move_name': line.move_name or False,
+                'reference': line.reference or False,
+                'running_balance': line.running_balance,
+                'comparison_balance': line.comparison_balance,
+                'has_amount': (
+                    bool(line.account_id)
+                    if report_type in ('trial_balance', 'general_ledger')
+                    else not line.is_section),
+                'has_children': bool(next_line and next_line.level > line.level),
+            })
+        return {
+            'report_id': report.id,
+            'report_type': report_type,
+            'title': dict(self._fields['report_type']._description_selection(self.env)).get(report_type),
+            'company_name': company.display_name,
+            'currency_symbol': company.currency_id.symbol,
+            'currency_position': company.currency_id.position,
+            'ui_labels': {
+                'balance': ui_label('Balance'), 'opening_balance': ui_label('Opening Balance'),
+                'debit': ui_label('Debit'), 'credit': ui_label('Credit'),
+                'closing_balance': ui_label('Closing Balance'), 'date': ui_label('Date'),
+                'partner': ui_label('Partner'), 'currency': ui_label('Currency'),
+                'month': ui_label('Month'), 'quarter': ui_label('Quarter'),
+                'fiscal_year': ui_label('Fiscal Year'), 'custom_dates': ui_label('Custom Dates'),
+                'from': ui_label('From'), 'to': ui_label('To'), 'as_of': ui_label('As of'),
+                'search_ledger': ui_label('Search accounts or entries'),
+                'posted_entries': ui_label('Posted Entries'), 'all_entries': ui_label('All Entries'),
+                'compare': ui_label('Compare'), 'comparison_period': ui_label('Comparison period'),
+                'comparison_presentation': ui_label('Comparison presentation'),
+                'no_comparison': ui_label('No Comparison'), 'previous_period': ui_label('Previous Period'),
+                'previous_year': ui_label('Same Period Last Year'), 'custom_date': ui_label('Custom Date'),
+                'compare_to': ui_label('Compare to'), 'percentage': ui_label('Percentage'),
+                'difference': ui_label('Difference'), 'percentage_change': ui_label('Percentage Change'),
+                'print': ui_label('Print'), 'pdf': ui_label('PDF'), 'xlsx': ui_label('XLSX'),
+                'fold_all': ui_label('Fold All'), 'unfold_all': ui_label('Unfold All'),
+            },
+            'date_from': fields.Date.to_string(date_from),
+            'date_to': fields.Date.to_string(date_to),
+            'comparison_mode': comparison_mode,
+            'comparison_date': fields.Date.to_string(comparison_date) if comparison_date else False,
+            'date_filter': date_filter,
+            'draft_move_count': draft_count,
+            'lines': lines_payload,
+        }
+
+    @api.model
+    def get_interactive_drilldown_action(self, report_id, line_code, amount_type=None):
+        """Open the account move lines that make up a statement row."""
+        report = self.browse(report_id).exists()
+        if not report:
+            raise UserError(_('The report has expired. Refresh it and try again.'))
+        report.ensure_one()
+        if report.company_id not in self.env.companies:
+            raise AccessError(_('You cannot read accounting reports for this company.'))
+
+        move_id = False
+        if report.report_type in ('trial_balance', 'general_ledger'):
+            report_line = report.line_ids.filtered(
+                lambda item: item.code == line_code and item.account_id)[:1]
+            if (not report_line and report.report_type == 'general_ledger'
+                    and str(line_code).isdigit()):
+                report_line = report.line_ids.filtered(
+                    lambda item: item.id == int(line_code) and item.account_id)[:1]
+            if not report_line:
+                raise UserError(_('This ledger row has no account-level drill-down.'))
+            account_ids = report_line.account_id.ids
+            account_types = set()
+            move_id = report_line.move_id.id if report.report_type == 'general_ledger' else False
+        else:
+            template = self.env['flousflow.account.report.template'].search([
+                ('code', '=', report.report_type),
+                '|', ('company_id', '=', False), ('company_id', '=', report.company_id.id),
+            ], limit=1)
+            template_line = template.line_ids.filtered(lambda item: item.code == line_code)[:1]
+            if not template_line:
+                raise UserError(_('This statement row has no account-level drill-down.'))
+
+            account_ids = set()
+            account_types = set()
+            seen = set()
+
+            def collect(line):
+                if line.id in seen:
+                    return
+                seen.add(line.id)
+                if line.formula:
+                    for token in line.formula.split():
+                        referenced = template.line_ids.filtered(
+                            lambda item, code=token.lstrip('+-'): item.code == code)[:1]
+                        if referenced:
+                            collect(referenced)
+                elif line.account_ids or line.account_types:
+                    account_ids.update(line.account_ids.ids)
+                    account_types.update(
+                        item.strip() for item in (line.account_types or '').split(',')
+                        if item.strip())
+                else:
+                    for child in line.child_line_ids:
+                        collect(child)
+
+            collect(template_line)
+        if not account_ids and not account_types:
+            raise UserError(_('This statement row has no account-level drill-down.'))
+
+        domain = [
+            ('company_id', '=', report.company_id.id),
+            ('date', '<=', report.date_to),
+        ]
+        if report.report_type in ('profit_loss', 'cash_flow', 'trial_balance'):
+            domain.append(('date', '>=', report.date_from))
+        elif report.report_type == 'general_ledger':
+            domain.append(('date', '>=', report.date_from))
+        if report.report_type == 'trial_balance' and amount_type == 'opening_balance':
+            domain = [
+                ('company_id', '=', report.company_id.id),
+                ('date', '<', report.date_from),
+            ]
+        elif report.report_type == 'trial_balance' and amount_type == 'closing_balance':
+            domain = [
+                ('company_id', '=', report.company_id.id),
+                ('date', '<=', report.date_to),
+            ]
+        if report.target_move == 'posted':
+            domain.append(('parent_state', '=', 'posted'))
+        if move_id:
+            domain.append(('move_id', '=', move_id))
+        account_domain = []
+        if account_ids and account_types:
+            account_domain = ['|', ('account_id', 'in', sorted(account_ids)),
+                              ('account_id.account_type', 'in', sorted(account_types))]
+        elif account_ids:
+            account_domain = [('account_id', 'in', sorted(account_ids))]
+        else:
+            account_domain = [('account_id.account_type', 'in', sorted(account_types))]
+        action = self.env['ir.actions.actions']._for_xml_id(
+            'account.action_account_moves_all_a')
+        action['domain'] = domain + account_domain
+        action['context'] = {'create': False}
+        return action
+
+    @api.model
+    def get_interactive_export_action(self, report_id, export_format):
+        report = self.browse(report_id).exists()
+        if not report:
+            raise UserError(_('The report has expired. Refresh it and try again.'))
+        report.ensure_one()
+        if report.company_id not in self.env.companies:
+            raise AccessError(_('You cannot export accounting reports for this company.'))
+        if export_format == 'pdf':
+            return report.action_print()
+        if export_format == 'xlsx':
+            return report.action_export_xlsx()
+        raise ValidationError(_('Unsupported report export format.'))
+
+    def _generate_annual_report(self):
+        """Combine the three core statements for the selected fiscal year."""
+        self.ensure_one()
+        sections = (
+            (_('Profit & Loss'), self._generate_profit_loss),
+            (_('Balance Sheet'), self._generate_balance_sheet),
+            (_('Cash Flow Statement'), self._generate_cash_flow),
+        )
+        values = []
+        sequence = 1
+        for title, generator in sections:
+            self.line_ids = [(5, 0, 0)]
+            generator()
+            values.append((0, 0, {
+                'sequence': sequence,
+                'name': title,
+                'code': 'annual_%s' % sequence,
+                'is_section': True,
+            }))
+            sequence += 1
+            for line in self.line_ids:
+                row = line.copy_data({'report_id': self.id})[0]
+                row.update({
+                    'sequence': sequence,
+                    'name': ('    ' * (line.level + 1)) + (line.name or ''),
+                    'level': line.level + 1,
+                })
+                values.append((0, 0, row))
+                sequence += 1
+        self.line_ids = [(5, 0, 0)] + values
 
     def action_unfold_all(self):
         self.ensure_one()
@@ -239,6 +574,7 @@ class FlousflowAccountReport(models.TransientModel):
             'date_from': self.date_from,
             'date_to': self.date_to,
             'comparison_mode': self.comparison_mode,
+            'comparison_date': self.comparison_date,
             'target_move': self.target_move,
             'display_mode': self.display_mode,
             'journal_ids': [(6, 0, self.journal_ids.ids)],
@@ -271,6 +607,7 @@ class FlousflowAccountReport(models.TransientModel):
             'date_from': preset.date_from,
             'date_to': preset.date_to,
             'comparison_mode': preset.comparison_mode,
+            'comparison_date': preset.comparison_date,
             'target_move': preset.target_move,
             'display_mode': preset.display_mode,
             'journal_ids': [(6, 0, preset.journal_ids.ids)],
@@ -302,6 +639,13 @@ class FlousflowAccountReport(models.TransientModel):
                 self.date_to - relativedelta(years=1),
             )
         period_days = (self.date_to - self.date_from).days + 1
+        if self.comparison_mode == 'custom_date':
+            if not self.comparison_date:
+                raise ValidationError(_('Choose a date for the comparison.'))
+            return (
+                self.comparison_date - relativedelta(days=period_days - 1),
+                self.comparison_date,
+            )
         previous_to = self.date_from - relativedelta(days=1)
         return (
             previous_to - relativedelta(days=period_days - 1),
@@ -415,7 +759,7 @@ class FlousflowAccountReport(models.TransientModel):
         attachment = self.env['ir.attachment'].create({
             'name': 'financial_report_%s_%s.xlsx' % (self.report_type, self.date_to),
             'type': 'binary',
-            'datas': base64.b64encode(output.getvalue()),
+            'raw': output.getvalue(),
             'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'res_model': self._name,
             'res_id': self.id,
@@ -467,6 +811,7 @@ class FlousflowAccountReport(models.TransientModel):
                 'balance': opening,
                 'running_balance': opening,
                 'is_section': True,
+                'level': 0,
             }))
             sequence += 1
             running = opening
@@ -489,6 +834,7 @@ class FlousflowAccountReport(models.TransientModel):
                     'credit': line.credit,
                     'balance': line.balance,
                     'running_balance': running,
+                    'level': 1,
                 }))
                 sequence += 1
             values.append((0, 0, {
@@ -501,6 +847,7 @@ class FlousflowAccountReport(models.TransientModel):
                 'balance': sum(account_lines.mapped('balance')),
                 'running_balance': running,
                 'is_total': True,
+                'level': 1,
             }))
             sequence += 1
         self.line_ids = values
@@ -553,7 +900,19 @@ class FlousflowAccountReport(models.TransientModel):
             'closing_balance': values['opening'] + values['movement'],
         }) for sequence, values in enumerate(
             sorted(values_by_account.values(), key=lambda item: item['account'].code),
-            start=1)]
+            start=1)] + [(0, 0, {
+                'sequence': len(values_by_account) + 1,
+                'name': _('Total'),
+                'code': 'total_trial_balance',
+                'is_total': True,
+                'opening_balance': sum(item['opening'] for item in values_by_account.values()),
+                'debit': sum(item['debit'] for item in values_by_account.values()),
+                'credit': sum(item['credit'] for item in values_by_account.values()),
+                'balance': sum(item['movement'] for item in values_by_account.values()),
+                'closing_balance': sum(
+                    item['opening'] + item['movement']
+                    for item in values_by_account.values()),
+            })]
 
     def _generate_journal_audit(self):
         groups = self.env['account.move.line']._read_group(
@@ -1051,8 +1410,10 @@ class FlousflowAccountReportPreset(models.Model):
     comparison_mode = fields.Selection(
         [('none', 'No Comparison'),
          ('previous_period', 'Previous Period'),
-         ('previous_year', 'Previous Year')],
+         ('previous_year', 'Same Period Last Year'),
+         ('custom_date', 'Custom Date')],
         required=True, default='none')
+    comparison_date = fields.Date(string='Comparison Date')
     target_move = fields.Selection(
         [('posted', 'Posted Entries Only'), ('all', 'All Entries')],
         required=True, default='posted')

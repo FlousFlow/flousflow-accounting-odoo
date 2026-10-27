@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of FlousFlow Accounting -->
+<odoo>
+    <record id="view_account_report_configuration_list" model="ir.ui.view">
+        <field name="name">account.report.configuration.list.flousflow</field>
+        <field name="model">account.report</field>
+        <field name="arch" type="xml">
+            <list string="Accounting Reports" default_order="sequence, name">
+                <field name="sequence" widget="handle" groups="account.group_account_manager"/>
+                <field name="name"/>
+                <field name="root_report_id" optional="hide"/>
+                <field name="country_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_account_report_configuration_form" model="ir.ui.view">
+        <field name="name">account.report.configuration.form.flousflow</field>
+        <field name="model">account.report</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Report">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sequence" groups="account.group_account_manager"/>
+                            <field name="root_report_id" groups="account.group_account_manager"/>
+                            <field name="country_id" groups="account.group_account_manager"/>
+                            <field name="availability_condition" groups="account.group_account_manager"/>
+                            <field name="groupby" groups="account.group_account_manager"/>
+                            <field name="user_groupby" groups="account.group_account_manager"/>
+                            <field name="active" groups="account.group_account_manager"/>
+                        </group>
+                        <group>
+                            <field name="chart_template" groups="account.group_account_manager"/>
+                            <field name="use_sections" groups="account.group_account_manager"/>
+                            <field name="default_opening_date_filter" groups="account.group_account_manager"/>
+                            <field name="use_fiscal_periods" groups="account.group_account_manager"/>
+                            <field name="currency_translation" groups="account.group_account_manager"/>
+                            <field name="load_more_limit" groups="account.group_account_manager"/>
+                            <field name="search_bar" groups="account.group_account_manager"/>
+                            <field name="integer_rounding" groups="account.group_account_manager"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Options" groups="account.group_account_manager">
+                            <group>
+                                <group string="Scope and Entries">
+                                    <field name="filter_multi_company"/>
+                                    <field name="filter_date_range"/>
+                                    <field name="filter_show_draft"/>
+                                    <field name="filter_unreconciled"/>
+                                    <field name="only_tax_exigible"/>
+                                    <field name="filter_journals"/>
+                                    <field name="filter_account_type"/>
+                                    <field name="filter_partner"/>
+                                    <field name="filter_aml_ir_filters"/>
+                                </group>
+                                <group string="Presentation and Comparison">
+                                    <field name="filter_hierarchy"/>
+                                    <field name="filter_hide_0_lines"/>
+                                    <field name="filter_unfold_all"/>
+                                    <field name="filter_period_comparison"/>
+                                    <field name="filter_growth_comparison"/>
+                                    <field name="filter_line_comparison"/>
+                                    <field name="filter_budgets"/>
+                                    <field name="allow_foreign_vat"/>
+                                    <field name="enable_snapshots"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Sections" groups="account.group_account_manager"
+                              invisible="not use_sections">
+                            <group>
+                                <field name="section_report_ids" widget="many2many_tags"
+                                       domain="[('id', '!=', id)]"/>
+                                <field name="section_main_report_ids" widget="many2many_tags"
+                                       readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Columns" groups="account.group_account_manager">
+                            <field name="column_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="expression_label"/>
+                                    <field name="figure_type"/>
+                                    <field name="sortable"/>
+                                    <field name="blank_if_zero"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Lines" groups="account.group_account_manager">
+                            <field name="line_ids">
+                                <list>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="parent_id"/>
+                                    <field name="hierarchy_level"/>
+                                    <field name="groupby" optional="hide"/>
+                                    <field name="user_groupby" optional="hide"/>
+                                    <field name="foldability" optional="hide"/>
+                                    <field name="hide_if_zero"/>
+                                </list>
+                                <form string="Accounting Report Line">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="code"/>
+                                                <field name="sequence"/>
+                                                <field name="parent_id"/>
+                                                <field name="hierarchy_level"/>
+                                            </group>
+                                            <group>
+                                                <field name="groupby"/>
+                                                <field name="user_groupby"/>
+                                                <field name="foldability"/>
+                                                <field name="hide_if_zero"/>
+                                                <field name="print_on_new_page"/>
+                                                <field name="action_id"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page string="Expressions">
+                                                <field name="expression_ids">
+                                                    <list editable="bottom">
+                                                        <field name="label"/>
+                                                        <field name="engine"/>
+                                                        <field name="formula"/>
+                                                        <field name="subformula" optional="hide"/>
+                                                        <field name="date_scope"/>
+                                                        <field name="figure_type"/>
+                                                        <field name="blank_if_zero"/>
+                                                        <field name="carryover_target" optional="hide"/>
+                                                        <field name="auditable" readonly="1"/>
+                                                    </list>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_report_configuration" model="ir.actions.act_window">
+        <field name="name">Accounting Reports</field>
+        <field name="res_model">account.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_account_report_configuration_list"/>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_account_report_configuration_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="10"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_account_report_configuration_list"/>
+        <field name="act_window_id" ref="action_account_report_configuration"/>
+    </record>
+
+    <record id="action_account_report_configuration_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="20"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_account_report_configuration_form"/>
+        <field name="act_window_id" ref="action_account_report_configuration"/>
+    </record>
+
+    <record id="view_account_report_configuration_search" model="ir.ui.view">
+        <field name="name">account.report.configuration.search.flousflow</field>
+        <field name="model">account.report</field>
+        <field name="arch" type="xml">
+            <search string="Accounting Reports">
+                <field name="name"/>
+                <field name="country_id"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Archived" domain="[('active', '=', False)]"/>
+                <filter name="groupby_root_report" string="Root Report" context="{'group_by': 'root_report_id'}"/>
+                <filter name="groupby_country" string="Country" context="{'group_by': 'country_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_report_configuration" model="ir.actions.act_window">
+        <field name="search_view_id" ref="view_account_report_configuration_search"/>
+    </record>
+</odoo>

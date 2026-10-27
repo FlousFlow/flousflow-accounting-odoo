@@ -23,7 +23,7 @@ class TestStandardAppIntegrations(TransactionCase):
         expected_fields = {
             'hr.expense': 'account_move_id',
             'mrp.production': 'wip_move_ids',
-            'pos.session': 'move_id',
+            'pos.session': 'move_ids',
             'project.project': 'account_id',
             'stock.move': 'account_move_id',
         }

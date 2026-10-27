@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Part of FlousFlow Accounting -->
 <odoo>
+    <data>
     <!-- Reuse the standard Account application instead of creating a second,
          overlapping accounting root. -->
     <record id="account.menu_finance" model="ir.ui.menu">
@@ -28,6 +29,11 @@
         <field name="parent_id" ref="account.account_account_menu"/>
         <field name="sequence">1</field>
     </record>
+    <!-- Reuse all Community analytic report views for the Enterprise-style
+         reporting destination; Odoo Community does not ship the grid view. -->
+    <record id="account.action_analytic_reporting" model="ir.actions.act_window">
+        <field name="view_mode">pivot,list,kanban,form,graph</field>
+    </record>
 
     <!-- Kept inactive so upgrades from versions <= 19.0.8 do not leave the
          former duplicate root visible. -->
@@ -43,6 +49,12 @@
               parent="account.account_closing_menu"
               action="flousflow_period_close_action"
               sequence="5"/>
+    <menuitem id="menu_flousflow_open_item_reconcile"
+              name="Reconcile"
+              parent="account.account_closing_menu"
+              action="flousflow_open_item_reconciliation_action"
+              groups="account.group_account_user"
+              sequence="1"/>
     <menuitem id="menu_flousflow_accounting_lock_dates"
               name="Lock Dates…"
               parent="account.account_closing_menu"
@@ -52,25 +64,33 @@
     <menuitem id="menu_flousflow_accounting_assets"
               name="Assets &amp; Liabilities"
               parent="account.menu_finance_entries"
-              sequence="30">
+              sequence="10">
         <menuitem id="menu_flousflow_accounting_asset_list"
                   name="Assets" action="flousflow_asset_action" sequence="10"/>
         <menuitem id="menu_flousflow_accounting_loans"
                   name="Loans" action="flousflow_loan_action" sequence="20"/>
     </menuitem>
+    <menuitem id="menu_flousflow_accounting_depreciation_schedule"
+              name="Depreciation Schedule"
+              parent="account.account_reports_legal_statements_menu"
+              action="flousflow_asset_dep_line_action" sequence="40"/>
 
     <!-- Review -->
+    <menuitem id="menu_flousflow_accounting_audit"
+              name="Audit"
+              parent="account.account_audit_menu"
+              sequence="10"/>
     <menuitem id="menu_flousflow_accounting_working_files"
               name="Working Files"
-              parent="account.account_audit_menu"
+              parent="menu_flousflow_accounting_audit"
               action="flousflow_working_file_action"
-              sequence="20"/>
+              sequence="10"/>
     <menuitem id="menu_flousflow_accounting_regularization"
               name="Regularization Entries"
               parent="account.account_audit_menu"
               sequence="30">
         <menuitem id="menu_flousflow_accounting_currencies"
-                  name="Currencies" action="flousflow_revaluation_action"/>
+                  name="Unrealized Currencies" action="flousflow_revaluation_action"/>
         <menuitem id="menu_flousflow_deferred_revenue"
                   name="Deferred Revenues" action="flousflow_deferred_revenue_action"/>
         <menuitem id="menu_flousflow_deferred_expense"
@@ -80,34 +100,56 @@
               name="Inventory"
               parent="account.account_audit_menu"
               sequence="40">
-        <menuitem id="menu_flousflow_accounting_depreciation_schedule"
-                  name="Depreciation Schedule"
-                  action="flousflow_asset_dep_line_action" sequence="20"/>
+        <menuitem id="menu_flousflow_accounting_inventory_valuation"
+                  name="Inventory Valuation"
+                  action="account.action_report_stock_valuation"
+                  sequence="10"/>
         <menuitem id="menu_flousflow_accounting_accrual_review"
                   name="Accrual Review"
                   action="flousflow_accrual_review_action" sequence="30"/>
     </menuitem>
+    <menuitem id="menu_flousflow_accounting_review_purchases"
+              name="Purchases"
+              parent="account.account_audit_menu"
+              sequence="50">
+        <menuitem id="menu_flousflow_accounting_bills_to_receive"
+                  name="Bills To Receive"
+                  action="flousflow_bills_to_receive_action" sequence="31"/>
+        <menuitem id="menu_flousflow_accounting_billed_not_received"
+                  name="Billed Not Received"
+                  action="flousflow_billed_not_received_action" sequence="32"/>
+    </menuitem>
+    <menuitem id="menu_flousflow_accounting_review_sales"
+              name="Sales"
+              parent="account.account_audit_menu"
+              sequence="60">
+        <menuitem id="menu_flousflow_accounting_invoices_to_be_issued"
+                  name="Invoices To Be Issued"
+                  action="flousflow_invoices_to_be_issued_action" sequence="33"/>
+        <menuitem id="menu_flousflow_accounting_invoiced_not_delivered"
+                  name="Invoiced Not Delivered"
+                  action="flousflow_invoiced_not_delivered_action" sequence="34"/>
+    </menuitem>
 
     <!-- Reporting: extend the standard Odoo report folders. -->
     <menuitem id="menu_flousflow_accounting_pnl"
-              name="Profit &amp; Loss"
+              name="Profit and Loss"
               parent="account.account_reports_legal_statements_menu"
-              action="flousflow_account_report_pnl_action" sequence="10"/>
+              action="flousflow_report_pnl_interactive_action" sequence="10"/>
     <menuitem id="menu_flousflow_accounting_balance_sheet"
               name="Balance Sheet"
               parent="account.account_reports_legal_statements_menu"
-              action="flousflow_account_report_balance_action" sequence="20"/>
+              action="flousflow_report_balance_interactive_action" sequence="20"/>
     <menuitem id="menu_flousflow_accounting_cash_flow"
               name="Cash Flow Statement"
               parent="account.account_reports_legal_statements_menu"
-              action="flousflow_account_report_cash_flow_action" sequence="30"/>
-
+              action="flousflow_report_cash_flow_interactive_action" sequence="30"/>
     <menuitem id="menu_flousflow_ledger_reports"
               name="Ledgers" parent="account.menu_finance_reports" sequence="2">
         <menuitem id="menu_flousflow_accounting_trial_balance"
                   name="Trial Balance" action="flousflow_account_report_trial_balance_action"/>
         <menuitem id="menu_flousflow_accounting_general_ledger"
-                  name="General Ledger" action="flousflow_account_report_gl_action"/>
+                  name="General Ledger" action="flousflow_report_gl_interactive_action"/>
         <menuitem id="menu_flousflow_accounting_account_statement"
                   name="Account Statement" action="flousflow_account_report_account_statement_action"/>
     </menuitem>
@@ -124,6 +166,23 @@
               name="Executive Summary"
               parent="account.account_reports_management_menu"
               action="flousflow_account_report_executive_action" sequence="30"/>
+    <menuitem id="menu_flousflow_accounting_annual_report"
+              name="Annual Report"
+              parent="menu_flousflow_accounting_audit"
+              action="flousflow_annual_report_action" sequence="20"/>
+    <menuitem id="menu_flousflow_accounting_annual_financial_statements"
+              name="Annual Financial Statements"
+              parent="account.account_reports_legal_statements_menu"
+              action="flousflow_account_report_annual_action" sequence="50"/>
+    <menuitem id="menu_flousflow_accounting_annual_report_templates"
+              name="Annual Report Templates"
+              parent="account.account_account_menu"
+              action="flousflow_annual_report_template_action"
+              groups="account.group_account_manager" sequence="25"/>
+    <menuitem id="menu_flousflow_accounting_loan_analysis"
+              name="Loans Analysis"
+              parent="account.account_reports_management_menu"
+              action="flousflow_loan_analysis_action" sequence="50"/>
 
     <menuitem id="menu_flousflow_accounting_partner_ledger"
               name="Partner Ledger"
@@ -149,11 +208,21 @@
               name="Tax Report"
               parent="account.account_reports_taxes_and_fiscal_menu"
               action="flousflow_account_report_tax_action" sequence="10"/>
-    <menuitem id="menu_flousflow_accounting_tax_returns"
-              name="Tax Return Reviews"
+    <menuitem id="menu_flousflow_accounting_fiscal_report"
+              name="Fiscal Report"
               parent="account.account_reports_taxes_and_fiscal_menu"
+              action="flousflow_account_report_tax_action" sequence="20"/>
+    <menuitem id="menu_flousflow_accounting_tax_returns"
+              name="Tax Returns"
+              parent="account.account_closing_menu"
               action="flousflow_tax_return_action"
-              groups="account.group_account_user" sequence="20"/>
+              groups="account.group_account_user" sequence="10"/>
+    <menuitem id="menu_flousflow_accounting_account_tags"
+              name="Account Tags"
+              parent="account.account_account_menu"
+              action="flousflow_account_tag_action"
+              groups="account.group_account_user"
+              sequence="10"/>
 
     <!-- Standalone business areas unique to this suite. -->
     <menuitem id="menu_flousflow_accounting_followup"
@@ -180,21 +249,36 @@
               groups="point_of_sale.group_pos_user" sequence="26"/>
 
     <!-- Configuration additions only; standard accounting configuration is reused. -->
+    <menuitem id="menu_flousflow_accounting_report_configuration"
+              name="Accounting Reports"
+              parent="account.account_account_menu"
+              action="action_account_report_configuration"
+              groups="account.group_account_readonly"
+              sequence="24"/>
     <menuitem id="menu_flousflow_accounting_fiscal_years"
               name="Fiscal Years" parent="account.account_account_menu"
               action="flousflow_fiscal_year_action" sequence="20"/>
     <menuitem id="menu_flousflow_accounting_asset_categories"
               name="Asset Models" parent="account.account_account_menu"
               action="flousflow_asset_category_action" sequence="21"/>
+    <menuitem id="menu_flousflow_accounting_depreciation_models"
+              name="Depreciation Models" parent="account.account_account_menu"
+              action="flousflow_depreciation_model_action" sequence="19"/>
     <menuitem id="menu_flousflow_accounting_asset_groups"
               name="Asset Groups" parent="account.account_account_menu"
               action="flousflow_asset_group_action" sequence="22"/>
     <menuitem id="menu_flousflow_accounting_budgets"
               name="Financial Budgets" parent="account.account_account_menu"
-              action="flousflow_budget_action" sequence="23"/>
+              action="flousflow_budget_action"
+              groups="account.group_account_manager" sequence="23"/>
     <menuitem id="menu_flousflow_accounting_followup_levels"
-              name="Follow-up Levels" parent="account.account_invoicing_menu"
-              action="flousflow_followup_action" sequence="30"/>
+              name="Invoice Reminders" parent="account.account_account_menu"
+              action="flousflow_followup_action"
+              groups="account.group_account_manager" sequence="24"/>
+    <menuitem id="menu_flousflow_accounting_followup_settings"
+              name="Follow-up Settings" parent="account.account_invoicing_menu"
+              action="flousflow_followup_configuration_action"
+              groups="account.group_account_manager" sequence="31"/>
     <menuitem id="menu_flousflow_accounting_report_templates"
               name="Report Templates"
               parent="account.menu_finance_configuration"
@@ -213,4 +297,5 @@
               name="Reconciliation Models"
               parent="account.menu_finance_configuration"
               action="account.action_account_reconcile_model" sequence="61"/>
+    </data>
 </odoo>

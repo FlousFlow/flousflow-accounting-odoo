@@ -17,6 +17,10 @@ class FlousflowAccountLoan(models.Model):
     lender_id = fields.Many2one('res.partner', required=True, check_company=True, tracking=True)
     company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company, tracking=True)
     currency_id = fields.Many2one('res.currency', required=True, default=lambda self: self.env.company.currency_id, tracking=True)
+    asset_group_id = fields.Many2one(
+        'flousflow.account.asset.group', string='Asset Group',
+        check_company=True, tracking=True,
+        help='Optional reporting classification for loan analysis.')
     principal_amount = fields.Monetary(required=True, tracking=True)
     annual_interest_rate = fields.Float(string='Annual Interest Rate (%)', required=True, tracking=True)
     installment_count = fields.Integer(required=True, default=12, tracking=True)
@@ -30,11 +34,14 @@ class FlousflowAccountLoan(models.Model):
         required=True, default='annuity', tracking=True)
     start_date = fields.Date(required=True, default=fields.Date.context_today)
     first_payment_date = fields.Date(required=True)
+    end_date = fields.Date(
+        string='End Date', compute='_compute_end_date', store=True, readonly=True)
     journal_id = fields.Many2one('account.journal', required=True, check_company=True, domain="[('type', '=', 'general')]", string='Loan Journal')
     cash_account_id = fields.Many2one('account.account', required=True, check_company=True, domain="[('account_type', 'in', ('asset_cash', 'asset_current'))]", string='Cash / Settlement Account')
     liability_account_id = fields.Many2one('account.account', required=True, check_company=True, domain="[('account_type', 'in', ('liability_current', 'liability_non_current', 'liability_payable'))]", string='Loan Liability Account')
     interest_account_id = fields.Many2one('account.account', required=True, check_company=True, domain="[('account_type', 'in', ('expense', 'expense_direct_cost', 'expense_depreciation'))]", string='Interest Expense Account')
     analytic_distribution = fields.Json(string='Analytic Distribution')
+    active = fields.Boolean(default=True, tracking=True)
     state = fields.Selection(
         [('draft', 'Draft'), ('running', 'Running'), ('closed', 'Closed'),
          ('cancelled', 'Cancelled')], default='draft', required=True,
@@ -45,6 +52,19 @@ class FlousflowAccountLoan(models.Model):
     total_payable = fields.Monetary(compute='_compute_totals', store=True)
     outstanding_principal = fields.Monetary(compute='_compute_totals', store=True)
     paid_installments = fields.Integer(compute='_compute_totals', store=True)
+
+    @api.depends('first_payment_date', 'installment_count', 'payment_frequency')
+    def _compute_end_date(self):
+        months_by_frequency = {
+            'monthly': 1, 'quarterly': 3, 'semiannual': 6, 'annual': 12,
+        }
+        for loan in self:
+            months = months_by_frequency.get(loan.payment_frequency)
+            if not loan.first_payment_date or not months or loan.installment_count < 1:
+                loan.end_date = False
+                continue
+            loan.end_date = loan.first_payment_date + relativedelta(
+                months=months * (loan.installment_count - 1))
 
     @api.depends('principal_amount', 'line_ids.interest_amount', 'line_ids.principal_amount', 'line_ids.state')
     def _compute_totals(self):
@@ -190,6 +210,12 @@ class FlousflowAccountLoanLine(models.Model):
     _check_company_auto = True
 
     loan_id = fields.Many2one('flousflow.account.loan', required=True, ondelete='cascade', index=True)
+    loan_name = fields.Char(related='loan_id.name', store=True, index=True)
+    loan_state = fields.Selection(related='loan_id.state', store=True, index=True)
+    loan_date = fields.Date(related='loan_id.start_date', store=True, index=True)
+    active = fields.Boolean(related='loan_id.active', store=True, index=True)
+    loan_asset_group_id = fields.Many2one(
+        related='loan_id.asset_group_id', store=True, index=True)
     sequence = fields.Integer(required=True)
     date = fields.Date(required=True)
     company_id = fields.Many2one(related='loan_id.company_id', store=True)
@@ -199,8 +225,35 @@ class FlousflowAccountLoanLine(models.Model):
     interest_amount = fields.Monetary(required=True)
     payment_amount = fields.Monetary(required=True)
     closing_balance = fields.Monetary(required=True)
+    long_term_theoretical_balance = fields.Monetary(
+        compute='_compute_theoretical_balances', store=True)
+    short_term_theoretical_balance = fields.Monetary(
+        compute='_compute_theoretical_balances', store=True)
     move_id = fields.Many2one('account.move', readonly=True, copy=False, check_company=True)
     state = fields.Selection([('draft', 'Scheduled'), ('posted', 'Posted'), ('reversed', 'Reversed')], compute='_compute_state', store=True)
+
+    @api.depends('closing_balance', 'date', 'loan_id.start_date',
+                 'loan_id.installment_count', 'loan_id.payment_frequency',
+                 'loan_id.company_id.fiscalyear_last_day',
+                 'loan_id.company_id.fiscalyear_last_month')
+    def _compute_theoretical_balances(self):
+        for line in self:
+            if not line.date or not line.loan_id.company_id:
+                line.long_term_theoretical_balance = 0.0
+                line.short_term_theoretical_balance = 0.0
+                continue
+            loan = line.loan_id
+            remaining_lines = loan.line_ids.filtered(lambda installment: installment.date > line.date)
+            current_fiscal_year_end = loan.company_id.compute_fiscalyear_dates(
+                line.date)['date_to']
+            next_fiscal_year_end = loan.company_id.compute_fiscalyear_dates(
+                current_fiscal_year_end + relativedelta(days=1))['date_to']
+            short_term = sum(
+                installment.principal_amount for installment in remaining_lines
+                if installment.date <= next_fiscal_year_end)
+            line.short_term_theoretical_balance = short_term
+            line.long_term_theoretical_balance = max(
+                line.closing_balance - short_term, 0.0)
 
     @api.depends('move_id.state', 'move_id.reversal_move_ids')
     def _compute_state(self):

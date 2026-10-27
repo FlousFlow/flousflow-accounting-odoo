@@ -2,7 +2,7 @@
 # Part of FlousFlow Accounting
 {
     'name': 'FlousFlow Accounting',
-    'version': '19.0.36.1.0',
+    'version': '20.0.1.0.0',
     'category': 'Accounting/Localizations/Account Charts',
     'summary': 'Complete Flous Flow accounting suite — country-based chart of '
                'accounts, financial reports, assets & depreciation, budgets, '
@@ -74,13 +74,21 @@ All features are original Community code and depend on ``account`` and ``mail``.
         'point_of_sale',
         'project',
         'purchase_stock',
+        'sale_margin',
         'sale_stock',
         'stock_account',
     ],
     'external_dependencies': {'python': ['xlsxwriter']},
+    'assets': {
+        'web.assets_backend': [
+            'flousflow_accounting/static/src/financial_report/financial_report.js',
+            'flousflow_accounting/static/src/financial_report/financial_report.xml',
+            'flousflow_accounting/static/src/financial_report/financial_report.scss',
+        ],
+    },
     'data': [
         'security/security.xml',
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
         'data/followup_mail_template.xml',
         'data/sequence.xml',
         'data/recurring_cron.xml',
@@ -93,11 +101,13 @@ All features are original Community code and depend on ``account`` and ``mail``.
         'views/period_close_views.xml',
         'views/pos_integration_views.xml',
         'views/bank_reconciliation_views.xml',
+        'views/open_item_reconciliation_views.xml',
         'views/tax_return_views.xml',
         'views/payment_promise_views.xml',
         'views/payment_batch_views.xml',
         'views/payment_transfer_views.xml',
         'views/report_views.xml',
+        'views/annual_report_views.xml',
         'views/report_preset_views.xml',
         'views/asset_views.xml',
         'views/account_move_views.xml',
@@ -110,7 +120,9 @@ All features are original Community code and depend on ``account`` and ``mail``.
         'views/dashboard_views.xml',
         'views/revaluation_views.xml',
         'views/financial_report_views.xml',
+        'views/account_report_configuration_views.xml',
         'reports/financial_report.xml',
+        'reports/annual_report.xml',
         'reports/followup_letter.xml',
         'views/menu.xml',
     ],

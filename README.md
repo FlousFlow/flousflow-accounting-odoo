@@ -1,6 +1,6 @@
-# FlousFlow Accounting for Odoo 19
+# FlousFlow Accounting for Odoo 20
 
-A complete, self-contained accounting suite for **Odoo 19 Community**, built on
+A complete, self-contained accounting suite for **Odoo 20 Community**, built on
 the standard `account` module. All features are original Community code.
 
 ## Module: `flousflow_accounting`
@@ -34,7 +34,8 @@ add this repository to your `addons_path` and it works directly.
 * **Payment batches & promises** — batch vendor payments with approval flow and
   "promise to pay" tracking.
 * **Bank reconciliation** — guided manual reconciliation workbench.
-* **Tax returns & VAT review** — tax return review and audit working files.
+* **Open-item reconciliation** — selected customer/vendor ledger items matched through Odoo's standard reconciliation engine.
+* **Tax returns & VAT review** — Kanban/Calendar tax return review and audit working files.
 * **Loans** — annuity/fixed-principal/interest-only schedules.
 * **Accrual review** — goods received not billed / delivered not invoiced.
 * **Period closing** — month/quarter/year close checklist with approval and
@@ -44,7 +45,9 @@ add this repository to your `addons_path` and it works directly.
 ### Install
 
 ```bash
-odoo -i flousflow_accounting -d <db> --stop-after-init
+python /path/to/odoo20/odoo-bin \
+  --addons-path=/path/to/odoo20/addons,/path/to/flousflow-accounting-odoo \
+  -i flousflow_accounting -d <db> --stop-after-init
 ```
 
 The chart of accounts loads automatically based on the company's country.
@@ -53,8 +56,12 @@ The chart of accounts loads automatically based on the company's country.
 
 * [`flousflow_accounting/README.md`](flousflow_accounting/README.md) — full
   feature and behaviour reference.
+* [`flousflow_accounting/docs/ODOO20_ACCOUNTING_PARITY.md`](flousflow_accounting/docs/ODOO20_ACCOUNTING_PARITY.md)
+  — Odoo 20 compatibility and Enterprise navigation parity baseline.
+* [`flousflow_accounting/docs/ODOO20_ENTERPRISE_PARITY_MATRIX.md`](flousflow_accounting/docs/ODOO20_ENTERPRISE_PARITY_MATRIX.md)
+  — full route, action, view, and selected field comparison.
 * [`flousflow_accounting/docs/ODOO19_ACCOUNTING_PARITY.md`](flousflow_accounting/docs/ODOO19_ACCOUNTING_PARITY.md)
-  — Odoo 19 parity workbench and verified scenario matrix.
+  — historical Odoo 19 behavioral comparison.
 
 ## License
 

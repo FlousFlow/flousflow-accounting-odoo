@@ -30,6 +30,24 @@ class TestAssets(TransactionCase):
             'prorata': False,
         })
 
+    def test_depreciation_models_enterprise_route_and_views(self):
+        action = self.env.ref(
+            'flousflow_accounting.flousflow_depreciation_model_action')
+        menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_depreciation_models')
+        self.assertEqual(action.res_model, 'flousflow.account.asset.category')
+        self.assertEqual(action.view_mode, 'list,kanban,form')
+        self.assertEqual(action.search_view_id, self.env.ref(
+            'flousflow_accounting.flousflow_depreciation_model_search'))
+        self.assertEqual(menu.action, action)
+        self.assertIn("('recognition_type', '=', 'asset')", action.domain)
+
+        kanban = self.env.ref(
+            'flousflow_accounting.flousflow_depreciation_model_kanban')
+        for field_name in ('name', 'method', 'method_number', 'method_period'):
+            self.assertIn(f'name="{field_name}"', kanban.arch)
+        self.assertIn("'default_recognition_type': 'asset'", action.context)
+
     def test_asset_board_linear(self):
         asset = self.env['flousflow.account.asset'].create({
             'name': 'Laptop',
@@ -179,6 +197,28 @@ class TestAssets(TransactionCase):
             action.res_model, 'flousflow.account.asset.depreciation.line')
         self.assertIn('pivot', action.view_mode)
         self.assertIn('graph', action.view_mode)
+
+    def test_assets_action_has_enterprise_view_modes_on_community_data(self):
+        action = self.env.ref('flousflow_accounting.flousflow_asset_action')
+        self.assertEqual(
+            action.view_mode, 'list,kanban,activity,form')
+        self.assertEqual(
+            action.domain, "[('recognition_type', '=', 'asset')]" )
+        kanban = self.env.ref(
+            'flousflow_accounting.flousflow_asset_view_kanban')
+        activity = self.env.ref(
+            'flousflow_accounting.flousflow_asset_view_activity')
+        self.assertEqual(kanban.model, action.res_model)
+        self.assertIn('value_residual', kanban.arch)
+        asset_list = self.env.ref('flousflow_accounting.flousflow_asset_view_list')
+        for field_name in (
+                'company_id', 'date', 'category_id', 'group_id', 'value',
+                'salvage_value', 'value_residual', 'analytic_distribution'):
+            self.assertIn(f'name="{field_name}"', asset_list.arch)
+        self.assertIn('string="Acquisition Date"', asset_list.arch)
+        self.assertIn('string="Gross Value"', asset_list.arch)
+        self.assertEqual(activity.model, action.res_model)
+        self.assertIn('activity-box', activity.arch)
 
     def test_depreciation_expense_keeps_analytic_distribution(self):
         plan = self.env['account.analytic.plan'].create({
@@ -358,6 +398,7 @@ class TestAssets(TransactionCase):
             'partner_id': vendor.id,
             'journal_id': purchase_journal.id,
             'invoice_date': '2026-01-15',
+            'invoice_origin': 'PO/FF-001',
             'invoice_line_ids': [(0, 0, {
                 'name': 'Production Machine',
                 'account_id': self.category.asset_account_id.id,
@@ -378,6 +419,15 @@ class TestAssets(TransactionCase):
         self.assertEqual(asset.partner_id, vendor)
         self.assertEqual(asset.date.isoformat(), '2026-01-15')
         self.assertEqual(asset.value, 5000.0)
+        self.assertEqual(source_line.asset_ids, asset)
+        self.assertEqual(source_line.invoice_origin, 'PO/FF-001')
+
+        bill.write({'attachment_ids': [(0, 0, {
+            'name': 'vendor-invoice.txt',
+            'res_model': 'account.move',
+            'raw': b'Invoice attachment',
+        })]})
+        self.assertEqual(source_line.move_attachment_ids, bill.attachment_ids)
 
     def test_asset_source_rejects_draft_vendor_bill_and_duplicate_line(self):
         purchase_journal = self.env['account.journal'].search([

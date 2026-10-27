@@ -11,7 +11,9 @@ class FlousflowAccountAccrualReview(models.TransientModel):
     date_to = fields.Date(required=True, default=fields.Date.context_today)
     review_type = fields.Selection(
         [('purchase', 'Goods Received Not Billed'),
-         ('sale', 'Goods Delivered Not Invoiced')],
+         ('purchase_not_received', 'Billed Not Received'),
+         ('sale', 'Goods Delivered Not Invoiced'),
+         ('sale_not_delivered', 'Invoiced Not Delivered')],
         required=True, default='purchase')
     line_ids = fields.One2many('flousflow.account.accrual.review.line', 'review_id', readonly=True)
     total_amount = fields.Monetary(compute='_compute_total')
@@ -24,7 +26,10 @@ class FlousflowAccountAccrualReview(models.TransientModel):
     def action_generate(self):
         self.ensure_one()
         self.line_ids = [(5, 0, 0)]
-        values = self._purchase_values() if self.review_type == 'purchase' else self._sale_values()
+        values = (
+            self._purchase_values()
+            if self.review_type in ('purchase', 'purchase_not_received')
+            else self._sale_values())
         self.line_ids = [(0, 0, value) for value in values]
         return {'type': 'ir.actions.act_window', 'res_model': self._name,
                 'res_id': self.id, 'view_mode': 'form', 'target': 'current'}
@@ -35,15 +40,24 @@ class FlousflowAccountAccrualReview(models.TransientModel):
             ('date', '<=', self.date_to), ('purchase_line_id', '!=', False),
             ('location_dest_id.usage', '=', 'internal'),
         ])
+        order_lines = self.env['purchase.order.line'].search([
+            ('order_id.company_id', '=', self.company_id.id),
+            ('order_id.state', 'in', ('purchase', 'done')),
+            ('invoice_lines.move_id.state', '=', 'posted'),
+            ('invoice_lines.move_id.move_type', '=', 'in_invoice'),
+            ('invoice_lines.move_id.invoice_date', '<=', self.date_to),
+        ]) | moves.mapped('purchase_line_id')
         result = []
-        for order_line in moves.mapped('purchase_line_id'):
+        for order_line in order_lines:
             received = sum(moves.filtered(lambda move: move.purchase_line_id == order_line).mapped('quantity'))
             billed = sum(order_line.invoice_lines.filtered(
                 lambda line: line.parent_state == 'posted'
                 and line.move_id.invoice_date <= self.date_to
                 and line.move_id.move_type == 'in_invoice').mapped('quantity'))
-            pending = received - billed
-            if self.company_id.currency_id.is_zero(pending):
+            pending = (
+                received - billed if self.review_type == 'purchase'
+                else billed - received)
+            if pending <= 0 or self.company_id.currency_id.is_zero(pending):
                 continue
             amount = order_line.currency_id._convert(
                 pending * order_line.price_unit, self.company_id.currency_id,
@@ -64,15 +78,24 @@ class FlousflowAccountAccrualReview(models.TransientModel):
             ('date', '<=', self.date_to), ('sale_line_id', '!=', False),
             ('location_id.usage', '=', 'internal'),
         ])
+        order_lines = self.env['sale.order.line'].search([
+            ('order_id.company_id', '=', self.company_id.id),
+            ('order_id.state', 'in', ('sale', 'done')),
+            ('invoice_lines.move_id.state', '=', 'posted'),
+            ('invoice_lines.move_id.move_type', '=', 'out_invoice'),
+            ('invoice_lines.move_id.invoice_date', '<=', self.date_to),
+        ]) | moves.mapped('sale_line_id')
         result = []
-        for order_line in moves.mapped('sale_line_id'):
+        for order_line in order_lines:
             delivered = sum(moves.filtered(lambda move: move.sale_line_id == order_line).mapped('quantity'))
             invoiced = sum(order_line.invoice_lines.filtered(
                 lambda line: line.parent_state == 'posted'
                 and line.move_id.invoice_date <= self.date_to
                 and line.move_id.move_type == 'out_invoice').mapped('quantity'))
-            pending = delivered - invoiced
-            if self.company_id.currency_id.is_zero(pending):
+            pending = (
+                delivered - invoiced if self.review_type == 'sale'
+                else invoiced - delivered)
+            if pending <= 0 or self.company_id.currency_id.is_zero(pending):
                 continue
             amount = order_line.currency_id._convert(
                 pending * order_line.price_unit, self.company_id.currency_id,

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of FlousFlow Accounting
+import ast
+
 from lxml import etree
 
 from odoo import fields
@@ -572,6 +574,147 @@ class TestFinancialReports(TransactionCase):
         self.assertAlmostEqual(amounts['expenses'], 40.0, places=2)
         self.assertAlmostEqual(amounts['net_profit'], 60.0, places=2)
 
+    def test_annual_report_combines_statements_and_compares_years(self):
+        self._post_move(
+            self.receivable, self.income, 80.0,
+            posting_date='2025-03-15')
+        self._post_move(
+            self.receivable, self.income, 100.0,
+            posting_date='2026-03-15')
+        wizard = self.env['flousflow.account.report'].create({
+            'report_type': 'annual_report',
+            'date_from': '2026-01-01',
+            'date_to': '2026-12-31',
+            'comparison_mode': 'previous_year',
+        })
+
+        wizard.action_generate()
+
+        section_names = wizard.line_ids.filtered('is_section').mapped('name')
+        sections = [name for name in section_names if name.strip() in {
+            'Profit & Loss', 'Balance Sheet', 'Cash Flow Statement'}]
+        self.assertEqual(sections, [
+            'Profit & Loss', 'Balance Sheet', 'Cash Flow Statement'])
+        income_line = wizard.line_ids.filtered(
+            lambda line: line.name.strip() == 'Operating Revenue')
+        self.assertTrue(income_line)
+        self.assertAlmostEqual(income_line.balance, 100.0, places=2)
+        self.assertAlmostEqual(
+            income_line.comparison_balance, 80.0, places=2)
+
+    def test_annual_report_defaults_to_company_fiscal_year(self):
+        fiscal_year = self.company.compute_fiscalyear_dates(fields.Date.today())
+        wizard = self.env['flousflow.account.report'].with_context(
+            default_report_type='annual_report').create({})
+
+        self.assertEqual(wizard.date_from, fiscal_year['date_from'])
+        self.assertEqual(wizard.date_to, fiscal_year['date_to'])
+        self.assertEqual(wizard.comparison_mode, 'previous_year')
+
+    def test_enterprise_parity_analysis_menus_open_expected_actions(self):
+        management = self.env.ref('account.account_reports_management_menu')
+        review = self.env.ref('account.account_audit_menu')
+        closing = self.env.ref('account.account_closing_menu')
+        annual_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_annual_report')
+        reconcile_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_open_item_reconcile')
+        tax_returns_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_tax_returns')
+        loan_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_loan_analysis')
+        inventory_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_inventory_valuation')
+        purchases_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_review_purchases')
+        sales_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_review_sales')
+        bills_to_receive_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_bills_to_receive')
+        billed_not_received_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_billed_not_received')
+        invoices_to_be_issued_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_invoices_to_be_issued')
+        invoiced_not_delivered_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_invoiced_not_delivered')
+        depreciation_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_depreciation_schedule')
+        assets_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_assets')
+        audit_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_audit')
+        working_files_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_working_files')
+        account_tags_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_account_tags')
+        self.assertEqual(audit_menu.parent_id, review)
+        self.assertEqual(annual_menu.parent_id, audit_menu)
+        self.assertEqual(working_files_menu.parent_id, audit_menu)
+        self.assertEqual(
+            working_files_menu.action.view_mode, 'kanban,list,form')
+        self.assertEqual(reconcile_menu.parent_id, closing)
+        self.assertEqual(tax_returns_menu.parent_id, closing)
+        self.assertEqual(inventory_menu.parent_id.parent_id, review)
+        self.assertEqual(purchases_menu.parent_id, review)
+        self.assertEqual(sales_menu.parent_id, review)
+        self.assertEqual(bills_to_receive_menu.parent_id, purchases_menu)
+        self.assertEqual(billed_not_received_menu.parent_id, purchases_menu)
+        self.assertEqual(invoices_to_be_issued_menu.parent_id, sales_menu)
+        self.assertEqual(invoiced_not_delivered_menu.parent_id, sales_menu)
+        self.assertEqual(assets_menu.parent_id, self.env.ref('account.menu_finance_entries'))
+        self.assertEqual(depreciation_menu.parent_id, self.env.ref('account.account_reports_legal_statements_menu'))
+        self.assertEqual(loan_menu.parent_id, management)
+        self.assertEqual(
+            depreciation_menu.action,
+            self.env.ref('flousflow_accounting.flousflow_asset_dep_line_action'))
+        self.assertEqual(
+            annual_menu.action,
+            self.env.ref('flousflow_accounting.flousflow_annual_report_action'))
+        self.assertEqual(
+            annual_menu.action.res_model, 'flousflow.account.annual.report')
+        annual_statements_menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_annual_financial_statements')
+        self.assertEqual(
+            annual_statements_menu.action,
+            self.env.ref('flousflow_accounting.flousflow_account_report_annual_action'))
+        self.assertEqual(
+            loan_menu.action,
+            self.env.ref('flousflow_accounting.flousflow_loan_analysis_action'))
+        self.assertEqual(loan_menu.action.res_model, 'flousflow.account.loan.line')
+        self.assertEqual(loan_menu.action.view_mode, 'list,form')
+        self.assertEqual(
+            loan_menu.action.view_ids.sorted('sequence').mapped('view_mode'),
+            ['pivot', 'list', 'form'])
+        analytic_action = self.env.ref('account.action_analytic_reporting')
+        self.assertEqual(
+            analytic_action.view_mode, 'pivot,list,kanban,form,graph')
+        self.assertEqual(
+            inventory_menu.action,
+            self.env.ref('account.action_report_stock_valuation'))
+        self.assertEqual(reconcile_menu.action.res_model, 'account.move.line')
+        self.assertEqual(account_tags_menu.action.res_model, 'account.account.tag')
+
+    def test_statement_report_menu_labels_and_order_match_enterprise(self):
+        statement_root = self.env.ref(
+            'account.account_reports_legal_statements_menu')
+        menus = self.env['ir.ui.menu'].browse([
+            self.env.ref(xml_id).id for xml_id in (
+                'flousflow_accounting.menu_flousflow_accounting_pnl',
+                'flousflow_accounting.menu_flousflow_accounting_balance_sheet',
+                'flousflow_accounting.menu_flousflow_accounting_cash_flow',
+                'flousflow_accounting.menu_flousflow_accounting_depreciation_schedule',
+            )
+        ])
+        self.assertTrue(all(menu.parent_id == statement_root for menu in menus))
+        self.assertEqual(
+            set(menus.mapped('name')),
+            {'Profit and Loss', 'Balance Sheet', 'Cash Flow Statement',
+             'Depreciation Schedule'})
+        self.assertEqual(
+            menus.sorted(lambda menu: (menu.sequence, menu.id)).mapped('name'),
+            ['Profit and Loss', 'Balance Sheet', 'Cash Flow Statement',
+             'Depreciation Schedule'])
+
     def test_statement_actions_are_full_page(self):
         for xml_id in (
                 'flousflow_account_report_customer_statement_action',
@@ -595,7 +738,6 @@ class TestFinancialReports(TransactionCase):
             'flousflow_account_report_aged_pay_action',
             'flousflow_account_report_partner_ledger_action',
             'flousflow_account_report_cash_flow_action',
-            'flousflow_account_report_trial_balance_action',
             'flousflow_account_report_journal_audit_action',
             'flousflow_account_report_tax_action',
             'flousflow_account_report_executive_action',
@@ -611,6 +753,148 @@ class TestFinancialReports(TransactionCase):
             self.assertEqual(
                 self.env.ref('flousflow_accounting.%s' % xml_id).view_id,
                 statement_view)
+
+    def test_enterprise_report_destinations_select_the_matching_report_type(self):
+        route_actions = {
+            'menu_flousflow_accounting_pnl':
+                ('flousflow_report_pnl_interactive_action', 'profit_loss'),
+            'menu_flousflow_accounting_balance_sheet':
+                ('flousflow_report_balance_interactive_action', 'balance_sheet'),
+            'menu_flousflow_accounting_cash_flow':
+                ('flousflow_report_cash_flow_interactive_action', 'cash_flow'),
+            'menu_flousflow_accounting_trial_balance':
+                ('flousflow_account_report_trial_balance_action', 'trial_balance'),
+            'menu_flousflow_accounting_general_ledger':
+                ('flousflow_report_gl_interactive_action', 'general_ledger'),
+            'menu_flousflow_accounting_executive_summary':
+                ('flousflow_account_report_executive_action', 'executive_summary'),
+            'menu_flousflow_accounting_aged_receivable':
+                ('flousflow_account_report_aged_rec_action', 'aged_receivable'),
+            'menu_flousflow_accounting_aged_payable':
+                ('flousflow_account_report_aged_pay_action', 'aged_payable'),
+            'menu_flousflow_accounting_partner_ledger':
+                ('flousflow_account_report_partner_ledger_action', 'partner_ledger'),
+            'menu_flousflow_accounting_customer_statement':
+                ('flousflow_account_report_customer_statement_action', 'customer_statement'),
+            'menu_flousflow_accounting_vendor_statement':
+                ('flousflow_account_report_vendor_statement_action', 'vendor_statement'),
+            'menu_flousflow_accounting_tax_report':
+                ('flousflow_account_report_tax_action', 'tax_report'),
+            'menu_flousflow_accounting_journal_audit':
+                ('flousflow_account_report_journal_audit_action', 'journal_audit'),
+        }
+        for menu_xmlid, (action_xmlid, report_type) in route_actions.items():
+            with self.subTest(menu=menu_xmlid):
+                menu = self.env.ref('flousflow_accounting.%s' % menu_xmlid)
+                action = self.env.ref('flousflow_accounting.%s' % action_xmlid)
+                self.assertEqual(menu.action, action)
+                action_context = ast.literal_eval(action.context or '{}')
+                self.assertEqual(
+                    action_context.get('default_report_type'), report_type)
+                if report_type in (
+                        'balance_sheet', 'profit_loss', 'cash_flow', 'trial_balance',
+                        'general_ledger'):
+                    self.assertEqual(action._name, 'ir.actions.client')
+                    self.assertEqual(
+                        action.tag, 'flousflow_accounting.financial_report')
+                else:
+                    self.assertEqual(action.res_model, 'flousflow.account.report')
+
+    def test_interactive_statement_payload_uses_the_existing_report_engine(self):
+        payload = self.env['flousflow.account.report'].get_interactive_report_data(
+            'balance_sheet', '2026-12-31', '2026-01-01', 'posted', 'none',
+            self.env.company.id)
+        self.assertEqual(payload['report_type'], 'balance_sheet')
+        self.assertEqual(payload['company_name'], self.env.company.display_name)
+        self.assertTrue(payload['currency_symbol'])
+        self.assertTrue(payload['report_id'])
+        self.assertTrue(any(
+            line['code'] == 'total_assets' and line['is_total']
+            for line in payload['lines']))
+        self.assertTrue(any(line['has_children'] for line in payload['lines']))
+
+    def test_interactive_statement_drilldown_is_company_and_date_scoped(self):
+        payload = self.env['flousflow.account.report'].get_interactive_report_data(
+            'balance_sheet', '2026-12-31', '2026-01-01', 'posted', 'none',
+            self.env.company.id)
+        action = self.env['flousflow.account.report'].get_interactive_drilldown_action(
+            payload['report_id'], 'total_assets')
+        self.assertEqual(action['type'], 'ir.actions.act_window')
+        self.assertEqual(action['res_model'], 'account.move.line')
+        self.assertIn(('company_id', '=', self.env.company.id), action['domain'])
+        self.assertIn(('date', '<=', fields.Date.to_date('2026-12-31')), action['domain'])
+
+    def test_interactive_statement_accepts_a_custom_comparison_date(self):
+        payload = self.env['flousflow.account.report'].get_interactive_report_data(
+            'balance_sheet', '2026-12-31', '2026-01-01', 'posted',
+            'custom_date', self.env.company.id, '2025-06-30')
+        self.assertEqual(payload['comparison_mode'], 'custom_date')
+        self.assertEqual(payload['comparison_date'], '2025-06-30')
+        self.assertTrue(any(
+            line['code'] == 'total_assets' and line['comparison_balance'] == 0.0
+            for line in payload['lines']))
+
+    def test_interactive_trial_balance_payload_has_enterprise_columns(self):
+        self._post_move(
+            self.receivable, self.income, 50.0, posting_date='2025-12-15')
+        self._post_move(
+            self.expense, self.payable, 40.0, posting_date='2026-01-15')
+        payload = self.env['flousflow.account.report'].get_interactive_report_data(
+            'trial_balance', '2026-01-31', target_move='posted',
+            date_filter='current_month')
+
+        self.assertEqual(payload['date_from'], '2026-01-01')
+        self.assertEqual(payload['date_to'], '2026-01-31')
+        receivable_line = next(
+            line for line in payload['lines']
+            if line['code'] == self.receivable.code)
+        self.assertEqual(receivable_line['opening_balance'], 50.0)
+        self.assertEqual(receivable_line['closing_balance'], 50.0)
+        total = next(line for line in payload['lines']
+                     if line['code'] == 'total_trial_balance')
+        self.assertTrue(total['is_total'])
+        self.assertEqual((total['debit'], total['credit']), (40.0, 40.0))
+        self.assertTrue(
+            {'opening_balance', 'debit', 'credit', 'closing_balance'} <= total.keys())
+
+        action = self.env['flousflow.account.report'].get_interactive_drilldown_action(
+            payload['report_id'], self.receivable.code, 'opening_balance')
+        self.assertIn(('account_id', 'in', [self.receivable.id]), action['domain'])
+        self.assertIn(('date', '<', fields.Date.to_date('2026-01-01')), action['domain'])
+
+    def test_interactive_general_ledger_payload_has_drillable_account_groups(self):
+        self._post_move(self.receivable, self.income, 75.0)
+        payload = self.env['flousflow.account.report'].get_interactive_report_data(
+            'general_ledger', '2026-01-31', target_move='posted',
+            date_filter='current_month')
+
+        account_header = next(
+            line for line in payload['lines']
+            if line['code'] == self.receivable.code and line['is_section'])
+        move_line = next(
+            line for line in payload['lines']
+            if line['account_id'] == account_header['account_id']
+            and line['date'] == '2026-01-15')
+        self.assertTrue(account_header['has_children'])
+        self.assertEqual(move_line['debit'], 75.0)
+        self.assertTrue(move_line['has_amount'])
+
+        action = self.env['flousflow.account.report'].get_interactive_drilldown_action(
+            payload['report_id'], move_line['id'], 'debit')
+        self.assertIn(('account_id', 'in', [self.receivable.id]), action['domain'])
+        self.assertIn(('date', '>=', fields.Date.to_date('2026-01-01')), action['domain'])
+
+    def test_fiscal_report_route_is_available_without_claiming_efile_parity(self):
+        menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_fiscal_report')
+        tax_report = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_tax_report')
+        self.assertEqual(
+            menu.complete_name,
+            'Accounting/Reporting/Taxes & Fiscal/Fiscal Report')
+        self.assertEqual(menu.action, tax_report.action)
+        action_context = ast.literal_eval(menu.action.context or '{}')
+        self.assertEqual(action_context.get('default_report_type'), 'tax_report')
 
     def test_refresh_keeps_the_correct_report_view(self):
         customer = self.env['res.partner'].create({
@@ -764,10 +1048,11 @@ class TestFinancialReports(TransactionCase):
         })
         wizard.action_generate()
         self.assertTrue(wizard.line_ids)
-        self.assertAlmostEqual(sum(wizard.line_ids.mapped('debit')), 250.0, places=2)
-        self.assertAlmostEqual(sum(wizard.line_ids.mapped('credit')), 250.0, places=2)
-        self.assertAlmostEqual(sum(wizard.line_ids.mapped('balance')), 0.0, places=2)
-        receivable = wizard.line_ids.filtered(
+        account_lines = wizard.line_ids.filtered(lambda line: not line.is_total)
+        self.assertAlmostEqual(sum(account_lines.mapped('debit')), 250.0, places=2)
+        self.assertAlmostEqual(sum(account_lines.mapped('credit')), 250.0, places=2)
+        self.assertAlmostEqual(sum(account_lines.mapped('balance')), 0.0, places=2)
+        receivable = account_lines.filtered(
             lambda line: line.account_id == self.receivable)
         self.assertAlmostEqual(receivable.opening_balance, 100.0, places=2)
         self.assertAlmostEqual(receivable.closing_balance, 350.0, places=2)

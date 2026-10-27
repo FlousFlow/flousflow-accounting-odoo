@@ -39,9 +39,41 @@ class TestRecurring(TransactionCase):
              ('company_id', '=', self.env.company.id)], limit=1)
         if not self.journal:
             self.skipTest('No bank/cash journal available')
+        outstanding_account = (
+            self.journal.suspense_account_id or self.journal.default_account_id)
+        if not outstanding_account:
+            self.skipTest('A payment outstanding account is required')
+        self.journal.inbound_payment_method_line_ids.payment_account_id = outstanding_account
+        self.journal.outbound_payment_method_line_ids.payment_account_id = outstanding_account
+        # Odoo 20 requires a receivable/payable destination account when a
+        # payment move is generated.  The minimal test chart does not assign
+        # those company defaults, so configure the standard chart accounts in
+        # the fixture instead of weakening the ORM constraint.
+        receivable = self.env['account.account'].search([
+            ('company_ids', 'in', self.env.company.id),
+            ('account_type', '=', 'asset_receivable'),
+        ], limit=1)
+        payable = self.env['account.account'].search([
+            ('company_ids', 'in', self.env.company.id),
+            ('account_type', '=', 'liability_payable'),
+        ], limit=1)
+        if not receivable or not payable:
+            self.skipTest('Receivable and payable accounts are required')
+        company_partner = self.env.company.partner_id
+        company_partner.property_account_receivable_id = receivable
+        company_partner.property_account_payable_id = payable
+        self.receivable_account = receivable
+        self.payable_account = payable
+
+    def _partner(self, name):
+        return self.env['res.partner'].create({
+            'name': name,
+            'property_account_receivable_id': self.receivable_account.id,
+            'property_account_payable_id': self.payable_account.id,
+        })
 
     def test_recurring_schedule(self):
-        partner = self.env['res.partner'].create({'name': 'Recurring Partner'})
+        partner = self._partner('Recurring Partner')
         rec = self.env['flousflow.account.recurring'].create({
             'partner_id': partner.id,
             'amount': 100.0,
@@ -57,7 +89,7 @@ class TestRecurring(TransactionCase):
         self.assertEqual(len(rec.line_ids), 6)
 
     def test_recurring_generate_payments(self):
-        partner = self.env['res.partner'].create({'name': 'Recurring Partner 2'})
+        partner = self._partner('Recurring Partner 2')
         rec = self.env['flousflow.account.recurring'].create({
             'partner_id': partner.id,
             'amount': 50.0,
@@ -79,7 +111,7 @@ class TestRecurring(TransactionCase):
         self.assertEqual(rec.line_ids.payment_id.ids, payment_ids)
 
     def test_recurring_interval_must_be_positive(self):
-        partner = self.env['res.partner'].create({'name': 'Invalid Interval'})
+        partner = self._partner('Invalid Interval')
         with self.assertRaises(ValidationError):
             self.env['flousflow.account.recurring'].create({
                 'partner_id': partner.id,
@@ -93,7 +125,7 @@ class TestRecurring(TransactionCase):
             })
 
     def test_generate_payments_only_processes_selected_schedule(self):
-        partner = self.env['res.partner'].create({'name': 'Scoped Schedule'})
+        partner = self._partner('Scoped Schedule')
         values = {
             'partner_id': partner.id,
             'amount': 25.0,
@@ -114,7 +146,7 @@ class TestRecurring(TransactionCase):
         self.assertFalse(other.line_ids.payment_id)
 
     def test_recurring_cron_processes_due_lines_only(self):
-        partner = self.env['res.partner'].create({'name': 'Cron Schedule'})
+        partner = self._partner('Cron Schedule')
         recurring = self.env['flousflow.account.recurring'].create({
             'partner_id': partner.id,
             'amount': 75.0,
@@ -137,7 +169,7 @@ class TestRecurring(TransactionCase):
         self.assertTrue(cron.active)
 
     def test_recurring_amount_validation(self):
-        partner = self.env['res.partner'].create({'name': 'Bad Amount'})
+        partner = self._partner('Bad Amount')
         with self.assertRaises(ValidationError):
             self.env['flousflow.account.recurring'].create({
                 'partner_id': partner.id,

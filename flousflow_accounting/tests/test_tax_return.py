@@ -14,6 +14,17 @@ class TestTaxReturnReview(AccountTestInvoicingCommon):
             'country_id': cls.env.company.account_fiscal_country_id.id,
         })
 
+    def test_tax_returns_action_has_kanban_and_calendar_views(self):
+        action = self.env.ref('flousflow_accounting.flousflow_tax_return_action')
+        self.assertEqual(action.view_mode, 'kanban,calendar,list,form')
+        self.assertEqual(
+            action.search_view_id,
+            self.env.ref('flousflow_accounting.flousflow_tax_return_view_search'))
+        self.assertTrue(self.env.ref(
+            'flousflow_accounting.flousflow_tax_return_view_kanban'))
+        self.assertTrue(self.env.ref(
+            'flousflow_accounting.flousflow_tax_return_view_calendar'))
+
     def _tax_move(self, state='posted'):
         move = self.env['account.move'].create({
             'move_type': 'entry', 'date': fields.Date.from_string('2026-07-15'),
@@ -37,8 +48,26 @@ class TestTaxReturnReview(AccountTestInvoicingCommon):
     def _return(self):
         return self.env['flousflow.account.tax.return'].create({
             'date_from': '2026-07-01', 'date_to': '2026-07-31',
+            'date_deadline': '2026-08-31',
             'reviewer_id': self.env.user.id,
         })
+
+    def test_submission_and_tax_lock_dates_are_workflow_audit_fields(self):
+        record = self._return()
+        expected_days = (record.date_deadline - fields.Date.context_today(record)).days
+        self.assertEqual(record.days_to_deadline, expected_days)
+        with self.assertRaises(UserError):
+            record.write({'date_submission': '2026-08-31'})
+        with self.assertRaises(UserError):
+            record.write({'date_lock': '2026-07-31'})
+
+        self._tax_move()
+        record.action_prepare()
+        record.action_submit()
+        self.assertEqual(record.date_submission, fields.Date.context_today(record))
+        record.action_approve()
+        record.action_close()
+        self.assertEqual(record.date_lock, record.company_id.tax_lock_date)
 
     def test_prepare_uses_posted_localization_tax_tags(self):
         move = self._tax_move()
@@ -66,6 +95,7 @@ class TestTaxReturnReview(AccountTestInvoicingCommon):
         record = self._return()
         record.action_prepare()
         record.action_submit()
+        self.assertEqual(record.date_submission, fields.Date.context_today(record))
         record.action_approve()
         move_count = self.env['account.move'].search_count([])
 
@@ -73,6 +103,7 @@ class TestTaxReturnReview(AccountTestInvoicingCommon):
 
         self.assertEqual(record.state, 'closed')
         self.assertEqual(record.company_id.tax_lock_date, record.date_to)
+        self.assertEqual(record.date_lock, record.date_to)
         self.assertEqual(self.env['account.move'].search_count([]), move_count)
 
     def test_closed_return_is_immutable(self):
@@ -81,3 +112,5 @@ class TestTaxReturnReview(AccountTestInvoicingCommon):
         record.action_prepare(); record.action_submit(); record.action_approve(); record.action_close()
         with self.assertRaises(UserError):
             record.write({'date_to': '2026-08-31'})
+        with self.assertRaises(UserError):
+            record.write({'date_deadline': '2026-09-30'})

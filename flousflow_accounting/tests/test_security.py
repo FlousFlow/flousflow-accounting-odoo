@@ -6,7 +6,7 @@ from odoo.tests import TransactionCase
 class TestAccountingSecurity(TransactionCase):
     """Accounting-owned records must follow the active company boundary."""
 
-    def test_company_models_have_global_company_rules(self):
+    def test_company_models_have_global_access_restrictions(self):
         model_names = {
             'flousflow.account.asset.category',
             'flousflow.account.asset.group',
@@ -35,9 +35,10 @@ class TestAccountingSecurity(TransactionCase):
             'flousflow.account.payment.promise',
         }
         models = self.env['ir.model'].search([('model', 'in', list(model_names))])
-        covered = set(self.env['ir.rule'].search([
+        covered = set(self.env['ir.access'].search([
             ('model_id', 'in', models.ids),
-            ('global', '=', True),
+            ('group_id', '=', False),
+            ('operation', '=', 'crud'),
         ]).mapped('model_id.model'))
         self.assertEqual(covered, model_names)
 

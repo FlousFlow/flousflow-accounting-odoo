@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.FinancialReport" owl="1">
+        <div class="o_action o_ff_financial_report">
+            <div class="o_ff_report_toolbar d-print-none">
+                <div class="o_ff_report_title">
+                    <h2 t-esc="this.state.payload?.title || 'Financial Report'"/>
+                    <span t-if="this.state.payload" class="text-muted" t-esc="this.state.payload.company_name"/>
+                </div>
+                <div class="o_ff_report_controls">
+                    <select t-if="this.state.reportType !== 'balance_sheet'" class="form-select"
+                            aria-label="Reporting period" t-att-value="this.state.periodPreset"
+                            t-on-change="this.onPeriodPresetChange">
+                        <option value="current_month"><t t-esc="this.state.payload?.ui_labels?.month || 'Month'"/></option>
+                        <option value="current_quarter"><t t-esc="this.state.payload?.ui_labels?.quarter || 'Quarter'"/></option>
+                        <option value="current_year"><t t-esc="this.state.payload?.ui_labels?.fiscal_year || 'Fiscal Year'"/></option>
+                        <option value="custom"><t t-esc="this.state.payload?.ui_labels?.custom_dates || 'Custom Dates'"/></option>
+                    </select>
+                    <button t-if="this.state.reportType !== 'balance_sheet'" class="btn btn-secondary" t-on-click="() => this.shiftPeriod(-1)"
+                            aria-label="Previous period"><i class="fa fa-chevron-left"/></button>
+                    <label t-if="this.state.reportType !== 'balance_sheet' and this.state.periodPreset === 'custom'" class="o_ff_date_control">
+                        <span t-esc="this.state.payload?.ui_labels?.from || 'From'"/>
+                        <input type="date" name="dateFrom" class="form-control"
+                               t-att-value="this.state.dateFrom" t-on-change="this.onDateChange"/>
+                    </label>
+                    <input t-if="this.state.reportType === 'general_ledger'" type="search"
+                           class="form-control o_ff_ledger_search" t-att-placeholder="this.state.payload?.ui_labels?.search_ledger || 'Search accounts or entries'"
+                           t-att-value="this.state.searchQuery" t-on-input="this.onSearchInput"/>
+                    <label t-if="this.state.reportType === 'balance_sheet' or this.state.periodPreset === 'custom'" class="o_ff_date_control">
+                        <span t-if="this.state.reportType === 'balance_sheet'" t-esc="this.state.payload?.ui_labels?.as_of || 'As of'"/>
+                        <span t-else="" t-esc="this.state.payload?.ui_labels?.to || 'To'"/>
+                        <input type="date" class="form-control" t-att-value="this.state.dateTo"
+                               t-on-change="this.onDateChange"/>
+                    </label>
+                    <span t-else="" class="btn btn-secondary o_ff_period_label">
+                        <i class="fa fa-calendar me-1"/>
+                        <t t-esc="this.periodLabel"/>
+                    </span>
+                    <button t-if="this.state.reportType !== 'balance_sheet'" class="btn btn-secondary" t-on-click="() => this.shiftPeriod(1)"
+                            aria-label="Next period"><i class="fa fa-chevron-right"/></button>
+                    <button t-if="this.hasFoldableLines"
+                            class="btn btn-secondary" t-on-click="this.foldAll"> <t t-esc="this.state.payload?.ui_labels?.fold_all || 'Fold All'"/></button>
+                    <button t-if="this.state.foldedCodes.length" class="btn btn-secondary"
+                            t-on-click="this.unfoldAll"> <t t-esc="this.state.payload?.ui_labels?.unfold_all || 'Unfold All'"/></button>
+                    <select class="form-select" aria-label="Journal entry status"
+                            t-att-value="this.state.targetMove" t-on-change="this.onMoveFilterChange">
+                        <option value="posted"><t t-esc="this.state.payload?.ui_labels?.posted_entries || 'Posted Entries'"/></option>
+                        <option value="all"><t t-esc="this.state.payload?.ui_labels?.all_entries || 'All Entries'"/></option>
+                    </select>
+                    <button class="btn btn-secondary" t-on-click="this.toggleComparison">
+                        <i class="fa fa-columns me-1"/> <t t-esc="this.state.payload?.ui_labels?.compare || 'Compare'"/>
+                    </button>
+                    <select class="form-select" t-att-aria-label="this.state.payload?.ui_labels?.comparison_period || 'Comparison period'"
+                            t-att-value="this.state.comparisonMode" t-on-change="this.onComparisonChange">
+                        <option value="none"><t t-esc="this.state.payload?.ui_labels?.no_comparison || 'No Comparison'"/></option>
+                        <option value="previous_period"><t t-esc="this.state.payload?.ui_labels?.previous_period || 'Previous Period'"/></option>
+                        <option value="previous_year"><t t-esc="this.state.payload?.ui_labels?.previous_year || 'Same Period Last Year'"/></option>
+                        <option value="custom_date"><t t-esc="this.state.payload?.ui_labels?.custom_date || 'Custom Date'"/></option>
+                    </select>
+                    <label t-if="this.state.comparisonMode === 'custom_date'" class="o_ff_date_control">
+                        <span t-esc="this.state.payload?.ui_labels?.compare_to || 'Compare to'"/>
+                        <input type="date" class="form-control" t-att-value="this.state.comparisonDate"
+                               t-on-change="this.onComparisonDateChange"/>
+                    </label>
+                    <select t-if="this.state.comparisonMode !== 'none'" class="form-select"
+                            t-att-aria-label="this.state.payload?.ui_labels?.comparison_presentation || 'Comparison presentation'" t-att-value="this.state.comparisonDisplay"
+                            t-on-change="this.onComparisonDisplayChange">
+                        <option value="percentage"><t t-esc="this.state.payload?.ui_labels?.percentage || 'Percentage'"/></option>
+                        <option value="difference"><t t-esc="this.state.payload?.ui_labels?.difference || 'Difference'"/></option>
+                    </select>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-print me-1"/> <t t-esc="this.state.payload?.ui_labels?.print || 'Print'"/>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <button class="dropdown-item" t-on-click="() => this.exportReport('pdf')" t-esc="this.state.payload?.ui_labels?.pdf || 'PDF'"/>
+                            <button class="dropdown-item" t-on-click="() => this.exportReport('xlsx')" t-esc="this.state.payload?.ui_labels?.xlsx || 'XLSX'"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div t-if="this.state.payload?.draft_move_count" class="alert alert-info o_ff_draft_warning d-print-none">
+                <i class="fa fa-info-circle me-2"/>
+                There are <strong t-esc="this.state.payload.draft_move_count"/> unposted journal items
+                dated on or before this report date.
+            </div>
+
+            <div t-if="this.state.error" class="alert alert-danger m-3" role="alert" t-esc="this.state.error"/>
+            <div t-if="this.state.loading" class="o_ff_report_loading">
+                <i class="fa fa-spinner fa-spin me-2"/> Loading report…
+            </div>
+
+            <div t-if="this.state.payload" class="o_ff_report_page">
+                <div class="o_ff_report_measure"
+                     t-esc="this.state.payload?.title || 'Financial Report'"/>
+                <table class="o_ff_report_table">
+                    <thead>
+                        <tr t-if="this.state.reportType === 'trial_balance'">
+                            <th class="o_ff_report_label"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.opening_balance || 'Opening Balance'"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.debit || 'Debit'"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.credit || 'Credit'"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.closing_balance || 'Closing Balance'"/>
+                            <th class="o_ff_report_info"/>
+                        </tr>
+                        <tr t-elif="this.state.reportType === 'general_ledger'">
+                            <th class="o_ff_report_label"/>
+                            <th t-esc="this.state.payload?.ui_labels?.date || 'Date'"/>
+                            <th t-esc="this.state.payload?.ui_labels?.partner || 'Partner'"/>
+                            <th t-esc="this.state.payload?.ui_labels?.currency || 'Currency'"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.debit || 'Debit'"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.credit || 'Credit'"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.balance || 'Balance'"/>
+                            <th t-if="this.state.comparisonMode !== 'none'" class="o_ff_report_amount"
+                                t-esc="this.state.comparisonDisplay === 'percentage' ? this.state.payload?.ui_labels?.percentage_change : this.state.payload?.ui_labels?.difference"/>
+                            <th class="o_ff_report_info"/>
+                        </tr>
+                        <tr t-else="">
+                            <th class="o_ff_report_label"/>
+                            <th class="o_ff_report_amount" t-esc="this.state.payload?.ui_labels?.balance || 'Balance'"/>
+                            <th t-if="this.state.comparisonMode !== 'none'" class="o_ff_report_amount"
+                                t-esc="this.state.comparisonDisplay === 'percentage' ? this.state.payload?.ui_labels?.percentage_change : this.state.payload?.ui_labels?.difference"/>
+                            <th class="o_ff_report_info"/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="this.visibleLines" t-as="line" t-key="line.id">
+                            <tr t-att-class="{'o_ff_report_section': line.is_section, 'o_ff_report_total': line.is_total}">
+                                <td class="o_ff_report_label" t-att-style="'padding-inline-start: ' + (20 + line.level * 22) + 'px'">
+                                    <button t-if="line.has_children" class="o_ff_fold_button"
+                                            t-on-click="() => this.toggleLine(line)"
+                                            t-att-aria-label="this.state.foldedCodes.includes(line.code) ? 'Expand section' : 'Collapse section'">
+                                        <i t-att-class="this.state.foldedCodes.includes(line.code) ? 'fa fa-caret-right' : 'fa fa-caret-down'"/>
+                                    </button>
+                                    <span t-esc="line.label || line.name"/>
+                                </td>
+                                <t t-if="this.state.reportType === 'general_ledger'">
+                                    <td t-esc="line.date || ''"/>
+                                    <td t-esc="line.partner_name || ''"/>
+                                    <td t-esc="line.currency_name || ''"/>
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'debit')"
+                                                t-esc="this.formatAmount(line.debit)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.debit)"/>
+                                    </td>
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'credit')"
+                                                t-esc="this.formatAmount(line.credit)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.credit)"/>
+                                    </td>
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'running_balance')"
+                                                t-esc="this.formatAmount(line.running_balance)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.running_balance)"/>
+                                    </td>
+                                </t>
+                                <t t-elif="this.state.reportType === 'trial_balance'">
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'opening_balance')"
+                                                t-esc="this.formatAmount(line.opening_balance)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.opening_balance)"/>
+                                    </td>
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'debit')"
+                                                t-esc="this.formatAmount(line.debit)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.debit)"/>
+                                    </td>
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'credit')"
+                                                t-esc="this.formatAmount(line.credit)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.credit)"/>
+                                    </td>
+                                    <td class="o_ff_report_amount">
+                                        <button t-if="line.has_amount" class="o_ff_amount_link"
+                                                t-on-click="() => this.openLine(line, 'closing_balance')"
+                                                t-esc="this.formatAmount(line.closing_balance)"/>
+                                        <span t-else="" t-esc="this.formatAmount(line.closing_balance)"/>
+                                    </td>
+                                </t>
+                                <td t-else="" class="o_ff_report_amount">
+                                    <button t-if="line.has_amount" class="o_ff_amount_link"
+                                            t-on-click="() => this.openLine(line)"
+                                            t-esc="this.formatAmount(line.balance)"/>
+                                </td>
+                                <td t-if="this.state.reportType !== 'trial_balance' and this.state.comparisonMode !== 'none'" class="o_ff_report_amount">
+                                    <button t-if="line.has_amount" class="o_ff_amount_link"
+                                            t-on-click="() => this.openLine(line)"
+                                            t-esc="this.formatComparison(line)"/>
+                                </td>
+                                <td class="o_ff_report_info">
+                                    <span class="o_ff_info_icon" title="Calculated from journal items using the selected report date and entry status.">ⓘ</span>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -15,7 +15,6 @@
         <field name="model">flousflow.account.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">flousflow_accounting.report_financial_statement</field>
-        <field name="report_file">flousflow_accounting.report_financial_statement</field>
         <field name="paperformat_id" ref="paperformat_financial_statement"/>
     </record>
 

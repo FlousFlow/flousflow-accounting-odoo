@@ -182,12 +182,10 @@ class TestBankReconciliation(AccountTestInvoicingCommon):
             'flousflow.account.bank.reconcile.candidate',
         ):
             model = self.env['ir.model']._get(model_name)
-            self.assertTrue(self.env['ir.model.access'].search_count([
+            self.assertTrue(self.env['ir.access'].search_count([
                 ('model_id', '=', model.id),
                 ('group_id', '=', self.env.ref('account.group_account_user').id),
-                ('perm_read', '=', True),
-                ('perm_write', '=', True),
-                ('perm_create', '=', True),
+                ('operation', '=', 'crud'),
             ]))
 
     def test_cross_company_candidate_is_rejected(self):

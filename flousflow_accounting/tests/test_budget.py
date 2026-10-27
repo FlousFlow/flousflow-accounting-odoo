@@ -19,6 +19,47 @@ class TestBudget(TransactionCase):
         if not all([self.income, self.expense, self.receivable, self.payable]):
             self.skipTest('Required accounts not available')
 
+    def test_budget_access_matches_enterprise_manager_scope(self):
+        accountant = self.env['res.users'].create({
+            'name': 'Budget Read Only Accountant',
+            'login': 'budget.readonly@example.com',
+            'company_id': self.env.company.id,
+            'company_ids': [(6, 0, self.env.company.ids)],
+            'group_ids': [(6, 0, [
+                self.env.ref('base.group_user').id,
+                self.env.ref('account.group_account_user').id,
+            ])],
+        })
+        manager = self.env['res.users'].create({
+            'name': 'Budget Manager',
+            'login': 'budget.manager@example.com',
+            'company_id': self.env.company.id,
+            'company_ids': [(6, 0, self.env.company.ids)],
+            'group_ids': [(6, 0, [
+                self.env.ref('base.group_user').id,
+                self.env.ref('account.group_account_manager').id,
+            ])],
+        })
+        budget_model = self.env['flousflow.account.budget']
+        self.assertTrue(budget_model.with_user(accountant).has_access('read'))
+        self.assertFalse(budget_model.with_user(accountant).has_access('create'))
+        self.assertFalse(budget_model.with_user(accountant).has_access('write'))
+        self.assertTrue(budget_model.with_user(manager).has_access('create'))
+
+        menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_budgets')
+        self.assertIn(self.env.ref('account.group_account_manager'), menu.group_ids)
+        self.assertNotIn(self.env.ref('account.group_account_user'), menu.group_ids)
+
+        list_arch = self.env.ref(
+            'flousflow_accounting.flousflow_budget_view_list').arch_db
+        self.assertIn('<list', list_arch)
+        self.assertIn('name="name"', list_arch)
+        self.assertIn('name="company_id"', list_arch)
+        form_arch = self.env.ref(
+            'flousflow_accounting.flousflow_budget_view_form').arch_db
+        self.assertIn('name="line_ids"', form_arch)
+
     def _post(self, debit_acc, credit_acc, amount, day):
         move = self.env['account.move'].create({
             'move_type': 'entry',

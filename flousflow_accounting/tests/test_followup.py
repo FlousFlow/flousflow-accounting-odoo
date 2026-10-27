@@ -17,6 +17,35 @@ class TestFollowup(TransactionCase):
         if not self.receivable or not self.income:
             self.skipTest('Required accounts not available')
 
+    def test_invoice_reminders_destination_matches_enterprise_structure(self):
+        menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_followup_levels')
+        action = self.env.ref('flousflow_accounting.flousflow_followup_action')
+        self.assertEqual(
+            menu.complete_name,
+            'Accounting/Configuration/Accounting/Invoice Reminders')
+        self.assertEqual(menu.action, action)
+        self.assertEqual(action.res_model, 'flousflow.account.followup.line')
+        self.assertEqual(action.view_mode, 'list,kanban,form')
+        self.assertEqual(
+            [mode for _view_id, mode in action.views],
+            ['list', 'kanban', 'form'])
+        self.assertTrue(action.search_view_id)
+
+        fields_in_list = self.env['flousflow.account.followup.line'].get_view(
+            view_id=self.env.ref(
+                'flousflow_accounting.flousflow_followup_line_view_list').id,
+            view_type='list')['arch']
+        self.assertIn('delay', fields_in_list)
+        self.assertIn('send_email', fields_in_list)
+        self.assertIn('send_letter', fields_in_list)
+
+    def test_followup_settings_remain_separately_accessible(self):
+        menu = self.env.ref(
+            'flousflow_accounting.menu_flousflow_accounting_followup_settings')
+        self.assertEqual(menu.action.res_model, 'flousflow.account.followup')
+        self.assertEqual(menu.action.view_mode, 'form')
+
     def test_followup_config_constraint(self):
         config = self.env['flousflow.account.followup'].create({
             'followup_line_ids': [

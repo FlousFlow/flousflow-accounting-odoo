@@ -29,14 +29,19 @@ class FlousflowAccountWorkingFile(models.Model):
     conclusion = fields.Html(sanitize=True)
     state = fields.Selection(
         [('draft', 'Draft'), ('in_review', 'In Review'),
-         ('approved', 'Approved'), ('cancelled', 'Cancelled')],
+         ('paused', 'Paused'), ('approved', 'Approved'), ('cancelled', 'Cancelled')],
         default='draft', required=True, tracking=True, copy=False)
+    paused_from_state = fields.Selection(
+        [('draft', 'Draft'), ('in_review', 'In Review')],
+        readonly=True, copy=False, tracking=True)
     approved_by_id = fields.Many2one('res.users', readonly=True, copy=False)
     approved_date = fields.Datetime(readonly=True, copy=False)
 
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+            if vals.get('state', 'draft') != 'draft' or vals.get('paused_from_state'):
+                raise UserError(_('Working files must start in Draft and use workflow actions to change status.'))
             if not vals.get('name') or vals['name'] == _('New'):
                 company = self.env['res.company'].browse(vals.get('company_id')) if vals.get('company_id') else self.env.company
                 vals['name'] = self.env['ir.sequence'].with_company(company).next_by_code('flousflow.account.working.file') or _('New')
@@ -53,7 +58,7 @@ class FlousflowAccountWorkingFile(models.Model):
                 raise UserError(_('Only draft working files can be submitted.'))
             if not record.reviewer_id:
                 raise UserError(_('Select a reviewer before submitting.'))
-            record.state = 'in_review'
+            record._write_workflow_state({'state': 'in_review'})
         return True
 
     def action_approve(self):
@@ -62,28 +67,57 @@ class FlousflowAccountWorkingFile(models.Model):
         for record in self:
             if record.state != 'in_review':
                 raise UserError(_('Only working files in review can be approved.'))
-            record.write({'state': 'approved', 'approved_by_id': self.env.user.id, 'approved_date': fields.Datetime.now()})
+            record._write_workflow_state({
+                'state': 'approved',
+                'approved_by_id': self.env.user.id,
+                'approved_date': fields.Datetime.now(),
+            })
+        return True
+
+    def action_pause(self):
+        for record in self:
+            if record.state not in ('draft', 'in_review'):
+                raise UserError(_('Only draft or in-review working files can be paused.'))
+            previous_state = record.state
+            record._write_workflow_state({
+                'state': 'paused', 'paused_from_state': previous_state,
+            })
+        return True
+
+    def action_resume(self):
+        for record in self:
+            if record.state != 'paused' or record.paused_from_state not in ('draft', 'in_review'):
+                raise UserError(_('Only paused working files with a saved workflow stage can be resumed.'))
+            record._write_workflow_state({
+                'state': record.paused_from_state, 'paused_from_state': False,
+            })
         return True
 
     def action_cancel(self):
         if self.filtered(lambda record: record.state == 'approved'):
             raise UserError(_('Approved working files cannot be cancelled.'))
-        self.write({'state': 'cancelled'})
+        self._write_workflow_state({'state': 'cancelled', 'paused_from_state': False})
         return True
 
     def action_reset_draft(self):
         if self.filtered(lambda record: record.state == 'approved'):
             raise UserError(_('Approved working files cannot return to draft.'))
-        self.write({'state': 'draft'})
+        self._write_workflow_state({'state': 'draft', 'paused_from_state': False})
         return True
 
     def write(self, vals):
+        if {'state', 'paused_from_state'}.intersection(vals):
+            raise UserError(_('Change the working file status through its workflow buttons.'))
         protected = {'title', 'date', 'period_start', 'period_end', 'company_id',
                      'owner_id', 'reviewer_id', 'account_ids', 'move_ids',
                      'attachment_ids', 'objective', 'procedures', 'findings', 'conclusion'}
         if protected.intersection(vals) and self.filtered(lambda record: record.state == 'approved'):
             raise UserError(_('Approved working files are read-only.'))
         return super().write(vals)
+
+    def _write_workflow_state(self, vals):
+        """Write protected workflow fields after a public action validates the transition."""
+        return super(FlousflowAccountWorkingFile, self).write(vals)
 
     def unlink(self):
         if self.filtered(lambda record: record.state != 'draft'):

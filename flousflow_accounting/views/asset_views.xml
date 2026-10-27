@@ -25,6 +25,65 @@
         </field>
     </record>
 
+    <record id="flousflow_depreciation_model_kanban" model="ir.ui.view">
+        <field name="name">flousflow.account.depreciation.model.kanban</field>
+        <field name="model">flousflow.account.asset.category</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="method" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="method"/>
+                <field name="method_number"/>
+                <field name="method_period"/>
+                <field name="method_progress_factor"/>
+                <field name="company_id"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="method"/></div>
+                            <div class="text-muted">
+                                <field name="method_number"/> ·
+                                <field name="method_period"/> months
+                            </div>
+                            <div groups="base.group_multi_company">
+                                <field name="company_id"/>
+                            </div>
+                            <field name="active" widget="boolean"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="flousflow_depreciation_model_search" model="ir.ui.view">
+        <field name="name">flousflow.account.depreciation.model.search</field>
+        <field name="model">flousflow.account.asset.category</field>
+        <field name="arch" type="xml">
+            <search string="Depreciation Models">
+                <field name="name"/>
+                <field name="method"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="group_method" string="Method" context="{'group_by': 'method'}"/>
+                <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="flousflow_depreciation_model_action" model="ir.actions.act_window">
+        <field name="name">Depreciation Models</field>
+        <field name="res_model">flousflow.account.asset.category</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('recognition_type', '=', 'asset')]</field>
+        <field name="context">{'default_recognition_type': 'asset'}</field>
+        <field name="search_view_id" ref="flousflow_depreciation_model_search"/>
+    </record>
+
     <record id="flousflow_asset_category_view_form" model="ir.ui.view">
         <field name="name">flousflow.account.asset.category.form</field>
         <field name="model">flousflow.account.asset.category</field>
@@ -83,7 +142,7 @@
     <record id="flousflow_asset_action" model="ir.actions.act_window">
         <field name="name">Assets</field>
         <field name="res_model">flousflow.account.asset</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,kanban,activity,form</field>
         <field name="domain">[('recognition_type', '=', 'asset')]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -114,16 +173,79 @@
         <field name="arch" type="xml">
             <list string="Assets" decoration-danger="state == 'draft'" decoration-success="state == 'close'">
                 <field name="name"/>
-                <field name="code" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="date" string="Acquisition Date"/>
                 <field name="category_id" string="Model"/>
-                <field name="group_id" optional="show"/>
-                <field name="recognition_type"/>
+                <field name="group_id" string="Asset Group" optional="show"/>
+                <field name="value" string="Gross Value"/>
+                <field name="salvage_value" optional="hide"/>
+                <field name="value_residual" optional="show"/>
+                <field name="analytic_distribution" widget="analytic_distribution" optional="hide"/>
+                <field name="code" optional="hide"/>
+                <field name="recognition_type" optional="hide"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_view_kanban" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.kanban</field>
+        <field name="model">flousflow.account.asset</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="partner_id"/>
                 <field name="date"/>
                 <field name="value"/>
-                <field name="value_residual" optional="show"/>
-                <field name="state" widget="badge"/>
-                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
-            </list>
+                <field name="value_residual"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <strong><field name="name"/></strong>
+                            <field name="state" widget="label_selection"
+                                   options="{'classes': {'draft': 'primary', 'open': 'success', 'paused': 'warning', 'close': 'default', 'cancelled': 'danger'}}"/>
+                        </div>
+                        <div class="text-muted"><field name="category_id"/></div>
+                        <div class="mt-2"><field name="partner_id"/></div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Gross Value</span><field name="value" widget="monetary"/>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Residual Value</span><field name="value_residual" widget="monetary"/>
+                        </div>
+                        <div class="text-muted mt-2"><field name="date"/></div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="flousflow_asset_view_activity" model="ir.ui.view">
+        <field name="name">flousflow.account.asset.activity</field>
+        <field name="model">flousflow.account.asset</field>
+        <field name="arch" type="xml">
+            <activity string="Asset">
+                <field name="currency_id"/>
+                <templates>
+                    <div t-name="activity-box" class="d-block">
+                        <div class="d-flex justify-content-between">
+                            <field name="name" class="o_text_block o_text_bold"/>
+                            <field name="value" widget="monetary"/>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <field name="partner_id" muted="1" class="o_text_block"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'draft'"
+                                   decoration-success="state == 'open'"
+                                   decoration-warning="state == 'paused'"
+                                   decoration-muted="state in ('close', 'cancelled')"/>
+                        </div>
+                    </div>
+                </templates>
+            </activity>
         </field>
     </record>
 

@@ -9,6 +9,22 @@
         <field name="target">current</field>
     </record>
 
+    <record id="flousflow_report_pnl_interactive_action" model="ir.actions.client">
+        <field name="name">Profit and Loss</field>
+        <field name="tag">flousflow_accounting.financial_report</field>
+        <field name="context" eval="{'default_report_type': 'profit_loss'}"/>
+    </record>
+    <record id="flousflow_report_balance_interactive_action" model="ir.actions.client">
+        <field name="name">Balance Sheet</field>
+        <field name="tag">flousflow_accounting.financial_report</field>
+        <field name="context" eval="{'default_report_type': 'balance_sheet'}"/>
+    </record>
+    <record id="flousflow_report_cash_flow_interactive_action" model="ir.actions.client">
+        <field name="name">Cash Flow Statement</field>
+        <field name="tag">flousflow_accounting.financial_report</field>
+        <field name="context" eval="{'default_report_type': 'cash_flow'}"/>
+    </record>
+
     <!-- Dedicated partner statement experience. It intentionally uses the
          standard Odoo form/list building blocks so it remains Community-safe. -->
     <record id="flousflow_partner_statement_view_form" model="ir.ui.view">
@@ -243,6 +259,11 @@
         <field name="target">current</field>
         <field name="context" eval="{'default_report_type': 'general_ledger'}"/>
     </record>
+    <record id="flousflow_report_gl_interactive_action" model="ir.actions.client">
+        <field name="name">General Ledger</field>
+        <field name="tag">flousflow_accounting.financial_report</field>
+        <field name="context" eval="{'default_report_type': 'general_ledger'}"/>
+    </record>
 
     <record id="flousflow_account_report_aged_rec_action" model="ir.actions.act_window">
         <field name="name">Aged Receivable</field>
@@ -280,12 +301,9 @@
         <field name="context" eval="{'default_report_type': 'cash_flow'}"/>
     </record>
 
-    <record id="flousflow_account_report_trial_balance_action" model="ir.actions.act_window">
+    <record id="flousflow_account_report_trial_balance_action" model="ir.actions.client">
         <field name="name">Trial Balance</field>
-        <field name="res_model">flousflow.account.report</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="flousflow_account_report_view_form"/>
-        <field name="target">current</field>
+        <field name="tag">flousflow_accounting.financial_report</field>
         <field name="context" eval="{'default_report_type': 'trial_balance'}"/>
     </record>
 
@@ -314,6 +332,15 @@
         <field name="view_id" ref="flousflow_account_report_view_form"/>
         <field name="target">current</field>
         <field name="context" eval="{'default_report_type': 'executive_summary'}"/>
+    </record>
+
+    <record id="flousflow_account_report_annual_action" model="ir.actions.act_window">
+        <field name="name">Annual Report</field>
+        <field name="res_model">flousflow.account.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="flousflow_account_report_view_form"/>
+        <field name="target">current</field>
+        <field name="context" eval="{'default_report_type': 'annual_report'}"/>
     </record>
 
     <record id="flousflow_account_report_customer_statement_action" model="ir.actions.act_window">
