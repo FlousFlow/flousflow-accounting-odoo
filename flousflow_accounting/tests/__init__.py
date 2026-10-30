@@ -1,20 +1,25 @@
-from ..legacy.accounting_pdf_reports import tests as _accounting_pdf_reports_tests
-from ..legacy.flousflow_branch_analytic import tests as _flousflow_branch_analytic_tests
-from ..legacy.om_account_asset import tests as _om_account_asset_tests
-from ..legacy.om_account_budget import tests as _om_account_budget_tests
-from ..legacy.om_fiscal_year import tests as _om_fiscal_year_tests
-from ..legacy.om_recurring_payments import tests as _om_recurring_payments_tests
-from ..legacy.om_account_daily_reports import tests as _om_account_daily_reports_tests
-from ..legacy.om_account_followup import tests as _om_account_followup_tests
-from ..legacy.om_account_reconcile import tests as _om_account_reconcile_tests
-from ..legacy.om_account_cash_forecast import tests as _om_account_cash_forecast_tests
-from ..legacy.om_account_check_printing import tests as _om_account_check_printing_tests
-from ..legacy.om_currency_rate_update import tests as _om_currency_rate_update_tests
-from ..legacy.om_currency_revaluation import tests as _om_currency_revaluation_tests
-from ..legacy.om_account_bank_statement_import import tests as _om_account_bank_statement_import_tests
-from ..legacy.om_account_bill_ocr import tests as _om_account_bill_ocr_tests
-from ..legacy.om_spreadsheet_account import tests as _om_spreadsheet_account_tests
-from ..legacy.om_spreadsheet_account_asset import tests as _om_spreadsheet_account_asset_tests
-from ..legacy.om_spreadsheet_account_budget import tests as _om_spreadsheet_account_budget_tests
-from ..legacy.om_spreadsheet_account_followup import tests as _om_spreadsheet_account_followup_tests
-from ..legacy.om_account_accountant import tests as _om_account_accountant_tests
+"""Expose tests from the merged source addons to Odoo's test loader."""
+
+import importlib
+import importlib.util
+import pkgutil
+from types import ModuleType
+
+from .. import legacy
+
+
+for addon in pkgutil.iter_modules(legacy.__path__):
+    if not addon.ispkg:
+        continue
+
+    tests_package_name = f"{legacy.__name__}.{addon.name}.tests"
+    if importlib.util.find_spec(tests_package_name) is None:
+        continue
+
+    tests_package = importlib.import_module(tests_package_name)
+    for imported_name, imported_module in vars(tests_package).items():
+        if imported_name.startswith("test_") and isinstance(imported_module, ModuleType):
+            # Odoo's loader discovers only test_* modules exported by this package.
+            # Add a unique alias because many source addons use the same test filename.
+            alias = f"test_{addon.name}_{imported_name.removeprefix('test_')}"
+            globals()[alias] = imported_module

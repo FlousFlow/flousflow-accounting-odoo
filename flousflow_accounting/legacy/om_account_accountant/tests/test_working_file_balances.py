@@ -286,7 +286,7 @@ class TestWorkingFileBalances(AccountTestInvoicingCommon):
             "working_file_check_enterprise_47",
         )
         templates = self.env["account.working.file.template"].browse([
-            self.env.ref(f"om_account_accountant.{name}").id for name in template_names
+            self.env.ref(f"flousflow_accounting.acc__{name}").id for name in template_names
         ])
         self.assertTrue(all(templates.mapped("evidence_required")))
 

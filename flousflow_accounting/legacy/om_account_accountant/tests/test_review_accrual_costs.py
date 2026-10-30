@@ -262,40 +262,40 @@ class TestReviewAccrualCosts(AccountTestInvoicingCommon):
     def test_review_accrual_reports_use_their_own_list_views(self):
         report_mappings = (
             (
-                "action_purchase_bill_to_receive_list",
-                "action_purchase_bill_to_receive",
-                "view_purchase_bill_to_receive_list",
+                "acc__action_purchase_bill_to_receive_list",
+                "acc__action_purchase_bill_to_receive",
+                "acc__view_purchase_bill_to_receive_list",
                 "avg",
             ),
             (
-                "action_purchase_billed_not_received_list",
-                "action_purchase_billed_not_received",
-                "view_purchase_billed_not_received_list",
+                "acc__action_purchase_billed_not_received_list",
+                "acc__action_purchase_billed_not_received",
+                "acc__view_purchase_billed_not_received_list",
                 "avg",
             ),
             (
-                "action_sale_invoice_to_be_issued_list",
-                "action_sale_invoice_to_be_issued",
-                "view_sale_invoice_to_be_issued_list",
+                "acc__action_sale_invoice_to_be_issued_list",
+                "acc__action_sale_invoice_to_be_issued",
+                "acc__view_sale_invoice_to_be_issued_list",
                 "sum",
             ),
             (
-                "action_sale_invoiced_not_delivered_list",
-                "action_sale_invoiced_not_delivered",
-                "view_sale_invoiced_not_delivered_list",
+                "acc__action_sale_invoiced_not_delivered_list",
+                "acc__action_sale_invoiced_not_delivered",
+                "acc__view_sale_invoiced_not_delivered_list",
                 "sum",
             ),
         )
         for mapping_xmlid, action_xmlid, view_xmlid, unit_price_aggregator in report_mappings:
             with self.subTest(mapping=mapping_xmlid):
-                mapping = self.env.ref(f"om_account_accountant.{mapping_xmlid}")
+                mapping = self.env.ref(f"flousflow_accounting.{mapping_xmlid}")
                 self.assertEqual(
                     mapping.act_window_id,
-                    self.env.ref(f"om_account_accountant.{action_xmlid}"),
+                    self.env.ref(f"flousflow_accounting.{action_xmlid}"),
                 )
                 self.assertEqual(
                     mapping.view_id,
-                    self.env.ref(f"om_account_accountant.{view_xmlid}"),
+                    self.env.ref(f"flousflow_accounting.{view_xmlid}"),
                 )
                 combined_arch = etree.fromstring(mapping.view_id.get_combined_arch().encode())
                 unit_price = combined_arch.xpath(".//field[@name='price_unit']")

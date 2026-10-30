@@ -268,7 +268,10 @@ class AccountingReport(models.TransientModel):
         for column, label in enumerate(headers):
             sheet.write(header_row, column, label, header_format)
 
-        for row_index, line in enumerate((row for row in lines if row.get('level') != 0), header_row + 1):
+        # Level zero is a valid depth for the synthetic P&L summary rows. The
+        # report engine already removes its hidden root wrappers, so exporting
+        # only non-zero levels silently produced header-only workbooks.
+        for row_index, line in enumerate(lines, header_row + 1):
             level = max(0, min(int(line.get('level', 0)), 15))
             bold = line.get('type') == 'report' or level <= 2
             show_amount = line.get('show_amount', True)

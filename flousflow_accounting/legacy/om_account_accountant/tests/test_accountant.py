@@ -3,7 +3,7 @@ from odoo.tests import TransactionCase, tagged
 
 @tagged('post_install', '-at_install')
 class TestAccountantBundle(TransactionCase):
-    """What the bundle itself adds on top of the modules it installs."""
+    """The consolidated bundle exposes one installable module, not source addons."""
 
     def test_the_bundle_installs_the_accounting_modules(self):
         expected = {
@@ -14,7 +14,8 @@ class TestAccountantBundle(TransactionCase):
         installed = set(self.env['ir.module.module'].search([
             ('name', 'in', list(expected)), ('state', '=', 'installed'),
         ]).mapped('name'))
-        self.assertEqual(installed, expected)
+        self.assertEqual(installed, set())
+        self.assertEqual(self.env.ref('base.module_flousflow_accounting').state, 'installed')
 
     def test_the_accounting_groups_are_renamed(self):
         self.assertEqual(self.env.ref('account.group_account_user').name, 'Accountant')

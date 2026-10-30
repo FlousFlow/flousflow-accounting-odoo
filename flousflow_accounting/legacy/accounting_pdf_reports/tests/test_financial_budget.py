@@ -54,9 +54,10 @@ class TestInteractiveFinancialBudget(AccountTestInvoicingCommon):
             report.id, '2026-01-01', '2026-12-31', financial_budget_id=budget.id,
         )
 
-        account_line = next(line for line in data['lines'] if line.get('account_id') == account.id)
-        self.assertEqual(account_line['budget_amount'], 12000.0)
-        self.assertTrue(account_line['budget_line_id'])
+        category_line = next(line for line in data['lines']
+                             if account.id in line.get('account_ids', [])
+                             and line.get('row_key') == 'pnl-revenue-%s' % report.id)
+        self.assertEqual(category_line['budget_amount'], 12000.0)
         self.assertEqual(data['financial_budget']['id'], budget.id)
 
     def test_profit_and_loss_prorates_budget_for_selected_date_range(self):
@@ -77,8 +78,10 @@ class TestInteractiveFinancialBudget(AccountTestInvoicingCommon):
             report.id, '2026-01-01', '2026-03-31', financial_budget_id=budget.id,
         )
 
-        account_line = next(line for line in data['lines'] if line.get('account_id') == account.id)
-        self.assertAlmostEqual(account_line['budget_amount'], 12000.0 * 90 / 365)
+        category_line = next(line for line in data['lines']
+                             if account.id in line.get('account_ids', [])
+                             and line.get('row_key') == 'pnl-revenue-%s' % report.id)
+        self.assertAlmostEqual(category_line['budget_amount'], 12000.0 * 90 / 365)
 
     def test_print_and_xlsx_exports_include_selected_budget(self):
         account, budget, wizard = self._create_budget_export_fixture()
@@ -90,7 +93,9 @@ class TestInteractiveFinancialBudget(AccountTestInvoicingCommon):
             'percentage_of_row_key', 'financial_budget_id',
         ])[0]
         report_data = wizard._prepare_export_data(form, wizard._get_interactive_report_data(form))
-        account_line = next(line for line in report_data['lines'] if line.get('account_id') == account.id)
+        account_line = next(line for line in report_data['lines']
+                            if account.id in line.get('account_ids', [])
+                            and line.get('row_key') == 'pnl-revenue-%s' % wizard.account_report_id.id)
         self.assertTrue(report_data['show_budget'])
         self.assertEqual(report_data['budget_label'], budget.name)
         self.assertEqual(account_line['budget_amount'], 12000.0)

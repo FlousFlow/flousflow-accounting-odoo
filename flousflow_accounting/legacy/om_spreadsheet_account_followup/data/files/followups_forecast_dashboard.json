@@ -254,7 +254,7 @@
                                         ],
                                         "orderBy": []
                                     },
-                                    "actionXmlId": "om_account_followup.action_followup_stat"
+                                    "actionXmlId": "flousflow_accounting.fol__action_followup_stat"
                                 },
                                 "dataSetStyles": {}
                             }
@@ -623,7 +623,7 @@
     "odooLinkReferences": {
         "e6d6b825-4441-5961-ab5e-0a6e4c38093a": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_followup.om_account_followup_s"
+            "odooMenuId": "flousflow_accounting.fol__om_account_followup_s"
         }
     }
 }

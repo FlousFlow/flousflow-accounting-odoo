@@ -245,7 +245,7 @@ class TestFollowup(AccountTestInvoicingCommon):
 
     def test_translations_are_loaded(self):
         self.env['res.lang']._activate_lang('fr_FR')
-        self.env['ir.module.module']._load_module_terms(['om_account_followup'], ['fr_FR'])
+        self.env['ir.module.module']._load_module_terms(['flousflow_accounting'], ['fr_FR'])
         self._create_customer_invoice('2026-01-01')
 
         wizard = self.env['followup.print'].with_context(lang='fr_FR').create({

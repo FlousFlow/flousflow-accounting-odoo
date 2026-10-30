@@ -34,8 +34,11 @@ class TestFinancialReportCashBasis(AccountTestInvoicingCommon):
         )
 
     def _revenue_amount(self, data, account):
-        return sum(line.get('balance', 0.0) for line in data['lines']
-                   if line.get('account_id') == account.id)
+        row_key = 'pnl-revenue-%s' % self.env.ref(
+            'flousflow_accounting.apr__account_financial_report_profitandloss0').id
+        revenue_line = next(line for line in data['lines'] if line.get('row_key') == row_key)
+        self.assertIn(account.id, revenue_line.get('account_ids', []))
+        return revenue_line.get('balance', 0.0)
 
     def test_cash_basis_filter_follows_invoice_payment_in_report_and_exports(self):
         invoice = self.env['account.move'].create({

@@ -123,7 +123,7 @@ class TestAnnualReport(AccountTestInvoicingCommon):
         financial = self.env['report.flousflow_accounting.apr__report_financial']
         for xmlid, name in (('account_financial_report_balancesheet0', 'Balance Sheet'),
                             ('account_financial_report_profitandloss0', 'Profit and Loss')):
-            report = self.env.ref('accounting_pdf_reports.%s' % xmlid)
+            report = self.env.ref('flousflow_accounting.apr__%s' % xmlid)
             standalone = financial.get_account_lines({
                 'account_report_id': (report.id, report.name),
                 'used_context': dict(wizard._build_contexts({'form': wizard.read(

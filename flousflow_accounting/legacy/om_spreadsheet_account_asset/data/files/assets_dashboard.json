@@ -300,7 +300,7 @@
                                         ],
                                         "orderBy": []
                                     },
-                                    "actionXmlId": "om_account_asset.action_account_asset_asset_form"
+                                    "actionXmlId": "flousflow_accounting.ast__action_account_asset_asset_form"
                                 },
                                 "dataSetStyles": {}
                             }
@@ -669,19 +669,19 @@
     "odooLinkReferences": {
         "e8a69d0b-d70e-5e75-9d88-559b54c5d6bf": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_asset.menu_action_account_asset_asset_form"
+            "odooMenuId": "flousflow_accounting.ast__menu_action_account_asset_asset_form"
         },
         "351b9b08-d044-5f68-ae0c-7f1c31176236": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_asset.menu_action_account_asset_asset_form"
+            "odooMenuId": "flousflow_accounting.ast__menu_action_account_asset_asset_form"
         },
         "89a37136-46af-5508-a8cc-06780948b182": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_asset.menu_action_account_asset_asset_form"
+            "odooMenuId": "flousflow_accounting.ast__menu_action_account_asset_asset_form"
         },
         "1233bd1d-697e-5fd5-b007-55dc4c4fb6ef": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_asset.menu_asset_depreciation_schedule"
+            "odooMenuId": "flousflow_accounting.ast__menu_asset_depreciation_schedule"
         }
     }
 }

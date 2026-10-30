@@ -75,47 +75,50 @@ msgid "Bank and Cash"
 msgstr "البنك والنقد"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/journal_audit/journal_audit.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/journal_audit/journal_audit.xml:0
 msgid "Audit"
 msgstr "تدقيق"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/journal_audit/journal_audit.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/journal_audit/journal_audit.xml:0
 msgid "Mark Reviewed"
 msgstr "تعليم كمُراجَع"
 
+#. module: flousflow_accounting
 #. odoo-javascript
-#: om_account_accountant/static/src/journal_audit/journal_audit.js
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/journal_audit/journal_audit.js:0
 msgid "Taxes Applied"
 msgstr "الضرائب المطبقة"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.xml:0
 msgid "Month"
 msgstr "الشهر"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.xml:0
 msgid "Quarter"
 msgstr "ربع السنة"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.xml:0
 msgid "Fiscal Year"
 msgstr "السنة المالية"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.xml:0
 msgid "Custom Dates"
 msgstr "تواريخ مخصصة"
 
+#. module: flousflow_accounting
 #. odoo-javascript
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.js:0
 msgid "Enter valid start and end dates."
 msgstr "أدخل تاريخ بداية ونهاية صالحين."
 
+#. module: flousflow_accounting
 #. odoo-javascript
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.js:0
 msgid "The start date must be on or before the end date."
 msgstr "يجب أن يكون تاريخ البداية في أو قبل تاريخ النهاية."
 
@@ -440,22 +443,24 @@ msgid "Unfold All"
 msgstr "فتح الكل"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.xml:0
 msgid "Options"
 msgstr "الخيارات"
 
 #. module: flousflow_accounting
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.xml:0
 msgid "Hide lines at 0"
 msgstr "إخفاء البنود عند الصفر"
 
+#. module: flousflow_accounting
 #. odoo-javascript
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.js:0
 msgid "Expand row"
 msgstr "توسيع السطر"
 
+#. module: flousflow_accounting
 #. odoo-javascript
-#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/deferred_schedule/deferred_schedule.js:0
 msgid "Collapse row"
 msgstr "طي السطر"
 
@@ -1512,6 +1517,7 @@ msgstr "عملة"
 msgid "Current Assets"
 msgstr "الأصول المتداولة"
 
+#. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
 msgid "Other Current Assets"
@@ -1523,11 +1529,13 @@ msgstr "الأصول المتداولة الأخرى"
 msgid "Current Liabilities"
 msgstr "الالتزامات الجارية"
 
+#. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
 msgid "Capital"
 msgstr "رأس المال"
 
+#. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
 msgid "Other Current Liabilities"

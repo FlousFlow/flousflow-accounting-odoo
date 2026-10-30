@@ -480,19 +480,19 @@
     "odooLinkReferences": {
         "da912f15-3bc6-5718-a2e7-afa0509a999e": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_budget.menu_account_budget"
+            "odooMenuId": "flousflow_accounting.bgt__menu_account_budget"
         },
         "fac5cfad-da20-51ef-aae1-d65fe50fd4f9": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_budget.menu_account_budget"
+            "odooMenuId": "flousflow_accounting.bgt__menu_account_budget"
         },
         "460fe30a-b28e-5ebf-858a-a80aeef83d66": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_budget.menu_account_budget"
+            "odooMenuId": "flousflow_accounting.bgt__menu_account_budget"
         },
         "adde33b4-c26f-5382-93ed-645460f2d07e": {
             "type": "odooMenu",
-            "odooMenuId": "om_account_budget.menu_account_budget"
+            "odooMenuId": "flousflow_accounting.bgt__menu_account_budget"
         }
     }
 }

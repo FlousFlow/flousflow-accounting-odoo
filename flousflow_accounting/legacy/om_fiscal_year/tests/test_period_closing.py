@@ -109,7 +109,7 @@ class TestPeriodClosing(AccountTestInvoicingCommon):
 
     def test_default_tasks(self):
         tasks = self.env['account.period.closing.task'].with_context(active_test=False).search(
-            [('id', 'in', [self.env.ref('om_fiscal_year.%s' % xmlid).id for xmlid in (
+            [('id', 'in', [self.env.ref('flousflow_accounting.fyi__%s' % xmlid).id for xmlid in (
                 'closing_task_bank', 'closing_task_accruals', 'closing_task_review')])])
         self.assertEqual(len(tasks), 3)
         self.assertFalse(tasks.company_id)
