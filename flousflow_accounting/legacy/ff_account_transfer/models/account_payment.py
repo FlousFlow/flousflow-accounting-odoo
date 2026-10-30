@@ -58,18 +58,21 @@ class AccountPayment(models.Model):
 
     def action_post(self):
         for payment in self:
-            if (
-                payment.is_internal_transfer
-                and not payment.paired_internal_transfer_payment_id
-                and payment.payment_type == 'outbound'
-            ):
-                paired_payment = self.with_context(
-                    skip_pairing_sync=True
-                ).create(payment._prepare_paired_transfer_vals())
-                payment.paired_internal_transfer_payment_id = paired_payment
-                paired_payment.paired_internal_transfer_payment_id = payment
-                super(AccountPayment, payment).action_post()
-                paired_payment.action_post()
+            if payment.is_internal_transfer:
+                paired_payment = payment.paired_internal_transfer_payment_id
+                if not paired_payment:
+                    paired_payment = self.with_context(
+                        skip_pairing_sync=True
+                    ).create(payment._prepare_paired_transfer_vals())
+                    payment.paired_internal_transfer_payment_id = paired_payment
+                    paired_payment.paired_internal_transfer_payment_id = payment
+
+                # Posting one leg must always post its counterpart too. This
+                # also keeps both entries in sync when a canceled transfer is
+                # reset to draft and posted again.
+                for transfer_payment in payment | paired_payment:
+                    if transfer_payment.state == 'draft':
+                        super(AccountPayment, transfer_payment).action_post()
             else:
                 super(AccountPayment, payment).action_post()
         return True
