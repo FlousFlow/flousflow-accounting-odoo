@@ -9,7 +9,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class OpenItemsReport extends Component {
-    static template = "accounting_pdf_reports.OpenItemsReport";
+    static template = "flousflow_accounting.apr__OpenItemsReport";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -43,7 +43,7 @@ export class OpenItemsReport extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_agedpartnerbalance",
+                "report.flousflow_accounting.apr__report_agedpartnerbalance",
                 "get_open_items_data", [], {
                     date_from: this.state.dateFrom,
                     result_selection: this.state.resultSelection,
@@ -78,7 +78,7 @@ export class OpenItemsReport extends Component {
             return;
         }
         this.state.partnerOptions = await this.orm.call(
-            "report.accounting_pdf_reports.report_agedpartnerbalance",
+            "report.flousflow_accounting.apr__report_agedpartnerbalance",
             "search_open_items_partners", [], {
                 query: this.state.partnerQuery,
                 result_selection: this.state.resultSelection,
@@ -108,7 +108,7 @@ export class OpenItemsReport extends Component {
 
     async openPartner(partnerId) {
         const action = await this.orm.call(
-            "report.accounting_pdf_reports.report_agedpartnerbalance",
+            "report.flousflow_accounting.apr__report_agedpartnerbalance",
             "get_open_items_partner_action", [partnerId]
         );
         return this.action.doAction(action);
@@ -116,7 +116,7 @@ export class OpenItemsReport extends Component {
 
     async openJournalItems(row) {
         const action = await this.orm.call(
-            "report.accounting_pdf_reports.report_agedpartnerbalance",
+            "report.flousflow_accounting.apr__report_agedpartnerbalance",
             "get_open_items_journal_action", [row.lines.map((line) => line.id)]
         );
         return this.action.doAction(action);
@@ -125,7 +125,7 @@ export class OpenItemsReport extends Component {
     async sendReminder(row) {
         try {
             const action = await this.orm.call(
-                "report.accounting_pdf_reports.report_agedpartnerbalance",
+                "report.flousflow_accounting.apr__report_agedpartnerbalance",
                 "get_open_items_reminder_action", [row.partner_id]
             );
             return this.action.doAction(action);
@@ -138,7 +138,7 @@ export class OpenItemsReport extends Component {
         const value = event.target.checked;
         try {
             await this.orm.call(
-                "report.accounting_pdf_reports.report_agedpartnerbalance",
+                "report.flousflow_accounting.apr__report_agedpartnerbalance",
                 "set_open_items_no_reminder", [[line.id], value]
             );
             line.no_reminder = value;
@@ -174,7 +174,7 @@ export class OpenItemsReport extends Component {
     async printReport() {
         try {
             const action = await this.orm.call(
-                "report.accounting_pdf_reports.report_agedpartnerbalance",
+                "report.flousflow_accounting.apr__report_agedpartnerbalance",
                 "print_open_items", [], {
                     date_from: this.state.dateFrom,
                     result_selection: this.state.resultSelection,
@@ -205,4 +205,4 @@ export class OpenItemsReport extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.open_items", OpenItemsReport);
+registry.category("actions").add("flousflow_accounting.apr__open_items", OpenItemsReport);

@@ -1,0 +1,56 @@
+.ff_aged_partner_report {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .ff_aged_toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+
+        h2 { margin: 0; font-size: 1.25rem; }
+    }
+
+    .ff_aged_filters {
+        display: flex;
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        > * { flex: 1 1 9rem; max-width: 16rem; }
+        .ff_aged_period { max-width: 10rem; }
+        .ff_aged_scale { max-width: 7rem; }
+    }
+
+    .ff_aged_partner_filter {
+        position: relative;
+        display: flex;
+        flex: 1 1 100%;
+        align-items: center;
+        gap: 0.35rem;
+
+        > input { max-width: 24rem; }
+    }
+
+    .ff_aged_partner_options {
+        position: absolute;
+        z-index: 3;
+        top: 100%;
+        left: 0;
+        min-width: 20rem;
+        max-height: 16rem;
+        overflow: auto;
+        padding: 0.35rem;
+        background: var(--body-bg, white);
+        border: 1px solid var(--border-color, #dee2e6);
+        box-shadow: 0 0.25rem 0.75rem #0002;
+    }
+
+    .ff_aged_content { flex: 1; overflow: auto; padding: 1rem; }
+    .ff_aged_table { min-width: 60rem; }
+    .ff_aged_partner_row { border-top: 1px solid var(--border-color, #dee2e6); }
+    .ff_aged_detail_row td:first-child { padding-inline-start: 2.5rem; }
+}

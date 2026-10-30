@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__ReviewAccrualList.Buttons">
+        <div class="btn btn-secondary d-inline-flex align-items-center gap-1 ff_review_accrual_as_of"
+             t-att-data-as-of-date="this.reviewAsOfDate.toISODate()">
+            <i class="oi oi-filled" data-icon="calendar_today"/>
+            <span>As of</span>
+            <DateTimeInput
+                type="'date'"
+                value="this.reviewAsOfDate"
+                class="'border-0 bg-transparent p-0 text-reset'"
+                onApply.bind="this.onReviewAsOfDateApply"
+            />
+        </div>
+        <t t-call="web.ListView.Buttons"/>
+    </t>
+</templates>

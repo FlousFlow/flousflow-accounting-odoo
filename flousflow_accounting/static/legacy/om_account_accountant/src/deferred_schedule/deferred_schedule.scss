@@ -1,0 +1,34 @@
+.o_ff_deferred_schedule {
+    min-height: 100%;
+    background: var(--body-bg, #f8f9fa);
+
+    .ff_deferred_period { width: 155px; }
+    .ff_deferred_group { width: 215px; }
+    .ff_deferred_target { width: 170px; }
+    .ff_deferred_comparison { width: 175px; }
+    .ff_deferred_period_count { width: 90px; }
+    .ff_deferred_comparison_mode { width: 150px; }
+    .ff_deferred_sort_order { width: 140px; }
+    .ff_deferred_scale { width: 150px; }
+    .ff_deferred_search input { width: 220px; }
+    .ff_deferred_journals { max-height: 360px; overflow-y: auto; }
+
+    .ff_deferred_schedule_card {
+        max-width: 1240px;
+        margin: 20px auto;
+        border-color: #d8dde3;
+    }
+
+    .table thead { background: #e1e5ea; }
+    .ff_deferred_total { font-weight: 700; border-top: 2px solid #adb5bd; }
+    .ff_deferred_detail { color: var(--text-muted, #6c757d); }
+    .ff_deferred_detail_name { display: inline-block; padding-inline-start: 2rem; }
+
+    @media print {
+        .o_control_panel button,
+        .o_control_panel select,
+        .o_control_panel input,
+        .o_control_panel label { display: none !important; }
+        .ff_deferred_schedule_card { border: 0; box-shadow: none !important; }
+    }
+}

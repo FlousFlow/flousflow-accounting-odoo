@@ -8,7 +8,7 @@ import { deserializeDate } from "@web/core/l10n/dates";
 import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 export class PartnerLedger extends Component {
-    static template = "accounting_pdf_reports.PartnerLedger";
+    static template = "flousflow_accounting.apr__PartnerLedger";
     props = useProps(standardActionServiceProps);
     setup() {
         this.orm = useService("orm"); this.action = useService("action"); this.notification = useService("notification");
@@ -20,7 +20,7 @@ export class PartnerLedger extends Component {
         onWillStart(async () => {
             try {
                 const options = await this.orm.call(
-                    "report.accounting_pdf_reports.report_partnerledger", "get_partner_filter_options",
+                    "report.flousflow_accounting.apr__report_partnerledger", "get_partner_filter_options",
                     [this.state.partnerIds]
                 );
                 this.state.tags = options.tags;
@@ -37,7 +37,7 @@ export class PartnerLedger extends Component {
     async loadReport() {
         this.state.loading = true;
         try {
-            const d = await this.orm.call("report.accounting_pdf_reports.report_partnerledger","get_interactive_data",[],{period_type:this.state.periodType,period_anchor:this.state.anchor,custom_date_from:this.state.customFrom,custom_date_to:this.state.customTo,target_move:this.state.targetMove,account_scope:this.state.accountScope,partner_ids:this.state.partnerIds,partner_tag_ids:this.state.partnerTagIds});
+            const d = await this.orm.call("report.flousflow_accounting.apr__report_partnerledger","get_interactive_data",[],{period_type:this.state.periodType,period_anchor:this.state.anchor,custom_date_from:this.state.customFrom,custom_date_to:this.state.customTo,target_move:this.state.targetMove,account_scope:this.state.accountScope,partner_ids:this.state.partnerIds,partner_tag_ids:this.state.partnerTagIds});
             this.state.partners=d.partners; this.state.dateFrom=d.date_from; this.state.dateTo=d.date_to; this.state.companyName=d.company_name; this.state.currencyId=d.currency_id; this.state.companyIds=d.company_ids; this.state.expandedIds=[]; this.state.draftCount=d.draft_count; this.state.dismissedDraftWarning=false;
         } catch(e) { this.notification.add(e.message||_t("The Partner Ledger could not be loaded."),{type:"danger"}); }
         finally { this.state.loading=false; }
@@ -52,7 +52,7 @@ export class PartnerLedger extends Component {
             return;
         }
         this.state.partnerOptions = await this.orm.call(
-            "report.accounting_pdf_reports.report_partnerledger", "search_interactive_partners",
+            "report.flousflow_accounting.apr__report_partnerledger", "search_interactive_partners",
             [this.state.partnerQuery]
         );
     }
@@ -79,7 +79,7 @@ export class PartnerLedger extends Component {
     async togglePartner(p) {
         if(this.state.expandedIds.includes(p.id)){this.state.expandedIds=this.state.expandedIds.filter(id=>id!==p.id);return;}
         this.state.expandedIds=[...this.state.expandedIds,p.id];
-        if(!p.lines.length){try{p.lines=await this.orm.call("report.accounting_pdf_reports.report_partnerledger","get_interactive_partner_lines",[],[p.id,this.state.dateFrom,this.state.dateTo,this.state.targetMove,this.state.accountScope]);}catch(e){this.notification.add(e.message||_t("Partner entries could not be loaded."),{type:"danger"});}}
+        if(!p.lines.length){try{p.lines=await this.orm.call("report.flousflow_accounting.apr__report_partnerledger","get_interactive_partner_lines",[],[p.id,this.state.dateFrom,this.state.dateTo,this.state.targetMove,this.state.accountScope]);}catch(e){this.notification.add(e.message||_t("Partner entries could not be loaded."),{type:"danger"});}}
     }
     formatAmount(v){const s={unit:[1,[69,2],""],rounded:[1,[69,0],""],thousand:[1000,[69,2],"k"],million:[1000000,[69,2],"M"]}[this.state.scale];return `${formatMonetary(v/s[0],{currencyId:this.state.currencyId,digits:s[1]})}${s[2]}`;}
     formatForeignAmount(line){if(!line.currency_id||line.currency_id===this.state.currencyId)return "";const s={unit:[1,[69,2],""],rounded:[1,[69,0],""],thousand:[1000,[69,2],"k"],million:[1000000,[69,2],"M"]}[this.state.scale];return formatMonetary(line.amount_currency/s[0],{currencyId:line.currency_id,digits:s[1]});}
@@ -112,7 +112,7 @@ export class PartnerLedger extends Component {
         return this.action.doAction(action);
     }
     async openDraftMoves(){const a=await this.action.loadAction("account.action_account_moves_all");a.domain=[...(a.domain||[]),["company_id","in",this.state.companyIds],["date","<=",this.state.dateTo],["state","=","draft"]];a.context={...a.context,search_default_posted:false};return this.action.doAction(a);}
-    async printReport(){if(!this.state.partners.length){this.notification.add(_t("There are no partners to print for the selected filters."),{type:"warning"});return;}const a=await this.action.loadAction("accounting_pdf_reports.action_account_partner_ledger_menu");a.context={...a.context,default_date_from:this.state.dateFrom,default_date_to:this.state.dateTo,default_target_move:this.state.targetMove,default_result_selection:this.state.accountScope==="payable"?"supplier":this.state.accountScope==="receivable"?"customer":"customer_supplier",default_partner_ids:this.state.partners.map(p=>p.id),default_reconciled:true,default_amount_currency:true};return this.action.doAction(a);}
+    async printReport(){if(!this.state.partners.length){this.notification.add(_t("There are no partners to print for the selected filters."),{type:"warning"});return;}const a=await this.action.loadAction("flousflow_accounting.apr__action_account_partner_ledger_menu");a.context={...a.context,default_date_from:this.state.dateFrom,default_date_to:this.state.dateTo,default_target_move:this.state.targetMove,default_result_selection:this.state.accountScope==="payable"?"supplier":this.state.accountScope==="receivable"?"customer":"customer_supplier",default_partner_ids:this.state.partners.map(p=>p.id),default_reconciled:true,default_amount_currency:true};return this.action.doAction(a);}
     exportXlsx(){if(!this.visiblePartners.length){this.notification.add(_t("There are no partners to export for the selected filters."),{type:"warning"});return;}const params=new URLSearchParams({period_type:this.state.periodType,period_anchor:this.state.anchor,custom_date_from:this.state.customFrom,custom_date_to:this.state.customTo,target_move:this.state.targetMove,account_scope:this.state.accountScope,partner_ids:this.state.partnerIds.join(","),partner_tag_ids:this.state.partnerTagIds.join(","),search:this.state.search,scale:this.state.scale});this.state.settingsOpen=false;return this.action.doAction({type:"ir.actions.act_url",url:`/accounting_pdf_reports/partner_ledger/export?${params.toString()}`,target:"download"});}
 }
-registry.category("actions").add("accounting_pdf_reports.partner_ledger",PartnerLedger);
+registry.category("actions").add("flousflow_accounting.apr__partner_ledger",PartnerLedger);

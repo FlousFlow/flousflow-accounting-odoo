@@ -8,7 +8,7 @@ import { standardActionServiceProps } from "@web/webclient/actions/action_plugin
 import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 
 export class TaxReport extends Component {
-    static template = "accounting_pdf_reports.TaxReport";
+    static template = "flousflow_accounting.apr__TaxReport";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -40,7 +40,7 @@ export class TaxReport extends Component {
         onWillStart(async () => {
             try {
                 const metadata = await this.orm.call(
-                    "report.accounting_pdf_reports.report_tax", "get_interactive_metadata", []
+                    "report.flousflow_accounting.apr__report_tax", "get_interactive_metadata", []
                 );
                 this.state.dateFrom = metadata.date_from;
                 this.state.dateTo = metadata.date_to;
@@ -179,7 +179,7 @@ export class TaxReport extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_tax", "get_interactive_data", [],
+                "report.flousflow_accounting.apr__report_tax", "get_interactive_data", [],
                 {
                     date_from: this.state.dateFrom,
                     date_to: this.state.dateTo,
@@ -272,7 +272,7 @@ export class TaxReport extends Component {
     }
 
     async printReport() {
-        const action = await this.action.loadAction("accounting_pdf_reports.action_account_tax_report");
+        const action = await this.action.loadAction("flousflow_accounting.apr__action_account_tax_report");
         action.context = {
             ...action.context,
             default_period: "custom",
@@ -305,4 +305,4 @@ export class TaxReport extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.tax_report", TaxReport);
+registry.category("actions").add("flousflow_accounting.apr__tax_report", TaxReport);

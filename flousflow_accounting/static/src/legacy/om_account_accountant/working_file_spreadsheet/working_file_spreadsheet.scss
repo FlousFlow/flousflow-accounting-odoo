@@ -1,0 +1,13 @@
+.o_working_file_spreadsheet {
+    height: 100%;
+    min-height: 0;
+
+    .o_working_file_spreadsheet_editor {
+        min-height: 0;
+    }
+}
+
+.o_working_file_spreadsheet_embedded {
+    height: 70vh;
+    min-height: 32rem;
+}

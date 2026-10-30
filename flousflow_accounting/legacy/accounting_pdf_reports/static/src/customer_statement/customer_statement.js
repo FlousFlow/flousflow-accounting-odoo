@@ -11,7 +11,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class CustomerStatement extends Component {
-    static template = "accounting_pdf_reports.CustomerStatement";
+    static template = "flousflow_accounting.apr__CustomerStatement";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -52,7 +52,7 @@ export class CustomerStatement extends Component {
         });
         onWillStart(async () => {
             this.state.tags = await this.orm.call(
-                "report.accounting_pdf_reports.customer_statement_data", "get_partner_tags", []
+                "report.flousflow_accounting.apr__customer_statement_data", "get_partner_tags", []
             );
             await this.searchPartners();
             await this.loadReport();
@@ -115,7 +115,7 @@ export class CustomerStatement extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.customer_statement_data", "get_interactive_data", [], {
+                "report.flousflow_accounting.apr__customer_statement_data", "get_interactive_data", [], {
                     period_type: this.state.periodType,
                     period_anchor: this.state.periodAnchor,
                     custom_date_from: this.state.customDateFrom,
@@ -189,7 +189,7 @@ export class CustomerStatement extends Component {
 
     async searchPartners() {
         this.state.partnerOptions = await this.orm.call(
-            "report.accounting_pdf_reports.customer_statement_data", "search_partners",
+            "report.flousflow_accounting.apr__customer_statement_data", "search_partners",
             [this.state.partnerSearch]
         );
     }
@@ -345,7 +345,7 @@ export class CustomerStatement extends Component {
     async printReport() {
         try {
             const action = await this.orm.call(
-                "report.accounting_pdf_reports.customer_statement_data",
+                "report.flousflow_accounting.apr__customer_statement_data",
                 "get_print_action", [this.getReportFilters()]
             );
             await this.action.doAction(action);
@@ -358,7 +358,7 @@ export class CustomerStatement extends Component {
         this.state.moreOpen = false;
         try {
             const action = await this.orm.call(
-                "report.accounting_pdf_reports.customer_statement_data",
+                "report.flousflow_accounting.apr__customer_statement_data",
                 "get_send_action", [this.getReportFilters()]
             );
             await this.action.doAction(action);
@@ -368,4 +368,4 @@ export class CustomerStatement extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.customer_statement", CustomerStatement);
+registry.category("actions").add("flousflow_accounting.apr__customer_statement", CustomerStatement);

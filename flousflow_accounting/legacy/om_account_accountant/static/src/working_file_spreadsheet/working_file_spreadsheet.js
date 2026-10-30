@@ -9,7 +9,7 @@ import { useService } from "@web/core/utils/hooks";
 import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
 
 export class WorkingFileSpreadsheetEditor extends Component {
-    static template = "om_account_accountant.WorkingFileSpreadsheetEditor";
+    static template = "flousflow_accounting.acc__WorkingFileSpreadsheetEditor";
     static components = { SpreadsheetComponent };
     props = useProps({
         recordId: t.number(),
@@ -164,7 +164,7 @@ export class WorkingFileSpreadsheetEditor extends Component {
 }
 
 class WorkingFileSpreadsheet extends Component {
-    static template = "om_account_accountant.WorkingFileSpreadsheet";
+    static template = "flousflow_accounting.acc__WorkingFileSpreadsheet";
     static components = { WorkingFileSpreadsheetEditor };
     props = useProps(standardActionServiceProps);
 
@@ -187,10 +187,10 @@ class WorkingFileSpreadsheet extends Component {
 }
 
 registry.category("lazy_components").add(
-    "om_account_accountant.WorkingFileSpreadsheet",
+    "flousflow_accounting.acc__WorkingFileSpreadsheet",
     WorkingFileSpreadsheet
 );
 registry.category("lazy_components").add(
-    "om_account_accountant.WorkingFileSpreadsheetEmbedded",
+    "flousflow_accounting.acc__WorkingFileSpreadsheetEmbedded",
     WorkingFileSpreadsheetEditor
 );

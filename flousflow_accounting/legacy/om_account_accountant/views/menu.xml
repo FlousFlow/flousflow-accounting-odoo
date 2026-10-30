@@ -3,7 +3,7 @@
 
     <record id="account.menu_finance" model="ir.ui.menu">
         <field name="name">Accounting</field>
-        <field name="web_icon">flousflow_accounting,legacy/flousflow_accounting/legacy/om_account_accountant/static/description/icon.png</field>
+        <field name="web_icon">flousflow_accounting,static/legacy/om_account_accountant/description/icon.png</field>
     </record>
 
     <record id="account.menu_action_account_moves_all" model="ir.ui.menu">

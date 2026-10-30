@@ -1,0 +1,98 @@
+.ff_tax_report {
+    min-width: 0;
+    background: var(--o-view-background-color, #f8f9fa);
+
+    .ff_tax_toolbar,
+    .ff_tax_filters {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--o-view-background-color, #fff);
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+    }
+
+    .ff_tax_toolbar h2 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .ff_tax_filters {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .ff_tax_date {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        white-space: nowrap;
+    }
+
+    .ff_tax_date .form-control {
+        width: 10rem;
+    }
+
+    .ff_tax_filters > .form-select {
+        width: auto;
+        min-width: 9.5rem;
+    }
+
+    .ff_tax_filters > .ff_tax_scale {
+        min-width: 8rem;
+    }
+
+    .ff_tax_company {
+        padding: 1rem;
+        font-weight: 600;
+    }
+
+    .ff_tax_table_wrap {
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 0 1rem 1rem;
+    }
+
+    .ff_tax_table {
+        min-width: 34rem;
+        margin: 0;
+        background: var(--o-view-background-color, #fff);
+    }
+
+    .ff_tax_group th {
+        background: #dce1e7;
+        font-weight: 700;
+    }
+
+    .ff_tax_total th {
+        border-top: 1px solid #adb5bd;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .ff_tax_report {
+        .ff_tax_toolbar,
+        .ff_tax_filters {
+            align-items: stretch;
+        }
+
+        .ff_tax_toolbar {
+            flex-wrap: wrap;
+        }
+
+        .ff_tax_filters {
+            justify-content: stretch;
+        }
+
+        .ff_tax_date {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .ff_tax_date .form-control,
+        .ff_tax_filters > .form-select {
+            flex: 1 1 100%;
+            width: 100%;
+        }
+    }
+}

@@ -11,7 +11,7 @@ const { DateTime } = luxon;
 const PAGE_SIZE = 100;
 
 export class JournalAudit extends Component {
-    static template = "om_account_accountant.JournalAudit";
+    static template = "flousflow_accounting.acc__JournalAudit";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -241,7 +241,7 @@ export class JournalAudit extends Component {
     }
 
     async openJournalItems(journal, account = false) {
-        const action = await this.action.loadAction("om_account_accountant.action_journal_audit_items");
+        const action = await this.action.loadAction("flousflow_accounting.acc__action_journal_audit_items");
         action.name = _t("Journal Items");
         action.domain = [
             ["company_id", "=", this.state.companyId],
@@ -385,4 +385,4 @@ export class JournalAudit extends Component {
     }
 }
 
-registry.category("actions").add("om_account_accountant.journal_audit", JournalAudit);
+registry.category("actions").add("flousflow_accounting.acc__journal_audit", JournalAudit);

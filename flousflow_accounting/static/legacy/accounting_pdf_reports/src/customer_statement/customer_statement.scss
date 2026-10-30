@@ -1,0 +1,82 @@
+.ff_customer_statement {
+    min-width: 0;
+    .ff_cs_toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+        padding: .75rem 1.5rem;
+        border-bottom: 1px solid #dee2e6;
+        background: #fff;
+    }
+
+    .ff_cs_title { margin: 0 .5rem 0 0; font-size: 1.25rem; white-space: nowrap; }
+    .ff_cs_filters { display: flex; flex: 1 1 36rem; flex-wrap: wrap; align-items: center; gap: .5rem; min-width: 0; }
+    .ff_cs_period_menu { min-width: 21rem; }
+    .ff_cs_period_menu > div > .ff_cs_period_option_label { flex: 1; }
+    .ff_cs_account_menu { min-width: 16rem; max-height: 22rem; overflow-y: auto; }
+    .ff_cs_partner_picker { min-width: 11rem; }
+    .ff_cs_partner_menu { min-width: 19rem; max-height: 25rem; overflow-y: auto; }
+    .ff_cs_scale { width: 7rem; }
+
+    .ff_cs_selected_partners { max-width: 78rem; margin: 0 auto 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+    .ff_cs_table_wrap { width: calc(100% - 2rem); max-width: 78rem; min-width: 0; margin: 0 auto; padding: 1rem 1.5rem; background: #fff; border: 1px solid #dee2e6; border-radius: .25rem; overflow-x: auto; overscroll-behavior-inline: contain; }
+    .ff_cs_table { min-width: 60rem; margin: 0; }
+    .ff_cs_table th, .ff_cs_table td { white-space: nowrap; }
+    .ff_cs_report_row { background: #fff; }
+    .ff_cs_partner_row { border-top: 2px solid #d8dde3; background: #e9ecef; }
+    .ff_cs_info_cell { position: relative; width: 2.5rem; text-align: center; }
+    .ff_cs_info_button { color: #87909a; padding: 0 .25rem; }
+    .ff_cs_info_popover {
+        position: absolute;
+        z-index: 5;
+        right: 1.75rem;
+        top: 0;
+        width: 34rem;
+        max-width: calc(100vw - 2rem);
+        padding: 1rem 1.25rem;
+        color: #343a40;
+        text-align: left;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: .75rem;
+        box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .16);
+        white-space: normal;
+    }
+    .ff_cs_info_line { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: .75rem; margin-bottom: .4rem; }
+    .ff_cs_info_line > :first-child { color: #6c757d; }
+    .ff_cs_info_line code { overflow-wrap: anywhere; color: #d63384; }
+    .ff_cs_info_card { padding-top: .45rem; margin-top: .45rem; border-top: 1px solid #e9ecef; }
+    .ff_cs_partner_controls { display: inline-flex; gap: .25rem; }
+    .ff_cs_partner_controls .btn { padding: 0 .25rem; }
+    .ff_cs_move_actions { position: relative; }
+    .ff_cs_move_actions .dropdown-menu { inset-inline-start: 0; inset-inline-end: auto; }
+    .ff_cs_move_row td { border-bottom-color: #e4e7ea; }
+    .ff_cs_total_row { border-top: 2px solid #6c757d; }
+    .ff_cs_empty { max-width: 78rem; margin: 0 auto; padding: 3rem; text-align: center; color: #6c757d; background: #fff; border: 1px solid #dee2e6; }
+}
+
+@media (max-width: 1100px) {
+    .ff_customer_statement .ff_cs_toolbar { padding: .75rem 1rem; }
+    .ff_customer_statement .ff_cs_filters { flex: 1 1 100%; }
+    .ff_customer_statement .ff_cs_table_wrap { width: calc(100% - 1.5rem); padding: .75rem; }
+}
+
+@media (max-width: 520px) {
+    .ff_customer_statement .ff_cs_toolbar { gap: .5rem; padding: .65rem .75rem; }
+    .ff_customer_statement .ff_cs_title { flex: 1 1 auto; font-size: 1.1rem; }
+    .ff_customer_statement .ff_cs_filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+    .ff_customer_statement .ff_cs_filters > * { min-width: 0; max-width: 100%; }
+    .ff_customer_statement .ff_cs_period_menu,
+    .ff_customer_statement .ff_cs_partner_menu,
+    .ff_customer_statement .ff_cs_account_menu { min-width: 0; width: 19rem; max-width: calc(100vw - 1.5rem); }
+    .ff_customer_statement .ff_cs_table_wrap { width: calc(100% - 1rem); padding: .5rem; }
+    .ff_customer_statement .ff_cs_info_popover { inset-inline-start: .25rem; inset-inline-end: auto; width: calc(100vw - 1.5rem); max-width: calc(100vw - 1.5rem); }
+    .ff_customer_statement .ff_cs_info_line { grid-template-columns: minmax(5rem, 7rem) minmax(0, 1fr); gap: .4rem; }
+}
+
+@media print {
+    .ff_customer_statement .ff_cs_toolbar,
+    .ff_customer_statement .ff_cs_selected_partners { display: none !important; }
+    .ff_customer_statement .ff_cs_table_wrap { max-width: none; border: 0; margin: 0; }
+}

@@ -25,7 +25,7 @@ function emptyWriteoff(amount = 0) {
  * server for a preview of it; all the accounting is done by the engine of `account.bank.statement.line`.
  */
 export class OmBankReconciliation extends Component {
-    static template = "om_account_reconcile.BankReconciliation";
+    static template = "flousflow_accounting.rec__BankReconciliation";
     static components = { ControlPanel, MultiRecordSelector, RecordSelector };
 
     props = useProps(standardActionServiceProps);

@@ -9,7 +9,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class AgedPartnerReport extends Component {
-    static template = "accounting_pdf_reports.AgedPartnerReport";
+    static template = "flousflow_accounting.apr__AgedPartnerReport";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -56,7 +56,7 @@ export class AgedPartnerReport extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_agedpartnerbalance",
+                "report.flousflow_accounting.apr__report_agedpartnerbalance",
                 "get_interactive_data",
                 [],
                 {
@@ -91,7 +91,7 @@ export class AgedPartnerReport extends Component {
             return;
         }
         this.state.partnerOptions = await this.orm.call(
-            "report.accounting_pdf_reports.report_agedpartnerbalance",
+            "report.flousflow_accounting.apr__report_agedpartnerbalance",
             "search_interactive_partners",
             [],
             { query: this.state.partnerQuery, result_selection: this.state.resultSelection }
@@ -134,7 +134,7 @@ export class AgedPartnerReport extends Component {
 
     async openOpenItems(partnerId) {
         const action = await this.orm.call(
-            "report.accounting_pdf_reports.report_agedpartnerbalance",
+            "report.flousflow_accounting.apr__report_agedpartnerbalance",
             "get_open_items_action", [partnerId]
         );
         return this.action.doAction(action);
@@ -166,7 +166,7 @@ export class AgedPartnerReport extends Component {
     async printReport() {
         try {
             await this.orm.call(
-                "report.accounting_pdf_reports.report_agedpartnerbalance",
+                "report.flousflow_accounting.apr__report_agedpartnerbalance",
                 "print_interactive_report",
                 [],
                 {
@@ -185,4 +185,4 @@ export class AgedPartnerReport extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.aged_partner", AgedPartnerReport);
+registry.category("actions").add("flousflow_accounting.apr__aged_partner", AgedPartnerReport);

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.apr__GeneralLedger">
+        <div class="o_action ff_general_ledger">
+            <div class="ff_gl_toolbar">
+                <button class="btn btn-primary" t-on-click="this.printReport">Print</button>
+                <div class="dropdown ff_gl_settings">
+                    <button class="btn btn-outline-secondary" type="button" title="Report options"
+                            t-att-aria-expanded="this.state.settingsOpen"
+                            t-on-click="() => this.state.settingsOpen = !this.state.settingsOpen">
+                        <i class="fa fa-cog"/>
+                    </button>
+                    <div t-if="this.state.settingsOpen" class="dropdown-menu show">
+                        <button class="dropdown-item" t-on-click="() => this.exportReport('xlsx')">XLSX</button>
+                        <button class="dropdown-item" t-on-click="() => this.exportReport('csv')">CSV</button>
+                    </div>
+                </div>
+                <div class="ff_gl_filters">
+                    <input class="form-control" type="search" placeholder="Search accounts"
+                           t-att-value="this.state.search"
+                           t-on-input="(ev) => this.state.search = ev.target.value"/>
+                    <div class="dropdown ff_gl_period_picker">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                t-on-click="() => this.togglePeriodPicker()">
+                            <i class="fa fa-calendar me-1"/><t t-out="this.periodLabel"/>
+                        </button>
+                        <div t-if="this.state.periodPickerOpen" class="dropdown-menu show p-2 ff_gl_period_menu">
+                            <t t-foreach="['month', 'quarter', 'fiscal_year']" t-as="periodType" t-key="periodType">
+                                <div class="d-flex align-items-center gap-1 ff_gl_period_option">
+                                    <button t-att-class="'dropdown-item ' + (this.state.periodType === periodType ? 'active' : '')"
+                                            t-on-click="() => this.setPeriodType(periodType)">
+                                        <t t-if="periodType === 'month'">Month</t>
+                                        <t t-elif="periodType === 'quarter'">Quarter</t>
+                                        <t t-else="">Fiscal Year</t>
+                                    </button>
+                                    <button class="btn btn-light btn-sm" t-att-aria-label="'Previous ' + periodType"
+                                            t-on-click="() => this.navigatePeriod(periodType, -1)">
+                                        <i class="fa fa-chevron-left"/>
+                                    </button>
+                                    <span class="text-nowrap" t-out="this.getPeriodOptionLabel(periodType)"/>
+                                    <button class="btn btn-light btn-sm" t-att-aria-label="'Next ' + periodType"
+                                            t-on-click="() => this.navigatePeriod(periodType, 1)">
+                                        <i class="fa fa-chevron-right"/>
+                                    </button>
+                                </div>
+                            </t>
+                            <button t-att-class="'dropdown-item ' + (this.state.periodType === 'custom' ? 'active' : '')"
+                                    t-on-click="() => this.setPeriodType('custom')">Custom Dates</button>
+                            <div t-if="this.state.periodType === 'custom'" class="px-2 pt-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <input class="form-control form-control-sm" type="date" aria-label="Start Date"
+                                           t-att-value="this.state.customDateFrom"
+                                           t-on-change="(ev) => this.onCustomDateChange('customDateFrom', ev)"/>
+                                    <span>to</span>
+                                    <input class="form-control form-control-sm" type="date" aria-label="End Date"
+                                           t-att-value="this.state.customDateTo"
+                                           t-on-change="(ev) => this.onCustomDateChange('customDateTo', ev)"/>
+                                </div>
+                                <small t-if="this.state.customDateError" class="text-danger d-block mt-1"
+                                       t-out="this.state.customDateError"/>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-secondary" t-on-click="this.applyFilters" title="Apply filters">
+                        <i class="fa fa-refresh"/>
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-sliders"/> <t t-if="this.state.targetMove === 'all'">Draft Entries</t>
+                            <t t-else="">Posted Entries</t>, <t t-if="this.state.cashBasis">Cash Basis</t>
+                            <t t-else="">Accrual Basis</t>
+                        </button>
+                        <div class="dropdown-menu p-3 ff_gl_filter_menu">
+                            <label class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox"
+                                       t-att-checked="this.state.targetMove === 'all'"
+                                       t-on-change="() => { this.state.targetMove = this.state.targetMove === 'all' ? 'posted' : 'all'; this.applyFilters(); }"/>
+                                <span class="form-check-label">Draft Entries</span>
+                            </label>
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" t-att-checked="this.state.cashBasis"
+                                       t-on-change="() => { this.state.cashBasis = !this.state.cashBasis; this.applyFilters(); }"/>
+                                <span class="form-check-label">Cash Basis Method</span>
+                            </label>
+                            <div class="dropdown-divider"/>
+                            <button class="dropdown-item" t-on-click="this.toggleAll">
+                                <t t-if="this.allVisibleExpanded">Fold All</t><t t-else="">Unfold All</t>
+                            </button>
+                        </div>
+                    </div>
+                    <select class="form-select ff_gl_scale" t-att-value="this.state.scale"
+                            t-on-change="(ev) => this.state.scale = ev.target.value">
+                        <option value="unit">In .$</option>
+                        <option value="rounded">In $</option>
+                        <option value="thousand">In k$</option>
+                        <option value="million">In M$</option>
+                    </select>
+                </div>
+            </div>
+            <div class="o_content">
+                <div class="ff_gl_report_header">
+                    <h2>General Ledger</h2>
+                    <span t-out="this.state.companyName"/>
+                </div>
+                <div t-if="this.state.draftCount and this.state.targetMove === 'posted' and !this.state.dismissedDraftWarning"
+                     class="alert alert-info d-flex align-items-center justify-content-between" role="status">
+                    <span>There are <a href="#" t-on-click.prevent="() => this.openJournalItems(false, true)"><t t-out="this.state.draftCount"/> unposted Journal Entries</a> prior to or included in this period.</span>
+                    <button class="btn-close" aria-label="Close" t-on-click="() => this.state.dismissedDraftWarning = true"/>
+                </div>
+                <div t-if="this.state.loading" class="text-center p-5"><i class="fa fa-spinner fa-spin me-2"/>Loading…</div>
+                <div t-else="" class="ff_gl_table_wrap">
+                    <table class="table table-hover ff_gl_table">
+                        <thead><tr>
+                            <th>Date</th><th>Partner</th><th>Currency</th>
+                            <th class="text-end">Debit</th><th class="text-end">Credit</th><th class="text-end">Balance</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr t-if="!this.visibleLines.length"><td colspan="6" class="text-center text-muted py-5">No data found</td></tr>
+                            <t t-foreach="this.visibleLines" t-as="line" t-key="line.account_id">
+                                <tr class="ff_gl_account_row">
+                                    <td colspan="3">
+                                        <button class="btn btn-link p-0 me-2 ff_gl_fold"
+                                                t-on-click="() => this.toggleAccount(line)">
+                                            <i t-att-class="this.state.expandedIds.includes(line.account_id) ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"/>
+                                        </button>
+                                        <span class="fw-semibold"><t t-out="line.code"/> <t t-out="line.name"/></span>
+                                        <button class="btn btn-sm btn-outline-secondary ms-3"
+                                                t-on-click="() => this.openJournalItems(line.account_id)">Journal Items</button>
+                                    </td>
+                                    <td class="text-end"><button class="btn btn-link p-0" t-on-click="() => this.openJournalItems(line.account_id)" t-out="this.formatAmount(line.debit)"/></td>
+                                    <td class="text-end"><button class="btn btn-link p-0" t-on-click="() => this.openJournalItems(line.account_id)" t-out="this.formatAmount(line.credit)"/></td>
+                                    <td class="text-end fw-semibold"><button class="btn btn-link p-0 fw-semibold" t-on-click="() => this.openJournalItems(line.account_id)" t-out="this.formatAmount(line.balance)"/></td>
+                                </tr>
+                                <t t-if="this.state.expandedIds.includes(line.account_id) and line.move_lines"
+                                   t-foreach="line.move_lines || []" t-as="moveLine" t-key="moveLine.id + '-' + moveLine.date">
+                                    <tr class="ff_gl_move_row">
+                                        <td><t t-out="this.formatDate(moveLine.date)"/></td>
+                                        <td><span t-if="moveLine.move_name" class="text-muted me-1" t-out="moveLine.move_name"/><t t-out="moveLine.partner_name or moveLine.label"/></td>
+                                        <td><t t-out="moveLine.currency_code"/></td>
+                                        <td class="text-end"><t t-out="this.formatAmount(moveLine.debit)"/></td>
+                                        <td class="text-end"><t t-out="this.formatAmount(moveLine.credit)"/></td>
+                                        <td class="text-end"><t t-out="this.formatAmount(moveLine.balance)"/></td>
+                                    </tr>
+                                </t>
+                            </t>
+                            <tr class="ff_gl_total_row">
+                                <td colspan="3">Total General Ledger</td>
+                                <td class="text-end"><t t-out="this.formatAmount(this.totals.debit)"/></td>
+                                <td class="text-end"><t t-out="this.formatAmount(this.totals.credit)"/></td>
+                                <td class="text-end"><t t-out="this.formatAmount(this.totals.balance)"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

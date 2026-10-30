@@ -1,0 +1,205 @@
+.o_ff_journal_audit {
+    min-height: 100%;
+    background: var(--body-bg, #f8f9fa);
+
+    .ff_journal_audit_control_panel {
+        display: block;
+    }
+
+    .ff_journal_audit_titlebar,
+    .ff_journal_audit_actions {
+        align-items: center;
+        display: flex;
+    }
+
+    .ff_journal_audit_titlebar {
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .ff_journal_audit_actions {
+        gap: 0.5rem;
+    }
+
+    .ff_journal_audit_settings {
+        position: relative;
+    }
+
+    .ff_journal_audit_filters {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+    }
+
+    .ff_journal_audit_period_picker {
+        position: relative;
+    }
+
+    .ff_journal_audit_period_menu {
+        min-width: 28rem;
+        max-width: calc(100vw - 2rem);
+    }
+
+    .ff_journal_audit_period_option {
+        align-items: center;
+        display: flex;
+        gap: 0.25rem;
+
+        .dropdown-item {
+            flex: 1;
+        }
+    }
+
+    .ff_journal_audit_period_value {
+        min-width: 8rem;
+        text-align: center;
+    }
+
+    .ff_journal_audit_custom_period {
+        border-top: 1px solid #dee2e6;
+        margin-top: 0.5rem;
+        padding: 0.75rem 0.5rem 0.25rem;
+
+        input {
+            min-width: 0;
+        }
+    }
+
+    .ff_journal_audit_target {
+        width: 190px;
+    }
+
+    .ff_journal_audit_scale {
+        width: 130px;
+    }
+
+    .ff_journal_audit_card {
+        max-width: 1240px;
+        margin: 20px auto;
+        border-color: #d8dde3;
+    }
+
+    .ff_journal_audit_table > thead {
+        background: #e1e5ea;
+    }
+
+    .ff_journal_audit_journal > td {
+        vertical-align: middle;
+    }
+
+    .ff_journal_audit_fold {
+        color: #68727d;
+        min-width: 18px;
+    }
+
+    .ff_journal_audit_details {
+        background: #f6f7f8;
+
+        .table {
+            font-size: 0.92rem;
+
+            thead {
+                color: #59636f;
+            }
+        }
+    }
+
+    .ff_journal_audit_tax_summary {
+        border-top: 1px solid #dee2e6;
+        padding: 20px 24px 24px;
+
+        h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        table {
+            max-width: 760px;
+        }
+    }
+
+    @media print {
+        .ff_journal_audit_period_menu {
+            display: none !important;
+        }
+
+        .o_control_panel button,
+        .o_control_panel select,
+        .o_control_panel input,
+        .ff_journal_audit_fold,
+        .ff_journal_audit_journal button,
+        .ff_journal_audit_tax_summary button {
+            display: none !important;
+        }
+
+        .ff_journal_audit_card {
+            border: 0;
+            box-shadow: none !important;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .o_ff_journal_audit {
+        .ff_journal_audit_control_panel {
+            padding-inline: 0.75rem !important;
+        }
+
+        .ff_journal_audit_titlebar {
+            gap: 0.5rem;
+        }
+
+        .ff_journal_audit_titlebar h2 {
+            font-size: 1.1rem;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ff_journal_audit_actions {
+            flex-shrink: 0;
+        }
+
+        .ff_journal_audit_filters {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ff_journal_audit_filters_mobile_open {
+            display: grid !important;
+        }
+
+        .ff_journal_audit_filters > * {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .ff_journal_audit_period_picker,
+        .ff_journal_audit_target,
+        .ff_journal_audit_scale {
+            width: 100%;
+        }
+
+        .ff_journal_audit_period_menu {
+            min-width: 0;
+            width: 28rem;
+            max-width: calc(100vw - 1.5rem);
+        }
+
+        .ff_journal_audit_period_option {
+            flex-wrap: wrap;
+        }
+
+        .ff_journal_audit_period_value {
+            min-width: 5rem;
+        }
+
+        .ff_journal_audit_filters > .form-check {
+            grid-column: 1 / -1;
+        }
+    }
+}

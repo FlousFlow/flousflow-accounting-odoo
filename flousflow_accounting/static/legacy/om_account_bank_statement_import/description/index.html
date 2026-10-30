@@ -1,0 +1,78 @@
+<div class="container-fluid">
+
+
+
+<div class="bg-light rounded p-4 p-md-5 text-center my-4">
+    <h1>Bank Statement Import for Odoo 20 Community</h1>
+    <p>Import the statements your bank gives you, in the format it offers &mdash; CAMT.053, MT940, OFX, QIF, CSV or Excel &mdash; and reconcile them as usual. The journal is recognised from the account number in the file, the transactions already imported are left out, and the file stays attached to the statement.</p>
+    <div>
+        <span>CAMT.053 &amp; MT940</span>
+        <span>OFX, QFX &amp; QIF</span>
+        <span>CSV &amp; Excel maps</span>
+        <span>Community Edition</span>
+    </div>
+</div>
+
+<div class="my-5">
+    <span>Import</span>
+    <h2>Whatever format your bank offers</h2>
+    <p>Drop the files on the Import Statement button of the statement list, or on the card of a bank journal on the accounting dashboard. Each file is handed to the parsers in turn and read by the first one that recognises it, so you never have to say which format it is in.</p>
+    <ul>
+        <li><span>&#10003;</span> &nbsp;CAMT.053, the ISO 20022 statement of the European banks.</li>
+        <li><span>&#10003;</span> &nbsp;MT940, the SWIFT statement, in its usual flavours.</li>
+        <li><span>&#10003;</span> &nbsp;OFX and QFX, the format of the online banking of North America.</li>
+        <li><span>&#10003;</span> &nbsp;QIF, with the format of its dates guessed from the values themselves, or written down when the file is ambiguous.</li>
+        <li><span>&#10003;</span> &nbsp;CSV and Excel, read through a map of the columns of your bank.</li>
+        <li><span>&#10003;</span> &nbsp;Several files at once, each one becoming its own statement.</li>
+    </ul>
+    <div class="my-4">
+        <img src="statement_import.png" alt="The import wizard: the files, the journal and the file map."/></div>
+    <p>The import wizard: the files, the journal and the file map.</p>
+</div>
+
+<div class="my-5">
+    <span>File maps</span>
+    <h2>Read the CSV of any bank, once and for all</h2>
+    <p>A file map describes the export of one bank: how its text is encoded, how its numbers and dates are written, and which column holds what. Set the map on the journal of that bank and it is filled in by itself at every import.</p>
+    <ul>
+        <li><span>&#10003;</span> &nbsp;Encoding, column separator and text delimiter, for a CSV or a TSV.</li>
+        <li><span>&#10003;</span> &nbsp;Decimal separator and thousands separator: 1,234.56 or 1.234,56 or 1 234,56.</li>
+        <li><span>&#10003;</span> &nbsp;Date format in the Python notation, rows to skip above the header, and the sheet to read of an Excel file.</li>
+        <li><span>&#10003;</span> &nbsp;Columns named by their header, or by their number when the file has none.</li>
+        <li><span>&#10003;</span> &nbsp;One signed amount column, or a debit column and a credit column &mdash; with the sign of the debits the way your bank writes them.</li>
+        <li><span>&#10003;</span> &nbsp;Label, reference, partner, counterpart account number, currency, notes and the identifier of the transaction at the bank.</li>
+        <li><span>&#10003;</span> &nbsp;A map belongs to one company, or is shared by all of them.</li>
+    </ul>
+</div>
+
+<div class="my-5">
+    <span>Safeguards</span>
+    <h2>Nothing lands in the wrong journal, nothing lands twice</h2>
+    <ul>
+        <li><span>&#10003;</span> &nbsp;The journal is found from the bank account number written in the file; leave the journal empty and let the file decide.</li>
+        <li><span>&#10003;</span> &nbsp;A file imported in the journal of another account is refused, and so is a file whose currency is not the one of the journal.</li>
+        <li><span>&#10003;</span> &nbsp;The identifier of each transaction at the bank is kept, so importing the same file again brings in only what is new, and tells you how much was already there.</li>
+        <li><span>&#10003;</span> &nbsp;The same file can be imported in two journals of two companies without either of them skipping the transactions of the other.</li>
+        <li><span>&#10003;</span> &nbsp;The opening and closing balances of the file are carried over to the statement, and the file itself stays attached to it.</li>
+        <li><span>&#10003;</span> &nbsp;Partner name, counterpart account, reference and notes are kept on the transactions, which helps the reconciliation find its counterparts.</li>
+    </ul>
+</div>
+
+<hr/>
+<hr/>
+
+<div>
+    <img src="odoo_mates.png" alt="Odoo Mates"/>
+    <h3>Keeping it simple</h3>
+    <h3>Email: <a href="mailto:odoomates@gmail.com">odoomates@gmail.com</a></h3>
+    <div>
+
+
+        <a target="_blank" href="https://www.youtube.com/channel/UCVKlUZP7HAhdQgs-9iTJklQ"><i class="fa fa-youtube-play"></i></a>
+    </div>
+</div>
+
+<hr/>
+<hr/>
+
+</div>

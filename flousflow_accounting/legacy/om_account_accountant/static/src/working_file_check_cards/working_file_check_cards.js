@@ -21,7 +21,7 @@ const CHECK_FIELDS = [
 ];
 
 export class WorkingFileCheckCards extends Component {
-    static template = "om_account_accountant.WorkingFileCheckCards";
+    static template = "flousflow_accounting.acc__WorkingFileCheckCards";
     static components = { Dropdown, DropdownItem, FileInput };
     props = useProps(standardFieldProps);
 

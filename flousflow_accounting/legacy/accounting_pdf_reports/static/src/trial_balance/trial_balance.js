@@ -10,7 +10,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class TrialBalance extends Component {
-    static template = "accounting_pdf_reports.TrialBalance";
+    static template = "flousflow_accounting.apr__TrialBalance";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -91,7 +91,7 @@ export class TrialBalance extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_trialbalance",
+                "report.flousflow_accounting.apr__report_trialbalance",
                 "get_interactive_data",
                 [this.state.periodType, this.state.periodAnchor,
                     this.state.customDateFrom, this.state.customDateTo,
@@ -204,7 +204,7 @@ export class TrialBalance extends Component {
     }
 
     async printReport() {
-        const action = await this.action.loadAction("accounting_pdf_reports.action_account_balance_menu");
+        const action = await this.action.loadAction("flousflow_accounting.apr__action_account_balance_menu");
         action.context = {
             ...action.context,
             default_date_from: this.state.dateFrom,
@@ -218,4 +218,4 @@ export class TrialBalance extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.trial_balance", TrialBalance);
+registry.category("actions").add("flousflow_accounting.apr__trial_balance", TrialBalance);

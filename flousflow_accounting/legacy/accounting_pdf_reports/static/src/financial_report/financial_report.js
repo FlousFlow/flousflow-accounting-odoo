@@ -11,7 +11,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class FinancialReport extends Component {
-    static template = "accounting_pdf_reports.FinancialReport";
+    static template = "flousflow_accounting.apr__FinancialReport";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -202,7 +202,7 @@ export class FinancialReport extends Component {
     async loadPeriod(periodType, anchor) {
         try {
             const dates = await this.orm.call(
-                "report.accounting_pdf_reports.report_financial",
+                "report.flousflow_accounting.apr__report_financial",
                 "get_interactive_period_dates",
                 [this.state.reportId, periodType, anchor]
             );
@@ -277,7 +277,7 @@ export class FinancialReport extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_financial",
+                "report.flousflow_accounting.apr__report_financial",
                 "get_interactive_data",
                 [this.state.reportId, this.state.dateFrom || false, this.state.dateTo,
                     this.state.targetMove, this.state.journalIds, this.state.comparison,
@@ -613,4 +613,4 @@ export class FinancialReport extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.financial_report", FinancialReport);
+registry.category("actions").add("flousflow_accounting.apr__financial_report", FinancialReport);

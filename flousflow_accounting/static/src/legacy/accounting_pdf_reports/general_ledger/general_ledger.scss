@@ -1,0 +1,128 @@
+.ff_general_ledger {
+    min-width: 0;
+    .ff_gl_toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 1.5rem;
+        border-bottom: 1px solid #dee2e6;
+        background: #fff;
+    }
+
+    .ff_gl_filters {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        flex: 1 1 36rem;
+        width: auto;
+        min-width: 0;
+    }
+
+    .ff_gl_filters > .form-control:first-child {
+        width: 18rem;
+        max-width: 28vw;
+    }
+
+    .ff_gl_period_picker > button { min-width: 10.5rem; }
+    .ff_gl_period_menu { min-width: 21rem; }
+    .ff_gl_period_option > .dropdown-item { min-width: 7rem; }
+    .ff_gl_period_option > span { flex: 1; text-align: center; }
+
+    .ff_gl_scale {
+        width: 7rem;
+    }
+
+    .ff_gl_filter_menu {
+        min-width: 17rem;
+    }
+
+    .ff_gl_report_header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        max-width: 78rem;
+        margin: 1.5rem auto 1rem;
+
+        h2 {
+            margin: 0;
+            font-size: 1.35rem;
+        }
+    }
+
+    .alert-info {
+        max-width: 78rem;
+        margin: 0 auto 1rem;
+        background-color: #d0edf2;
+        border-color: #d0edf2;
+    }
+
+    .ff_gl_table_wrap {
+        width: calc(100% - 2rem);
+        max-width: 78rem;
+        min-width: 0;
+        margin: 0 auto;
+        padding: 1rem 1.5rem;
+        background: var(--o-view-background-color, #fff);
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+    }
+
+    .ff_gl_table {
+        min-width: 64rem;
+        margin: 0;
+
+        th {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .ff_gl_account_row td {
+            border-top: 1px solid #dce0e4;
+            background-color: #fff;
+        }
+
+        .ff_gl_move_row td {
+            color: #555b61;
+            background-color: #fbfbfc;
+        }
+
+        .ff_gl_total_row td {
+            border-top: 2px solid #87909a;
+            font-weight: 700;
+        }
+
+        td.text-end,
+        th.text-end {
+            min-width: 8.5rem;
+            white-space: nowrap;
+        }
+    }
+
+    .ff_gl_fold {
+        color: #69737d;
+    }
+}
+
+@media (max-width: 1100px) {
+    .ff_general_ledger .ff_gl_toolbar { padding: .75rem 1rem; }
+    .ff_general_ledger .ff_gl_filters { flex: 1 1 100%; }
+    .ff_general_ledger .ff_gl_report_header,
+    .ff_general_ledger .alert-info,
+    .ff_general_ledger .ff_gl_table_wrap { width: calc(100% - 1.5rem); }
+    .ff_general_ledger .ff_gl_table_wrap { padding: .75rem; }
+}
+
+@media (max-width: 520px) {
+    .ff_general_ledger .ff_gl_toolbar { gap: .5rem; padding: .65rem .75rem; }
+    .ff_general_ledger .ff_gl_filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ff_general_ledger .ff_gl_filters > * { width: 100%; min-width: 0; max-width: 100%; }
+    .ff_general_ledger .ff_gl_filters > .form-control:first-child { grid-column: 1 / -1; width: 100%; max-width: 100%; }
+    .ff_general_ledger .ff_gl_period_picker > button { max-width: 100%; }
+    .ff_general_ledger .ff_gl_report_header { align-items: flex-start; gap: .5rem; font-size: .9rem; }
+    .ff_general_ledger .ff_gl_table_wrap { width: calc(100% - 1rem); padding: .5rem; }
+}

@@ -4,7 +4,7 @@ import { useService } from "@web/core/utils/hooks";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 class WorkingFileBalanceAccountField extends Component {
-    static template = "om_account_accountant.WorkingFileBalanceAccountField";
+    static template = "flousflow_accounting.acc__WorkingFileBalanceAccountField";
     props = useProps(standardFieldProps);
 
     setup() {

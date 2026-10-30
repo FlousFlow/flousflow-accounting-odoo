@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__AccountDashboardKpisReorder"
+       t-inherit="account.AccountDashboardKpis" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_account_dashboard_kpis')]" position="attributes">
+            <attribute name="t-on-dragstart">this.onKpiDragStart</attribute>
+            <attribute name="t-on-dragover">this.onKpiDragOver</attribute>
+            <attribute name="t-on-drop">this.onKpiDrop</attribute>
+        </xpath>
+    </t>
+    <t t-name="flousflow_accounting.acc__AccountDashboardKpiCardDraggable"
+       t-inherit="account.AccountDashboardKpiCard" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o_account_dashboard_kpi_card')]" position="attributes">
+            <attribute name="t-att-draggable">'true'</attribute>
+        </xpath>
+    </t>
+</templates>

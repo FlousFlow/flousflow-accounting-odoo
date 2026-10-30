@@ -36,5 +36,5 @@ export class ReviewAccrualListController extends ListController {
 registry.category("views").add("review_accrual_list", {
     ...listView,
     Controller: ReviewAccrualListController,
-    buttonTemplate: "om_account_accountant.ReviewAccrualList.Buttons",
+    buttonTemplate: "flousflow_accounting.acc__ReviewAccrualList.Buttons",
 });

@@ -10,7 +10,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class DeferredScheduleReport extends Component {
-    static template = "om_account_accountant.DeferredScheduleReport";
+    static template = "flousflow_accounting.acc__DeferredScheduleReport";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -347,4 +347,4 @@ export class DeferredScheduleReport extends Component {
     }
 }
 
-registry.category("actions").add("om_account_accountant.deferred_schedule", DeferredScheduleReport);
+registry.category("actions").add("flousflow_accounting.acc__deferred_schedule", DeferredScheduleReport);

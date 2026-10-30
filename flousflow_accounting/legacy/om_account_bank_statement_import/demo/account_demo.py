@@ -19,7 +19,7 @@ class AccountChartTemplate(models.AbstractModel):
                 'name': 'Demo Bank - CSV export',
                 'company_id': company.id,
                 'note': 'The columns of the CSV statements of the demo bank, e.g. the file '
-                        '/flousflow_accounting/legacy/om_account_bank_statement_import/static/demo/demo_bank_statement.csv',
+                        '/flousflow_accounting/static/legacy/om_account_bank_statement_import/demo/demo_bank_statement.csv',
                 'file_encoding': 'utf-8',
                 'delimiter': ',',
                 'quotechar': '"',

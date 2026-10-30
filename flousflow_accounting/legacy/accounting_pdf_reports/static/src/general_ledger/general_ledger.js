@@ -11,7 +11,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class GeneralLedger extends Component {
-    static template = "accounting_pdf_reports.GeneralLedger";
+    static template = "flousflow_accounting.apr__GeneralLedger";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -91,7 +91,7 @@ export class GeneralLedger extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_general_ledger",
+                "report.flousflow_accounting.apr__report_general_ledger",
                 "get_interactive_data",
                 [false, false, this.state.targetMove, this.state.cashBasis, accountIds || [],
                     this.state.periodType, this.state.periodAnchor,
@@ -249,7 +249,7 @@ export class GeneralLedger extends Component {
 
     async printReport() {
         const { dateFrom, dateTo } = this.state;
-        const action = await this.action.loadAction("accounting_pdf_reports.action_account_general_ledger_menu");
+        const action = await this.action.loadAction("flousflow_accounting.apr__action_account_general_ledger_menu");
         action.context = {
             ...action.context,
             default_date_from: dateFrom,
@@ -283,4 +283,4 @@ export class GeneralLedger extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.general_ledger", GeneralLedger);
+registry.category("actions").add("flousflow_accounting.apr__general_ledger", GeneralLedger);

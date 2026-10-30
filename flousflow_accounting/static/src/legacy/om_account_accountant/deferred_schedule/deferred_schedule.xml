@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__DeferredScheduleReport" owl="1">
+        <div class="o_action_manager o_ff_deferred_schedule">
+            <div class="o_control_panel d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 py-2">
+                <div>
+                    <h2 class="mb-0 ff_deferred_title" t-out="this.title"/>
+                    <div class="dropdown d-inline-block ms-2">
+                        <button class="btn btn-light btn-sm" title="Report options"
+                                t-att-aria-expanded="this.state.settingsOpen"
+                                t-on-click="() => this.toggleSettings()">
+                            <i class="fa fa-cog"/>
+                        </button>
+                        <div t-if="this.state.settingsOpen" class="dropdown-menu show">
+                            <button class="dropdown-item" t-on-click="() => this.exportXlsx()">
+                                <i class="fa fa-file-excel-o me-2"/>XLSX
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <label class="ff_deferred_search d-flex align-items-center gap-2 mb-0">
+                    <i class="fa fa-search"/>
+                    <span class="visually-hidden">Search</span>
+                    <input class="form-control" type="search" placeholder="Search..."
+                           t-att-value="this.state.search" t-on-input="(ev) => this.onSearchInput(ev)"/>
+                </label>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                t-on-click="() => this.toggleJournalPicker()">
+                            <t t-if="this.state.journalIds.length === 0">All Journals</t>
+                            <t t-else=""><t t-out="this.state.journalIds.length"/> Journals</t>
+                        </button>
+                        <div t-if="this.state.journalPickerOpen" class="dropdown-menu show ff_deferred_journals">
+                            <label t-foreach="this.state.journals" t-as="journal" t-key="journal.id"
+                                   class="dropdown-item d-flex align-items-center gap-2">
+                                <input type="checkbox" class="form-check-input mt-0"
+                                       t-att-checked="this.isJournalSelected(journal.id)"
+                                       t-on-change="(ev) => this.onJournalToggle(journal.id, ev)"/>
+                                <span t-out="journal.name"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button id="ff_deferred_period" class="btn btn-secondary dropdown-toggle ff_deferred_period"
+                                type="button" t-on-click="() => this.togglePeriodPicker()">
+                            <i class="fa fa-calendar me-1"/><t t-out="this.periodLabel"/>
+                        </button>
+                        <div t-if="this.state.periodPickerOpen" class="dropdown-menu show p-2 ff_deferred_period_menu">
+                            <t t-foreach="['month', 'quarter', 'fiscal_year']" t-as="periodType" t-key="periodType">
+                                <div class="d-flex align-items-center gap-1 ff_deferred_period_option">
+                                    <button t-att-class="'dropdown-item ' + (this.state.periodType === periodType ? 'active' : '')"
+                                            t-on-click="() => this.setPeriodType(periodType)">
+                                        <t t-if="periodType === 'month'">Month</t>
+                                        <t t-elif="periodType === 'quarter'">Quarter</t>
+                                        <t t-else="">Fiscal Year</t>
+                                    </button>
+                                    <button class="btn btn-light btn-sm" t-att-aria-label="'Previous ' + periodType"
+                                            t-on-click="() => this.navigatePeriod(periodType, -1)">
+                                        <i class="fa fa-chevron-left"/>
+                                    </button>
+                                    <span class="text-nowrap" t-out="this.getPeriodOptionLabel(periodType)"/>
+                                    <button class="btn btn-light btn-sm" t-att-aria-label="'Next ' + periodType"
+                                            t-on-click="() => this.navigatePeriod(periodType, 1)">
+                                        <i class="fa fa-chevron-right"/>
+                                    </button>
+                                </div>
+                            </t>
+                            <button t-att-class="'dropdown-item ' + (this.state.periodType === 'custom' ? 'active' : '')"
+                                    t-on-click="() => this.setPeriodType('custom')">Custom Dates</button>
+                            <div t-if="this.state.periodType === 'custom'" class="ff_deferred_custom_period px-2 pt-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <input class="form-control form-control-sm" type="date" aria-label="Start Date"
+                                           t-att-value="this.state.customDateFrom"
+                                           t-on-change="(ev) => this.onCustomDateChange('customDateFrom', ev)"/>
+                                    <span>to</span>
+                                    <input class="form-control form-control-sm" type="date" aria-label="End Date"
+                                           t-att-value="this.state.customDateTo"
+                                           t-on-change="(ev) => this.onCustomDateChange('customDateTo', ev)"/>
+                                </div>
+                                <small t-if="this.state.customDateError" class="text-danger d-block mt-1"
+                                       t-out="this.state.customDateError"/>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="ff_deferred_group" class="visually-hidden">Group By</label>
+                    <select id="ff_deferred_group" class="form-select ff_deferred_group"
+                            t-att-value="this.state.groupBy"
+                            t-on-change="(ev) => this.onFilterChange('groupBy', ev.target.value)">
+                        <option value="account">Group by Account</option>
+                        <option value="category">Group by Product Category</option>
+                        <option value="product">Group by Product</option>
+                    </select>
+                    <label for="ff_deferred_target" class="visually-hidden">Target Moves</label>
+                    <select id="ff_deferred_target" class="form-select ff_deferred_target"
+                            t-att-value="this.state.targetMove"
+                            t-on-change="(ev) => this.onFilterChange('targetMove', ev.target.value)">
+                        <option value="posted">Posted Entries</option>
+                        <option value="all">All Entries</option>
+                    </select>
+                    <label for="ff_deferred_comparison" class="visually-hidden">Comparison</label>
+                    <select id="ff_deferred_comparison" class="form-select ff_deferred_comparison"
+                            t-att-value="this.state.comparisonPeriods ? 'previous' : 'none'"
+                            t-on-change="(ev) => this.onComparisonToggle(ev)">
+                        <option value="none">No Comparison</option>
+                        <option value="previous">Previous Period</option>
+                    </select>
+                    <label t-if="this.state.comparisonPeriods" for="ff_deferred_period_count"
+                           class="visually-hidden">Number of Comparison Periods</label>
+                    <input t-if="this.state.comparisonPeriods" id="ff_deferred_period_count"
+                           class="form-control ff_deferred_period_count" type="number" min="1" max="120"
+                           t-att-value="this.state.comparisonPeriods"
+                           t-on-change="(ev) => this.onComparisonPeriodCount(ev)"/>
+                    <label t-if="this.state.comparisonPeriods" for="ff_deferred_comparison_mode"
+                           class="visually-hidden">Comparison in</label>
+                    <select t-if="this.state.comparisonPeriods" id="ff_deferred_comparison_mode"
+                            class="form-select ff_deferred_comparison_mode"
+                            t-att-value="this.state.comparisonMode"
+                            t-on-change="(ev) => this.onComparisonOptionChange('comparisonMode', ev)">
+                        <option value="percentage">Percentage</option>
+                        <option value="amount">Amount</option>
+                    </select>
+                    <label for="ff_deferred_sort_order" class="visually-hidden">Sort Order</label>
+                    <select id="ff_deferred_sort_order" class="form-select ff_deferred_sort_order"
+                            t-att-value="this.state.sortOrder"
+                            t-on-change="(ev) => this.onComparisonOptionChange('sortOrder', ev)">
+                        <option value="desc">Descending</option>
+                        <option value="asc">Ascending</option>
+                    </select>
+                    <div class="dropdown ff_deferred_options">
+                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                t-att-aria-expanded="this.state.optionsOpen"
+                                t-on-click="() => this.toggleOptions()">Options</button>
+                        <div t-if="this.state.optionsOpen" class="dropdown-menu show p-2">
+                            <label class="dropdown-item d-flex align-items-center gap-2">
+                                <input class="form-check-input mt-0" type="checkbox"
+                                       t-att-checked="this.state.hideZero"
+                                       t-on-change="(ev) => this.onFilterChange('hideZero', ev.target.checked)"/>
+                                <span>Hide lines at 0</span>
+                            </label>
+                            <label class="dropdown-item d-flex align-items-center gap-2">
+                                <input class="form-check-input mt-0 ff_deferred_unfold_all" type="checkbox"
+                                       t-att-checked="this.state.unfoldAll"
+                                       t-on-change="(ev) => this.toggleUnfoldAll(ev)"/>
+                                <span>Unfold All</span>
+                            </label>
+                        </div>
+                    </div>
+                    <label for="ff_deferred_scale" class="visually-hidden">Display Amounts</label>
+                    <select id="ff_deferred_scale" class="form-select ff_deferred_scale"
+                            t-att-value="this.state.scale" t-on-change="(ev) => this.onScaleChange(ev)">
+                        <option value="1">In Currency</option>
+                        <option value="1000">In Thousands</option>
+                        <option value="1000000">In Millions</option>
+                    </select>
+                    <button class="btn btn-primary" t-on-click="() => this.printReport()">
+                        <i class="fa fa-print me-1"/>Print
+                    </button>
+                </div>
+            </div>
+            <div t-if="this.state.loading" class="text-center p-5">
+                <i class="fa fa-spinner fa-spin me-2"/>Loading report…
+            </div>
+            <div t-else="" class="o_content p-3">
+                <div class="card shadow-sm ff_deferred_schedule_card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th t-out="this.state.groupBy === 'account' ? 'Account' : (this.state.groupBy === 'category' ? 'Product Category' : 'Product')"/>
+                                    <th class="text-end">Entries</th>
+                                    <th t-foreach="this.state.periods" t-as="reportPeriod" t-key="reportPeriod.key"
+                                        class="text-end">
+                                        <t t-if="reportPeriod.key === this.state.period">
+                                            <t t-out="reportPeriod.label"/> <span>Recognized Amount</span>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-out="reportPeriod.label"/> <span t-out="this.state.comparisonMode === 'percentage' ? 'Change (%)' : 'Change Amount'"/>
+                                        </t>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="!this.visibleRows.length">
+                                    <td t-att-colspan="1 + this.state.periods.length + 1"
+                                        class="text-center text-muted py-5">No data found for the selected period.</td>
+                                </tr>
+                                <t t-foreach="this.visibleRows" t-as="row" t-key="row.key">
+                                <tr>
+                                    <td>
+                                        <button t-if="row.details.length" class="btn btn-link btn-sm p-0 me-2"
+                                                t-att-aria-expanded="this.isExpanded(row)"
+                                                t-att-aria-label="this.rowToggleLabel(row)"
+                                                t-on-click="() => this.toggleRow(row)">
+                                            <i t-att-class="this.isExpanded(row) ? 'fa fa-caret-down' : 'fa fa-caret-right'"/>
+                                        </button>
+                                        <button class="btn btn-link p-0" t-on-click="() => this.openGroup(row)"
+                                                t-out="row.name"/>
+                                    </td>
+                                    <td class="text-end" t-out="row.entries"/>
+                                    <td t-foreach="this.state.periods" t-as="reportPeriod" t-key="reportPeriod.key"
+                                        class="text-end">
+                                        <button class="btn btn-link p-0" t-on-click="() => this.openGroup(row, reportPeriod)"
+                                                t-att-title="'Open entries for ' + reportPeriod.label">
+                                            <t t-if="reportPeriod.key === this.state.period" t-out="this.formatAmount(row.amount)"/>
+                                            <t t-else="" t-out="this.formatComparison(this.comparisonValue(row, reportPeriod.key))"/>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr t-if="this.isExpanded(row)" t-foreach="row.details" t-as="detail" t-key="detail.key"
+                                    class="ff_deferred_detail">
+                                    <td><span class="ff_deferred_detail_name" t-out="detail.name"/></td>
+                                    <td class="text-end" t-out="detail.entries"/>
+                                    <td t-foreach="this.state.periods" t-as="reportPeriod" t-key="reportPeriod.key"
+                                        class="text-end">
+                                        <t t-if="reportPeriod.key === this.state.period" t-out="this.formatAmount(detail.amount)"/>
+                                        <t t-else="" t-out="this.formatComparison(detail.comparison_values[reportPeriod.key])"/>
+                                    </td>
+                                </tr>
+                                </t>
+                                <tr t-if="this.visibleRows.length" class="ff_deferred_total">
+                                    <td>Total</td>
+                                    <td class="text-end" t-out="this.totals.entries"/>
+                                    <td t-foreach="this.state.periods" t-as="reportPeriod" t-key="reportPeriod.key"
+                                        class="text-end">
+                                        <t t-if="reportPeriod.key === this.state.period" t-out="this.formatAmount(this.totals.amount)"/>
+                                        <t t-else="" t-out="this.formatComparison(this.totalComparisonValue(reportPeriod.key))"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

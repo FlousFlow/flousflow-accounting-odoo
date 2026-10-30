@@ -11,7 +11,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class CashFlowReport extends Component {
-    static template = "accounting_pdf_reports.CashFlowReport";
+    static template = "flousflow_accounting.apr__CashFlowReport";
     props = useProps(standardActionServiceProps);
 
     setup() {
@@ -51,7 +51,7 @@ export class CashFlowReport extends Component {
     async loadMetadata() {
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_cash_flow",
+                "report.flousflow_accounting.apr__report_cash_flow",
                 "get_interactive_metadata",
                 []
             );
@@ -145,7 +145,7 @@ export class CashFlowReport extends Component {
         this.state.loading = true;
         try {
             const data = await this.orm.call(
-                "report.accounting_pdf_reports.report_cash_flow",
+                "report.flousflow_accounting.apr__report_cash_flow",
                 "get_interactive_data",
                 [],
                 {
@@ -180,7 +180,7 @@ export class CashFlowReport extends Component {
         }
         if (periodType === "fiscal_year") {
             const dates = await this.orm.call(
-                "report.accounting_pdf_reports.report_cash_flow",
+                "report.flousflow_accounting.apr__report_cash_flow",
                 "get_interactive_period_dates",
                 [],
                 { anchor_date: anchor.toISODate() }
@@ -230,7 +230,7 @@ export class CashFlowReport extends Component {
             .plus({ [unit]: direction }).toISODate();
         if (this.state.periodType === "fiscal_year") {
             const dates = await this.orm.call(
-                "report.accounting_pdf_reports.report_cash_flow",
+                "report.flousflow_accounting.apr__report_cash_flow",
                 "get_interactive_period_dates",
                 [],
                 { anchor_date: this.state.periodAnchor }
@@ -320,7 +320,7 @@ export class CashFlowReport extends Component {
         }
         try {
             const action = await this.orm.call(
-                "report.accounting_pdf_reports.report_cash_flow",
+                "report.flousflow_accounting.apr__report_cash_flow",
                 "print_interactive_report",
                 [],
                 {
@@ -359,4 +359,4 @@ export class CashFlowReport extends Component {
     }
 }
 
-registry.category("actions").add("accounting_pdf_reports.cash_flow", CashFlowReport);
+registry.category("actions").add("flousflow_accounting.apr__cash_flow", CashFlowReport);

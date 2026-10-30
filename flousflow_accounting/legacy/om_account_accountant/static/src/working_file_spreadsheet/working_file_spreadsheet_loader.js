@@ -4,13 +4,13 @@ import { registry } from "@web/core/registry";
 import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
 
 export class WorkingFileSpreadsheetLoader extends Component {
-    static template = "om_account_accountant.WorkingFileSpreadsheetLoader";
+    static template = "flousflow_accounting.acc__WorkingFileSpreadsheetLoader";
     static components = { LazyComponent };
 
     props = useProps(standardActionServiceProps);
 }
 
 registry.category("actions").add(
-    "om_account_accountant.working_file_spreadsheet",
+    "flousflow_accounting.acc__working_file_spreadsheet",
     WorkingFileSpreadsheetLoader
 );

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.apr__FinancialReport" owl="1">
+        <div class="o_action ff_financial_report">
+            <div class="ff_fr_toolbar">
+                <button class="btn btn-primary" t-on-click="this.openPrintOptions">Print</button>
+                <div class="ff_fr_title">
+                    <h2><t t-out="this.state.title"/></h2>
+                    <div class="dropdown d-inline-block">
+                        <button class="btn btn-link" title="Report actions" data-bs-toggle="dropdown" aria-label="Report actions">
+                            <i class="fa fa-cog"/>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <button class="dropdown-item" type="button" t-on-click="this.exportXlsx">
+                                <i class="fa fa-file-excel-o me-2"/>XLSX
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ff_fr_controls">
+                    <label t-if="!this.isProfitLoss" class="btn btn-outline-secondary"><i class="fa fa-calendar me-1"/>As of
+                        <input type="date" t-att-value="this.state.dateTo" t-on-change="(ev) => this.onDateChange('dateTo', ev)"/>
+                    </label>
+                    <div t-if="this.isProfitLoss" class="btn-group ff_fr_period_selector">
+                        <button t-if="this.state.periodType !== 'custom'" class="btn btn-outline-secondary" type="button"
+                                aria-label="Previous period" t-on-click="() => this.movePeriod(-1)">
+                            <i class="fa fa-chevron-left"/>
+                        </button>
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-label="Report period">
+                            <i class="fa fa-calendar me-1"/><t t-out="this.periodLabel"/>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end p-2 ff_fr_period_menu">
+                            <button class="dropdown-item" t-att-class="this.state.periodType === 'month' ? 'active' : ''"
+                                    type="button" t-on-click="() => this.selectPeriod('month')">Month</button>
+                            <button class="dropdown-item" t-att-class="this.state.periodType === 'quarter' ? 'active' : ''"
+                                    type="button" t-on-click="() => this.selectPeriod('quarter')">Quarter</button>
+                            <button class="dropdown-item" t-att-class="this.state.periodType === 'fiscal_year' ? 'active' : ''"
+                                    type="button" t-on-click="() => this.selectPeriod('fiscal_year')">Fiscal Year</button>
+                            <button class="dropdown-item" t-att-class="this.state.periodType === 'custom' ? 'active' : ''"
+                                    type="button" t-on-click="() => this.selectPeriod('custom')">Custom Dates</button>
+                            <div t-if="this.state.periodType === 'custom'" class="px-3 py-2">
+                                <label class="form-label">Start Date
+                                    <input class="form-control" type="date" t-att-value="this.state.dateFrom"
+                                           t-on-change="(ev) => this.onCustomDateChange('dateFrom', ev)"/>
+                                </label>
+                                <label class="form-label mb-0">End Date
+                                    <input class="form-control" type="date" t-att-value="this.state.dateTo"
+                                           t-on-change="(ev) => this.onCustomDateChange('dateTo', ev)"/>
+                                </label>
+                            </div>
+                        </div>
+                        <button t-if="this.state.periodType !== 'custom'" class="btn btn-outline-secondary" type="button"
+                                aria-label="Next period" t-on-click="() => this.movePeriod(1)">
+                            <i class="fa fa-chevron-right"/>
+                        </button>
+                    </div>
+                    <div t-if="this.isProfitLoss" class="dropdown ff_fr_budget_selector">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-label="Budget">
+                            <i class="fa fa-bar-chart me-1"/><t t-out="this.selectedBudget?.name || 'Budget'"/>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end p-2 ff_fr_budget_menu">
+                            <input class="form-control form-control-sm mb-2" type="search" aria-label="Search budgets"
+                                   placeholder="Search budgets" t-att-value="this.state.budgetSearch"
+                                   t-on-click="(ev) => ev.stopPropagation()"
+                                   t-on-input="(ev) => this.state.budgetSearch = ev.target.value"/>
+                            <div class="ff_fr_budget_options">
+                                <button t-if="this.state.budgetId" class="dropdown-item" type="button"
+                                        t-on-click="() => this.selectBudget(false)">Clear budget</button>
+                                <button t-foreach="this.visibleBudgets" t-as="budget" t-key="budget.id"
+                                        class="dropdown-item" type="button"
+                                        t-on-click="() => this.selectBudget(budget.id)"
+                                        t-out="budget.name"/>
+                                <div t-if="!this.visibleBudgets.length" class="dropdown-item-text text-muted">
+                                    No budgets found
+                                </div>
+                            </div>
+                            <div t-if="this.state.canEditFinancialBudget" class="dropdown-divider"/>
+                            <button t-if="this.state.canEditFinancialBudget" class="dropdown-item" type="button"
+                                    t-on-click="this.openBudgetDialog">Create</button>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" t-att-class="this.state.comparison ? 'btn-primary' : 'btn-outline-secondary'"
+                                type="button" data-bs-toggle="dropdown">Comparison</button>
+                        <div class="dropdown-menu p-3 ff_fr_comparison_menu">
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('none')">No Comparison</button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('previous_period')">Previous Period</button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('same_period_last_year')">Same Period Last Year</button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('custom')">Custom Dates</button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('percentage_of')">Percentage of</button>
+                            <div t-if="this.isProfitLoss and this.state.comparisonMode === 'previous_period'" class="px-2 py-2">
+                                <label class="form-label mb-1">Previous Periods</label>
+                                <input class="form-control" type="number" min="1" step="1"
+                                       t-att-value="this.state.comparisonPeriods"
+                                       t-on-change="this.onComparisonPeriodsChange"/>
+                            </div>
+                            <div t-if="this.state.comparison and this.state.comparisonMode !== 'percentage_of'" class="mt-2">
+                                <label class="form-label mb-1">Sort by</label>
+                                <select class="form-select" t-att-value="this.state.comparisonSort"
+                                        t-on-change="(ev) => this.state.comparisonSort = ev.target.value">
+                                    <option value="ascending">Ascending</option>
+                                    <option value="descending">Descending</option>
+                                </select>
+                            </div>
+                            <div t-if="this.state.comparisonMode === 'custom'" class="px-2 py-2">
+                                <label class="form-label">Comparison Start Date
+                                    <input class="form-control" type="date" t-att-value="this.state.comparisonDateFrom"
+                                           t-on-change="(ev) => this.onComparisonDateChange('comparisonDateFrom', ev)"/>
+                                </label>
+                                <label class="form-label mb-0">Comparison End Date
+                                    <input class="form-control" type="date" t-att-value="this.state.comparisonDateTo"
+                                           t-on-change="(ev) => this.onComparisonDateChange('comparisonDateTo', ev)"/>
+                                </label>
+                            </div>
+                            <div t-if="this.state.comparisonMode === 'percentage_of'" class="mt-2">
+                                <label class="form-label mb-1">Percentage of</label>
+                                <select class="form-select" t-att-value="this.state.percentageOfRowKey || ''"
+                                        t-on-change="this.selectPercentageOfRow">
+                                    <option value="">Select a report line</option>
+                                    <option t-foreach="this.comparisonBaseLines" t-as="line"
+                                            t-key="this.formulaInfoKey(line)"
+                                            t-att-value="this.formulaInfoKey(line)" t-out="line.name"/>
+                                </select>
+                            </div>
+                            <div t-if="this.state.comparison &amp;&amp; this.state.comparisonMode !== 'percentage_of'" class="mt-2">
+                                <label class="form-label mb-1">Comparison in</label>
+                                <select class="form-select" t-att-value="this.state.comparisonDisplay"
+                                        t-on-change="(ev) => this.state.comparisonDisplay = ev.target.value">
+                                    <option value="percentage">Percentage</option>
+                                    <option value="amount">Amount</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-sliders me-1"/><t t-if="this.state.targetMove === 'posted'">Posted Entries</t><t t-else="">All Entries</t>, <t t-if="this.state.cashBasis">Cash Basis</t><t t-else="">Accrual Basis</t>
+                            <t t-if="this.state.debitCredit">, Debit/Credit</t>
+                        </button>
+                        <div class="dropdown-menu p-3 ff_fr_filter_menu">
+                            <label class="form-check mb-2"><input class="form-check-input" type="radio" name="ff_target_move" t-att-checked="this.state.targetMove === 'posted'"
+                                t-on-change="() => { this.state.targetMove = 'posted'; this.loadReport(); }"/><span class="form-check-label">All Posted Entries</span></label>
+                            <label class="form-check mb-2"><input class="form-check-input" type="radio" name="ff_target_move" t-att-checked="this.state.targetMove === 'all'"
+                                t-on-change="() => { this.state.targetMove = 'all'; this.loadReport(); }"/><span class="form-check-label">All Entries</span></label>
+                            <label class="form-check mb-2"><input class="form-check-input ff_fr_cash_basis" type="checkbox" t-att-checked="this.state.cashBasis"
+                                t-on-change="() => { this.state.cashBasis = !this.state.cashBasis; this.loadReport(); }"/><span class="form-check-label">Cash Basis Method</span></label>
+                            <div class="dropdown-divider"/>
+                            <button class="dropdown-item" type="button" t-on-click="this.toggleAllLines">
+                                <t t-if="this.areAllLinesExpanded()">Fold All</t><t t-else="">Unfold All</t>
+                            </button>
+                            <label class="form-check mb-2"><input class="form-check-input" type="checkbox" t-att-checked="this.state.hideZero"
+                                t-on-change="() => this.state.hideZero = !this.state.hideZero"/><span class="form-check-label">Hide lines at 0</span></label>
+                            <label class="form-check mb-2"><input class="form-check-input" type="checkbox" t-att-checked="this.state.debitCredit"
+                                t-on-change="() => { this.state.debitCredit = !this.state.debitCredit; this.loadReport(); }"/><span class="form-check-label">Display Debit/Credit Columns</span></label>
+                            <label class="form-label mt-2">Journals</label>
+                            <select class="form-select" multiple="multiple" size="6" t-on-change="this.onJournalsChange">
+                                <option t-foreach="this.state.journals" t-as="journal" t-key="journal.id" t-att-value="journal.id"
+                                        t-att-selected="this.state.journalIds.includes(journal.id)" t-out="journal.name"/>
+                            </select>
+                        </div>
+                    </div>
+                    <select class="form-select ff_fr_scale" t-att-value="this.state.scale" t-on-change="(ev) => this.state.scale = ev.target.value">
+                        <option value="unit">In .$</option><option value="rounded">In $</option>
+                        <option value="thousand">In k$</option><option value="million">In M$</option>
+                    </select>
+                </div>
+            </div>
+            <div class="o_content">
+                <div t-if="this.state.draftCount and this.state.targetMove === 'posted' and !this.state.dismissedDraftWarning"
+                     class="alert alert-info d-flex align-items-center justify-content-between ff_fr_warning" role="status">
+                    <span>There are <strong t-out="this.state.draftCount"/> unposted Journal Entries prior or included in this period.</span>
+                    <button class="btn-close" aria-label="Close" t-on-click="() => this.state.dismissedDraftWarning = true"/>
+                </div>
+                <div t-if="this.state.loading" class="text-center p-5"><i class="fa fa-spinner fa-spin me-2"/>Loading…</div>
+                <div t-else="" class="ff_fr_report_wrap">
+                    <table class="table ff_fr_table">
+                        <thead><tr>
+                            <th aria-label="Account"/>
+                            <th t-if="this.state.debitCredit" class="text-end">Debit</th>
+                            <th t-if="this.state.debitCredit" class="text-end">Credit</th>
+                            <th t-foreach="this.periodColumns" t-as="periodColumn" t-key="periodColumn.key" class="text-end">
+                                <t t-out="this.formatPeriodRange(periodColumn.date_from, periodColumn.date_to, this.state.periodType)"/>
+                            </th>
+                            <th t-if="this.state.budgetId" class="text-end"><t t-out="this.selectedBudget?.name || 'Budget'"/></th>
+                            <th t-if="this.state.comparison and (this.state.comparisonMode === 'percentage_of' or this.state.comparisonContexts.length === 1)" class="text-end">
+                                <t t-if="this.state.comparisonMode === 'percentage_of'">% of <t t-out="this.percentageOfBaseLine?.name || ''"/></t>
+                                <t t-elif="this.state.comparisonDisplay === 'percentage'">Change (%)</t>
+                                <t t-else="">Change</t>
+                            </th>
+                            <th class="ff_fr_info_column" aria-label="Formula details"/>
+                        </tr></thead>
+                        <tbody>
+                        <tr t-if="!this.visibleLines.length"><td t-att-colspan="2 + (this.state.debitCredit ? 2 : 0) + this.periodColumns.length + (this.state.comparison and (this.state.comparisonMode === 'percentage_of' or this.state.comparisonContexts.length === 1) ? 1 : 0)" class="text-center text-muted py-5">No data found</td></tr>
+                        <tr t-foreach="this.visibleLines" t-as="line" t-key="line.row_key || (line.report_id + '-' + (line.account_id || 'section'))"
+                            t-att-class="line.type === 'report' ? (line.level &lt;= 1 ? 'ff_fr_section' : 'ff_fr_subsection') : (line.type === 'total' ? 'ff_fr_total' : (line.type === 'group' ? 'ff_fr_group' : 'ff_fr_account'))">
+                            <td t-att-style="'padding-inline-start: ' + (18 + line.level * 16) + 'px'">
+                                <button t-if="this.hasChildren(line)" class="btn btn-link p-0 me-2 ff_fr_fold" t-on-click="() => this.toggleLine(line)">
+                                    <i t-att-class="this.state.expanded.includes(this.expansionKey(line)) ? 'fa fa-caret-down' : 'fa fa-caret-right'"/>
+                                </button>
+                                <button t-if="line.account_id || line.account_ids?.length" class="btn btn-link p-0 ff_fr_account_link" t-on-click="() => this.openLineDetails(line)" t-out="line.name"/>
+                                <span t-else="" t-out="line.name"/>
+                            </td>
+                            <td t-if="this.state.debitCredit" class="text-end ff_fr_amount"><t t-if="line.show_amount !== false" t-out="this.formatAmount(line.debit)"/></td>
+                            <td t-if="this.state.debitCredit" class="text-end ff_fr_amount"><t t-if="line.show_amount !== false" t-out="this.formatAmount(line.credit)"/></td>
+                            <td t-foreach="this.periodColumns" t-as="periodColumn" t-key="periodColumn.key" class="text-end ff_fr_amount">
+                                <button t-if="line.show_amount !== false and (line.account_id || line.account_ids?.length)" class="btn btn-link p-0 ff_fr_amount_link" t-on-click="() => this.openLineDetails({...line, detail_date_from: periodColumn.date_from, detail_date_to: periodColumn.date_to})" t-out="this.formatAmount(this.periodColumnAmount(line, periodColumn))"/>
+                                <t t-elif="line.show_amount !== false" t-out="this.formatAmount(this.periodColumnAmount(line, periodColumn))"/>
+                            </td>
+                            <td t-if="this.state.budgetId" class="text-end ff_fr_amount">
+                                <input t-if="this.state.canEditFinancialBudget and line.account_id and line.show_amount !== false"
+                                       class="form-control form-control-sm text-end ff_fr_budget_amount" type="number" step="0.01"
+                                       t-att-value="line.budget_amount || 0" t-on-change="(ev) => this.saveBudgetLine(line, ev)"/>
+                                <t t-elif="line.show_amount !== false" t-out="this.formatAmount(line.budget_amount || 0)"/>
+                            </td>
+                            <td t-if="this.state.comparison and (this.state.comparisonMode === 'percentage_of' or this.state.comparisonContexts.length === 1)" class="text-end ff_fr_amount"><t t-if="line.show_amount !== false" t-out="this.comparisonChange(line)"/></td>
+                            <td class="ff_fr_info_cell">
+                                <button type="button" class="btn btn-link ff_fr_info_button" title="Show formula details"
+                                        t-att-aria-expanded="this.state.formulaInfoKey === this.formulaInfoKey(line)"
+                                        t-on-click="() => this.toggleFormulaInfo(line)">
+                                    <i class="oi" data-icon="info"/>
+                                </button>
+                                <div t-if="this.state.formulaInfoKey === this.formulaInfoKey(line)" class="ff_fr_formula_popover" role="dialog">
+                                    <div class="ff_fr_formula_row"><span>Engine</span><strong t-out="line.formula_info.engine"/></div>
+                                    <div class="ff_fr_formula_row"><span>Label</span><strong t-out="line.formula_info.label"/></div>
+                                    <div class="ff_fr_formula_row"><span>Formula</span><code dir="auto" t-out="line.formula_info.formula"/></div>
+                                    <div t-if="line.formula_info.subformula" class="ff_fr_formula_row"><span>Subformula</span><code t-out="line.formula_info.subformula"/></div>
+                                    <div class="ff_fr_formula_row"><span>Value</span><strong t-out="this.formatFormulaValue(line.formula_info.value)"/></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </div>
+            </div>
+            <div t-if="this.state.budgetDialog" class="modal d-block" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header"><h4 class="modal-title">Create Financial Budget</h4>
+                            <button type="button" class="btn-close" aria-label="Close" t-on-click="() => this.state.budgetDialog = false"/>
+                        </div>
+                        <div class="modal-body">
+                            <label class="form-label">Budget Name
+                                <input class="form-control" type="text" t-att-value="this.state.budgetName"
+                                       t-on-input="(ev) => this.state.budgetName = ev.target.value"/>
+                            </label>
+                            <label class="form-label">Start Date
+                                <input class="form-control" type="date" t-att-value="this.state.budgetDateFrom"
+                                       t-on-change="(ev) => this.state.budgetDateFrom = ev.target.value"/>
+                            </label>
+                            <label class="form-label">End Date
+                                <input class="form-control" type="date" t-att-value="this.state.budgetDateTo"
+                                       t-on-change="(ev) => this.state.budgetDateTo = ev.target.value"/>
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" t-on-click="this.createFinancialBudget">Create</button>
+                            <button type="button" class="btn btn-secondary" t-on-click="() => this.state.budgetDialog = false">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -5,7 +5,7 @@ import { user } from "@web/core/user";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
 class WorkingFileSpreadsheetField extends Component {
-    static template = "om_account_accountant.WorkingFileSpreadsheetField";
+    static template = "flousflow_accounting.acc__WorkingFileSpreadsheetField";
     static components = { LazyComponent };
     props = useProps(standardFieldProps);
 

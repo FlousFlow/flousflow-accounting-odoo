@@ -4,7 +4,7 @@
     <record id="ast__account_assets_scss_backend" model="ir.asset">
         <field name="name">aAccount Assets SCSS</field>
         <field name="bundle">web.assets_backend</field>
-        <field name="path">/flousflow_accounting/legacy/om_account_asset/static/src/scss/account_asset.scss</field>
+        <field name="path">/flousflow_accounting/static/legacy/om_account_asset/src/scss/account_asset.scss</field>
         <field name="sequence" eval="18"/>
     </record>
 

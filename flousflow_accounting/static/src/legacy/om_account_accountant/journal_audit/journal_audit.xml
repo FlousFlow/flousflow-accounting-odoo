@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__JournalAudit" owl="1">
+        <div class="o_action_manager o_ff_journal_audit">
+            <div class="o_control_panel ff_journal_audit_control_panel px-3 py-2">
+                <div class="ff_journal_audit_titlebar">
+                    <h2 class="mb-0">Journal Audit</h2>
+                    <div class="ff_journal_audit_actions">
+                        <button class="btn btn-primary" t-on-click="printReport">
+                            <i class="oi me-1" data-icon="print"/>Print
+                        </button>
+                        <button class="btn btn-light ff_journal_audit_filter_toggle d-md-none" type="button"
+                                title="Filters" aria-label="Filters"
+                                t-att-aria-expanded="this.state.filtersOpen ? 'true' : 'false'"
+                                t-on-click="() => this.toggleFilters()">
+                            <i class="oi" data-icon="filter_alt"/>
+                        </button>
+                        <div class="dropdown ff_journal_audit_settings">
+                            <button class="btn btn-light" type="button" title="Report options"
+                                    aria-label="Report options"
+                                    t-att-aria-expanded="this.state.settingsOpen ? 'true' : 'false'"
+                                    t-on-click="() => this.toggleSettings()">
+                                <i class="oi oi-filled" data-icon="settings"/>
+                            </button>
+                            <div t-if="this.state.settingsOpen" class="dropdown-menu show">
+                                <button class="dropdown-item" t-on-click="() => this.exportXlsx()">
+                                    <i class="fa fa-file-excel-o me-2"/>XLSX
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div t-att-class="'ff_journal_audit_filters ' + (this.state.filtersOpen ? 'ff_journal_audit_filters_mobile_open' : 'd-none d-md-flex')">
+                    <div class="dropdown ff_journal_audit_period_picker">
+                        <button class="btn btn-light" type="button"
+                                t-att-aria-expanded="this.state.periodFilterOpen ? 'true' : 'false'"
+                                t-on-click="() => this.togglePeriodFilter()">
+                            <i class="oi me-1" data-icon="calendar_today"/><t t-out="this.periodLabel"/>
+                        </button>
+                        <div t-if="this.state.periodFilterOpen" class="dropdown-menu show p-2 ff_journal_audit_period_menu">
+                            <div t-foreach="['month', 'quarter', 'fiscal_year']" t-as="period" t-key="period"
+                                 class="ff_journal_audit_period_option">
+                                <button t-att-class="'dropdown-item ' + (this.state.periodType === period ? 'active' : '')"
+                                        t-on-click="() => this.setPeriod(period)">
+                                    <t t-if="period === 'month'">Month</t>
+                                    <t t-elif="period === 'quarter'">Quarter</t>
+                                    <t t-else="">Fiscal Year</t>
+                                </button>
+                                <button class="btn btn-light btn-sm" t-att-aria-label="'Previous ' + period"
+                                        t-on-click="() => this.navigatePeriod(period, -1)">
+                                    <i class="oi" data-icon="arrow_left"/>
+                                </button>
+                                <span class="ff_journal_audit_period_value" t-out="this.getPeriodOptionLabel(period)"/>
+                                <button class="btn btn-light btn-sm" t-att-aria-label="'Next ' + period"
+                                        t-on-click="() => this.navigatePeriod(period, 1)">
+                                    <i class="oi" data-icon="arrow_right"/>
+                                </button>
+                            </div>
+                            <div class="ff_journal_audit_custom_period">
+                                <strong>Custom Dates</strong>
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <input class="form-control form-control-sm" type="date"
+                                           aria-label="Start Date" t-att-value="this.state.customDateFrom"
+                                           t-on-change="(ev) => this.onCustomDateFromChange(ev)"/>
+                                    <span>to</span>
+                                    <input class="form-control form-control-sm" type="date"
+                                           aria-label="End Date" t-att-value="this.state.customDateTo"
+                                           t-on-change="(ev) => this.onCustomDateToChange(ev)"/>
+                                </div>
+                                <small t-if="this.state.customDateError" class="text-danger d-block mt-1"
+                                       t-out="this.state.customDateError"/>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="ff_journal_audit_target" class="visually-hidden">Target Moves</label>
+                    <select id="ff_journal_audit_target" class="form-select ff_journal_audit_target"
+                            t-att-value="this.state.targetMove" t-on-change="(ev) => this.onTargetMoveChange(ev)">
+                        <option value="posted">Posted Entries</option>
+                        <option value="draft">Draft Entries</option>
+                        <option value="all">All Entries</option>
+                    </select>
+                    <label class="form-check d-flex align-items-center gap-1 mb-0 text-nowrap">
+                        <input class="form-check-input mt-0" type="checkbox"
+                               t-att-checked="this.state.includePayments" t-on-change="(ev) => this.onPaymentsChange(ev)"/>
+                        <span>Include Payments</span>
+                    </label>
+                    <label for="ff_journal_audit_scale" class="visually-hidden">Display Amounts</label>
+                    <select id="ff_journal_audit_scale" class="form-select ff_journal_audit_scale"
+                            t-att-value="this.state.displayScale" t-on-change="(ev) => this.onDisplayScaleChange(ev)">
+                        <option value="1">In $</option>
+                        <option value="1000">In k$</option>
+                        <option value="1000000">In M$</option>
+                    </select>
+                </div>
+            </div>
+
+            <div t-if="this.state.loading" class="text-center p-5">
+                <i class="fa fa-spinner fa-spin me-2"/>Loading Journal Audit…
+            </div>
+            <div t-else="" class="o_content p-3">
+                <div class="card shadow-sm ff_journal_audit_card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 ff_journal_audit_table">
+                            <thead>
+                                <tr>
+                                    <th>Documents</th>
+                                    <th class="text-end">To Review</th>
+                                    <th class="text-end">Debit</th>
+                                    <th class="text-end">Credit</th>
+                                    <th class="text-end">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="!this.state.journals.length">
+                                    <td colspan="5" class="text-center text-muted py-5">No data found for the selected period.</td>
+                                </tr>
+                                <t t-foreach="this.state.journals" t-as="journal" t-key="journal.id">
+                                    <tr class="ff_journal_audit_journal">
+                                        <td>
+                                            <button class="btn btn-link p-0 me-2 ff_journal_audit_fold"
+                                                    t-on-click="() => this.toggleJournal(journal)"
+                                                    t-att-aria-expanded="this.state.expanded.includes(journal.id)">
+                                                <i class="oi" t-att-data-icon="this.state.expanded.includes(journal.id) ? 'arrow_drop_down' : 'arrow_right'"/>
+                                            </button>
+                                            <strong t-out="journal.name"/>
+                                            <span class="text-muted ms-2" t-out="journal.document_type"/>
+                                            <button class="btn btn-sm btn-outline-primary ms-2 ff_journal_audit_review"
+                                                    t-on-click="() => this.openGroupJournalItems(journal)">
+                                                Audit
+                                            </button>
+                                            <button t-if="this.state.canAudit &amp;&amp; journal.to_review"
+                                                    t-att-data-journal-id="journal.journal_id"
+                                                    t-att-data-move-type="journal.move_type"
+                                                    t-att-data-to-review="journal.to_review"
+                                                    t-att-class="'btn btn-sm btn-outline-primary ms-2 ff_journal_audit_review'"
+                                                    t-att-disabled="this.state.auditingJournalId === journal.id"
+                                                    t-on-click="() => this.auditJournal(journal)">
+                                                <i t-if="this.state.auditingJournalId === journal.id" class="fa fa-spinner fa-spin me-1"/>
+                                                Mark Reviewed
+                                            </button>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-att-class="journal.to_review ? 'badge text-bg-warning' : 'text-muted'"
+                                                  t-out="journal.to_review"/>
+                                        </td>
+                                        <td class="text-end" t-out="this.formatAmount(journal.debit)"/>
+                                        <td class="text-end" t-out="this.formatAmount(journal.credit)"/>
+                                        <td class="text-end fw-semibold" t-out="this.formatAmount(journal.balance)"/>
+                                    </tr>
+                                    <tr t-if="this.state.expanded.includes(journal.id)" class="ff_journal_audit_details">
+                                        <td colspan="5" class="p-0">
+                                            <table t-if="journal.accounts.length" class="table table-sm mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Account</th>
+                                                        <th class="text-end">Debit</th><th class="text-end">Credit</th><th class="text-end">Balance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr t-foreach="journal.accounts" t-as="account" t-key="account.account_id">
+                                                        <td>
+                                                            <span class="text-muted me-2" t-out="account.code"/>
+                                                            <button class="btn btn-link p-0" t-on-click="() => this.openAccountJournalItems(journal, account)" t-out="account.name"/>
+                                                        </td>
+                                                        <td class="text-end" t-out="this.formatAmount(account.debit)"/>
+                                                        <td class="text-end" t-out="this.formatAmount(account.credit)"/>
+                                                        <td class="text-end" t-out="this.formatAmount(account.balance)"/>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div t-else="" class="text-center p-3 text-muted">No account lines in this group.</div>
+                                            <div t-if="journal.taxes.length" class="ff_journal_audit_applied_taxes p-3">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h4 class="h6 mb-2">Applied Taxes</h4>
+                                                    <button class="btn btn-link btn-sm ff_journal_audit_tax_audit"
+                                                            t-on-click="() => this.openJournalAppliedTaxes(journal)">
+                                                        Audit
+                                                    </button>
+                                                </div>
+                                                <table class="table table-sm mb-0">
+                                                    <thead>
+                                                        <tr><th>Name</th><th class="text-end">Base Amount</th><th class="text-end">Tax Amount</th></tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr t-foreach="journal.taxes" t-as="tax" t-key="tax.id">
+                                                            <td>
+                                                                <button class="btn btn-link p-0" t-on-click="() => this.openTaxLines(tax, journal)" t-out="tax.name"/>
+                                                            </td>
+                                                            <td class="text-end" t-out="this.formatAmount(tax.base)"/>
+                                                            <td class="text-end" t-out="this.formatAmount(tax.balance)"/>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="ff_journal_audit_tax_summary">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h3>Tax Summary</h3>
+                            <button class="btn btn-link ff_journal_audit_tax_audit"
+                                    t-on-click="() => this.openAppliedTaxes()">Audit</button>
+                        </div>
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr><th>Tax</th><th class="text-end">Base Amount</th><th class="text-end">Tax Amount</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="!this.state.taxes.length">
+                                    <td colspan="3" class="text-center text-muted py-3">No tax lines for the selected period.</td>
+                                </tr>
+                                <tr t-foreach="this.state.taxes" t-as="tax" t-key="tax.id">
+                                    <td>
+                                        <button class="btn btn-link p-0" t-on-click="() => this.openTaxLines(tax)" t-out="tax.name"/>
+                                    </td>
+                                    <td class="text-end" t-out="this.formatAmount(tax.base)"/>
+                                    <td class="text-end" t-out="this.formatAmount(tax.balance)"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
