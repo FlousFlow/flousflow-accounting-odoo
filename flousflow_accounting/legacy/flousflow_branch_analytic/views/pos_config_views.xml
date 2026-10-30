@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fba__view_pos_config_form_branch_analytic" model="ir.ui.view">
+        <field name="name">pos.config.form.branch.analytic</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='configuration']" position="after">
+                <page string="Analytic Accounting" name="branch_analytic">
+                    <group>
+                        <group>
+                            <field name="analytic_account_id"
+                                   options="{'no_create': True}"
+                                   domain="[('company_id', 'in', [company_id, False])]"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

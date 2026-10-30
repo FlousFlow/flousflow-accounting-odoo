@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="acc__view_account_move_line_filter_ff_tax_audit" model="ir.ui.view">
+        <field name="name">account.move.line.search.ff.tax.audit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="inside">
+                <filter name="ff_group_by_taxes"
+                        string="Taxes"
+                        domain="[]"
+                        context="{'group_by': 'tax_ids'}"/>
+                <filter name="ff_group_by_account"
+                        string="Account"
+                        domain="[]"
+                        context="{'group_by': 'account_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

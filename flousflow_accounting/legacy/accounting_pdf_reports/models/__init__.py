@@ -1,0 +1,7 @@
+from . import account_account_type
+from . import account_financial_report
+from . import account_move_line
+from . import account_account
+from . import res_company
+from . import account_financial_budget
+from . import account_annual_report_document

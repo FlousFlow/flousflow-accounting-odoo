@@ -1,68 +1,13 @@
 # FlousFlow Accounting for Odoo 20
 
-A complete, self-contained accounting suite for **Odoo 20 Community**, built on
-the standard `account` module. All features are original Community code.
+This repository packages the 21 accounting addons from the FlousFlow 20.0 source suite as one Apps-installable addon: `flousflow_accounting`.
 
-## Module: `flousflow_accounting`
+The source implementations remain under `flousflow_accounting/legacy/<source_addon>/`. Consolidation changes the Odoo addon topology, resource paths, and XML IDs so the source components can load together under one technical module name. It does not reimplement their business features. See the addon's `SOURCE_LICENSES.md` for the component-by-component license list and `flousflow_accounting/README.md` for installation notes.
 
-The module lives in the [`flousflow_accounting/`](flousflow_accounting/) folder —
-add this repository to your `addons_path` and it works directly.
+## Odoo 20 requirements
 
-### Features
+- Odoo 20 with the listed dependencies in the module manifest.
+- Python package `pypdf`.
+- Odoo Enterprise's `spreadsheet_dashboard_account` addon for spreadsheet dashboards. This full package is not compatible with a pure Community installation while those components are included.
 
-* **Chart of accounts** — country-based chart/tax auto-load using the standard
-  `account.chart.template` engine (`flous_generic_coa` fallback, `l10n_eg`
-  support out of the box).
-* **Financial reports** — Profit & Loss, Balance Sheet, Trial Balance, Cash
-  Flow, General/Partner Ledgers, Customer/Vendor/Account Statements, Executive
-  Summary, Aged Receivable/Payable, Tax & Journal Audit — with drill-down,
-  filters, PDF and XLSX export.
-* **Internal transfers** — paired bank ↔ cash transfers with automatic
-  counterpart payment and safe cancellation.
-* **Multicurrency revaluation** — revaluation wizard with posted gain/loss
-  entries and reversal.
-* **Assets & depreciation** — models, groups, straight-line/declining/hybrid
-  depreciation, prorata, deferred expenses/revenues, disposals and reversals.
-* **Budgets** — financial and analytic budget lines, approval states, planned
-  vs actual vs theoretical with overrun detection.
-* **Follow-up** — collection levels, overdue report, scheduled reminders and
-  printable letters.
-* **Fiscal years & lock dates** — fiscal periods plus fiscal/tax/sales/
-  purchase/hard lock dates.
-* **Recurring payments** — scoped, idempotent schedules with a concurrency-safe
-  cron that posts standard Odoo payments.
-* **Payment batches & promises** — batch vendor payments with approval flow and
-  "promise to pay" tracking.
-* **Bank reconciliation** — guided manual reconciliation workbench.
-* **Open-item reconciliation** — selected customer/vendor ledger items matched through Odoo's standard reconciliation engine.
-* **Tax returns & VAT review** — Kanban/Calendar tax return review and audit working files.
-* **Loans** — annuity/fixed-principal/interest-only schedules.
-* **Accrual review** — goods received not billed / delivered not invoiced.
-* **Period closing** — month/quarter/year close checklist with approval and
-  controlled lock-date application.
-* **Dashboard** — bank/cash, receivable, payable, YTD P&L and counters.
-
-### Install
-
-```bash
-python /path/to/odoo20/odoo-bin \
-  --addons-path=/path/to/odoo20/addons,/path/to/flousflow-accounting-odoo \
-  -i flousflow_accounting -d <db> --stop-after-init
-```
-
-The chart of accounts loads automatically based on the company's country.
-
-### Documentation
-
-* [`flousflow_accounting/README.md`](flousflow_accounting/README.md) — full
-  feature and behaviour reference.
-* [`flousflow_accounting/docs/ODOO20_ACCOUNTING_PARITY.md`](flousflow_accounting/docs/ODOO20_ACCOUNTING_PARITY.md)
-  — Odoo 20 compatibility and Enterprise navigation parity baseline.
-* [`flousflow_accounting/docs/ODOO20_ENTERPRISE_PARITY_MATRIX.md`](flousflow_accounting/docs/ODOO20_ENTERPRISE_PARITY_MATRIX.md)
-  — full route, action, view, and selected field comparison.
-* [`flousflow_accounting/docs/ODOO19_ACCOUNTING_PARITY.md`](flousflow_accounting/docs/ODOO19_ACCOUNTING_PARITY.md)
-  — historical Odoo 19 behavioral comparison.
-
-## License
-
-LGPL-3. Author: Flous Flow — https://flousflow.com
+Add this repository to `addons_path`, refresh Apps, and install **FlousFlow Accounting**.

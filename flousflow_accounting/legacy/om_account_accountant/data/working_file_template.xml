@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="acc__working_file_check_treasury" model="account.working.file.template">
+        <field name="sequence">10</field><field name="section">Treasury and financing</field>
+        <field name="name">Review bank and cash balances</field>
+        <field name="description">Agree balances to bank statements and supporting reconciliations.</field>
+    </record>
+    <record id="acc__working_file_check_receivables" model="account.working.file.template">
+        <field name="sequence">20</field><field name="section">Receivables and revenue</field>
+        <field name="name">Review customer receivables</field>
+        <field name="description">Review aged receivables, material balances, and collectability evidence.</field>
+    </record>
+    <record id="acc__working_file_check_revenue" model="account.working.file.template">
+        <field name="sequence">30</field><field name="section">Receivables and revenue</field>
+        <field name="name">Review revenue recognition and cut-off</field>
+    </record>
+    <record id="acc__working_file_check_fixed_assets" model="account.working.file.template">
+        <field name="sequence">40</field><field name="section">Fixed assets</field>
+        <field name="name">Review additions, disposals, and depreciation</field>
+    </record>
+    <record id="acc__working_file_check_inventory" model="account.working.file.template">
+        <field name="sequence">50</field><field name="section">Inventory</field>
+        <field name="name">Review inventory valuation and count evidence</field>
+    </record>
+    <record id="acc__working_file_check_payables" model="account.working.file.template">
+        <field name="sequence">60</field><field name="section">Purchases and payables</field>
+        <field name="name">Review supplier balances and subsequent payments</field>
+    </record>
+    <record id="acc__working_file_check_accruals" model="account.working.file.template">
+        <field name="sequence">70</field><field name="section">Purchases and payables</field>
+        <field name="name">Review accrued expenses and cut-off</field>
+    </record>
+    <record id="acc__working_file_check_equity" model="account.working.file.template">
+        <field name="sequence">80</field><field name="section">Equity and provisions</field>
+        <field name="name">Review equity movements and provisions</field>
+    </record>
+    <record id="acc__working_file_check_expenses" model="account.working.file.template">
+        <field name="sequence">90</field><field name="section">Operating expenses</field>
+        <field name="name">Review material operating expenses</field>
+    </record>
+</odoo>

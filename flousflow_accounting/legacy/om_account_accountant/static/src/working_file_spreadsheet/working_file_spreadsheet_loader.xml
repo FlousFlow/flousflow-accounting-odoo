@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__WorkingFileSpreadsheetLoader" owl="1">
+        <LazyComponent
+            bundle="'spreadsheet.o_spreadsheet'"
+            Component="'flousflow_accounting.acc__WorkingFileSpreadsheet'"
+            props="this.props"
+        />
+    </t>
+</templates>

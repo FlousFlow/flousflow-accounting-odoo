@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Branch Analytic Accounting</title>
+
+</head>
+<body>
+  <h1>Branch Analytic Accounting</h1>
+  <p class="tagline">Turn Odoo <strong>Analytic Accounting</strong> into a branch / profit-center tracking system.</p>
+
+  <p class="lead">
+    Assign one <strong>branch (analytic account)</strong> to a Point of Sale configuration, a sales order or a
+    customer invoice, and Odoo automatically posts the <strong>revenue</strong> and the <strong>cost of goods sold (COGS)</strong>
+    onto that same branch. The native analytic P&amp;L report then shows, per branch:
+  </p>
+
+  <pre>
+Revenue
+- COGS
+-----------
+= Gross Profit</pre>
+
+  <h2>Key features</h2>
+  <ul>
+    <li><span class="badge">Point of Sale</span> New <em>Analytic Account</em> field on every POS configuration.</li>
+    <li><span class="badge">POS session closing</span> Sales, refunds, COGS and COGS reversals automatically receive the POS analytic account (100%). Receivable, cash, bank, tax and stock-valuation (balance-sheet) lines are never polluted.</li>
+    <li><span class="badge">Customer invoices &amp; credit notes</span> An <em>Analytic Account</em> header propagated to the invoice product lines; native <code>stock_account</code> then copies it onto the COGS lines. Credit notes reverse on the same branch.</li>
+    <li><span class="badge">POS-generated invoices</span> Inherit the analytic account from the POS configuration — no manual selection.</li>
+    <li><span class="badge">Sales orders</span> An <em>Analytic Account</em> header propagated to the order lines, then natively to the invoice and COGS.</li>
+    <li><span class="badge">Optional enforcement</span> Require an analytic account before closing a POS session, posting a customer invoice, or confirming a sales order.</li>
+  </ul>
+
+  <h2>Why only P&amp;L lines?</h2>
+  <p>
+    Receivable, cash, bank, tax and stock-valuation accounts live on the balance sheet and must never carry a branch.
+    This module tags <strong>only</strong> the income / expense lines, so the branch P&amp;L stays clean and the balance
+    sheet is left untouched.
+  </p>
+
+  <h2>Configuration</h2>
+  <ol>
+    <li>Create the branch analytic accounts (<em>Accounting &rarr; Configuration &rarr; Analytic Accounts</em>), optionally under a dedicated analytic plan such as <em>Branches</em>.</li>
+    <li>Assign an analytic account on each Point of Sale configuration (<em>Point of Sale &rarr; Configuration &rarr; Point of Sale</em>).</li>
+    <li>Optionally enable the enforcement toggles in <em>Settings &rarr; Accounting &rarr; Analytics</em>.</li>
+  </ol>
+
+  <h2>Screenshots</h2>
+
+  <h3>Point of Sale &mdash; Analytic Account</h3>
+  <p>Pick the branch analytic account on each POS configuration; every closed session posts sales, refunds and COGS to that branch.</p>
+  <img src="1.png" alt="Point of Sale analytic account">
+
+  <h3>Customer invoice &mdash; Analytic Account header</h3>
+  <p>Select the branch on the invoice header; product lines and COGS inherit it automatically.</p>
+  <img src="2.png" alt="Customer invoice analytic account">
+
+  <h3>Sales order &mdash; Analytic Account header</h3>
+  <p>Select the branch on the sales order; it flows natively to the invoice and COGS.</p>
+  <img src="3.png" alt="Sales order analytic account">
+
+  <h3>Settings &mdash; Analytics enforcement</h3>
+  <p>Optionally require an analytic account before closing a POS session, posting a customer invoice, or confirming a sales order.</p>
+  <img src="4.png" alt="Analytics enforcement settings">
+
+  <h2>Technical notes</h2>
+  <ul>
+    <li>Odoo 20 Community — built with standard inheritance only; no core files are modified.</li>
+    <li>Uses the native <code>analytic_distribution</code> and native <code>stock_account</code> COGS flow — no duplicated COGS entries.</li>
+    <li>Multi-company safe (<code>check_company=True</code>).</li>
+    <li>Includes automated tests covering POS sale/refund, two branches, customer invoice, credit note, POS-generated invoice and sales orders.</li>
+  </ul>
+
+  <p class="foot">By <strong>Flous Flow</strong> &mdash; </p>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fba__res_config_settings_view_form_branch_analytic" model="ir.ui.view">
+        <field name="name">res.config.settings.branch.analytic</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='analytic']" position="inside">
+                <setting id="branch_analytic_require_pos"
+                         string="Require Analytic Account on POS"
+                         company_dependent="1"
+                         groups="account.group_account_user"
+                         help="Prevent closing a POS session whose configuration has no Analytic Account.">
+                    <field name="branch_analytic_require_pos"/>
+                </setting>
+                <setting id="branch_analytic_require_invoice"
+                         string="Require Analytic Account on Customer Invoices"
+                         company_dependent="1"
+                         groups="account.group_account_user"
+                         help="Prevent posting a customer invoice or credit note without an Analytic Account.">
+                    <field name="branch_analytic_require_invoice"/>
+                </setting>
+                <setting id="branch_analytic_require_sale"
+                         string="Require Analytic Account on Sales Orders"
+                         company_dependent="1"
+                         groups="account.group_account_user"
+                         help="Prevent confirming a sales order without an Analytic Account.">
+                    <field name="branch_analytic_require_sale"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

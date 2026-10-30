@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Odoo 20 represents company restrictions as domain-based ir.access records. -->
+    <record id="apr__annual_report_document_company_access" model="ir.access">
+        <field name="name">Annual Reports: allowed companies</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document')]"/>
+        <field name="operation">crud</field>
+        <field name="domain">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="apr__annual_report_document_section_company_access" model="ir.access">
+        <field name="name">Annual Report Sections: allowed companies</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document.section')]"/>
+        <field name="operation">crud</field>
+        <field name="domain">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="apr__annual_report_template_company_access" model="ir.access">
+        <field name="name">Annual Report Templates: allowed companies</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.template')]"/>
+        <field name="operation">crud</field>
+        <field name="domain">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="apr__annual_report_template_section_company_access" model="ir.access">
+        <field name="name">Annual Report Template Sections: allowed companies</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.template.section')]"/>
+        <field name="operation">crud</field>
+        <field name="domain">['|', ('template_id.company_id', '=', False), ('template_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="apr__access_account_annual_report_document_readonly" model="ir.access">
+        <field name="name">Annual Report: read</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document')]"/>
+        <field name="group_id" ref="account.group_account_readonly"/>
+        <field name="operation">r</field>
+    </record>
+    <record id="apr__access_account_annual_report_document_accountant" model="ir.access">
+        <field name="name">Annual Report: accountant</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document')]"/>
+        <field name="group_id" ref="account.group_account_invoice"/>
+        <field name="operation">crud</field>
+    </record>
+    <record id="apr__access_account_annual_report_document_manager" model="ir.access">
+        <field name="name">Annual Report: manager</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document')]"/>
+        <field name="group_id" ref="account.group_account_manager"/>
+        <field name="operation">crud</field>
+    </record>
+    <record id="apr__access_account_annual_report_document_section_readonly" model="ir.access">
+        <field name="name">Annual Report Section: read</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document.section')]"/>
+        <field name="group_id" ref="account.group_account_readonly"/>
+        <field name="operation">r</field>
+    </record>
+    <record id="apr__access_account_annual_report_document_section_accountant" model="ir.access">
+        <field name="name">Annual Report Section: accountant</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document.section')]"/>
+        <field name="group_id" ref="account.group_account_invoice"/>
+        <field name="operation">crud</field>
+    </record>
+    <record id="apr__access_account_annual_report_document_section_manager" model="ir.access">
+        <field name="name">Annual Report Section: manager</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.document.section')]"/>
+        <field name="group_id" ref="account.group_account_manager"/>
+        <field name="operation">crud</field>
+    </record>
+    <record id="apr__access_account_annual_report_template_readonly" model="ir.access">
+        <field name="name">Annual Report Template: read</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.template')]"/>
+        <field name="group_id" ref="account.group_account_readonly"/>
+        <field name="operation">r</field>
+    </record>
+    <record id="apr__access_account_annual_report_template_manager" model="ir.access">
+        <field name="name">Annual Report Template: manager</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.template')]"/>
+        <field name="group_id" ref="account.group_account_manager"/>
+        <field name="operation">crud</field>
+    </record>
+    <record id="apr__access_account_annual_report_template_section_readonly" model="ir.access">
+        <field name="name">Annual Report Template Section: read</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.template.section')]"/>
+        <field name="group_id" ref="account.group_account_readonly"/>
+        <field name="operation">r</field>
+    </record>
+    <record id="apr__access_account_annual_report_template_section_manager" model="ir.access">
+        <field name="name">Annual Report Template Section: manager</field>
+        <field name="model_id" search="[('model', '=', 'account.annual.report.template.section')]"/>
+        <field name="group_id" ref="account.group_account_manager"/>
+        <field name="operation">crud</field>
+    </record>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="apr__report_financial">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <div class="page o_om_report">
+                        <t t-call="flousflow_accounting.apr__report_style"/>
+                        <h2 t-out="data['account_report_id'][1]"/>
+
+                        <div id="informations" class="row mb-4">
+                            <div class="col" t-if="data['date_from'] or data['date_to']">
+                                <strong>Period:</strong>
+                                <div>
+                                    <t t-if="data['date_from'] and data['date_to']"><span t-out="data['date_from']" t-options="{'widget': 'date'}"/> - <span t-out="data['date_to']" t-options="{'widget': 'date'}"/></t>
+                                    <t t-elif="data['date_from']">From <span t-out="data['date_from']" t-options="{'widget': 'date'}"/></t>
+                                    <t t-else="">Until <span t-out="data['date_to']" t-options="{'widget': 'date'}"/></t>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <strong>Target Moves:</strong>
+                                <div t-if="data['target_move'] == 'all'">All Entries</div>
+                                <div t-if="data['target_move'] == 'posted'">All Posted Entries</div>
+                                <div t-if="data.get('cash_basis')">Cash Basis</div>
+                                <div t-else="">Accrual Basis</div>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm table-reports ff_financial_print_table">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th t-if="data['debit_credit']" class="text-end">Debit</th>
+                                    <th t-if="data['debit_credit']" class="text-end">Credit</th>
+                                    <th t-foreach="period_columns" t-as="period_column" class="text-end">
+                                        <span t-out="period_column['label']"/>
+                                    </th>
+                                    <th t-if="show_budget" class="text-end">
+                                        <span t-out="budget_label"/>
+                                    </th>
+                                    <th t-if="show_comparison_change" class="text-end">
+                                        <span t-out="comparison_change_label"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="report_lines" t-as="line"
+                                    t-att-class="'o_om_section' if line.get('type') == 'report' and int(line.get('level', 0)) &lt;= 1 else ('o_om_total' if line.get('type') == 'total' else ('o_om_group' if line.get('type') == 'group' else ''))">
+                                    <t t-set="level" t-value="max(0, int(line.get('level', 0)))"/>
+                                    <td t-att-style="'padding-right: %spx;' % (8 + level * 16) if (o.env.lang or '').startswith('ar') else 'padding-left: %spx;' % (8 + level * 16)">
+                                        <span t-out="line.get('name')"/>
+                                    </td>
+                                    <td t-if="data['debit_credit']" class="text-end text-nowrap">
+                                        <span t-if="line.get('show_amount', True)" t-out="line.get('debit', 0.0)" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td t-if="data['debit_credit']" class="text-end text-nowrap">
+                                        <span t-if="line.get('show_amount', True)" t-out="line.get('credit', 0.0)" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td t-foreach="period_columns" t-as="period_column" class="text-end text-nowrap">
+                                        <t t-set="period_amount" t-value="line.get('balance', 0.0) if period_column['current'] else ((line.get('balance_cmp_list') or [line.get('balance_cmp', 0.0)])[period_column['index']] if period_column['index'] &lt; len(line.get('balance_cmp_list') or [line.get('balance_cmp', 0.0)]) else 0.0)"/>
+                                        <span t-if="line.get('show_amount', True)" t-out="period_amount" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td t-if="show_budget" class="text-end text-nowrap">
+                                        <span t-if="line.get('show_amount', True) and line.get('budget_amount') is not None"
+                                              t-out="line.get('budget_amount')"
+                                              t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                    <td t-if="show_comparison_change" class="text-end text-nowrap">
+                                        <t t-if="line.get('show_amount', True) and comparison_display == 'percentage'" t-out="line.get('comparison_change')"/>
+                                        <span t-elif="line.get('show_amount', True)" t-out="line.get('comparison_change')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

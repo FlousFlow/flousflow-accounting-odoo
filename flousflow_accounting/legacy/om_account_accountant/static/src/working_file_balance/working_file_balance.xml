@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__WorkingFileBalanceAccountField" owl="1">
+        <button type="button" class="btn btn-link p-0 text-start" t-on-click="openJournalItems">
+            <t t-esc="props.value"/>
+        </button>
+    </t>
+</templates>

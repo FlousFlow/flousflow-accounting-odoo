@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="apr__action_report_customer_statement" model="ir.actions.report">
+        <field name="name">Customer / Vendor Statement</field>
+        <field name="model">account.common.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.apr__report_customer_statement</field>
+        <field name="paperformat_id" ref="apr__paperformat_om_report"/>
+        <field name="group_ids" eval="[(4, ref('account.group_account_readonly')), (4, ref('account.group_account_invoice')), (4, ref('account.group_account_user')), (4, ref('account.group_account_manager'))]"/>
+        <field name="print_report_name">'Statement - %s' % (object.customer_statement_partner_id.name or '')</field>
+    </record>
+
+    <template id="apr__report_customer_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="statements" t-as="statement">
+                <t t-foreach="statement['report_data']['partners']" t-as="statement_partner">
+                    <t t-call="web.internal_layout">
+                        <div class="page o_om_report">
+                            <t t-call="flousflow_accounting.apr__report_style"/>
+                            <h2 t-out="statement['report_title']"/>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <strong>Company</strong>
+                                    <div t-out="statement['report_data']['company_name']"/>
+                                </div>
+                                <div class="col">
+                                    <strong>Partner</strong>
+                                    <div t-out="statement_partner['name']"/>
+                                </div>
+                                <div class="col">
+                                    <strong>Period</strong>
+                                    <div>
+                                        <span t-out="statement['period'][0]" t-options="{'widget': 'date'}"/>
+                                        <span> – </span>
+                                        <span t-out="statement['period'][1]" t-options="{'widget': 'date'}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-sm table-reports">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Due Date</th>
+                                        <th>Label</th>
+                                        <th>Reference</th>
+                                        <th class="text-end">Amount<t t-out="statement['scale_suffix']"/></th>
+                                        <th class="text-end">Amount in Currency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="statement_partner['lines']" t-as="line">
+                                        <td><span t-out="line['date']" t-options="{'widget': 'date'}"/></td>
+                                        <td><span t-out="line['date_maturity']" t-options="{'widget': 'date'}"/></td>
+                                        <td t-out="line['label']"/>
+                                        <td t-out="line['reference']"/>
+                                        <td class="text-end text-nowrap">
+                                            <span t-out="line['scaled_amount']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                            <t t-out="statement['scale_suffix']"/>
+                                        </td>
+                                        <td class="text-end text-nowrap">
+                                            <t t-set="line_currency" t-value="env['res.currency'].browse(line['currency_id'])"/>
+                                            <span t-out="line['amount_currency']" t-options="{'widget': 'monetary', 'display_currency': line_currency}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="fw-bold border-top">
+                                        <td colspan="4">Total</td>
+                                        <td class="text-end text-nowrap">
+                                            <span t-out="statement_partner['scaled_amount']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                            <t t-out="statement['scale_suffix']"/>
+                                        </td>
+                                        <td/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="apr__email_template_customer_statement" model="mail.template">
+        <field name="name">Customer / Vendor Statement</field>
+        <field name="model_id" ref="model_account_common_report"/>
+        <field name="email_from">{{ user.email_formatted or '' }}</field>
+        <field name="partner_to">{{ object.customer_statement_partner_id.id }}</field>
+        <field name="subject">{{ env.company.name }} Statement of Account</field>
+        <field name="lang">{{ object.customer_statement_partner_id.lang or user.lang }}</field>
+        <field name="report_template_ids" eval="[(4, ref('flousflow_accounting.apr__action_report_customer_statement'))]"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0; padding: 0; font-size: 14px;">
+                <p>Dear <t t-out="object.customer_statement_partner_id.name or ''"/>,</p>
+                <p>Please find attached the statement of your account with <t t-out="env.company.name or ''"/> for the selected period.</p>
+                <p>If anything does not match your records, please let us know.</p>
+                <p>Best regards,<br/><t t-out="user.name or ''"/><br/><t t-out="env.company.name or ''"/></p>
+            </div>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,15 @@
+id,name,model_id,group_id/id,operation,domain
+acc__access_account_asset_category_readonly,account.asset.category readonly,account.asset.category,account.group_account_readonly,r,
+acc__access_account_asset_asset_readonly,account.asset.asset readonly,account.asset.asset,account.group_account_readonly,r,
+acc__access_account_working_file_readonly,account.working.file readonly,account.working.file,account.group_account_readonly,r,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_user,account.working.file accountant,account.working.file,account.group_account_user,cru,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_manager,account.working.file manager,account.working.file,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_check_readonly,account.working.file.check readonly,account.working.file.check,account.group_account_readonly,r,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_check_user,account.working.file.check accountant,account.working.file.check,account.group_account_user,cru,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_check_manager,account.working.file.check manager,account.working.file.check,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_template_readonly,account.working.file.template readonly,account.working.file.template,account.group_account_readonly,r,
+acc__access_account_working_file_template_user,account.working.file.template accountant,account.working.file.template,account.group_account_user,r,
+acc__access_account_working_file_template_manager,account.working.file.template manager,account.working.file.template,account.group_account_manager,crud,
+acc__access_account_working_file_balance_readonly,account.working.file.balance readonly,account.working.file.balance,account.group_account_readonly,r,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_balance_user,account.working.file.balance accountant,account.working.file.balance,account.group_account_user,cru,"[('company_id', 'in', company_ids)]"
+acc__access_account_working_file_balance_manager,account.working.file.balance manager,account.working.file.balance,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"

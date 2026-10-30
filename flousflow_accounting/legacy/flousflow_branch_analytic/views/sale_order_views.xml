@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fba__view_order_form_branch_analytic" model="ir.ui.view">
+        <field name="name">sale.order.form.branch.analytic</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='other_information']//group[@name='sale_info']" position="inside">
+                <field name="analytic_account_id"
+                       options="{'no_create': True}"
+                       domain="[('company_id', 'in', [company_id, False])]"
+                       readonly="state == 'cancel' or locked"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

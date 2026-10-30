@@ -1,0 +1,801 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-10-28 04:55+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: om_account_accountant
+#. odoo-python
+#: code:addons/om_account_accountant/models/account_move.py:0
+msgid ""
+"%(warning)s\n"
+"\n"
+"This invoice cannot be posted: ask an accounting manager to post it, or collect what the customer owes first."
+msgstr ""
+"%(warning)s\n"
+"\n"
+"لا يمكن ترحيل هذه الفاتورة: اطلب من مدير المحاسبة ترحيلها، أو قم بتحصيل ما يدين به العميل أولًا."
+
+#. module: om_account_accountant
+#: model:ir.actions.act_window,name:om_account_accountant.action_account_account_tag
+#: model:ir.ui.menu,name:om_account_accountant.menu_account_tag
+msgid "Account Tags"
+msgstr "علامات تصنيف الحساب"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_partner_property_form
+msgid "Accounting"
+msgstr "المحاسبة"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.res_config_settings_view_form
+msgid "Anglo-Saxon Accounting"
+msgstr "المحاسبة الأنجلوسكسونية"
+
+#. module: om_account_accountant
+#: model:ir.module.module,summary:base.module_om_account_accountant
+msgid ""
+"Annual Report, Bank Reconciliation Statement, Accounting Reports, Asset "
+"Management and Budget, Recurring Payments, Lock Dates, Fiscal Year, Period "
+"Closing, Accounting Dashboard, Financial Reports, Cash Flow Statement, Cash "
+"Forecast, Customer Follow up Management, Bank Reconciliation, Cheque "
+"Printing, Automatic Currency Rates, Currency Revaluation, Bank Statement "
+"Import, Vendor Bill OCR"
+msgstr ""
+"التقرير السنوي، كشف التسوية البنكية، التقارير المحاسبية، إدارة الأصول "
+"والميزانية، الدفعات المتكررة، تواريخ الإقفال، السنة المالية، إقفال الفترة، "
+"لوحة بيانات المحاسبة، التقارير المالية، قائمة التدفقات النقدية، التدفق "
+"النقدي المتوقع، إدارة متابعة العملاء، التسوية البنكية، طباعة الشيكات، أسعار "
+"العملات التلقائية، إعادة تقييم العملات، استيراد كشف الحساب البنكي، OCR "
+"لفواتير الموردين"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_bank_reconciliation
+msgid "Bank Reconciliation"
+msgstr "التسوية البنكية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_accounting_statement_bank
+msgid "Bank Statements"
+msgstr "كشوفات الحساب البنكية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_accounting_bank_and_cash
+#: model:ir.ui.menu,name:om_account_accountant.menu_action_account_moves_journal_bank_cash
+msgid "Bank and Cash"
+msgstr "البنك والنقد"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/journal_audit/journal_audit.xml
+msgid "Audit"
+msgstr "تدقيق"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/journal_audit/journal_audit.xml
+msgid "Mark Reviewed"
+msgstr "تعليم كمُراجَع"
+
+#. odoo-javascript
+#: om_account_accountant/static/src/journal_audit/journal_audit.js
+msgid "Taxes Applied"
+msgstr "الضرائب المطبقة"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+msgid "Month"
+msgstr "الشهر"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+msgid "Quarter"
+msgstr "ربع السنة"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+msgid "Fiscal Year"
+msgstr "السنة المالية"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+msgid "Custom Dates"
+msgstr "تواريخ مخصصة"
+
+#. odoo-javascript
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+msgid "Enter valid start and end dates."
+msgstr "أدخل تاريخ بداية ونهاية صالحين."
+
+#. odoo-javascript
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+msgid "The start date must be on or before the end date."
+msgstr "يجب أن يكون تاريخ البداية في أو قبل تاريخ النهاية."
+
+
+#. module: om_account_accountant
+#: model:ir.model.fields,field_description:om_account_accountant.field_res_company__credit_limit_block
+#: model:ir.model.fields,field_description:om_account_accountant.field_res_config_settings__credit_limit_block
+msgid "Block Over the Credit Limit"
+msgstr "الحظر عند تجاوز الحد الائتماني"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_accounting_statement_cash
+msgid "Cash Statements"
+msgstr "الكشوفات النقدية"
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_account_account_tag
+msgid "Create an account tag"
+msgstr "إنشاء علامة تصنيف حساب"
+
+#. module: om_account_accountant
+#: model:ir.actions.act_window,name:om_account_accountant.action_moves_unposted
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_moves_unposted
+msgid "Draft Entries"
+msgstr "القيود في حالة المسودة"
+
+#. module: om_account_accountant
+#: model:ir.actions.act_window,name:om_account_accountant.action_moves_to_review
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_moves_to_review
+msgid "Entries to Review"
+msgstr "قيود للعرض"
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_moves_unposted
+msgid ""
+"Everything is posted. Draft entries are not in the reports and not in the balances, so a period\n"
+"                should not be closed while any are left here."
+msgstr ""
+"تم ترحيل كل شيء. القيود في حالة المسودة ليست في التقارير ولا في الأرصدة، لذا لا ينبغي\n"
+"                إقفال الفترة طالما تبقى أي منها هنا."
+
+#. module: om_account_accountant
+#: model:ir.model.fields,field_description:om_account_accountant.field_res_company__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_journal_audit
+msgid "Journal Audit"
+msgstr "تدقيق دفتر اليومية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_finance_entries_accounting_journals
+msgid "Journals"
+msgstr "دفاتر اليومية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_account_management_config
+msgid "Management"
+msgstr "الإدارة"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_match_journal_items
+msgid "Match Journal Items"
+msgstr "مطابقة عناصر اليومية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_action_account_moves_journal_misc
+msgid "Miscellaneous"
+msgstr "متفرقات"
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_moves_unposted
+msgid "No draft entry"
+msgstr "لا يوجد قيد في حالة المسودة"
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_account_payment_method
+msgid "No payment method"
+msgstr "لا توجد طريقة دفع"
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_moves_to_review
+msgid "Nothing waiting to be reviewed"
+msgstr "لا يوجد شيء بانتظار المراجعة"
+
+#. module: om_account_accountant
+#: model:ir.module.module,shortdesc:base.module_om_account_accountant
+msgid "Odoo 20 Accounting Community"
+msgstr "محاسبة Odoo 20 Community"
+
+#. module: om_account_accountant
+#: model:ir.module.module,description:base.module_om_account_accountant
+msgid ""
+"Odoo 20 Financial Reports, Asset Management and Budget, Financial Reports, "
+"Cash Flow Statement, Cash Forecast, Recurring Payments, Bank Reconciliation,"
+" Customer Follow Up Management, Account Lock Date, Fiscal Year and Period "
+"Closing, Cheque Printing, Automatic Currency Rates, Accounting Dashboard, "
+"Vendor Bill OCR"
+msgstr ""
+"التقارير المالية لـ Odoo 20، إدارة الأصول والميزانية، التقارير المالية، "
+"قائمة التدفقات النقدية، التدفق النقدي المتوقع، الدفعات المتكررة، التسوية "
+"البنكية، إدارة متابعة العملاء، تاريخ إقفال الحسابات، السنة المالية وإقفال "
+"الفترة، طباعة الشيكات، أسعار العملات التلقائية، لوحة بيانات المحاسبة، OCR "
+"لفواتير الموردين"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_open_items
+msgid "Open Items"
+msgstr "العناصر المفتوحة"
+
+#. module: om_account_accountant
+#: model:res.groups,name:om_account_accountant.group_credit_limit_override
+msgid "Override the Credit Limit"
+msgstr "تجاوز الحد الائتماني"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_payment_method_search
+msgid "Payment Method"
+msgstr "طريقة الدفع"
+
+#. module: om_account_accountant
+#: model:ir.actions.act_window,name:om_account_accountant.action_account_payment_method
+#: model:ir.ui.menu,name:om_account_accountant.menu_account_payment_method
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_payment_method_form
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_payment_method_search
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_payment_method_tree
+msgid "Payment Methods"
+msgstr "طرق الدفع"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_payment_method_search
+msgid "Payment Type"
+msgstr "نوع السداد"
+
+#. module: om_account_accountant
+#: model:res.groups,comment:om_account_accountant.group_credit_limit_override
+msgid ""
+"Post the customer invoices going over the credit limit of the customer."
+msgstr "ترحيل فواتير العملاء التي تتجاوز الحد الائتماني للعميل."
+
+#. module: om_account_accountant
+#. odoo-python
+#: code:addons/om_account_accountant/models/account_move.py:0
+msgid ""
+"Posted over the credit limit of the customer.\n"
+"%(warning)s"
+msgstr ""
+"تم الترحيل متجاوزًا الحد الائتماني للعميل.\n"
+"%(warning)s"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_action_account_moves_journal_purchase
+msgid "Purchases"
+msgstr "المشتريات"
+
+#. module: om_account_accountant
+#: model:ir.actions.server,name:om_account_accountant.action_account_reconciliation
+msgid "Reconcile"
+msgstr "تسوية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_reconciliation
+msgid "Reconciliation"
+msgstr "التسوية"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.res_config_settings_view_form
+msgid ""
+"Record the cost of a good as an expense when this good is\n"
+"                                invoiced to a final customer (instead of recording the cost as soon\n"
+"                                as the product is received in stock)."
+msgstr ""
+"سجّل تكلفة السلعة كنفقة عند فوترة هذه السلعة\n"
+"                                لعميل نهائي (بدلًا من تسجيل التكلفة بمجرد\n"
+"                                استلام المنتج في المخزون)."
+
+#. module: om_account_accountant
+#: model:ir.model.fields,help:om_account_accountant.field_res_config_settings__anglo_saxon_accounting
+msgid ""
+"Record the cost of a good as an expense when this good is invoiced to a "
+"final customer."
+msgstr "سجّل تكلفة السلعة كنفقة عند فوترة هذه السلعة لعميل نهائي."
+
+#. module: om_account_accountant
+#: model:ir.model.fields,help:om_account_accountant.field_res_company__credit_limit_block
+#: model:ir.model.fields,help:om_account_accountant.field_res_config_settings__credit_limit_block
+msgid ""
+"Refuse to post a customer invoice that brings the customer over its credit "
+"limit. The users allowed to override the credit limit can still post it, and"
+" the override is logged on the invoice."
+msgstr ""
+"رفض ترحيل فاتورة العميل التي تجعل العميل يتجاوز حده الائتماني. لا يزال "
+"بإمكان المستخدمين المسموح لهم بتجاوز الحد الائتماني ترحيلها، ويُسجَّل "
+"التجاوز في الفاتورة."
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.res_config_settings_view_form
+msgid "Refuse to post an invoice going over the limit"
+msgstr "رفض ترحيل الفاتورة التي تتجاوز الحد"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_regularization
+msgid "Regularization Entries"
+msgstr "قيود التسوية"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_action_account_moves_journal_sales
+msgid "Sales"
+msgstr "المبيعات"
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_account_account_tag
+msgid ""
+"Tags group accounts or tax lines in the reports, such as the cash flow "
+"statement or the tax grids."
+msgstr ""
+"تجمع علامات التصنيف الحسابات أو بنود الضرائب في التقارير، مثل قائمة التدفقات"
+" النقدية أو شبكات الضرائب."
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.res_config_settings_view_form
+msgid ""
+"The accounting managers can still post it: the override is logged on the "
+"invoice."
+msgstr "لا يزال بإمكان مديري المحاسبة ترحيلها: يُسجَّل التجاوز في الفاتورة."
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_account_payment_method
+msgid ""
+"The payment methods, such as manual or cheque, that the journals offer for "
+"incoming and outgoing payments."
+msgstr ""
+"طرق الدفع، مثل اليدوي أو الشيك، التي توفرها دفاتر اليومية للدفعات الواردة "
+"والصادرة."
+
+#. module: om_account_accountant
+#: model_terms:ir.actions.act_window,help:om_account_accountant.action_moves_to_review
+msgid ""
+"The posted entries someone has marked to review appear here until they are "
+"checked."
+msgstr ""
+"القيود المُرحّلة التي حددها شخص ما للمراجعة تظهر هنا حتى يتم التحقق منها."
+
+#. module: om_account_accountant
+#: model:ir.actions.client,name:om_account_accountant.action_bank_rec_to_review
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_bank_rec_to_review
+msgid "Transactions to Review"
+msgstr "المعاملات المراد مراجعتها"
+
+#. module: om_account_accountant
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_unrealized_currencies
+msgid "Unrealized Currencies"
+msgstr "فروق العملات غير المحققة"
+
+#. module: om_account_accountant
+#: model:ir.model.fields,field_description:om_account_accountant.field_res_config_settings__anglo_saxon_accounting
+msgid "Use anglo-saxon accounting"
+msgstr "استخدام طريقة المحاسبة الأنجلو-ساكسونية"
+
+#. module: om_account_accountant
+#: model:ir.actions.client,name:om_account_accountant.action_deferred_expense_report
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_deferred_expenses
+msgid "Deferred Expenses"
+msgstr "النفقات المؤجلة"
+
+#. module: om_account_accountant
+#: model:ir.actions.client,name:om_account_accountant.action_deferred_revenue_report
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_deferred_revenues
+msgid "Deferred Revenues"
+msgstr "الإيرادات المؤجلة"
+
+#. module: om_account_accountant
+msgid "Period"
+msgstr "الفترة"
+
+#. module: om_account_accountant
+msgid "Group By"
+msgstr "التجميع حسب"
+
+#. module: om_account_accountant
+msgid "Group by Account"
+msgstr "التجميع حسب الحساب"
+
+#. module: om_account_accountant
+msgid "Group by Product Category"
+msgstr "التجميع حسب فئة المنتج"
+
+#. module: om_account_accountant
+msgid "Group by Product"
+msgstr "التجميع حسب المنتج"
+
+#. module: om_account_accountant
+msgid "Product Category"
+msgstr "فئة المنتج"
+
+#. module: om_account_accountant
+msgid "Product"
+msgstr "المنتج"
+
+#. module: om_account_accountant
+msgid "Target Moves"
+msgstr "القيود المستهدفة"
+
+#. module: om_account_accountant
+msgid "Posted Entries"
+msgstr "القيود المُرحّلة"
+
+#. module: om_account_accountant
+msgid "All Entries"
+msgstr "كل القيود"
+
+#. module: om_account_accountant
+msgid "Compare Previous Period"
+msgstr "مقارنة بالفترة السابقة"
+
+#. module: om_account_accountant
+msgid "Hide Zero Lines"
+msgstr "إخفاء البنود الصفرية"
+
+#. module: om_account_accountant
+msgid "Unfold All"
+msgstr "فتح الكل"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+msgid "Options"
+msgstr "الخيارات"
+
+#. module: om_account_accountant
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.xml
+msgid "Hide lines at 0"
+msgstr "إخفاء البنود عند الصفر"
+
+#. odoo-javascript
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+msgid "Expand row"
+msgstr "توسيع السطر"
+
+#. odoo-javascript
+#: om_account_accountant/static/src/deferred_schedule/deferred_schedule.js
+msgid "Collapse row"
+msgstr "طي السطر"
+
+#. module: om_account_accountant
+msgid "Display Amounts"
+msgstr "عرض المبالغ"
+
+#. module: om_account_accountant
+msgid "In Currency"
+msgstr "بعملة الشركة"
+
+#. module: om_account_accountant
+msgid "In Thousands"
+msgstr "بالآلاف"
+
+#. module: om_account_accountant
+msgid "In Millions"
+msgstr "بالملايين"
+
+#. module: om_account_accountant
+msgid "Entries"
+msgstr "القيود"
+
+#. module: om_account_accountant
+msgid "Recognized Amount"
+msgstr "المبلغ المعترف به"
+
+#. module: om_account_accountant
+msgid "Previous Period"
+msgstr "الفترة السابقة"
+
+#. module: om_account_accountant
+msgid "Change"
+msgstr "التغير"
+
+#. module: om_account_accountant
+msgid "Total"
+msgstr "الإجمالي"
+
+#. module: om_account_accountant
+msgid "Print"
+msgstr "طباعة"
+
+#. module: om_account_accountant
+msgid "Loading report…"
+msgstr "جارٍ تحميل التقرير…"
+
+#. module: om_account_accountant
+msgid "No data found for the selected period."
+msgstr "لا توجد بيانات للفترة المحددة."
+
+#. module: om_account_accountant
+msgid "The deferred report could not be loaded."
+msgstr "تعذر تحميل تقرير التأجيل."
+
+#. module: om_account_accountant
+msgid "The selected schedule entries could not be opened."
+msgstr "تعذر فتح قيود الجدول المحدد."
+
+#. module: om_account_accountant
+msgid "Choose a valid reporting month."
+msgstr "اختر شهر تقرير صحيحًا."
+
+#. module: om_account_accountant
+msgid "Unsupported deferred report."
+msgstr "تقرير التأجيل غير مدعوم."
+
+#. module: om_account_accountant
+msgid "Unsupported grouping."
+msgstr "طريقة التجميع غير مدعومة."
+
+#. module: om_account_accountant
+msgid "Unsupported journal entry filter."
+msgstr "مرشح القيود غير مدعوم."
+
+#. module: om_account_accountant
+msgid "You are not allowed to read deferred schedule reports."
+msgstr "ليس لديك صلاحية قراءة تقارير جداول التأجيل."
+
+#. module: om_account_accountant
+#: model:ir.model.fields,field_description:om_account_accountant.field_account_asset_asset__invoice_line_id
+msgid "Source Invoice Line"
+msgstr "بند الفاتورة المصدر"
+
+#. module: om_account_accountant
+msgid "Search"
+msgstr "بحث"
+
+#. module: om_account_accountant
+msgid "Search..."
+msgstr "بحث..."
+
+#. module: om_account_accountant
+msgid "All Journals"
+msgstr "كل اليوميات"
+
+#. module: om_account_accountant
+msgid "Choose valid journals."
+msgstr "اختر يوميات صحيحة."
+
+#. module: om_account_accountant
+msgid "One or more selected journals are outside the active company."
+msgstr "يومية واحدة أو أكثر من اليوميات المحددة لا تخص الشركة الحالية."
+
+#. module: om_account_accountant
+msgid "Comparison"
+msgstr "مقارنة"
+
+#. module: om_account_accountant
+msgid "No Comparison"
+msgstr "بدون مقارنة"
+
+#. module: om_account_accountant
+msgid "Number of Comparison Periods"
+msgstr "عدد فترات المقارنة"
+
+#. module: om_account_accountant
+msgid "Comparison in"
+msgstr "المقارنة بـ"
+
+#. module: om_account_accountant
+msgid "Percentage"
+msgstr "النسبة المئوية"
+
+#. module: om_account_accountant
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: om_account_accountant
+msgid "Sort Order"
+msgstr "ترتيب الفرز"
+
+#. module: om_account_accountant
+msgid "Descending"
+msgstr "تنازلي"
+
+#. module: om_account_accountant
+msgid "Ascending"
+msgstr "تصاعدي"
+
+#. module: om_account_accountant
+msgid "Change (%)"
+msgstr "التغير (٪)"
+
+#. module: om_account_accountant
+msgid "Change Amount"
+msgstr "مبلغ التغير"
+
+#. module: om_account_accountant
+msgid "Choose a valid number of comparison periods."
+msgstr "اختر عددًا صحيحًا لفترات المقارنة."
+
+#. module: om_account_accountant
+msgid "The number of comparison periods must be between 0 and 120."
+msgstr "يجب أن يكون عدد فترات المقارنة بين 0 و120."
+
+#. module: om_account_accountant
+msgid "Unsupported comparison method."
+msgstr "طريقة المقارنة غير مدعومة."
+
+#. module: om_account_accountant
+msgid "Unsupported report sort order."
+msgstr "ترتيب فرز التقرير غير مدعوم."
+
+#. module: om_account_accountant
+#: model:ir.actions.act_window,name:om_account_accountant.action_account_working_file
+#: model:ir.ui.menu,name:om_account_accountant.menu_review_working_files
+msgid "Working Files"
+msgstr "ملفات العمل"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_working_file_form
+msgid "Cycles"
+msgstr "الدورات"
+
+#. module: om_account_accountant
+#: model:ir.ui.view,arch_db:om_account_accountant.view_account_working_file_form
+msgid "Review Checks"
+msgstr "قوائم الفحص"
+
+#. module: om_account_accountant
+#: model:ir.ui.view,arch_db:om_account_accountant.view_account_working_file_form
+#: model:ir.ui.view,arch_db:om_account_accountant.view_account_working_file_balance_list
+msgid "Balances"
+msgstr "الأرصدة"
+
+#. module: om_account_accountant
+msgid "Review Balances"
+msgstr "مراجعة الأرصدة"
+
+#. module: om_account_accountant
+msgid "Refresh Accounts"
+msgstr "تحديث الحسابات"
+
+#. module: om_account_accountant
+msgid "Start Date"
+msgstr "تاريخ البداية"
+
+#. module: om_account_accountant
+msgid "End Date"
+msgstr "تاريخ النهاية"
+
+#. module: om_account_accountant
+msgid "Balance N-1"
+msgstr "رصيد السنة السابقة"
+
+#. module: om_account_accountant
+msgid "Var N-1"
+msgstr "التغير عن السنة السابقة"
+
+#. module: om_account_accountant
+msgid "Var %"
+msgstr "نسبة التغير"
+
+#. module: om_account_accountant
+msgid "Last Comment"
+msgstr "آخر تعليق"
+
+#. module: om_account_accountant
+msgid "Pending Review"
+msgstr "بانتظار المراجعة"
+
+#. module: om_account_accountant
+msgid "Reviewed"
+msgstr "تمت المراجعة"
+
+#. module: om_account_accountant
+msgid "Supervised"
+msgstr "خاضع للإشراف"
+
+#. module: om_account_accountant
+msgid "Exception"
+msgstr "حالة استثنائية"
+
+#. module: om_account_accountant
+msgid "Resolved"
+msgstr "تمت المعالجة"
+
+#. module: om_account_accountant
+msgid "checks resolved"
+msgstr "فحوصات تمت معالجتها"
+
+#. module: om_account_accountant
+msgid "Every review check must be resolved before certification."
+msgstr "يجب معالجة جميع فحوصات المراجعة قبل اعتماد الملف."
+
+#. module: om_account_accountant
+msgid "Mark Reviewed"
+msgstr "وضع علامة تمت المراجعة"
+
+#. module: om_account_accountant
+msgid "Certified"
+msgstr "معتمد"
+
+#. module: om_account_accountant
+msgid "Certify"
+msgstr "اعتماد"
+
+#. module: om_account_accountant
+msgid "Working file marked as reviewed."
+msgstr "تم وضع علامة تمت المراجعة على ملف العمل."
+
+#. module: om_account_accountant
+msgid "Working file certified."
+msgstr "تم اعتماد ملف العمل."
+
+#. module: om_account_accountant
+msgid "Accounts"
+msgstr "الحسابات"
+
+#. module: om_account_accountant
+#: model_terms:ir.ui.view,arch_db:om_account_accountant.view_account_working_file_kanban
+msgid "balances reviewed"
+msgstr "الأرصدة التي تمت مراجعتها"
+
+#. module: om_account_accountant
+msgid "checks reviewed"
+msgstr "بند تمت مراجعته"
+
+#. module: om_account_accountant
+msgid "Last Comment:"
+msgstr "آخر تعليق:"
+
+#. module: om_account_accountant
+msgid "Open Checklist List"
+msgstr "فتح قائمة الفحص"
+
+#. module: om_account_accountant
+msgid "Save this working file to load the company's active account balances."
+msgstr "احفظ ملف المراجعة لتحميل أرصدة الحسابات النشطة للشركة."
+
+#. module: om_account_accountant
+msgid "Account"
+msgstr "الحساب"
+
+#. module: om_account_accountant
+msgid "Code"
+msgstr "الرمز"
+
+#. module: om_account_accountant
+msgid "Type"
+msgstr "النوع"
+
+#. module: om_account_accountant
+msgid "The end date cannot be earlier than the start date."
+msgstr "لا يمكن أن يسبق تاريخ النهاية تاريخ البداية."
+
+#. module: om_account_accountant
+msgid "Only accounting users can refresh working-file balances."
+msgstr "يقتصر تحديث أرصدة ملف المراجعة على مستخدمي المحاسبة."
+
+#. module: om_account_accountant
+msgid "Reopen the working file before changing its balance reviews."
+msgstr "أعد فتح ملف المراجعة قبل تعديل مراجعات الأرصدة."
+
+#. module: om_account_accountant
+msgid "Add notes..."
+msgstr "أضف ملاحظات..."
+
+#. module: om_account_accountant
+msgid "Upload File"
+msgstr "تحميل ملف"
+
+#. module: om_account_accountant
+msgid "Remove file"
+msgstr "إزالة الملف"
+
+#. module: om_account_accountant
+msgid "Review notes"
+msgstr "ملاحظات المراجعة"
+
+#. module: om_account_accountant
+msgid "Review status"
+msgstr "حالة المراجعة"
+
+#. module: om_account_accountant
+msgid "Loading review checks…"
+msgstr "جارٍ تحميل فحوصات المراجعة…"
+
+#. module: om_account_accountant
+msgid "No review checks are available."
+msgstr "لا توجد فحوصات مراجعة متاحة."

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fba__view_move_form_branch_analytic" model="ir.ui.view">
+        <field name="name">account.move.form.branch.analytic</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@id='header_right_group']" position="inside">
+                <label for="analytic_account_id"
+                       string="Analytic Account"
+                       style="font-weight:bold;"
+                       invisible="move_type not in ('out_invoice', 'out_refund')"/>
+                <field name="analytic_account_id"
+                       nolabel="1"
+                       options="{'no_create': True}"
+                       domain="[('company_id', 'in', [company_id, False])]"
+                       invisible="move_type not in ('out_invoice', 'out_refund')"
+                       readonly="state != 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

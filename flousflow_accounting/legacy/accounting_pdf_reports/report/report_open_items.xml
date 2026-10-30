@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="apr__action_report_open_items" model="ir.actions.report">
+        <field name="name">Open Items</field>
+        <field name="model">account.move.line</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.apr__open_items_document</field>
+        <field name="print_report_name">'Open Items'</field>
+    </record>
+
+    <template id="apr__open_items_document">
+        <t t-call="web.html_container">
+            <t t-set="company" t-value="env.company"/>
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Open Items</h2>
+                    <p>As of <span t-out="report_data.get('date_from')"/></p>
+                    <p t-if="report_data.get('unposted_count')" class="text-info">
+                        There are <strong t-out="report_data.get('unposted_count')"/> unposted Journal Entries prior to or included in this period.
+                    </p>
+                    <t t-set="company_currency" t-value="env['res.currency'].browse(report_data.get('currency_id'))"/>
+                    <t t-foreach="report_data.get('rows', [])" t-as="row">
+                        <h4 t-out="row['name']"/>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>No Reminder</th>
+                                    <th>Invoice Date</th>
+                                    <th>Due Date</th>
+                                    <th>Journal Item</th>
+                                    <th class="text-end">Amount</th>
+                                    <th class="text-end">Residual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="row['lines']" t-as="line">
+                                    <td><span t-out="'Yes' if line['no_reminder'] else 'No'"/></td>
+                                    <td t-out="line['invoice_date']"/>
+                                    <td t-out="line['due_date']"/>
+                                    <td t-out="line['label']"/>
+                                    <td class="text-end" t-out="line['amount']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"/>
+                                    <td class="text-end" t-out="line['residual']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"/>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4">Partner Total</th>
+                                    <th class="text-end" t-out="row['amount']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"/>
+                                    <th class="text-end" t-out="row['residual']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_currency}"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+                    <table class="table table-sm">
+                        <tfoot>
+                            <tr>
+                                <th>Total Open Items</th>
+                                <th class="text-end" t-out="report_data.get('totals', {}).get('amount', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"/>
+                                <th class="text-end" t-out="report_data.get('totals', {}).get('residual', 0)"
+                                    t-options="{'widget': 'monetary', 'display_currency': company_currency}"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

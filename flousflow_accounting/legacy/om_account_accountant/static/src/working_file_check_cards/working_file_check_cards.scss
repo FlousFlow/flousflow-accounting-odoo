@@ -1,0 +1,100 @@
+.o_account_return_check_section_title {
+    margin: 0 0 0.75rem;
+    color: var(--bs-secondary-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.o_account_return_check_card {
+    border-inline-end: 4px solid var(--bs-info);
+    background-color: var(--bs-card-bg, var(--bs-body-bg));
+}
+
+.o_account_return_check_reviewed {
+    border-inline-end-color: var(--bs-success);
+}
+
+.o_account_return_check_exception {
+    border-inline-end-color: var(--bs-danger);
+}
+
+.o_account_return_check_card_layout {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+    direction: ltr;
+    padding: 1rem;
+}
+
+.o_account_return_check_card_status {
+    padding-top: 0.15rem;
+}
+
+.o_account_return_check_card_content {
+    min-width: 0;
+    text-align: right;
+    direction: auto;
+}
+
+.o_account_return_check_name {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.o_account_return_check_description {
+    color: var(--bs-secondary-color);
+    white-space: pre-line;
+}
+
+.o_account_return_check_note,
+.o_account_return_check_note:focus {
+    min-height: 2.25rem;
+    padding: 0.35rem 0;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--bs-border-color);
+    background: transparent;
+    box-shadow: none;
+    color: inherit;
+    text-align: right;
+    resize: vertical;
+}
+
+.o_account_return_check_note::placeholder,
+.o_account_return_check_note_readonly {
+    color: var(--bs-secondary-color);
+}
+
+.o_account_return_check_note_readonly {
+    min-height: 2.25rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--bs-border-color);
+    white-space: pre-wrap;
+}
+
+.o_account_return_check_upload {
+    color: var(--bs-link-color);
+    text-decoration: none;
+}
+
+.o_account_return_check_upload:hover {
+    text-decoration: underline;
+}
+
+.o_account_return_check_evidence a {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 575.98px) {
+    .o_account_return_check_card_layout {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .o_account_return_check_card_status {
+        grid-row: 2;
+    }
+}

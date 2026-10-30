@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="apr__action_report_annual_document" model="ir.actions.report">
+        <field name="name">Annual Report</field>
+        <field name="model">account.annual.report.document</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.apr__report_annual_document</field>
+        <field name="print_report_name">object.name.replace('/', '-') + '.pdf'</field>
+    </record>
+
+    <template id="apr__report_annual_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page o_annual_document">
+                        <style>
+                            .o_annual_document h1 { font-size: 28px; margin: 0 0 12px; }
+                            .o_annual_document h2 { border-bottom: 1px solid #adb5bd; padding-bottom: 6px; }
+                            .o_annual_document .o_annual_meta { color: #6c757d; margin-bottom: 24px; }
+                            .o_annual_document .o_annual_section { margin-top: 18px; }
+                            .o_annual_document .o_annual_attachment { margin: 12px 0; }
+                            .o_annual_document .o_annual_attachment img { max-width: 100%; max-height: 220mm; }
+                        </style>
+                        <h1 t-out="doc.name"/>
+                        <div class="o_annual_meta">
+                            <span t-out="doc.company_id.name"/> ·
+                            <span t-out="doc.date_from" t-options="{'widget': 'date'}"/> –
+                            <span t-out="doc.date_to" t-options="{'widget': 'date'}"/>
+                            <span t-if="doc.responsible_user_ids">
+                                · Prepared by <span t-out="', '.join(doc.responsible_user_ids.mapped('name'))"/>
+                            </span>
+                        </div>
+                        <t t-foreach="doc.section_ids.sorted('sequence')" t-as="section">
+                            <div class="o_annual_section"
+                                 t-att-style="'page-break-before: always;' if section.page_break_before else ''">
+                                <h2 t-out="section.name"/>
+                                <div t-field="section.content"/>
+                            </div>
+                        </t>
+                        <div t-if="doc.image_attachment_ids" class="o_annual_section">
+                            <h2>Image Attachments</h2>
+                            <t t-foreach="doc.image_attachment_ids.sorted('id')"
+                               t-as="attachment">
+                                <div class="o_annual_attachment">
+                                    <p t-out="attachment.name"/>
+                                    <img t-att-src="image_data_uri(attachment.raw)" t-att-alt="attachment.name"/>
+                                </div>
+                            </t>
+                        </div>
+                        <div t-if="doc.other_attachment_ids" class="o_annual_section">
+                            <h2>Other Attachments</h2>
+                            <ul>
+                                <t t-foreach="doc.other_attachment_ids.sorted('id')"
+                                   t-as="attachment">
+                                    <li t-out="attachment.name"/>
+                                </t>
+                            </ul>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.apr__CashFlowReport" owl="1">
+        <div class="o_action ff_cash_flow_report">
+            <div class="ff_cf_toolbar">
+                <button class="btn btn-primary" type="button" t-on-click="this.printReport">Print</button>
+                <h2>Cash Flow Statement</h2>
+                <div class="ff_cf_toolbar_actions">
+                    <button class="btn btn-outline-secondary h-100 d-md-none" type="button" title="Filters" aria-label="Filters"
+                            aria-controls="ff_cf_filter_panel"
+                            t-att-aria-expanded="this.state.filtersOpen ? 'true' : 'false'"
+                            t-on-click="this.toggleFilters">
+                        <span class="oi oi-filled" data-icon="filter_alt"/>
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-link" type="button" title="Report actions" aria-label="Report actions"
+                                data-bs-toggle="dropdown">
+                            <i class="oi oi-fw oi-filled" data-icon="settings"/>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <button class="dropdown-item" type="button" t-on-click="this.exportXlsx">
+                                <i class="fa fa-file-excel-o me-2"/>XLSX
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ff_cf_filter_panel"
+                 t-att-class="'ff_cf_filter_panel ' + (this.state.filtersOpen ? 'd-flex' : 'd-none d-md-flex')">
+                <div class="ff_cf_filters">
+                    <div class="input-group ff_cf_period">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-label="Period">
+                            <span class="oi oi-fw oi-filled" data-icon="calendar_today"/>
+                            <t t-out="this.periodLabel"/>
+                        </button>
+                        <div class="dropdown-menu p-2 ff_cf_period_menu">
+                            <div t-foreach="[['month', 'Month'], ['quarter', 'Quarter'], ['fiscal_year', 'Fiscal Year']]"
+                                 t-as="period" t-key="period[0]" class="ff_cf_period_option"
+                                 t-att-class="this.state.periodType === period[0] ? 'is-selected' : ''">
+                                <button class="dropdown-item" type="button"
+                                        t-on-click="(event) => this.onPeriodTypeClick(period[0], event)">
+                                    <i t-if="this.state.periodType === period[0]" class="oi oi-fw oi-check me-2"/>
+                                    <i t-else="" class="oi oi-fw me-2"/>
+                                    <t t-out="period[1]"/>
+                                </button>
+                                <div class="ff_cf_period_navigation">
+                                    <button class="btn btn-link" type="button"
+                                            t-att-aria-label="'Previous ' + period[1].toLowerCase()"
+                                            t-on-click="(event) => this.onPeriodNavigationClick(period[0], -1, event)">
+                                        <span class="oi oi-fw oi-filled" data-icon="arrow_left"/>
+                                    </button>
+                                    <span t-out="this.getPeriodOptionLabel(period[0])"/>
+                                    <button class="btn btn-link" type="button"
+                                            t-att-aria-label="'Next ' + period[1].toLowerCase()"
+                                            t-on-click="(event) => this.onPeriodNavigationClick(period[0], 1, event)">
+                                        <span class="oi oi-fw oi-filled" data-icon="arrow_right"/>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="dropdown-item ff_cf_custom_period_option" type="button"
+                                    t-on-click="(event) => this.onPeriodTypeClick('custom', event)">
+                                <i t-if="this.state.periodType === 'custom'" class="oi oi-fw oi-check me-2"/>
+                                <i t-else="" class="oi oi-fw me-2"/>
+                                Custom Dates
+                            </button>
+                            <div t-if="this.state.periodType === 'custom'" class="px-3 py-2">
+                                <label class="form-label">Start Date
+                                    <input class="form-control" type="date" t-att-value="this.state.customDateFrom"
+                                           t-on-change="(ev) => this.onCustomDateChange('customDateFrom', ev)"/>
+                                </label>
+                                <label class="form-label mb-0">End Date
+                                    <input class="form-control" type="date" t-att-value="this.state.customDateTo"
+                                           t-on-change="(ev) => this.onCustomDateChange('customDateTo', ev)"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <span class="oi oi-fw oi-filled" data-icon="tune"/>
+                            <t t-if="this.state.targetMove === 'posted'">Posted Entries</t>
+                            <t t-elif="this.state.targetMove === 'draft'">Draft Entries</t>
+                            <t t-else="">All Entries</t>
+                        </button>
+                        <div class="dropdown-menu p-3 ff_cf_state_menu">
+                            <button class="dropdown-item" type="button" t-on-click="() => this.onTargetMoveChange('posted')">Posted Entries</button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.onTargetMoveChange('draft')">Draft Entries</button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.onTargetMoveChange('all')">All Entries</button>
+                            <div class="dropdown-divider"/>
+                            <label class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" t-att-checked="this.state.hideZero"
+                                       t-on-change="() => this.state.hideZero = !this.state.hideZero"/>
+                                <span class="form-check-label">Hide lines at 0</span>
+                            </label>
+                            <label class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" t-att-checked="this.state.journalFilterEnabled"
+                                       t-on-change="this.toggleJournalFilter"/>
+                                <span class="form-check-label">Filter Journals</span>
+                            </label>
+                            <select t-if="this.state.journalFilterEnabled" class="form-select" multiple="multiple" size="6"
+                                    t-on-change="this.onJournalsChange">
+                                <option t-foreach="this.state.journals" t-as="journal" t-key="journal.id"
+                                        t-att-value="journal.id" t-att-selected="this.state.journalIds.includes(journal.id)"
+                                        t-out="journal.name"/>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle ff_cf_scale" type="button"
+                                aria-label="Currency scale" data-bs-toggle="dropdown">
+                            <t t-if="this.state.scale === 'unit'">In .$</t>
+                            <t t-elif="this.state.scale === 'rounded'">In $</t>
+                            <t t-elif="this.state.scale === 'thousand'">In k$</t>
+                            <t t-else="">In M$</t>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setScale('unit')">
+                                <i t-if="this.state.scale === 'unit'" class="oi oi-fw oi-check me-2"/>
+                                In .$
+                            </button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setScale('rounded')">
+                                <i t-if="this.state.scale === 'rounded'" class="oi oi-fw oi-check me-2"/>
+                                In $
+                            </button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setScale('thousand')">
+                                <i t-if="this.state.scale === 'thousand'" class="oi oi-fw oi-check me-2"/>
+                                In k$
+                            </button>
+                            <button class="dropdown-item" type="button" t-on-click="() => this.setScale('million')">
+                                <i t-if="this.state.scale === 'million'" class="oi oi-fw oi-check me-2"/>
+                                In M$
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="o_content ff_cf_content">
+                <div t-if="this.state.loading" class="text-center p-5">
+                    <i class="fa fa-spinner fa-spin me-2"/>Loading…
+                </div>
+                <div t-else="" class="ff_cf_report_wrap">
+                    <table class="table table-hover ff_cf_table">
+                        <thead>
+                            <tr><th aria-label="Description"/><th class="text-end">Balance</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr class="ff_cf_summary_row">
+                                <td>Cash and cash equivalents at the beginning of the period</td>
+                                <td class="text-end" t-out="this.formatAmount(this.state.opening)"/>
+                            </tr>
+                            <tr class="ff_cf_band_row">
+                                <td>Net increase (decrease) in cash and cash equivalents</td>
+                                <td t-if="!this.isZero(this.state.netChange)" class="text-end" t-out="this.formatAmount(this.state.netChange)"/>
+                            </tr>
+                            <t t-foreach="this.visibleSections" t-as="section" t-key="section.activity">
+                                <tr class="ff_cf_section_row">
+                                    <td colspan="2" t-out="section.name"/>
+                                </tr>
+                                <tr t-if="!section.lines.length" class="ff_cf_empty_row">
+                                    <td class="ps-4 text-muted">No cash movement</td><td/>
+                                </tr>
+                                <t t-foreach="section.lines" t-as="line" t-key="line.key">
+                                    <tr class="ff_cf_line_row">
+                                        <td>
+                                            <button t-if="line.accounts.length" class="btn btn-link p-0 me-2 ff_cf_fold"
+                                                    t-on-click="() => this.toggleLine(section, line)">
+                                                <i t-att-class="this.isExpanded(section, line) ? 'fa fa-caret-down' : 'fa fa-caret-right'"/>
+                                            </button>
+                                            <span t-out="line.name"/>
+                                            <button t-if="!line.accounts.length and line.line_ids.length" class="btn btn-link btn-sm ms-2"
+                                                    t-on-click="() => this.openJournalItems(line.line_ids)">Journal Items</button>
+                                        </td>
+                                        <td class="text-end">
+                                            <button t-if="line.line_ids.length" class="btn btn-link p-0 ff_cf_amount"
+                                                    t-on-click="() => this.openJournalItems(line.line_ids)"
+                                                    t-out="this.formatAmount(line.amount)"/>
+                                            <span t-else="" t-out="this.formatAmount(line.amount)"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="this.isExpanded(section, line)" t-foreach="line.accounts" t-as="account" t-key="account.account_id"
+                                        class="ff_cf_account_row">
+                                        <td class="ps-5">
+                                            <span t-out="account.code"/> <span t-out="account.name"/>
+                                            <button t-if="account.line_ids.length" class="btn btn-link btn-sm ms-2"
+                                                    t-on-click="() => this.openJournalItems(account.line_ids)">Journal Items</button>
+                                        </td>
+                                        <td class="text-end" t-out="this.formatAmount(account.amount)"/>
+                                    </tr>
+                                </t>
+                            </t>
+                            <tr class="ff_cf_summary_row ff_cf_closing_row">
+                                <td>Cash and cash equivalents at the end of the period</td>
+                                <td class="text-end" t-out="this.formatAmount(this.state.closing)"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted small ff_cf_note">
+                        Cash and cash equivalents are the Bank and Cash accounts. The cash paid or received is classified
+                        by what it was paid for, following payments through reconciled transit accounts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="apr__account_report_balance_view" model="ir.ui.view">
+        <field name="name">Trial Balance</field>
+        <field name="model">account.balance.report</field>
+        <field name="inherit_id" ref="flousflow_accounting.apr__account_common_report_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='target_move']" position="after">
+                    <field name="display_account" widget="radio"/>
+                    <field name="cash_basis"/>
+                </xpath>
+                <xpath expr="//field[@name='journal_ids']" position="after">
+                    <field name="analytic_account_ids" widget="many2many_tags"
+                           invisible="1"
+                           options="{'no_open': True, 'no_create': True}"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="apr__action_account_balance_menu" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.balance.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="apr__account_report_balance_view"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_account" />
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="apr__action_interactive_trial_balance" model="ir.actions.client">
+        <field name="name">Trial Balance</field>
+        <field name="tag">flousflow_accounting.apr__trial_balance</field>
+        <field name="target">main</field>
+    </record>
+
+    <menuitem id="apr__menu_general_balance_report"
+              name="Trial Balance"
+              sequence="10"
+              parent="apr__menu_finance_reporting_ledgers"
+              action="apr__action_interactive_trial_balance"
+              groups="account.group_account_readonly,account.group_account_manager"/>
+
+</odoo>

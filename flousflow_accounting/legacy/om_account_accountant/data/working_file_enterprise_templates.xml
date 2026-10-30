@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="acc__working_file_check_enterprise_01" model="account.working.file.template">
+        <field name="sequence">10</field><field name="section">Treasury and financing</field>
+        <field name="name">Loans classification</field>
+        <field name="description">Ensure that loans are properly classified as current vs. non-current, and disclosed in accordance with Belgian GAAP. Loans payable within 1 year → Account 42. Loans &gt; 1 year → Account 17.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_02" model="account.working.file.template">
+        <field name="sequence">20</field><field name="section">Treasury and financing</field>
+        <field name="name">Loans recording</field>
+        <field name="description">Confirm that all loans recorded in the accounts actually exist and match the loan agreements.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_03" model="account.working.file.template">
+        <field name="sequence">30</field><field name="section">Treasury and financing</field>
+        <field name="name">No Negative Petty Cash Balances</field>
+        <field name="description">Review petty cash accounts to ensure they do not have credit balances. Investigate and justify any anomalies.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_04" model="account.working.file.template">
+        <field name="sequence">40</field><field name="section">Treasury and financing</field>
+        <field name="name">Provision for Impairment</field>
+        <field name="description">Identify potential losses and record impairment provisions where required.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_05" model="account.working.file.template">
+        <field name="sequence">50</field><field name="section">Treasury and financing</field>
+        <field name="name">Review of Guarantees</field>
+        <field name="description">Prepare a complete inventory of guarantees received or granted (pledges, mortgages, guarantees).</field>
+        <field name="evidence_required">True</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_06" model="account.working.file.template">
+        <field name="sequence">60</field><field name="section">Treasury and financing</field>
+        <field name="name">Settlement in Subsequent Period</field>
+        <field name="description">Confirm that cash and card receipts recorded at period end were settled in the following period. Verify the accounting treatment of discounting and factoring arrangements. Factoring is the sale of unpaid invoices (receivables) to a third party for immediate cash.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_07" model="account.working.file.template">
+        <field name="sequence">70</field><field name="section">Treasury and financing</field>
+        <field name="name">Outstanding Checks</field>
+        <field name="description">Identify checks that remain uncashed (lost, forgotten, or to be canceled).</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_08" model="account.working.file.template">
+        <field name="sequence">80</field><field name="section">Treasury and financing</field>
+        <field name="name">Foreign Currency Exchange Difference</field>
+        <field name="description">Review foreign exchange rates used at year end, compare them with the prior year, and verify the recognition and presentation of currency adjustments.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_09" model="account.working.file.template">
+        <field name="sequence">90</field><field name="section">Treasury and financing</field>
+        <field name="name">Analytical Review</field>
+        <field name="description">Compare account balances to identify significant differences, analyze trends, and assess performance against prior periods.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_10" model="account.working.file.template">
+        <field name="sequence">100</field><field name="section">Treasury and financing</field>
+        <field name="name">Cash Inventory Reconciliation</field>
+        <field name="description">Compare the general ledger cash account with the physical cash count provided by the client. Investigate and explain differences.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_11" model="account.working.file.template">
+        <field name="sequence">110</field><field name="section">Treasury and financing</field>
+        <field name="name">Clearing of Intercompany Transfers</field>
+        <field name="description">Ensure all internal bank transfer and intercompany clearing accounts are reconciled and supported.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_12" model="account.working.file.template">
+        <field name="sequence">120</field><field name="section">Treasury and financing</field>
+        <field name="name">Missing Document in Bank Transaction</field>
+        <field name="description">Review bank transactions that are not associated with invoices and ensure the corresponding documents are created in Odoo.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_13" model="account.working.file.template">
+        <field name="sequence">130</field><field name="section">Treasury and financing</field>
+        <field name="name">Bank Statements</field>
+        <field name="description">Collect missing bank statements, reconcile them with internal records, and resolve differences.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_14" model="account.working.file.template">
+        <field name="sequence">140</field><field name="section">Treasury and financing</field>
+        <field name="name">Financial Provisions Review</field>
+        <field name="description">Validate recognition and classification of financial provisions and reversals. Ensure all entries are properly justified.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_15" model="account.working.file.template">
+        <field name="sequence">150</field><field name="section">Treasury and financing</field>
+        <field name="name">Marketable Securities Review</field>
+        <field name="description">Confirm proper classification, fair value measurement, and accounting treatment of disposals of marketable securities.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_16" model="account.working.file.template">
+        <field name="sequence">160</field><field name="section">Treasury and financing</field>
+        <field name="name">Analytical Review of Bank Charges</field>
+        <field name="description">Perform an analytical review of bank charges. Confirm consistent accounting treatment and explain significant changes.</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_17" model="account.working.file.template">
+        <field name="sequence">170</field><field name="section">Fixed Assets</field>
+        <field name="name">Subsidiaries and Investments Summary</field>
+        <field name="description">Prepare a summary of subsidiaries and investments, including ownership percentages, acquisition values, net equity, earnings, and dividends.</field>
+        <field name="evidence_required">True</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_18" model="account.working.file.template">
+        <field name="sequence">180</field><field name="section">Fixed Assets</field>
+        <field name="name">Asset Movements and Accounting Treatment</field>
+        <field name="description">Identify acquisitions, disposals, write-offs, and other movements. Verify accounting treatment, depreciation, and capital gains.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_19" model="account.working.file.template">
+        <field name="sequence">190</field><field name="section">Fixed Assets</field>
+        <field name="name">Review Depreciation Periods for New Acquisitions</field>
+        <field name="description">Check depreciation periods for new acquisitions against similar assets. Document changes in accounting methods.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_20" model="account.working.file.template">
+        <field name="sequence">200</field><field name="section">Fixed Assets</field>
+        <field name="name">Fixed Assets Analytical Review</field>
+        <field name="description">Analyze changes in fixed assets and depreciation between year N and year N-1.</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_21" model="account.working.file.template">
+        <field name="sequence">210</field><field name="section">Regulatory</field>
+        <field name="name">Events of the Period</field>
+        <field name="description">Summarize the main events that occurred during this fiscal period.</field>
+        <field name="evidence_required">True</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_22" model="account.working.file.template">
+        <field name="sequence">220</field><field name="section">Regulatory</field>
+        <field name="name">Suspense Accounts</field>
+        <field name="description">Clear suspense accounts regularly, investigate unallocated or pending transactions, and document unresolved items.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_23" model="account.working.file.template">
+        <field name="sequence">230</field><field name="section">Regulatory</field>
+        <field name="name">Accounting Process</field>
+        <field name="description">Document the current accounting processes, especially where they are performed internally.</field>
+        <field name="evidence_required" eval="True"/>
+    </record>
+    <record id="acc__working_file_check_enterprise_24" model="account.working.file.template">
+        <field name="sequence">240</field><field name="section">Regulatory</field>
+        <field name="name">Asset Register</field>
+        <field name="description">Summarize the main events that occurred during this fiscal period.</field>
+        <field name="evidence_required" eval="True"/>
+    </record>
+    <record id="acc__working_file_check_enterprise_25" model="account.working.file.template">
+        <field name="sequence">250</field><field name="section">Regulatory</field>
+        <field name="name">Monitoring of Depreciation</field>
+        <field name="description">Ensure compliance with local tax rules on depreciation. Verify that depreciation methods, periods, and start dates meet tax requirements, including linear depreciation and pro rata temporis application, and do not use double declining for tax purposes.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_26" model="account.working.file.template">
+        <field name="sequence">260</field><field name="section">Regulatory</field>
+        <field name="name">Reconcile Tax Payables with Tax Filings</field>
+        <field name="description">Reconcile tax payables with the latest official filings. Analyze variances, verify subsequent payments, and document unsettled amounts or disputes.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_27" model="account.working.file.template">
+        <field name="sequence">270</field><field name="section">Regulatory</field>
+        <field name="name">VAT Rate Compliance</field>
+        <field name="description">Ensure the VAT rates applied are consistent with the company's activities.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_28" model="account.working.file.template">
+        <field name="sequence">280</field><field name="section">Regulatory</field>
+        <field name="name">Tax Deductions and Credits Eligibility</field>
+        <field name="description">Identify applicable tax relief programs, verify eligibility, calculate benefits, validate supporting documentation, and monitor refund claims.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_29" model="account.working.file.template">
+        <field name="sequence">290</field><field name="section">Regulatory</field>
+        <field name="name">Foreign Operations</field>
+        <field name="description">Review and reconcile intra-EU and international export and import operations for compliance and completeness.</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_30" model="account.working.file.template">
+        <field name="sequence">300</field><field name="section">Sales</field>
+        <field name="name">Revenue and Receivables Review</field>
+        <field name="description">Analyze changes in revenue and trade receivables between year N and year N-1.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_31" model="account.working.file.template">
+        <field name="sequence">310</field><field name="section">Sales</field>
+        <field name="name">Year-End Revenue Cutoff Analysis</field>
+        <field name="description">Review sales recorded in the final month, identify services delivered in the next period, estimate deferred revenue, and document the calculation.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_32" model="account.working.file.template">
+        <field name="sequence">320</field><field name="section">Sales</field>
+        <field name="name">Overdue Receivables and Follow-Up</field>
+        <field name="description">For high-risk receivables over 60 days, check for documented follow-up, negotiated payment plans, and impairment provisions where recovery is doubtful.</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_33" model="account.working.file.template">
+        <field name="sequence">330</field><field name="section">Inventory</field>
+        <field name="name">Obtain Signed Inventory Valuation</field>
+        <field name="description">Obtain a detailed physical inventory, with valuation and signature from the company manager.</field>
+        <field name="evidence_required">True</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_34" model="account.working.file.template">
+        <field name="sequence">340</field><field name="section">Inventory</field>
+        <field name="name">Inventory Analytical Review</field>
+        <field name="description">Analyze changes in inventory assets between year N and year N-1.</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_35" model="account.working.file.template">
+        <field name="sequence">350</field><field name="section">Purchases</field>
+        <field name="name">Trade Payables Analytical Review</field>
+        <field name="description">Perform a year-over-year analysis of trade payables and explain significant changes.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_36" model="account.working.file.template">
+        <field name="sequence">360</field><field name="section">Purchases</field>
+        <field name="name">Foreign Currency Payables</field>
+        <field name="description">Revalue foreign currency payables at the year-end closing rate and ensure unrealized exchange differences are recorded correctly in profit or loss in accordance with Belgian GAAP.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_37" model="account.working.file.template">
+        <field name="sequence">370</field><field name="section">Purchases</field>
+        <field name="name">Investigate Unusual Vendor Balances</field>
+        <field name="description">Identify and explain significant or unusual vendor balances, especially debit balances.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_38" model="account.working.file.template">
+        <field name="sequence">380</field><field name="section">Purchases</field>
+        <field name="name">Payables Settlement</field>
+        <field name="description">Ensure all payables outstanding at year end are settled correctly in the following period.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_39" model="account.working.file.template">
+        <field name="sequence">390</field><field name="section">Purchases</field>
+        <field name="name">Review Overdue Payables</field>
+        <field name="description">Review payables overdue by more than 60 days and ensure all amounts are recorded correctly.</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_40" model="account.working.file.template">
+        <field name="sequence">400</field><field name="section">Capital</field>
+        <field name="name">Allocation of Prior-Year Result to Equity</field>
+        <field name="description">Review how the prior-year result (N-1) was allocated, especially any reclassification to capital or reserves.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_41" model="account.working.file.template">
+        <field name="sequence">410</field><field name="section">Capital</field>
+        <field name="name">Equity Account Movements vs. Legal Documents</field>
+        <field name="description">Ensure accounting entries in equity accounts agree with their supporting legal documents.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_42" model="account.working.file.template">
+        <field name="sequence">420</field><field name="section">Capital</field>
+        <field name="name">Risk Provisioning and Provision Movement Schedule</field>
+        <field name="description">Prepare a detailed provision schedule and ensure all risks are identified and properly provisioned.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_43" model="account.working.file.template">
+        <field name="sequence">430</field><field name="section">Capital</field>
+        <field name="name">Legal Reserve and Dividend Eligibility</field>
+        <field name="description">Verify that the legal reserve is properly funded and dividends meet legal requirements, including where formation costs remain unamortized.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_44" model="account.working.file.template">
+        <field name="sequence">440</field><field name="section">Capital</field>
+        <field name="name">Minimum Share Capital Compliance</field>
+        <field name="description">Verify that the company's share capital meets or exceeds the legal minimum for its corporate form.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_45" model="account.working.file.template">
+        <field name="sequence">450</field><field name="section">Capital</field>
+        <field name="name">Verify Dividend Payments</field>
+        <field name="description">Ensure declared dividends have actually been paid to shareholders.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_46" model="account.working.file.template">
+        <field name="sequence">460</field><field name="section">Capital</field>
+        <field name="name">Intercompany Account Reconciliation</field>
+        <field name="description">Reconcile balances between related entities to support accurate group accounting and elimination of intercompany transactions.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_47" model="account.working.file.template">
+        <field name="sequence">470</field><field name="section">Capital</field>
+        <field name="name">Annual General Meeting Minutes on Dividend Distribution</field>
+        <field name="description">Obtain and archive signed annual general meeting minutes documenting the distribution of the prior-year result.</field>
+        <field name="evidence_required">True</field>
+    </record>
+
+    <record id="acc__working_file_check_enterprise_48" model="account.working.file.template">
+        <field name="sequence">480</field><field name="section">Operating Expenses</field>
+        <field name="name">Meal Expense Adjustments</field>
+        <field name="description">Ensure the deduction for business meals is within the legal limit.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_49" model="account.working.file.template">
+        <field name="sequence">490</field><field name="section">Operating Expenses</field>
+        <field name="name">Non-Recoverable VAT: Gross Accounting</field>
+        <field name="description">Ensure non-deductible expenses are recorded gross, including the related VAT.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_50" model="account.working.file.template">
+        <field name="sequence">500</field><field name="section">Operating Expenses</field>
+        <field name="name">Review for Capitalizable Expenses</field>
+        <field name="description">Identify expenses that should have been capitalized under the applicable accounting standards.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_51" model="account.working.file.template">
+        <field name="sequence">510</field><field name="section">Operating Expenses</field>
+        <field name="name">Travel and Entertainment Expenses</field>
+        <field name="description">Review travel and entertainment expenses and ensure every entry is supported by valid documentation.</field>
+    </record>
+    <record id="acc__working_file_check_enterprise_52" model="account.working.file.template">
+        <field name="sequence">520</field><field name="section">Operating Expenses</field>
+        <field name="name">Operating Expenses Analytical Review</field>
+        <field name="description">Compare current-year and prior-year expense trends and explain significant variances.</field>
+    </record>
+</odoo>

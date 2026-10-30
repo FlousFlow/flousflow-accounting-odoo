@@ -1,26 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of FlousFlow Accounting
-from . import test_chart_template
-from . import test_reports
-from . import test_annual_report
-from . import test_assets
-from . import test_budget
-from . import test_followup
-from . import test_fiscal_recurring
-from . import test_dashboard
-from . import test_financial_report
-from . import test_security
-from . import test_loans
-from . import test_working_files
-from . import test_period_close
-from . import test_accrual_review
-from . import test_lock_dates
-from . import test_community_independence
-from . import test_bank_reconciliation
-from . import test_open_item_reconciliation
-from . import test_tax_return
-from . import test_payment_batch
-from . import test_revaluation
-from . import test_standard_app_integrations
-from . import test_branch_analytic
-from . import test_branch_analytic_flow
+from ..legacy.accounting_pdf_reports import tests as _accounting_pdf_reports_tests
+from ..legacy.flousflow_branch_analytic import tests as _flousflow_branch_analytic_tests
+from ..legacy.om_account_asset import tests as _om_account_asset_tests
+from ..legacy.om_account_budget import tests as _om_account_budget_tests
+from ..legacy.om_fiscal_year import tests as _om_fiscal_year_tests
+from ..legacy.om_recurring_payments import tests as _om_recurring_payments_tests
+from ..legacy.om_account_daily_reports import tests as _om_account_daily_reports_tests
+from ..legacy.om_account_followup import tests as _om_account_followup_tests
+from ..legacy.om_account_reconcile import tests as _om_account_reconcile_tests
+from ..legacy.om_account_cash_forecast import tests as _om_account_cash_forecast_tests
+from ..legacy.om_account_check_printing import tests as _om_account_check_printing_tests
+from ..legacy.om_currency_rate_update import tests as _om_currency_rate_update_tests
+from ..legacy.om_currency_revaluation import tests as _om_currency_revaluation_tests
+from ..legacy.om_account_bank_statement_import import tests as _om_account_bank_statement_import_tests
+from ..legacy.om_account_bill_ocr import tests as _om_account_bill_ocr_tests
+from ..legacy.om_spreadsheet_account import tests as _om_spreadsheet_account_tests
+from ..legacy.om_spreadsheet_account_asset import tests as _om_spreadsheet_account_asset_tests
+from ..legacy.om_spreadsheet_account_budget import tests as _om_spreadsheet_account_budget_tests
+from ..legacy.om_spreadsheet_account_followup import tests as _om_spreadsheet_account_followup_tests
+from ..legacy.om_account_accountant import tests as _om_account_accountant_tests

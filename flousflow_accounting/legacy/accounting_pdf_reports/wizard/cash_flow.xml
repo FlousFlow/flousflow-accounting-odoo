@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="apr__account_cash_flow_report_view" model="ir.ui.view">
+        <field name="name">Cash Flow Statement</field>
+        <field name="model">account.cash.flow.report</field>
+        <field name="inherit_id" ref="flousflow_accounting.apr__account_common_report_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='target_move']" position="after">
+                <field name="display_detail" widget="radio"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="apr__action_account_cash_flow_report" model="ir.actions.act_window">
+        <field name="name">Cash Flow Statement</field>
+        <field name="res_model">account.cash.flow.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="apr__account_cash_flow_report_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="apr__action_interactive_cash_flow_report" model="ir.actions.client">
+        <field name="name">Cash Flow Statement</field>
+        <field name="tag">flousflow_accounting.apr__cash_flow</field>
+        <field name="target">main</field>
+    </record>
+
+    <menuitem id="apr__menu_account_report_cash_flow"
+              name="Cash Flow Statement"
+              sequence="30"
+              action="apr__action_interactive_cash_flow_report"
+              parent="account.account_reports_legal_statements_menu"
+              groups="account.group_account_readonly,account.group_account_manager"/>
+
+</odoo>

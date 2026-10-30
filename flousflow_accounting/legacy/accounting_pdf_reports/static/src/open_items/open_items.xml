@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.apr__OpenItemsReport" owl="1">
+        <div class="o_action ff_open_items_report">
+            <div class="ff_open_items_toolbar">
+                <button class="btn btn-primary" t-on-click="this.printReport">Print</button>
+                <h2>Open Items</h2>
+                <div class="dropdown">
+                    <button class="btn btn-secondary" type="button" aria-label="Report options"
+                            t-att-aria-expanded="this.state.settingsOpen"
+                            t-on-click="() => this.state.settingsOpen = !this.state.settingsOpen">
+                        <i class="fa fa-cog"/>
+                    </button>
+                    <div t-if="this.state.settingsOpen" class="dropdown-menu show">
+                        <button class="dropdown-item" t-on-click="this.exportXlsx">XLSX</button>
+                    </div>
+                </div>
+                <div class="ff_open_items_filters">
+                    <input class="form-control" type="date" aria-label="As of date"
+                           t-att-value="this.state.dateFrom"
+                           t-on-change="(ev) => this.onFilterChange('dateFrom', ev)"/>
+                    <select class="form-select" aria-label="Account"
+                            t-att-value="this.state.resultSelection"
+                            t-on-change="(ev) => this.onFilterChange('resultSelection', ev)">
+                        <option value="trade">Trade Partners</option>
+                        <option value="customer">Receivable</option>
+                        <option value="supplier">Payable</option>
+                    </select>
+                    <select class="form-select" aria-label="Target moves"
+                            t-att-value="this.state.targetMove"
+                            t-on-change="(ev) => this.onFilterChange('targetMove', ev)">
+                        <option value="posted">Posted Entries</option>
+                        <option value="all">All Entries</option>
+                    </select>
+                    <select class="form-select ff_open_items_scale" aria-label="Currency scale"
+                            t-att-value="this.state.scale"
+                            t-on-change="(ev) => this.state.scale = ev.target.value">
+                        <option value="unit">In .$</option>
+                        <option value="rounded">In $</option>
+                        <option value="thousand">In k$</option>
+                        <option value="million">In M$</option>
+                    </select>
+                </div>
+                <div class="ff_open_items_partner_filter">
+                    <input class="form-control" type="search" placeholder="Search partners"
+                           t-att-value="this.state.partnerQuery" t-on-input="this.searchPartners"/>
+                    <div t-if="this.state.partnerOptions.length" class="ff_open_items_partner_options">
+                        <button t-foreach="this.state.partnerOptions" t-as="partner" t-key="partner.id"
+                                class="dropdown-item" t-on-click="() => this.addPartner(partner)"
+                                t-out="partner.name"/>
+                    </div>
+                    <span t-foreach="this.state.selectedPartners" t-as="partner" t-key="partner.id"
+                          class="badge text-bg-secondary me-1">
+                        <t t-out="partner.name"/>
+                        <button class="btn-close btn-close-white ms-1" aria-label="Remove partner"
+                                t-on-click="() => this.removePartner(partner.id)"/>
+                    </span>
+                </div>
+            </div>
+            <div class="o_content ff_open_items_content">
+                <div t-if="this.state.unpostedCount" class="alert alert-info alert-dismissible">
+                    There are <strong t-out="this.state.unpostedCount"/> unposted Journal Entries prior to or included in this period.
+                </div>
+                <div t-if="this.state.loading" class="text-center p-5">
+                    <i class="fa fa-spinner fa-spin me-2"/>Loading…
+                </div>
+                <div t-else="" class="table-responsive">
+                    <table class="table table-hover ff_open_items_table">
+                        <thead>
+                            <tr>
+                                <th>No Reminder</th>
+                                <th>Invoice Date</th>
+                                <th>Due Date</th>
+                                <th>Journal Item</th>
+                                <th class="text-end">Amount</th>
+                                <th class="text-end">Amount Currency</th>
+                                <th class="text-end">Residual</th>
+                                <th class="text-end">Residual Currency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-if="!this.state.rows.length">
+                                <td colspan="8" class="text-center text-muted py-5">No data found</td>
+                            </tr>
+                            <t t-foreach="this.state.rows" t-as="row" t-key="row.partner_id">
+                                <tr class="ff_open_items_partner_row">
+                                    <td colspan="4">
+                                        <button class="btn btn-link p-0 me-2" t-on-click="() => this.togglePartner(row)">
+                                            <i t-att-class="this.state.expandedIds.includes(row.partner_id) ? 'fa fa-caret-down' : 'fa fa-caret-right'"/>
+                                        </button>
+                                        <strong t-out="row.name"/>
+                                        <button class="btn btn-link btn-sm ms-2" t-on-click="() => this.openPartner(row.partner_id)">Partner</button>
+                                        <button class="btn btn-link btn-sm" t-on-click="() => this.openJournalItems(row)">Journal Items</button>
+                                        <button t-if="this.state.canSendReminder" class="btn btn-link btn-sm"
+                                                t-on-click="() => this.sendReminder(row)">Send Reminder</button>
+                                    </td>
+                                    <td class="text-end" t-out="this.formatAmount(row.amount)"/>
+                                    <td class="text-end"/>
+                                    <td class="text-end fw-bold" t-out="this.formatAmount(row.residual)"/>
+                                    <td class="text-end"/>
+                                </tr>
+                                <tr t-if="this.state.expandedIds.includes(row.partner_id)"
+                                    t-foreach="row.lines" t-as="line" t-key="line.id" class="ff_open_items_detail_row">
+                                    <td>
+                                        <input type="checkbox" t-att-checked="line.no_reminder"
+                                               t-att-disabled="!this.state.canEditReminder"
+                                               t-on-change="(ev) => this.toggleNoReminder(line, ev)"
+                                               t-att-aria-label="'No Reminder: ' + line.label"/>
+                                    </td>
+                                    <td t-out="this.formatDate(line.invoice_date)"/>
+                                    <td t-out="this.formatDate(line.due_date)"/>
+                                    <td><button class="btn btn-link p-0" t-on-click="() => this.openMove(line)" t-out="line.label"/></td>
+                                    <td class="text-end" t-out="this.formatAmount(line.amount)"/>
+                                    <td class="text-end" t-out="this.formatAmount(line.amount_currency, line.currency_id)"/>
+                                    <td class="text-end" t-out="this.formatAmount(line.residual)"/>
+                                    <td class="text-end" t-out="this.formatAmount(line.residual_currency, line.currency_id)"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="4">Total Open Items</td>
+                                <td class="text-end" t-out="this.formatAmount(this.state.totals.amount)"/>
+                                <td class="text-end"/>
+                                <td class="text-end" t-out="this.formatAmount(this.state.totals.residual)"/>
+                                <td class="text-end"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

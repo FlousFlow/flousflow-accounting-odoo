@@ -1,0 +1,52 @@
+.ff_partner_ledger {
+ min-width:0;
+ .ff_pl_toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:.75rem;padding:.75rem 1.5rem;border-bottom:1px solid #dee2e6;background:#fff}
+ .ff_pl_settings{position:relative}.ff_pl_settings .dropdown-menu{inset-inline-start:0;inset-inline-end:auto}
+ .ff_pl_toolbar h2{margin:0;white-space:nowrap;font-size:1.25rem}.ff_pl_filters{display:flex;align-items:center;flex:1 1 36rem;flex-wrap:wrap;gap:.5rem;margin-inline-start:auto;min-width:0}
+ .ff_pl_filters select{width:auto;max-width:100%}.ff_pl_filters > *{min-width:0}.ff_pl_period{width:16rem;max-width:100%}.ff_pl_search{width:14rem;max-width:100%}.ff_pl_scale{min-width:6rem}
+ .ff_pl_partner_filter{position:relative}.ff_pl_partner_menu{min-width:19rem;max-height:25rem;overflow-y:auto}.ff_pl_partner_menu .form-check{padding-inline-start:1.5rem}
+ .ff_pl_move_actions{position:relative}.ff_pl_move_actions .dropdown-menu{inset-inline-start:0;inset-inline-end:auto}
+ .ff_pl_selected_partners{max-width:90rem;margin:.75rem auto;display:flex;gap:.4rem;flex-wrap:wrap}
+ .ff_pl_header{display:flex;justify-content:space-between;gap:.75rem;max-width:90rem;width:calc(100% - 2rem);margin:1.25rem auto .75rem;min-width:0}
+ .ff_pl_table_wrap{width:calc(100% - 2rem);max-width:90rem;min-width:0;margin:0 auto;padding:1rem 1.5rem;background:#fff;border:1px solid #dee2e6;border-radius:.25rem;overflow-x:auto;overscroll-behavior-inline:contain}
+ .ff_pl_table{min-width:68rem;margin:0}.ff_pl_table th,.ff_pl_table td{white-space:nowrap}.ff_pl_partner_row{background:#e9ecef;border-top:2px solid #d8dde3}
+}
+@media (max-width: 1100px) {
+ .ff_partner_ledger .ff_pl_toolbar{padding:.75rem 1rem}
+ .ff_partner_ledger .ff_pl_toolbar h2{flex:1 1 auto}
+ .ff_partner_ledger .ff_pl_filters{flex:1 1 100%;margin-inline-start:0}
+ .ff_partner_ledger .ff_pl_search{flex:1 1 13rem}
+ .ff_partner_ledger .ff_pl_filters > select{flex:1 1 9rem}
+ .ff_partner_ledger .ff_pl_period{flex:0 1 16rem}
+ .ff_partner_ledger .ff_pl_header,.ff_partner_ledger .ff_pl_table_wrap{width:calc(100% - 1.5rem)}
+ .ff_partner_ledger .ff_pl_table_wrap{padding:.75rem}
+}
+@media (max-width: 520px) {
+ .ff_partner_ledger .ff_pl_toolbar{gap:.5rem;padding:.65rem .75rem}
+ .ff_partner_ledger .ff_pl_toolbar h2{font-size:1.1rem}
+ .ff_partner_ledger .ff_pl_filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+ .ff_partner_ledger .ff_pl_filters > *,.ff_partner_ledger .ff_pl_period,.ff_partner_ledger .ff_pl_search{width:100%;max-width:100%}
+ .ff_partner_ledger .ff_pl_period,.ff_partner_ledger .ff_pl_search{grid-column:1 / -1}
+ .ff_partner_ledger .ff_pl_filters > select{min-width:0}
+ .ff_partner_ledger .ff_pl_header,.ff_partner_ledger .ff_pl_table_wrap{width:calc(100% - 1rem)}
+ .ff_partner_ledger .ff_pl_header{font-size:.9rem}
+ .ff_partner_ledger .ff_pl_table_wrap{padding:.5rem}
+}
+@media (max-width: 767px) {
+ .ff_partner_ledger .ff_pl_toolbar{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:.5rem;padding:.65rem .75rem}
+ .ff_partner_ledger .ff_pl_toolbar h2{min-width:0;overflow:hidden;text-overflow:ellipsis}
+ .ff_partner_ledger .ff_pl_mobile_filter_toggle{display:inline-flex;align-items:center;white-space:nowrap}
+ .ff_partner_ledger .ff_pl_filters{display:none}
+ .ff_partner_ledger .ff_pl_filters.is-open{display:grid;grid-column:1 / -1;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.5rem}
+ .ff_partner_ledger .ff_pl_filters.is-open > *{width:100%;min-width:0;max-width:100%}
+ .ff_partner_ledger .ff_pl_filters.is-open .ff_pl_period,
+ .ff_partner_ledger .ff_pl_filters.is-open .ff_pl_search,
+ .ff_partner_ledger .ff_pl_filters.is-open > .d-flex{grid-column:1 / -1}
+ .ff_partner_ledger .ff_pl_filters.is-open .ff_pl_period{width:100%}
+ .ff_partner_ledger .ff_pl_filters.is-open select{width:100%;min-width:0}
+ .ff_partner_ledger .ff_pl_partner_menu{width:19rem;max-width:calc(100vw - 2rem);min-width:0}
+}
+@media (min-width: 768px) {
+ .ff_partner_ledger .ff_pl_mobile_filter_toggle{display:none}
+}
+@media print{.ff_partner_ledger .ff_pl_toolbar{display:none!important}.ff_partner_ledger .ff_pl_table_wrap{max-width:none;border:0}}

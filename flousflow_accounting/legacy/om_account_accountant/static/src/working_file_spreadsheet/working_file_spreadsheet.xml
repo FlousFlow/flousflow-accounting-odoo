@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__WorkingFileSpreadsheet" owl="1">
+        <WorkingFileSpreadsheetEditor recordId="this.recordId" canEdit="this.canEdit"
+                                      onBack.bind="this.returnToWorkingFile"/>
+    </t>
+
+    <t t-name="flousflow_accounting.acc__WorkingFileSpreadsheetEditor" owl="1">
+        <div t-att-class="{'o_action': !this.props.embedded, 'o_working_file_spreadsheet': true, 'o_working_file_spreadsheet_embedded': this.props.embedded}"
+             class="d-flex flex-column">
+            <div class="d-flex align-items-center justify-content-between border-bottom p-2">
+                <div class="d-flex align-items-center gap-3">
+                    <button t-if="this.props.onBack" type="button" class="btn btn-secondary btn-sm"
+                            t-att-disabled="this.state.status == 'saving'"
+                            t-on-click="this.goBack">Back to Working File</button>
+                    <h2 t-if="this.props.onBack" class="mb-0" t-esc="this.state.name"/>
+                </div>
+                <div class="d-flex align-items-center gap-2" role="status" aria-live="polite">
+                    <span t-if="this.state.status == 'saving'">Saving…</span>
+                    <span t-elif="this.state.status == 'dirty'">Unsaved changes</span>
+                    <span t-elif="this.state.status == 'saved'">Saved</span>
+                    <span t-elif="this.state.status == 'readonly'">Read only</span>
+                    <span t-elif="this.state.status == 'error'" class="text-danger">Save failed</span>
+                    <button t-if="this.state.error and this.props.canEdit" type="button" class="btn btn-secondary btn-sm"
+                            t-on-click="this.retrySave">Retry</button>
+                </div>
+            </div>
+            <div t-if="this.state.loading" class="d-flex flex-grow-1 align-items-center justify-content-center">
+                <i class="fa fa-spinner fa-spin me-2"/> Loading spreadsheet…
+            </div>
+            <div t-elif="this.model" class="o_working_file_spreadsheet_editor flex-grow-1">
+                <SpreadsheetComponent model="this.model"/>
+            </div>
+        </div>
+    </t>
+</templates>

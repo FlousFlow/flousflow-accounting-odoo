@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="acc__view_account_working_file_balance_list" model="ir.ui.view">
+        <field name="name">account.working.file.balance.list</field>
+        <field name="model">account.working.file.balance</field>
+        <field name="arch" type="xml">
+            <list string="Balances" create="false" delete="false">
+                <field name="sequence" widget="handle" optional="hide"/>
+                <field name="account_code" string="Code"/>
+                <field name="account_name" string="Account" widget="ff_working_file_balance_account"/>
+                <field name="account_type" string="Type" optional="hide"/>
+                <field name="balance" string="Balance" sum="Total Balance"/>
+                <field name="balance_previous" string="Balance N-1" sum="Total Balance N-1"/>
+                <field name="variation" string="Var N-1" sum="Total Variation"/>
+                <field name="variation_percent" string="Var %"/>
+                <field name="last_comment" string="Last Comment" optional="show"/>
+                <field name="state" string="Status" widget="badge"/>
+                <field name="reviewer_id" optional="hide"/>
+                <field name="reviewed_on" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_balance_form" model="ir.ui.view">
+        <field name="name">account.working.file.balance.form</field>
+        <field name="model">account.working.file.balance</field>
+        <field name="arch" type="xml">
+            <form string="Account Balance Review">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="file_id"/>
+                            <field name="account_id"/>
+                            <field name="account_type"/>
+                            <field name="state" widget="badge"/>
+                        </group>
+                        <group>
+                            <field name="balance"/>
+                            <field name="balance_previous"/>
+                            <field name="variation"/>
+                            <field name="variation_percent"/>
+                            <field name="reviewer_id"/>
+                            <field name="reviewed_on"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="last_comment" placeholder="Add a review comment..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_balance_search" model="ir.ui.view">
+        <field name="name">account.working.file.balance.search</field>
+        <field name="model">account.working.file.balance</field>
+        <field name="arch" type="xml">
+            <search string="Balances">
+                <field name="account_code" string="Code"/>
+                <field name="account_name" string="Account"/>
+                <field name="last_comment" string="Last Comment"/>
+                <filter name="pending" string="Pending Review" domain="[('state', '=', 'pending')]"/>
+                <filter name="reviewed" string="Reviewed" domain="[('state', '=', 'reviewed')]"/>
+                <searchpanel>
+                    <field name="account_type" string="Type" select="multi" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_check_search" model="ir.ui.view">
+        <field name="name">account.working.file.check.search</field>
+        <field name="model">account.working.file.check</field>
+        <field name="arch" type="xml">
+            <search string="Review Checks">
+                <field name="name"/>
+                <field name="section"/>
+                <field name="note"/>
+                <filter name="pending" string="Pending Review" domain="[('state', '=', 'pending')]"/>
+                <filter name="reviewed" string="Reviewed" domain="[('state', '=', 'reviewed')]"/>
+                <filter name="supervised" string="Supervised" domain="[('state', '=', 'supervised')]"/>
+                <filter name="exception" string="Exception" domain="[('state', '=', 'exception')]"/>
+                <group name="group_by">
+                    <filter name="group_section" string="Section" context="{'group_by': 'section'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_check_list" model="ir.ui.view">
+        <field name="name">account.working.file.check.list</field>
+        <field name="model">account.working.file.check</field>
+        <field name="arch" type="xml">
+            <list string="Review Checks" editable="bottom" default_order="sequence,id">
+                <field name="sequence" widget="handle" optional="hide"/>
+                <field name="section"/>
+                <field name="name"/>
+                <field name="state" widget="badge"/>
+                <field name="reviewer_id" optional="hide"/>
+                <field name="reviewed_on" optional="hide"/>
+                <field name="note" optional="show"/>
+                <field name="evidence_attachment_count" string="Evidence Files" optional="show"/>
+                <field name="evidence" filename="evidence_filename" optional="hide"/>
+                <field name="evidence_filename" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_check_form" model="ir.ui.view">
+        <field name="name">account.working.file.check.form</field>
+        <field name="model">account.working.file.check</field>
+        <field name="arch" type="xml">
+            <form string="Review Check">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="file_id" readonly="1"/>
+                            <field name="section"/>
+                            <field name="name"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="reviewer_id" readonly="1"/>
+                            <field name="reviewed_on" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                    <field name="note" placeholder="Review notes and findings..."/>
+                    <group string="Supporting Evidence">
+                        <field name="evidence_attachment_ids" widget="many2many_binary"/>
+                    </group>
+                    <group string="Previously Uploaded Evidence" invisible="not evidence_filename">
+                        <field name="evidence" filename="evidence_filename" string="Legacy Evidence"/>
+                        <field name="evidence_filename" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_list" model="ir.ui.view">
+        <field name="name">account.working.file.list</field>
+        <field name="model">account.working.file</field>
+        <field name="arch" type="xml">
+            <list string="Working Files" decoration-success="state in ['reviewed', 'validated']">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="reviewed_count" string="Resolved"/>
+                <field name="check_count" string="Checks"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_kanban" model="ir.ui.view">
+        <field name="name">account.working.file.kanban</field>
+        <field name="model">account.working.file</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" default_order="date_to desc, id desc">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="check_count"/>
+                <field name="reviewed_count"/>
+                <field name="progress"/>
+                <field name="balance_line_count"/>
+                <field name="balance_reviewed_count"/>
+                <field name="balance_progress"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <strong class="text-truncate"><field name="name"/></strong>
+                            <field name="state" widget="badge"/>
+                        </div>
+                        <div class="text-muted mt-2">
+                            <field name="date_from"/> – <field name="date_to"/>
+                        </div>
+                        <div class="mt-2">
+                            <field name="balance_reviewed_count"/> / <field name="balance_line_count"/>
+                            <span>balances reviewed</span>
+                        </div>
+                        <field name="balance_progress" widget="progressbar"/>
+                        <div class="mt-2">
+                            <field name="reviewed_count"/> / <field name="check_count"/> <span>checks resolved</span>
+                        </div>
+                        <field name="progress" widget="progressbar"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_form" model="ir.ui.view">
+        <field name="name">account.working.file.form</field>
+        <field name="model">account.working.file</field>
+        <field name="arch" type="xml">
+            <form string="Working File">
+                <header>
+                    <button name="action_mark_reviewed" type="object" string="Mark Reviewed"
+                            class="btn-primary" groups="account.group_account_manager"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_validate" type="object" string="Validate"
+                            groups="account.group_account_manager"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_validate" type="object" string="Certify"
+                            class="btn-primary" groups="account.group_account_manager"
+                            invisible="state != 'reviewed'"/>
+                    <button name="action_reopen" type="object" string="Reopen"
+                            groups="account.group_account_manager"
+                            invisible="state == 'in_progress'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="in_progress,reviewed,validated" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cycles" name="checks">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <button name="action_open_checks" type="object" string="Open Checklist List"
+                                        icon="fa-list" invisible="not id"/>
+                            </div>
+                            <field name="check_ids" widget="ff_working_file_check_cards"
+                                   readonly="state == 'validated'"/>
+                        </page>
+                        <page string="Balances" name="balances">
+                            <group>
+                                <field name="balance_line_count" string="Accounts" readonly="1"/>
+                            </group>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <button name="action_open_balances" type="object" string="Review Balances"
+                                        class="btn-primary" invisible="not id"/>
+                                <button name="action_refresh_balance_lines" type="object" string="Refresh Accounts"
+                                        groups="account.group_account_user,account.group_account_manager"
+                                        invisible="not id or state == 'validated'"/>
+                            </div>
+                            <p class="text-muted" invisible="id">Save this working file to load the company's active account balances.</p>
+                            <field name="balance_line_ids" readonly="state == 'validated'">
+                                <list editable="bottom" create="false" delete="false" default_order="sequence,account_id">
+                                    <field name="sequence" widget="handle" optional="hide"/>
+                                    <field name="account_code" string="Code" readonly="1"/>
+                                    <field name="account_name" string="Account" widget="ff_working_file_balance_account" readonly="1"/>
+                                    <field name="account_type" string="Type" optional="hide" readonly="1"/>
+                                    <field name="balance" string="Balance" readonly="1"/>
+                                    <field name="balance_previous" string="Balance N-1" readonly="1"/>
+                                    <field name="variation" string="Var N-1" readonly="1"/>
+                                    <field name="variation_percent" string="Var %" readonly="1"/>
+                                    <field name="last_comment" string="Last Comment" optional="show"/>
+                                    <field name="state" string="Status" widget="badge"/>
+                                    <field name="reviewer_id" optional="hide" readonly="1"/>
+                                    <field name="reviewed_on" optional="hide" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Spreadsheet" name="spreadsheet">
+                            <div class="d-flex align-items-center gap-2">
+                                <button name="action_open_spreadsheet" type="object"
+                                        string="Open Spreadsheet" icon="fa-table"
+                                        class="btn-primary" invisible="not id"/>
+                                <span class="text-muted">Spreadsheet changes are saved automatically.</span>
+                            </div>
+                            <field name="spreadsheet_data" widget="ff_working_file_spreadsheet"
+                                   nolabel="1" readonly="state == 'validated'" invisible="not id"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="acc__view_account_working_file_search" model="ir.ui.view">
+        <field name="name">account.working.file.search</field>
+        <field name="model">account.working.file</field>
+        <field name="arch" type="xml">
+            <search string="Working Files">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter name="in_progress" string="In Progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="reviewed" string="Reviewed" domain="[('state', '=', 'reviewed')]"/>
+                <filter name="validated" string="Certified" domain="[('state', '=', 'validated')]"/>
+                <filter name="group_period" string="Start Date" context="{'group_by': 'date_from'}"/>
+                <filter name="group_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="acc__action_account_working_file" model="ir.actions.act_window">
+        <field name="name">Working Files</field>
+        <field name="res_model">account.working.file</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="acc__view_account_working_file_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create an accounting working file</p>
+            <p>Track period review checks, findings, and supporting evidence.</p>
+        </field>
+    </record>
+
+    <record id="acc__action_account_working_file_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="acc__view_account_working_file_kanban"/>
+        <field name="act_window_id" ref="acc__action_account_working_file"/>
+    </record>
+
+</odoo>

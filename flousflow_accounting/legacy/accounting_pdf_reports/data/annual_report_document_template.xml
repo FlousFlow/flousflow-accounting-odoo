@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="apr__annual_report_template_standard" model="account.annual.report.template">
+        <field name="name">Annual Report</field>
+        <field name="description">A reusable structure for an annual company report.</field>
+        <field name="sequence" eval="10"/>
+    </record>
+    <record id="apr__annual_report_template_standard_overview" model="account.annual.report.template.section">
+        <field name="template_id" ref="apr__annual_report_template_standard"/>
+        <field name="sequence" eval="10"/>
+        <field name="name">Company Overview</field>
+    </record>
+    <record id="apr__annual_report_template_standard_summary" model="account.annual.report.template.section">
+        <field name="template_id" ref="apr__annual_report_template_standard"/>
+        <field name="sequence" eval="20"/>
+        <field name="name">Executive Summary</field>
+        <field name="page_break_before" eval="True"/>
+    </record>
+    <record id="apr__annual_report_template_standard_performance" model="account.annual.report.template.section">
+        <field name="template_id" ref="apr__annual_report_template_standard"/>
+        <field name="sequence" eval="30"/>
+        <field name="name">Financial Performance</field>
+        <field name="page_break_before" eval="True"/>
+    </record>
+    <record id="apr__annual_report_template_standard_position" model="account.annual.report.template.section">
+        <field name="template_id" ref="apr__annual_report_template_standard"/>
+        <field name="sequence" eval="40"/>
+        <field name="name">Financial Position</field>
+    </record>
+    <record id="apr__annual_report_template_standard_cash_flow" model="account.annual.report.template.section">
+        <field name="template_id" ref="apr__annual_report_template_standard"/>
+        <field name="sequence" eval="50"/>
+        <field name="name">Cash Flow</field>
+        <field name="page_break_before" eval="True"/>
+    </record>
+    <record id="apr__annual_report_template_standard_notes" model="account.annual.report.template.section">
+        <field name="template_id" ref="apr__annual_report_template_standard"/>
+        <field name="sequence" eval="60"/>
+        <field name="name">Notes and Attachments</field>
+    </record>
+</odoo>

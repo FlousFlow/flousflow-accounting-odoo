@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="apr__action_interactive_customer_statement" model="ir.actions.client">
+        <field name="name">Customer Statement</field>
+        <field name="tag">flousflow_accounting.apr__customer_statement</field>
+        <field name="target">main</field>
+    </record>
+
+    <menuitem id="apr__menu_interactive_customer_statement"
+              name="Customer / Vendor Statement"
+              sequence="5"
+              parent="account.account_reports_partners_reports_menu"
+              action="apr__action_interactive_customer_statement"
+              groups="account.group_account_invoice,account.group_account_readonly,account.group_account_user,account.group_account_manager"/>
+</odoo>

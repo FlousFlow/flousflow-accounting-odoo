@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.apr__TaxReport" owl="1">
+        <div class="o_action ff_tax_report">
+            <div class="ff_tax_toolbar">
+                <button class="btn btn-primary" type="button" t-on-click="this.printReport">Print</button>
+                <h2>Tax Report</h2>
+                <div class="dropdown ms-auto">
+                    <button class="btn btn-link" type="button" title="Report actions" aria-label="Report actions"
+                            t-att-aria-expanded="this.state.settingsOpen ? 'true' : 'false'"
+                            t-on-click="() => this.state.settingsOpen = !this.state.settingsOpen">
+                        <i class="fa fa-cog"/>
+                    </button>
+                    <div t-if="this.state.settingsOpen" class="dropdown-menu dropdown-menu-end show">
+                        <button class="dropdown-item" type="button" t-on-click="this.exportXlsx">
+                            <i class="fa fa-file-excel-o me-2"/>XLSX
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="ff_tax_filters">
+                <label class="ff_tax_date">
+                    <span>Start Date</span>
+                    <input class="form-control" type="date" t-att-value="this.state.dateFrom"
+                           t-on-change="(ev) => { this.state.dateFrom = ev.target.value; this.loadReport(); }"/>
+                </label>
+                <label class="ff_tax_date">
+                    <span>End Date</span>
+                    <input class="form-control" type="date" t-att-value="this.state.dateTo"
+                           t-on-change="(ev) => { this.state.dateTo = ev.target.value; this.loadReport(); }"/>
+                </label>
+                <div class="dropdown ff_tax_comparison">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            t-att-class="this.state.comparisonMode !== 'none' ? 'btn-primary' : 'btn-outline-secondary'">
+                        Comparison
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end p-3">
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('none')">No Comparison</button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('previous_period')">Previous Period</button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('same_period_last_year')">Same Period Last Year</button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setComparisonMode('custom')">Custom Dates</button>
+                        <div t-if="this.state.comparisonMode === 'previous_period'" class="px-2 py-2">
+                            <label class="form-label mb-1">Previous Periods</label>
+                            <input class="form-control" type="number" min="1" max="12" step="1"
+                                   t-att-value="this.state.comparisonPeriods"
+                                   t-on-change="(ev) => this.updateComparison('comparisonPeriods', ev)"/>
+                        </div>
+                        <div t-if="this.state.comparisonMode !== 'none'" class="px-2 py-2">
+                            <label class="form-label mb-1">Request Period</label>
+                            <select class="form-select" t-att-value="this.state.comparisonSort"
+                                    t-on-change="(ev) => this.updateComparison('comparisonSort', ev)">
+                                <option value="descending">Descending</option>
+                                <option value="ascending">Ascending</option>
+                            </select>
+                        </div>
+                        <div t-if="this.state.comparisonMode === 'custom'" class="px-2 py-2">
+                            <label class="form-label">Comparison Start Date
+                                <input class="form-control" type="date" t-att-value="this.state.comparisonDateFrom"
+                                       t-on-change="(ev) => this.updateComparison('comparisonDateFrom', ev)"/>
+                            </label>
+                            <label class="form-label mb-0">Comparison End Date
+                                <input class="form-control" type="date" t-att-value="this.state.comparisonDateTo"
+                                       t-on-change="(ev) => this.updateComparison('comparisonDateTo', ev)"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <select class="form-select" aria-label="Target Moves" t-att-value="this.state.targetMove"
+                        t-on-change="(ev) => { this.state.targetMove = ev.target.value; this.loadReport(); }">
+                    <option value="posted">Posted Entries</option>
+                    <option value="all">All Entries</option>
+                </select>
+                <select class="form-select" aria-label="Report" t-att-value="this.state.reportView"
+                        t-on-change="(ev) => this.setReportView(ev.target.value)">
+                    <option value="general">General Tax Report</option>
+                    <option value="account_tax">Group by: Account &gt; Tax</option>
+                    <option value="tax_account">Group by: Tax &gt; Account</option>
+                </select>
+                <select class="form-select ff_tax_scale" aria-label="Currency Scale"
+                        t-att-value="this.state.scale" t-on-change="(ev) => this.state.scale = ev.target.value">
+                    <option t-foreach="this.scaleOptions" t-as="option" t-key="option.value"
+                            t-att-value="option.value" t-out="option.label"/>
+                </select>
+            </div>
+            <div class="o_content">
+                <div class="ff_tax_company" t-out="this.state.companyName"/>
+                <div t-if="this.state.draftCount &amp;&amp; this.state.targetMove === 'posted' &amp;&amp; !this.state.dismissedWarning"
+                     class="alert alert-info d-flex align-items-center justify-content-between" role="status">
+                    <span>There are <t t-out="this.state.draftCount"/> unposted journal entries in this period.</span>
+                    <button class="btn-close" type="button" aria-label="Close"
+                            t-on-click="() => this.state.dismissedWarning = true"/>
+                </div>
+                <div t-if="this.state.loading" class="text-center p-5">
+                    <i class="fa fa-spinner fa-spin me-2"/>Loading…
+                </div>
+                <div t-else="" class="ff_tax_table_wrap">
+                    <table class="table table-hover ff_tax_table">
+                        <thead>
+                            <tr t-if="this.periodColumns.length > 1">
+                                <th t-if="this.state.reportView === 'account_tax'" rowspan="2">Account</th>
+                                <th t-else="" rowspan="2">Tax</th>
+                                <th t-foreach="this.periodColumns" t-as="period" t-key="period.key" colspan="2" class="text-center" t-out="period.label"/>
+                            </tr>
+                            <tr t-if="this.periodColumns.length > 1">
+                                <t t-foreach="this.periodColumns" t-as="period" t-key="period.key + '-labels'">
+                                    <th class="text-end">Net</th><th class="text-end">Tax</th>
+                                </t>
+                            </tr>
+                            <tr t-else="">
+                                <th t-if="this.state.reportView === 'account_tax'">Account</th><th t-else="">Tax</th>
+                                <th class="text-end">Net</th><th class="text-end">Tax</th>
+                            </tr>
+                        </thead>
+                        <tbody t-if="this.state.reportView === 'general'">
+                            <t t-foreach="this.visibleGroups" t-as="group" t-key="group.key">
+                                <tr class="ff_tax_group"><th t-att-colspan="this.amountColumnCount" t-out="group.label"/></tr>
+                                <tr t-foreach="group.lines" t-as="line" t-key="line.tax_id">
+                                    <td class="ps-4">
+                                        <span t-out="line.name"/>
+                                        <button class="btn btn-link p-0 ms-1 ff_tax_row_action" type="button"
+                                                aria-label="Journal Items"
+                                                t-on-click="() => this.openJournalItems(line.tax_id, false, this.periodColumns[0])">
+                                            <i class="fa fa-ellipsis-v"/>
+                                        </button>
+                                    </td>
+                                    <t t-foreach="this.periodColumns" t-as="period" t-key="period.key">
+                                        <td class="text-end" t-out="this.periodAmount(group.key, line.tax_id, period, 'net')"/>
+                                        <td class="text-end" t-out="this.periodAmount(group.key, line.tax_id, period, 'tax')"/>
+                                    </t>
+                                </tr>
+                                <tr class="ff_tax_total">
+                                    <th class="ps-4" t-att-colspan="1">Total <t t-out="group.label"/></th>
+                                    <t t-foreach="this.periodColumns" t-as="period" t-key="period.key">
+                                        <th class="text-end" t-out="this.periodTotal(group.key, period, 'net')"/>
+                                        <th class="text-end" t-out="this.periodTotal(group.key, period, 'tax')"/>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr t-if="!this.visibleGroups.length">
+                                <td t-att-colspan="this.amountColumnCount" class="text-center text-muted py-5">No tax on this period.</td>
+                            </tr>
+                        </tbody>
+                        <tbody t-else="">
+                            <t t-foreach="this.visibleGroupedGroups" t-as="group" t-key="group.key">
+                                <tr class="ff_tax_group"><th t-att-colspan="this.amountColumnCount" t-out="group.label"/></tr>
+                                <t t-foreach="group.items" t-as="parent" t-key="parent.id">
+                                    <tr class="ff_tax_parent"><th t-att-colspan="this.amountColumnCount" t-out="parent.label"/></tr>
+                                    <tr t-foreach="parent.children" t-as="child" t-key="child.id">
+                                        <td class="ps-4">
+                                            <span t-out="child.label"/>
+                                            <button class="btn btn-link p-0 ms-1 ff_tax_row_action" type="button"
+                                                    aria-label="Journal Items"
+                                                    t-on-click="() => this.openJournalItems(this.state.reportView === 'account_tax' ? child.id : parent.id, this.state.reportView === 'account_tax' ? parent.id : child.id, this.periodColumns[0])">
+                                                <i class="fa fa-ellipsis-v"/>
+                                            </button>
+                                        </td>
+                                        <t t-foreach="this.periodColumns" t-as="period" t-key="period.key">
+                                            <td class="text-end">
+                                                <button class="btn btn-link p-0 ff_tax_drilldown" type="button"
+                                                        t-on-click="() => this.openJournalItems(this.state.reportView === 'account_tax' ? child.id : parent.id, this.state.reportView === 'account_tax' ? parent.id : child.id, period)"
+                                                        t-out="this.groupedAmount(group.key, parent.id, child.id, period, 'net')"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <button class="btn btn-link p-0 ff_tax_drilldown" type="button"
+                                                        t-on-click="() => this.openJournalItems(this.state.reportView === 'account_tax' ? child.id : parent.id, this.state.reportView === 'account_tax' ? parent.id : child.id, period)"
+                                                        t-out="this.groupedAmount(group.key, parent.id, child.id, period, 'tax')"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                                <tr class="ff_tax_total">
+                                    <th>Total <t t-out="group.label"/></th>
+                                    <t t-foreach="this.periodColumns" t-as="period" t-key="period.key">
+                                        <th class="text-end" t-out="this.periodTotal(group.key, period, 'net')"/>
+                                        <th class="text-end" t-out="this.periodTotal(group.key, period, 'tax')"/>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr t-if="!this.visibleGroupedGroups.length">
+                                <td t-att-colspan="this.amountColumnCount" class="text-center text-muted py-5">No tax on this period.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,71 @@
+<div class="container-fluid">
+
+
+
+<div class="bg-light rounded p-4 p-md-5 text-center my-4">
+    <h1>Currency Revaluation for Odoo 20 Community</h1>
+    <p>Restate what is open in a foreign currency at the rate of the closing date &mdash; the unpaid invoices, the unpaid bills and the accounts held in a foreign currency &mdash; as one adjustment entry on an unrealized gain and an unrealized loss account, reversed at the start of the next period.</p>
+    <div>
+        <span>Unrealized gains and losses</span>
+        <span>Closing rate</span>
+        <span>IAS 21</span>
+        <span>Community Edition</span>
+    </div>
+</div>
+
+<div class="my-5">
+    <span>Revalue</span>
+    <h2>See the adjustment before you post it</h2>
+    <p>Open Currency Revaluation from the Closing menu, pick the date and, if you want, the currencies to treat. The lines are computed as you type: for each account, partner and currency, what is open in the foreign currency, what it is worth in the books, what it is worth at the rate of that date, and the difference between the two.</p>
+    <ul>
+        <li><span>&#10003;</span> &nbsp;The receivable and payable accounts are revalued on what is left open on them, invoice by invoice and partner by partner.</li>
+        <li><span>&#10003;</span> &nbsp;The accounts held in a foreign currency, such as a foreign bank account, are revalued on the balance they hold.</li>
+        <li><span>&#10003;</span> &nbsp;Every currency other than the one of the company, or only the ones you name.</li>
+        <li><span>&#10003;</span> &nbsp;The total of the adjustment is shown before anything is posted.</li>
+        <li><span>&#10003;</span> &nbsp;A past period gives the same figures once the invoices have been paid: only what was matched on or before the revaluation date is deducted.</li>
+    </ul>
+    <div class="my-4">
+        <img src="currency_revaluation.png" alt="The revaluation, account by account, with the adjustment of each line."/></div>
+    <p>The revaluation, account by account, with the adjustment of each line.</p>
+</div>
+
+<div class="my-5">
+    <span>Entry</span>
+    <h2>One adjustment entry, reversed on its own</h2>
+    <p>Post Adjustment writes a single entry: the difference on each account against the unrealized gain account and the unrealized loss account. The amounts in the foreign currency do not move &mdash; only what they are worth does.</p>
+    <ul>
+        <li><span>&#10003;</span> &nbsp;Each line says which amount was revalued and at the rate of which date.</li>
+        <li><span>&#10003;</span> &nbsp;The entry is reversed at the start of the next period, so nothing is gained or lost until the invoices are paid.</li>
+        <li><span>&#10003;</span> &nbsp;A date can be revalued only once: the entry already posted on it is named, and has to be reversed or deleted first.</li>
+        <li><span>&#10003;</span> &nbsp;Only the accounting managers can post a revaluation.</li>
+        <li><span>&#10003;</span> &nbsp;The revaluation date is kept on the entry, so the adjustments are easy to find again.</li>
+    </ul>
+</div>
+
+<div class="my-5">
+    <span>Settings</span>
+    <h2>Set it up once, per company</h2>
+    <p>The journal of the adjustment entries, the unrealized gain account, the unrealized loss account and whether the entry is reversed are kept on the company and filled in by default in the wizard.</p>
+    <div class="my-4">
+        <img src="currency_settings.png" alt="The journal and the accounts of the revaluation, in the accounting settings."/></div>
+    <p>The journal and the accounts of the revaluation, in the accounting settings.</p>
+</div>
+
+<hr/>
+<hr/>
+
+<div>
+    <img src="odoo_mates.png" alt="Odoo Mates"/>
+    <h3>Keeping it simple</h3>
+    <h3>Email: <a href="mailto:odoomates@gmail.com">odoomates@gmail.com</a></h3>
+    <div>
+
+
+        <a target="_blank" href="https://www.youtube.com/channel/UCVKlUZP7HAhdQgs-9iTJklQ"><i class="fa fa-youtube-play"></i></a>
+    </div>
+</div>
+
+<hr/>
+<hr/>
+
+</div>

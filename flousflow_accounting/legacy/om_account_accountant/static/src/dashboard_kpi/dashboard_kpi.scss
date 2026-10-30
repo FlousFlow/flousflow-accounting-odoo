@@ -1,0 +1,16 @@
+.o_account_dashboard_kpis {
+    // The stock dashboard hides cards by a fixed priority at each breakpoint.
+    // Keep the tiles selected by the user visible so their saved order matters.
+    > .o_account_dashboard_kpi_card[data-kpi-id] {
+        display: flex;
+    }
+
+    > [data-kpi-id] {
+        display: flex;
+        cursor: grab;
+    }
+
+    > [data-kpi-id]:active {
+        cursor: grabbing;
+    }
+}

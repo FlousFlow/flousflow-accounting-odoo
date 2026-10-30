@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="apr__action_account_report_pl" model="ir.actions.act_window">
+        <field name="name">Profit and Loss</field>
+        <field name="res_model">accounting.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="apr__accounting_report_view"/>
+        <field name="target">new</field>
+        <field name="context" eval="{'default_account_report_id':ref('flousflow_accounting.apr__account_financial_report_profitandloss0')}"/>
+    </record>
+
+    <record id="apr__action_interactive_profit_and_loss" model="ir.actions.client">
+        <field name="name">Profit and Loss</field>
+        <field name="tag">flousflow_accounting.apr__financial_report</field>
+        <field name="context" eval="{'report_id': ref('flousflow_accounting.apr__account_financial_report_profitandloss0'), 'profit_loss_report_id': ref('flousflow_accounting.apr__account_financial_report_profitandloss0'), 'print_action_xmlid': 'flousflow_accounting.apr__action_account_report_pl'}"/>
+    </record>
+
+    <menuitem id="apr__menu_account_report_pl"
+              name="Profit and Loss"
+              sequence="20"
+              action="apr__action_interactive_profit_and_loss"
+              parent="account.account_reports_legal_statements_menu"
+              groups="account.group_account_readonly,account.group_account_manager"/>
+
+</odoo>

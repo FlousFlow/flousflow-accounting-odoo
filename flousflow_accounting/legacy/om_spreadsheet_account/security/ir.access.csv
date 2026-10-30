@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+spa__access_om_spreadsheet_aged_balance_readonly,om.spreadsheet.aged.balance readonly,om.spreadsheet.aged.balance,account.group_account_readonly,r,
+spa__access_om_spreadsheet_aged_balance_invoice,om.spreadsheet.aged.balance invoice,om.spreadsheet.aged.balance,account.group_account_invoice,r,
+spa__om_spreadsheet_aged_balance_company_rule,Aged balance: multi-company,om.spreadsheet.aged.balance,,r,"[('company_id', 'in', company_ids)]"

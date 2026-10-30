@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.acc__WorkingFileCheckCards" owl="1">
+        <div class="o_account_return_check_cards">
+            <div t-if="this.state.loading" class="text-muted py-3" role="status">
+                <i class="fa fa-spinner fa-spin me-2"/><t t-esc="this.loadingLabel"/>
+            </div>
+            <div t-elif="!this.state.sections.length" class="text-muted py-3">
+                <t t-esc="this.emptyLabel"/>
+            </div>
+            <section t-foreach="this.state.sections" t-as="section" t-key="section.name"
+                     class="o_account_return_check_section mb-4">
+                <h3 class="o_account_return_check_section_title" t-esc="section.name"/>
+                <article t-foreach="section.checks" t-as="check" t-key="check.id"
+                         class="o_account_return_check_card card mb-2"
+                         t-att-class="{'o_account_return_check_reviewed': check.state === 'reviewed' || check.state === 'supervised', 'o_account_return_check_exception': check.state === 'exception'}">
+                    <div class="o_account_return_check_card_layout">
+                        <div class="o_account_return_check_card_status">
+                            <Dropdown t-if="this.state.canWrite">
+                                <button type="button"
+                                        t-attf-class="btn {{ this.getStatusButtonClass(check.state) }} rounded-pill o_account_review_state_selection_badge_button"
+                                        t-att-aria-label="this.reviewStatusLabel + ': ' + this.getStatusLabel(check.state)">
+                                    <t t-esc="this.getStatusLabel(check.state)"/>
+                                </button>
+                                <t t-set-slot="content">
+                                    <t t-foreach="this.getEditableStatusOptions()" t-as="option" t-key="option.value">
+                                        <DropdownItem
+                                            class="'d-flex text-black align-items-center o_account_review_state_selection_badge_dropdown_item'"
+                                            onSelected="() => this.onStatusChange(check, option.value)">
+                                            <span class="rounded-circle me-2"
+                                                  style="width: 10px; height: 10px;"
+                                                  t-att-class="this.getStatusItemClass(option)"/>
+                                            <span t-esc="option.label"/>
+                                        </DropdownItem>
+                                    </t>
+                                </t>
+                            </Dropdown>
+                            <button t-else="" type="button" disabled="disabled"
+                                    t-attf-class="btn {{ this.getStatusButtonClass(check.state) }} rounded-pill o_account_review_state_selection_badge_button">
+                                <t t-esc="this.getStatusLabel(check.state)"/>
+                            </button>
+                        </div>
+                        <div class="o_account_return_check_card_content">
+                            <h4 class="o_account_return_check_name" t-esc="check.name"/>
+                            <p t-if="check.description" class="o_account_return_check_description mb-2"
+                               t-esc="check.description"/>
+                            <textarea t-if="this.state.canWrite" class="form-control o_account_return_check_note"
+                                      rows="1" t-att-value="check.note"
+                                      t-att-placeholder="this.addNotesLabel"
+                                      t-att-aria-label="this.notesLabel + ': ' + check.name"
+                                      t-on-input="(event) => this.onNoteInput(check, event)"
+                                      t-on-blur="() => this.saveNote(check)"/>
+                            <div t-else="" class="o_account_return_check_note_readonly"
+                                 t-esc="check.note || this.addNotesLabel"/>
+                            <div t-if="check.evidence_filename" class="text-muted small mt-2">
+                                <i class="fa fa-paperclip me-1"/>
+                                <span t-esc="check.evidence_filename"/>
+                            </div>
+                            <div t-if="check.evidence_required || check.attachments.length"
+                                 class="o_account_return_check_evidence mt-2">
+                                <FileInput t-if="this.state.canWrite"
+                                           resModel="'account.working.file.check'"
+                                           resId="check.id" multiUpload="true"
+                                           onUpload="(files) => this.onFilesUploaded(check, files)">
+                                    <button type="button" class="btn btn-link p-0 o_account_return_check_upload">
+                                        <i class="fa fa-upload me-1"/>
+                                        <t t-esc="this.uploadFileLabel"/>
+                                    </button>
+                                </FileInput>
+                                <ul t-if="check.attachments.length" class="list-unstyled mb-0 mt-1">
+                                    <li t-foreach="check.attachments" t-as="attachment" t-key="attachment.id"
+                                        class="d-flex align-items-center gap-2 small">
+                                        <a t-att-href="this.getAttachmentUrl(attachment)"
+                                           t-esc="attachment.name"/>
+                                        <button t-if="this.state.canWrite" type="button"
+                                                class="btn btn-link p-0 text-danger"
+                                                t-att-aria-label="this.removeFileLabel"
+                                                t-on-click.stop="() => this.removeEvidence(check, attachment)">
+                                            <i class="fa fa-times"/>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </t>
+</templates>

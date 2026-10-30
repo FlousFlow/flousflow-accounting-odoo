@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="flousflow_accounting.apr__PartnerLedger" owl="1">
+<div class="o_action ff_partner_ledger">
+ <div class="ff_pl_toolbar"><button class="btn btn-primary" t-on-click="this.printReport">Print</button><h2>Partner Ledger</h2><div class="dropdown ff_pl_settings">
+  <button class="btn btn-outline-secondary" type="button" title="Report options" aria-label="Report options" t-att-aria-expanded="this.state.settingsOpen" t-on-click="()=>this.state.settingsOpen=!this.state.settingsOpen"><i class="fa fa-cog"/></button>
+  <div t-if="this.state.settingsOpen" class="dropdown-menu show"><button class="dropdown-item" type="button" t-on-click="this.exportXlsx"><i class="fa fa-file-excel-o me-2"/>XLSX</button></div>
+ </div><button class="btn btn-outline-secondary ff_pl_mobile_filter_toggle" type="button" aria-label="Filters" t-att-aria-expanded="this.state.filtersOpen" t-on-click="()=>this.state.filtersOpen=!this.state.filtersOpen"><i class="fa fa-filter me-1"/>Filters</button><div t-att-class="'ff_pl_filters' + (this.state.filtersOpen ? ' is-open' : '')">
+  <div class="input-group ff_pl_period"><button class="btn btn-outline-secondary" title="Previous year" t-on-click="()=>this.changeYear(-1)"><i class="fa fa-chevron-left"/></button><button class="btn btn-outline-secondary" t-on-click="this.toggleCustom" t-out="this.periodLabel"/><button class="btn btn-outline-secondary" title="Next year" t-on-click="()=>this.changeYear(1)"><i class="fa fa-chevron-right"/></button></div>
+  <div t-if="this.state.periodType==='custom'" class="d-flex gap-1"><input class="form-control" type="date" t-att-value="this.state.customFrom" t-on-change="(ev)=>this.setDate('customFrom',ev)"/><input class="form-control" type="date" t-att-value="this.state.customTo" t-on-change="(ev)=>this.setDate('customTo',ev)"/></div>
+  <input class="form-control ff_pl_search" type="search" placeholder="Search partners" t-att-value="this.state.search" t-on-input="(ev)=>this.state.search=ev.target.value"/>
+  <select class="form-select" t-att-value="this.state.accountScope" t-on-change="(ev)=>{this.state.accountScope=ev.target.value;this.loadReport();}"><option value="trade">Trade Partners</option><option value="receivable">Receivable</option><option value="payable">Payable</option></select>
+  <div class="dropdown ff_pl_partner_filter">
+   <button class="btn btn-outline-secondary dropdown-toggle" type="button" t-on-click="()=>this.state.partnerFilterOpen=!this.state.partnerFilterOpen"><i class="fa fa-users me-1"/>Partners</button>
+   <div t-if="this.state.partnerFilterOpen" class="dropdown-menu show p-2 ff_pl_partner_menu">
+    <input class="form-control form-control-sm mb-2" type="search" placeholder="Search partners" t-att-value="this.state.partnerQuery" t-on-input="this.searchInteractivePartners"/>
+    <button t-foreach="this.state.partnerOptions" t-as="partner" t-key="partner.id" class="dropdown-item" type="button" t-on-click="()=>this.addPartner(partner)" t-out="partner.name"/>
+    <div t-if="this.state.partnerQuery.length &gt;= 2 &amp;&amp; !this.state.partnerOptions.length" class="dropdown-item-text text-muted">No partners found</div>
+    <div class="dropdown-divider"/>
+    <div class="small text-muted mb-1">Tags</div>
+    <label class="form-check" t-foreach="this.state.tags" t-as="tag" t-key="tag.id">
+     <input class="form-check-input" type="checkbox" t-att-checked="this.state.partnerTagIds.includes(tag.id)" t-on-change="()=>this.togglePartnerTag(tag.id)"/>
+     <span class="form-check-label" t-out="tag.name"/>
+    </label>
+   </div>
+  </div>
+  <select class="form-select" t-att-value="this.state.targetMove" t-on-change="(ev)=>{this.state.targetMove=ev.target.value;this.loadReport();}"><option value="posted">Posted Entries</option><option value="all">All Entries</option></select>
+  <select class="form-select ff_pl_scale" t-att-value="this.state.scale" t-on-change="(ev)=>this.state.scale=ev.target.value"><option value="unit">In .$</option><option value="rounded">In $</option><option value="thousand">In k$</option><option value="million">In M$</option></select>
+ </div></div>
+ <div t-if="this.state.selectedPartners.length" class="ff_pl_selected_partners">
+  <span t-foreach="this.state.selectedPartners" t-as="partner" t-key="partner.id" class="badge rounded-pill text-bg-secondary">
+   <t t-out="partner.name"/><button type="button" class="btn-close btn-close-white ms-1" aria-label="Remove partner" t-on-click="()=>this.removePartner(partner.id)"/>
+  </span>
+ </div>
+ <div class="o_content"><div class="ff_pl_header"><strong t-out="this.state.companyName"/><span t-out="this.periodLabel"/></div>
+  <div t-if="this.state.draftCount and this.state.targetMove === 'posted' and !this.state.dismissedDraftWarning" class="alert alert-info d-flex align-items-center justify-content-between" role="status">
+   <span>There are <a href="#" t-on-click.prevent="this.openDraftMoves"><t t-out="this.state.draftCount"/> unposted Journal Entries</a> prior to or included in this period.</span>
+   <button class="btn-close" type="button" aria-label="Close" t-on-click="()=>this.state.dismissedDraftWarning=true"/>
+  </div>
+  <div t-if="this.state.loading" class="text-center p-5"><i class="fa fa-spinner fa-spin me-2"/>Loading…</div><div t-else="" class="ff_pl_table_wrap">
+  <table class="table table-hover ff_pl_table"><thead><tr><th>Journal</th><th>Account</th><th>Date</th><th>Due Date</th><th>Matching</th><th class="text-end">Debit</th><th class="text-end">Credit</th><th class="text-end">Amount Currency</th><th class="text-end">Balance</th></tr></thead><tbody>
+   <tr t-if="!this.visiblePartners.length"><td colspan="9" class="text-center text-muted py-5">No data found</td></tr>
+   <t t-foreach="this.visiblePartners" t-as="partner" t-key="partner.id"><tr class="ff_pl_partner_row"><td colspan="5"><button class="btn btn-link p-0 me-2" t-on-click="()=>this.togglePartner(partner)"><i t-att-class="this.state.expandedIds.includes(partner.id)?'fa fa-caret-down':'fa fa-caret-right'"/></button><strong t-out="partner.name"/> <button class="btn btn-link btn-sm" t-on-click="()=>this.openPartner(partner.id)">Partner</button><button class="btn btn-link btn-sm" t-on-click="()=>this.openPartnerItems(partner.id)">Journal Items</button></td><td class="text-end" t-out="this.formatAmount(partner.debit)"/><td class="text-end" t-out="this.formatAmount(partner.credit)"/><td/><td class="text-end" t-out="this.formatAmount(partner.balance)"/></tr>
+   <tr t-if="this.state.expandedIds.includes(partner.id)" t-foreach="partner.lines" t-as="line" t-key="line.id"><td><div class="d-flex align-items-center gap-1"><div class="d-flex flex-column align-items-start"><button class="btn btn-link p-0" t-att-title="line.label" t-on-click="()=>this.openMove(line.move_id)" t-out="line.label"/><small class="text-muted" t-out="line.journal"/></div><div class="dropdown ff_pl_move_actions"><button class="btn btn-link btn-sm p-0" type="button" aria-label="Journal entry actions" t-on-click.stop="()=>this.toggleMoveAction(line.id)"><i class="fa fa-ellipsis-v"/></button><div t-if="this.state.moveActionOpenFor===line.id" class="dropdown-menu show"><button class="dropdown-item" type="button" t-on-click="()=>this.openMove(line.move_id)">View Journal Entry</button></div></div></div></td><td t-out="line.account"/><td><button class="btn btn-link p-0" t-on-click="()=>this.openMove(line.move_id)" t-out="this.formatDate(line.date)"/></td><td t-out="this.formatDate(line.due_date)"/><td t-out="line.matching"/><td class="text-end" t-out="this.formatAmount(line.debit)"/><td class="text-end" t-out="this.formatAmount(line.credit)"/><td class="text-end" t-out="this.formatForeignAmount(line)"/><td class="text-end" t-out="this.formatAmount(line.balance)"/></tr></t>
+  </tbody><tfoot><tr class="fw-bold"><td colspan="5">Total</td><td class="text-end" t-out="this.formatAmount(this.totals.debit)"/><td class="text-end" t-out="this.formatAmount(this.totals.credit)"/><td/><td class="text-end" t-out="this.formatAmount(this.totals.balance)"/></tr></tfoot></table>
+ </div></div>
+</div>
+</t></templates>

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Journal Audit uses a focused read-through list like Enterprise's drill-down. -->
+    <record id="acc__view_journal_audit_items_list" model="ir.ui.view">
+        <field name="name">account.move.line.journal.audit.list</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <list string="Journal Items" create="false">
+                <field name="move_id" column_invisible="True"/>
+                <field name="invoice_date" string="Invoice Date" optional="show"/>
+                <field name="account_id" options="{'no_open': True, 'no_create': True}"/>
+                <field name="name" string="Description"/>
+                <field name="tax_ids" string="Taxes" widget="many2many_tax_tags" readonly="1" optional="show"/>
+                <field name="debit" sum="Total Debit" readonly="1" decoration-muted="debit == 0"/>
+                <field name="credit" sum="Total Credit" readonly="1" decoration-muted="credit == 0"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="acc__action_journal_audit_items" model="ir.actions.act_window">
+        <field name="name">Journal Items</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="acc__view_journal_audit_items_list"/>
+        <field name="context">{'create': False, 'search_default_group_by_move': 1}</field>
+    </record>
+
+    <record id="acc__action_moves_to_review" model="ir.actions.act_window">
+        <field name="name">Entries to Review</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'entry')]</field>
+        <field name="context">{'search_default_to_check': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Nothing waiting to be reviewed</p>
+            <p>The posted entries someone has marked to review appear here until they are checked.</p>
+        </field>
+    </record>
+
+    <record id="acc__action_moves_unposted" model="ir.actions.act_window">
+        <field name="name">Draft Entries</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_unposted': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No draft entry</p>
+            <p>Everything is posted. Draft entries are not in the reports and not in the balances, so a period
+                should not be closed while any are left here.</p>
+        </field>
+    </record>
+
+    <record id="acc__action_bank_rec_to_review" model="ir.actions.client">
+        <field name="name">Transactions to Review</field>
+        <field name="tag">om_bank_reconciliation</field>
+        <field name="params" eval="{'filter': 'to_review'}"/>
+    </record>
+
+    <!-- The four accrual queues use Odoo's native as-of date search methods. -->
+    <record id="acc__action_purchase_bill_to_receive" model="ir.actions.act_window">
+        <field name="name">Bills To Receive</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('bill_to_receive', 'in', [True])]</field>
+        <field name="context">{
+            'create': False, 'delete': False,
+            'search_default_order_date_last_year': 1,
+            'search_default_groupby_supplier': 1,
+        }</field>
+    </record>
+
+    <record id="acc__view_purchase_bill_to_receive_list" model="ir.ui.view">
+        <field name="name">purchase.order.line.bill.to.receive.list</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <list string="Bills To Receive" create="false" delete="false" js_class="review_accrual_list">
+                <field name="order_id" string="PO Reference"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="name" string="Description" optional="hide"/>
+                <field name="product_qty" string="Quantity" sum="Total Quantity"/>
+                <field name="qty_received_at_date" string="Received" sum="Total Received"/>
+                <field name="qty_invoiced_at_date" string="Billed" sum="Total Billed"/>
+                <field name="price_unit" string="Unit Price" avg="Average Unit Price"/>
+                <field name="amount_to_invoice_at_date" string="Amount" sum="Total Amount"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="company_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+    <record id="acc__view_purchase_billed_not_received_list" model="ir.ui.view">
+        <field name="name">purchase.order.line.billed.not.received.list</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="acc__view_purchase_bill_to_receive_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="string">Billed Not Received</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="acc__action_purchase_bill_to_receive_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="acc__view_purchase_bill_to_receive_list"/>
+        <field name="act_window_id" ref="acc__action_purchase_bill_to_receive"/>
+    </record>
+
+    <record id="acc__action_purchase_billed_not_received" model="ir.actions.act_window">
+        <field name="name">Billed Not Received</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('prepaid_expense', 'in', [True])]</field>
+        <field name="context">{
+            'create': False, 'delete': False,
+            'search_default_order_date_last_year': 1,
+            'search_default_groupby_supplier': 1,
+        }</field>
+    </record>
+    <record id="acc__action_purchase_billed_not_received_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="acc__view_purchase_billed_not_received_list"/>
+        <field name="act_window_id" ref="acc__action_purchase_billed_not_received"/>
+    </record>
+
+    <record id="acc__view_sale_invoice_review_search" model="ir.ui.view">
+        <field name="name">sale.order.line.review.accrual.search</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="review_order_date_last_year" string="For the Last 365 Days"
+                        domain="[('order_id.date_order', '&gt;', 'today -365d')]" invisible="1"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter name="review_groupby_customer" string="Customer" domain="[]"
+                        context="{'group_by': 'order_partner_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="acc__action_sale_invoice_to_be_issued" model="ir.actions.act_window">
+        <field name="name">Invoices To Be Issued</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('invoice_to_be_issued', 'in', [True])]</field>
+        <field name="search_view_id" ref="acc__view_sale_invoice_review_search"/>
+        <field name="context">{
+            'create': False, 'delete': False,
+            'search_default_review_order_date_last_year': 1,
+            'search_default_review_groupby_customer': 1,
+        }</field>
+    </record>
+
+    <record id="acc__view_sale_invoice_to_be_issued_list" model="ir.ui.view">
+        <field name="name">sale.order.line.invoice.to.be.issued.list</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <list string="Invoices To Be Issued" create="false" delete="false" js_class="review_accrual_list">
+                <field name="order_id" string="Order Ref"/>
+                <field name="order_partner_id" string="Customer"/>
+                <field name="name" string="Description"/>
+                <field name="salesman_id" string="Salesperson" optional="show"/>
+                <field name="product_uom_qty" string="Quantity" sum="Total Quantity"/>
+                <field name="qty_delivered_at_date" string="Delivered" sum="Total Delivered"/>
+                <field name="qty_invoiced_at_date" string="Invoiced" sum="Total Invoiced"/>
+                <field name="price_unit" string="Unit Price" sum="Total Unit Price"/>
+                <field name="amount_to_invoice_at_date" string="Amount" sum="Total Amount"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="company_id" column_invisible="True"/>
+                <field name="review_accrual_unit_cost" string="Unit Cost" sum="Unit Cost"/>
+                <field name="review_accrual_delivered_total_cost" string="Total Cost"/>
+            </list>
+        </field>
+    </record>
+    <record id="acc__view_sale_invoiced_not_delivered_list" model="ir.ui.view">
+        <field name="name">sale.order.line.invoiced.not.delivered.list</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="acc__view_sale_invoice_to_be_issued_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="string">Invoiced Not Delivered</attribute>
+            </xpath>
+            <xpath expr="//field[@name='review_accrual_delivered_total_cost']" position="replace">
+                <field name="review_accrual_invoiced_total_cost" string="Total Cost"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="acc__action_sale_invoice_to_be_issued_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="acc__view_sale_invoice_to_be_issued_list"/>
+        <field name="act_window_id" ref="acc__action_sale_invoice_to_be_issued"/>
+    </record>
+
+    <record id="acc__action_sale_invoiced_not_delivered" model="ir.actions.act_window">
+        <field name="name">Invoiced Not Delivered</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('deferred_revenue', 'in', [True])]</field>
+        <field name="search_view_id" ref="acc__view_sale_invoice_review_search"/>
+        <field name="context">{
+            'create': False, 'delete': False,
+            'search_default_review_order_date_last_year': 1,
+            'search_default_review_groupby_customer': 1,
+        }</field>
+    </record>
+    <record id="acc__action_sale_invoiced_not_delivered_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="acc__view_sale_invoiced_not_delivered_list"/>
+        <field name="act_window_id" ref="acc__action_sale_invoiced_not_delivered"/>
+    </record>
+
+    <!-- Keep the extra community work queues available under Accounting. -->
+    <menuitem id="acc__menu_review_work_queues" name="Work Queues"
+              parent="account.menu_finance_entries" groups="account.group_account_readonly" sequence="80"/>
+    <!-- Enterprise exposes only its three native review destinations under
+         Control. Keep our narrower Entries to Review queue under Accounting. -->
+    <menuitem id="acc__menu_review_journal_items" action="account.action_account_moves_all"
+              parent="account.account_audit_control_menu" groups="account.group_account_readonly" sequence="6"/>
+    <menuitem id="acc__menu_review_moves_to_review" name="Entries to Review" action="acc__action_moves_to_review"
+              parent="acc__menu_review_work_queues" groups="account.group_account_readonly" sequence="10"/>
+    <menuitem id="acc__menu_review_moves_unposted" name="Draft Entries" action="acc__action_moves_unposted"
+              parent="acc__menu_review_work_queues" groups="account.group_account_readonly" sequence="20"/>
+
+    <menuitem id="acc__menu_review_reconciliation" name="Reconciliation"
+              parent="account.menu_finance_entries" groups="account.group_account_readonly" sequence="85"/>
+    <menuitem id="acc__menu_review_bank_reconciliation" action="flousflow_accounting.rec__action_bank_reconciliation"
+              parent="acc__menu_review_reconciliation" groups="account.group_account_user" sequence="10"/>
+    <menuitem id="acc__menu_review_open_items" action="flousflow_accounting.rec__action_open_items_reconciliation"
+              parent="acc__menu_review_reconciliation" groups="account.group_account_user" sequence="20"/>
+    <menuitem id="acc__menu_review_match_journal_items" action="flousflow_accounting.rec__action_move_line_match"
+              parent="acc__menu_review_reconciliation" groups="account.group_account_user" sequence="30"/>
+    <menuitem id="acc__menu_review_bank_rec_to_review" action="acc__action_bank_rec_to_review"
+              parent="acc__menu_review_reconciliation" groups="account.group_account_user" sequence="40"/>
+
+    <!-- om_account_reconcile already exposes the first three actions under its
+         Accounting > Reconciliation menu. Keep their former records inactive
+         to avoid duplicate navigation; retain the unique review queue there. -->
+    <record id="acc__menu_review_reconciliation" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="acc__menu_review_bank_reconciliation" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="acc__menu_review_open_items" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="acc__menu_review_match_journal_items" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="acc__menu_review_bank_rec_to_review" model="ir.ui.menu">
+        <field name="parent_id" ref="flousflow_accounting.rec__menu_reconciliation"/>
+        <field name="sequence" eval="50"/>
+    </record>
+
+    <record id="acc__action_journal_audit" model="ir.actions.client">
+        <field name="name">Journal Audit</field>
+        <field name="tag">flousflow_accounting.acc__journal_audit</field>
+        <field name="params" eval="{}"/>
+    </record>
+
+    <!-- Use the interactive community report; keep the printable wizard in Reporting. -->
+    <menuitem id="acc__menu_review_journal_audit" name="Journal Audit"
+              action="acc__action_journal_audit"
+              parent="account.account_audit_control_menu"
+              groups="account.group_account_readonly" sequence="30"/>
+
+    <menuitem id="acc__menu_review_audit" name="Audit" parent="account.account_audit_menu"
+              groups="account.group_account_readonly" sequence="30"/>
+    <menuitem id="acc__menu_review_working_files" name="Working Files"
+              action="acc__action_account_working_file" parent="acc__menu_review_audit"
+              groups="account.group_account_readonly" sequence="10"/>
+    <record id="acc__action_deferred_expense_report" model="ir.actions.client">
+        <field name="name">Deferred Expenses</field>
+        <field name="tag">flousflow_accounting.acc__deferred_schedule</field>
+        <field name="params" eval="{'report_type': 'expense'}"/>
+    </record>
+    <record id="acc__action_deferred_revenue_report" model="ir.actions.client">
+        <field name="name">Deferred Revenues</field>
+        <field name="tag">flousflow_accounting.acc__deferred_schedule</field>
+        <field name="params" eval="{'report_type': 'revenue'}"/>
+    </record>
+    <record id="flousflow_accounting.apr__menu_account_report_annual" model="ir.ui.menu">
+        <field name="parent_id" ref="acc__menu_review_audit"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <!-- Enterprise keeps Inventory Valuation inside its Inventory folder. -->
+    <menuitem id="acc__menu_review_inventory" name="Inventory"
+              parent="account.account_audit_menu"
+              groups="account.group_account_readonly" sequence="40"/>
+    <menuitem id="acc__menu_review_inventory_valuation" name="Inventory Valuation"
+              action="account.action_report_stock_valuation" parent="acc__menu_review_inventory"
+              groups="account.group_account_readonly" sequence="10"/>
+
+    <menuitem id="acc__menu_review_regularization" name="Regulatory" parent="account.account_audit_menu"
+              groups="account.group_account_readonly" sequence="50"/>
+    <menuitem id="acc__menu_review_unrealized_currencies" name="Unrealized Currencies"
+              action="flousflow_accounting.crv__action_currency_revaluation" parent="acc__menu_review_regularization"
+              groups="account.group_account_manager" sequence="10"/>
+    <menuitem id="acc__menu_review_deferred_revenues" name="Deferred Revenues"
+              action="acc__action_deferred_revenue_report" parent="acc__menu_review_regularization"
+              groups="account.group_account_readonly" sequence="20"/>
+    <menuitem id="acc__menu_review_deferred_expenses" name="Deferred Expenses"
+              action="acc__action_deferred_expense_report" parent="acc__menu_review_regularization"
+              groups="account.group_account_readonly" sequence="30"/>
+
+    <menuitem id="acc__menu_review_purchases" name="Purchases" parent="account.account_audit_menu"
+              groups="account.group_account_readonly" sequence="60"/>
+    <menuitem id="acc__menu_review_bill_to_receive" action="acc__action_purchase_bill_to_receive"
+              parent="acc__menu_review_purchases" groups="account.group_account_readonly" sequence="10"/>
+    <menuitem id="acc__menu_review_billed_not_received" action="acc__action_purchase_billed_not_received"
+              parent="acc__menu_review_purchases" groups="account.group_account_readonly" sequence="20"/>
+
+    <menuitem id="acc__menu_review_sales" name="Sales" parent="account.account_audit_menu"
+              groups="account.group_account_readonly" sequence="70"/>
+    <menuitem id="acc__menu_review_invoice_to_be_issued" action="acc__action_sale_invoice_to_be_issued"
+              parent="acc__menu_review_sales" groups="account.group_account_readonly" sequence="10"/>
+    <menuitem id="acc__menu_review_invoiced_not_delivered" action="acc__action_sale_invoiced_not_delivered"
+              parent="acc__menu_review_sales" groups="account.group_account_readonly" sequence="20"/>
+
+</odoo>
