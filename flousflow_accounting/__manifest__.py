@@ -44,6 +44,8 @@ Odoo ``account`` module:
 * **Accrual review** — period-end accrual review and posting.
 * **Period closing** — controlled checklist, evidence, approval and standard
   Odoo lock-date application.
+* **Branch analytics** — optional branch assignment on sales orders, customer
+  invoices and POS configurations, propagated to revenue and COGS analytics.
 * **Dashboard** — bank/cash, receivable, payable, YTD income/expense/net profit
   and open/overdue document counters.
 
@@ -72,9 +74,11 @@ All features are original Community code and depend on ``account`` and ``mail``.
         'mail',
         'mrp_account',
         'point_of_sale',
+        'pos_stock',
         'project',
         'purchase_stock',
         'sale_margin',
+        'sale',
         'sale_stock',
         'stock_account',
     ],
@@ -100,6 +104,7 @@ All features are original Community code and depend on ``account`` and ``mail``.
         'views/accrual_review_views.xml',
         'views/period_close_views.xml',
         'views/pos_integration_views.xml',
+        'views/branch_analytic_views.xml',
         'views/bank_reconciliation_views.xml',
         'views/open_item_reconciliation_views.xml',
         'views/tax_return_views.xml',

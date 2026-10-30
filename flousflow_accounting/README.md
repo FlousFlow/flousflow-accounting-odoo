@@ -27,10 +27,15 @@ standard `account.chart.template` engine — exactly like standard Odoo.
 | Open-item reconciliation | Closing > Reconcile filters posted open receivable/payable lines and delegates selected same-company/account/partner items to Odoo's standard reconciliation engine |
 | Period closing | Month/quarter/year close checklist, draft-entry gate, reviewer approval, audit evidence and controlled application of standard Odoo lock dates |
 | Dashboard | Bank/cash, receivable, payable, YTD P&L and open/overdue counters |
+| Branch analytics | Optional branch analytic account on POS, sales orders, and customer invoices; tags revenue and POS COGS while leaving balance-sheet lines untouched. Enforcement is opt-in per company. |
 
 All features are original Community code. The logistics accrual review uses the
 standard `purchase_stock`, `sale_stock` and `stock_account` modules. Online bank
 synchronization is intentionally excluded.
+
+See [Legacy Suite Merge Status](docs/LEGACY_SUITE_MERGE_STATUS.md) for the
+feature-by-feature mapping against the former multi-addon accounting suite and
+the remaining unmerged capabilities.
 
 ## How the chart behaves
 

@@ -27,4 +27,5 @@ from . import tax_return
 from . import payment_batch
 from . import revaluation
 from . import payment_transfer
+from . import branch_analytic
 from . import ir_ui_menu

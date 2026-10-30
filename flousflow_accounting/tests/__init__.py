@@ -22,3 +22,5 @@ from . import test_tax_return
 from . import test_payment_batch
 from . import test_revaluation
 from . import test_standard_app_integrations
+from . import test_branch_analytic
+from . import test_branch_analytic_flow
