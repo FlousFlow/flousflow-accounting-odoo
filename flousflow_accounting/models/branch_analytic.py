@@ -106,6 +106,18 @@ class AccountMove(models.Model):
     def _onchange_branch_analytic_account_id(self):
         self._apply_branch_analytic_distribution()
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        moves = super().create(vals_list)
+        moves._apply_branch_analytic_distribution()
+        return moves
+
+    def write(self, vals):
+        result = super().write(vals)
+        if 'analytic_account_id' in vals:
+            self._apply_branch_analytic_distribution()
+        return result
+
     def _apply_branch_analytic_distribution(self):
         for move in self:
             if move.analytic_account_id:
@@ -123,6 +135,7 @@ class AccountMove(models.Model):
 
     def _post(self, soft=True):
         self._check_branch_analytic_required()
+        self._apply_branch_analytic_distribution()
         return super()._post(soft=soft)
 
 
@@ -132,6 +145,18 @@ class SaleOrder(models.Model):
     @api.onchange('analytic_account_id')
     def _onchange_branch_analytic_account_id(self):
         self._apply_branch_analytic_distribution()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        orders = super().create(vals_list)
+        orders._apply_branch_analytic_distribution()
+        return orders
+
+    def write(self, vals):
+        result = super().write(vals)
+        if 'analytic_account_id' in vals:
+            self._apply_branch_analytic_distribution()
+        return result
 
     def _apply_branch_analytic_distribution(self):
         for order in self:
@@ -146,6 +171,7 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         self._check_branch_analytic_required()
+        self._apply_branch_analytic_distribution()
         return super().action_confirm()
 
 

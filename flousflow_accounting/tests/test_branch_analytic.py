@@ -105,7 +105,6 @@ class TestBranchAnalytic(TransactionCase):
             ],
         })
         move.analytic_account_id = self.cairo
-        move._apply_branch_analytic_distribution()
 
         product_line = move.invoice_line_ids.filtered(lambda l: l.display_type == 'product')
         note_line = move.line_ids.filtered(lambda l: l.display_type == 'line_note')
@@ -128,9 +127,7 @@ class TestBranchAnalytic(TransactionCase):
             ],
         })
         move.analytic_account_id = self.cairo
-        move._apply_branch_analytic_distribution()
         move.analytic_account_id = self.giza
-        move._apply_branch_analytic_distribution()
         self.assertEqual(
             move.invoice_line_ids.analytic_distribution,
             {str(self.giza.id): 100.0},
@@ -152,7 +149,6 @@ class TestBranchAnalytic(TransactionCase):
                 }),
             ],
         })
-        move._apply_branch_analytic_distribution()
         self.assertEqual(
             move.invoice_line_ids.analytic_distribution,
             {str(self.cairo.id): 100.0},

@@ -393,7 +393,6 @@ class TestBranchAnalyticFlow(TestPoSCommon):
                 'price_unit': 100.0,
             })],
         })
-        so._apply_branch_analytic_distribution()
         for line in so.order_line.filtered(lambda l: not l.display_type):
             self.assertEqual(line.analytic_distribution, {str(self.cairo.id): 100.0})
 
@@ -410,7 +409,6 @@ class TestBranchAnalyticFlow(TestPoSCommon):
                 'price_unit': 50.0,
             })],
         })
-        so._apply_branch_analytic_distribution()
         so.action_confirm()
         invoice = so._create_invoices()
         self.assertTrue(invoice)
