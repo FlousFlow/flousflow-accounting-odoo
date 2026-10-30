@@ -30,6 +30,8 @@ export class FlousflowFinancialReport extends Component {
             comparisonMode: "none",
             comparisonDate: context.default_comparison_date || today,
             comparisonDisplay: "percentage",
+            amountScale: "unit",
+            hideZeroLines: false,
             searchQuery: "",
             loading: false,
             payload: null,
@@ -166,14 +168,28 @@ export class FlousflowFinancialReport extends Component {
     }
 
     formatAmount(value) {
+        const scales = { unit: 1, thousand: 1000, million: 1000000 };
+        const amountScale = scales[this.state.amountScale] || 1;
         const amount = new Intl.NumberFormat(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-        }).format(value || 0);
+        }).format((value || 0) / amountScale);
         const symbol = this.state.payload?.currency_symbol || "";
+        const suffix = this.state.amountScale === "thousand" ? "k" : this.state.amountScale === "million" ? "M" : "";
         return this.state.payload?.currency_position === "before"
-            ? `${symbol} ${amount}`
-            : `${amount} ${symbol}`;
+            ? `${symbol} ${amount}${suffix}`
+            : `${amount}${suffix} ${symbol}`;
+    }
+
+    amountScaleLabel(scale) {
+        const labels = {
+            unit: "in_currency",
+            thousand: "in_thousands",
+            million: "in_millions",
+        };
+        const label = this.state.payload?.ui_labels?.[labels[scale]] || "In $";
+        const symbol = this.state.payload?.currency_symbol || "$";
+        return label.replace("$", symbol);
     }
 
     formatComparison(line) {
@@ -191,6 +207,10 @@ export class FlousflowFinancialReport extends Component {
 
     get visibleLines() {
         let rows = this.state.payload?.lines || [];
+        if (this.state.hideZeroLines) {
+            rows = rows.filter((line) =>
+                line.is_section || line.is_total || Math.abs(line.balance || 0) >= 0.005);
+        }
         if (this.state.reportType === "general_ledger" && this.state.searchQuery) {
             const query = this.state.searchQuery.toLocaleLowerCase();
             const groups = [];

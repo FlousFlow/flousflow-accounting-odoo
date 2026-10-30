@@ -47,6 +47,18 @@
                         <option value="posted"><t t-esc="this.state.payload?.ui_labels?.posted_entries || 'Posted Entries'"/></option>
                         <option value="all"><t t-esc="this.state.payload?.ui_labels?.all_entries || 'All Entries'"/></option>
                     </select>
+                    <select class="form-select" aria-label="Amount scale"
+                            t-att-value="this.state.amountScale" t-on-change="(event) => this.state.amountScale = event.target.value">
+                        <option value="unit"><t t-esc="this.amountScaleLabel('unit')"/></option>
+                        <option value="thousand"><t t-esc="this.amountScaleLabel('thousand')"/></option>
+                        <option value="million"><t t-esc="this.amountScaleLabel('million')"/></option>
+                    </select>
+                    <label class="btn btn-secondary d-inline-flex align-items-center gap-2">
+                        <input type="checkbox" class="form-check-input m-0"
+                               t-att-checked="this.state.hideZeroLines"
+                               t-on-change="(event) => this.state.hideZeroLines = event.target.checked"/>
+                        <t t-esc="this.state.payload?.ui_labels?.hide_zero_lines || 'Hide lines at 0'"/>
+                    </label>
                     <button class="btn btn-secondary" t-on-click="this.toggleComparison">
                         <i class="fa fa-columns me-1"/> <t t-esc="this.state.payload?.ui_labels?.compare || 'Compare'"/>
                     </button>

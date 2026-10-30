@@ -121,7 +121,7 @@
     <record id="bs_bank_cash" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
         <field name="parent_id" ref="bs_current_assets"/>
-        <field name="name">Bank &amp; Cash</field>
+        <field name="name">Bank and Cash Accounts</field>
         <field name="code">bank_cash</field>
         <field name="account_types">asset_cash</field>
         <field name="sequence">12</field>
@@ -166,6 +166,7 @@
         <field name="code">fixed_assets</field>
         <field name="sequence">17</field>
         <field name="is_section" eval="True"/>
+        <field name="hide_in_report" eval="True"/>
     </record>
     <record id="bs_fixed_assets_other" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
@@ -190,11 +191,12 @@
         <field name="code">total_fixed_assets</field>
         <field name="formula">fixed_assets_other +non_current_assets</field>
         <field name="sequence">20</field>
+        <field name="hide_in_report" eval="True"/>
     </record>
     <record id="bs_total_assets" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
         <field name="parent_id" ref="bs_assets"/>
-        <field name="name">Total Assets</field>
+        <field name="name">Total ASSETS</field>
         <field name="code">total_assets</field>
         <field name="formula">total_current_assets +total_fixed_assets</field>
         <field name="sequence">21</field>
@@ -222,12 +224,12 @@
         <field name="code">payables</field>
         <field name="account_types">liability_payable</field>
         <field name="sign">reversed</field>
-        <field name="sequence">32</field>
+        <field name="sequence">34</field>
     </record>
     <record id="bs_credit_cards" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
         <field name="parent_id" ref="bs_current_liabilities"/>
-        <field name="name">Credit Cards</field>
+        <field name="name">Credit Card</field>
         <field name="code">credit_cards</field>
         <field name="account_types">liability_credit_card</field>
         <field name="sign">reversed</field>
@@ -240,7 +242,7 @@
         <field name="code">current_liabilities_other</field>
         <field name="account_types">liability_current</field>
         <field name="sign">reversed</field>
-        <field name="sequence">34</field>
+        <field name="sequence">32</field>
     </record>
     <record id="bs_total_current_liabilities" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
@@ -262,7 +264,7 @@
     <record id="bs_total_liabilities" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
         <field name="parent_id" ref="bs_liabilities"/>
-        <field name="name">Total Liabilities</field>
+        <field name="name">Total LIABILITIES</field>
         <field name="code">total_liabilities</field>
         <field name="formula">total_current_liabilities +non_current_liabilities</field>
         <field name="sequence">37</field>
@@ -270,7 +272,7 @@
 
     <record id="bs_equity" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
-        <field name="name">Equity</field>
+        <field name="name">EQUITY (&amp; EARNINGS)</field>
         <field name="code">equity_section</field>
         <field name="sequence">40</field>
         <field name="is_section" eval="True"/>
@@ -284,58 +286,74 @@
         <field name="sign">reversed</field>
         <field name="sequence">41</field>
     </record>
-    <record id="bs_current_year_earnings" model="flousflow.account.report.template.line">
+    <record id="bs_earnings" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
         <field name="parent_id" ref="bs_equity"/>
-        <field name="name">Retained Earnings</field>
-        <field name="code">retained_earnings</field>
-        <field name="account_types">equity_unaffected</field>
-        <field name="sign">reversed</field>
+        <field name="name">Earnings</field>
+        <field name="code">earnings_section</field>
         <field name="sequence">42</field>
+        <field name="is_section" eval="True"/>
     </record>
     <record id="bs_current_year_income" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
-        <field name="parent_id" ref="bs_equity"/>
+        <field name="parent_id" ref="bs_earnings"/>
         <field name="name">Current Year Income</field>
         <field name="code">current_year_income</field>
         <field name="account_types">income,income_other</field>
         <field name="sign">reversed</field>
         <field name="date_scope">fiscal_year</field>
         <field name="hide_in_report" eval="True"/>
-        <field name="sequence">43</field>
+        <field name="sequence">1</field>
     </record>
     <record id="bs_current_year_expenses" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
-        <field name="parent_id" ref="bs_equity"/>
+        <field name="parent_id" ref="bs_earnings"/>
         <field name="name">Current Year Expenses</field>
         <field name="code">current_year_expenses</field>
         <field name="account_types">expense,expense_depreciation,expense_direct_cost,expense_other</field>
         <field name="date_scope">fiscal_year</field>
         <field name="hide_in_report" eval="True"/>
-        <field name="sequence">44</field>
+        <field name="sequence">2</field>
     </record>
     <record id="bs_current_fiscal_year_earnings" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
-        <field name="parent_id" ref="bs_equity"/>
-        <field name="name">Current Year Earnings</field>
+        <field name="parent_id" ref="bs_earnings"/>
+        <field name="name">Current Year Unallocated Earnings</field>
         <field name="code">current_year_earnings</field>
         <field name="formula">current_year_income -current_year_expenses</field>
-        <field name="sequence">45</field>
+        <field name="sequence">3</field>
+    </record>
+    <record id="bs_current_year_earnings" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_earnings"/>
+        <field name="name">Previous Years Earnings</field>
+        <field name="code">retained_earnings</field>
+        <field name="account_types">equity_unaffected</field>
+        <field name="sign">reversed</field>
+        <field name="sequence">4</field>
+    </record>
+    <record id="bs_total_earnings" model="flousflow.account.report.template.line">
+        <field name="template_id" ref="template_balance_sheet"/>
+        <field name="parent_id" ref="bs_earnings"/>
+        <field name="name">Total Earnings</field>
+        <field name="code">total_earnings</field>
+        <field name="formula">current_year_earnings +retained_earnings</field>
+        <field name="sequence">5</field>
     </record>
     <record id="bs_total_equity" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
         <field name="parent_id" ref="bs_equity"/>
-        <field name="name">Total Equity</field>
+        <field name="name">Total EQUITY (&amp; EARNINGS)</field>
         <field name="code">total_equity</field>
-        <field name="formula">equity +retained_earnings +current_year_earnings</field>
+        <field name="formula">equity +total_earnings</field>
         <field name="sequence">46</field>
     </record>
 
     <record id="bs_unallocated_profit_loss" model="flousflow.account.report.template.line">
         <field name="template_id" ref="template_balance_sheet"/>
-        <field name="name">Unallocated Profit / Loss</field>
-        <field name="code">unallocated_profit_loss</field>
-        <field name="formula">total_assets -total_liabilities -total_equity</field>
+        <field name="name">LIABILITIES + EQUITY</field>
+        <field name="code">liabilities_and_equity</field>
+        <field name="formula">total_liabilities +total_equity</field>
         <field name="sequence">50</field>
     </record>
 </odoo>

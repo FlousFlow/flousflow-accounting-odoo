@@ -349,6 +349,28 @@ class TestFinancialReports(TransactionCase):
         self.assertTrue(wizard.line_ids)
         self.assertTrue(wizard.line_ids.filtered(lambda l: l.is_total))
 
+    def test_balance_sheet_matches_enterprise_report_hierarchy(self):
+        template = self.env.ref(
+            'flousflow_accounting.template_balance_sheet')
+        lines = template._compute_lines(
+            self.company, fields.Date.from_string('2026-01-01'),
+            fields.Date.from_string('2026-12-31'))
+        codes = [line['code'] for line in lines]
+        self.assertEqual(codes, [
+            'assets', 'current_assets', 'bank_cash', 'receivables',
+            'current_assets_other', 'prepayments', 'total_current_assets',
+            'fixed_assets_other', 'non_current_assets', 'total_assets',
+            'liabilities', 'current_liabilities', 'current_liabilities_other',
+            'credit_cards', 'payables', 'total_current_liabilities',
+            'non_current_liabilities', 'total_liabilities', 'equity_section',
+            'equity', 'earnings_section', 'current_year_earnings',
+            'retained_earnings', 'total_earnings', 'total_equity',
+            'liabilities_and_equity',
+        ])
+        self.assertEqual(lines[2]['name'], 'Bank and Cash Accounts')
+        self.assertEqual(lines[13]['name'], 'Credit Card')
+        self.assertEqual(lines[21]['name'], 'Current Year Unallocated Earnings')
+
     def test_balance_sheet_is_cumulative_before_date_from(self):
         self._post_move(
             self.receivable, self.income, 125.0,
