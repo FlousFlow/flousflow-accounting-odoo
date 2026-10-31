@@ -41,6 +41,14 @@
                             <option value="cash">Cash Basis</option>
                         </select>
                     </label>
+                    <label class="ff_es_select">
+                        <span>In Currency</span>
+                        <select class="form-select" t-att-value="this.state.currencyId"
+                                t-on-change="this.onCurrencyChange">
+                            <option t-foreach="this.state.currencies" t-as="currency" t-key="currency.id"
+                                    t-att-value="currency.id" t-out="currency.name"/>
+                        </select>
+                    </label>
                 </div>
             </header>
             <main class="ff_es_content">

@@ -25,6 +25,7 @@ export class ExecutiveSummary extends Component {
             loading: true,
             companyName: "",
             currencyId: false,
+            currencies: [],
             groups: [],
             comparisonGroups: [],
         });
@@ -46,7 +47,8 @@ export class ExecutiveSummary extends Component {
         return this.orm.call(
             "report.flousflow_accounting.apr__report_financial",
             "get_executive_summary_data",
-            [dateFrom || false, dateTo || false, this.state.targetMove, this.state.cashBasis],
+            [dateFrom || false, dateTo || false, this.state.targetMove, this.state.cashBasis,
+                this.state.currencyId || false],
         );
     }
 
@@ -55,6 +57,7 @@ export class ExecutiveSummary extends Component {
         this.state.dateTo = data.date_to;
         this.state.companyName = data.company_name;
         this.state.currencyId = data.currency_id;
+        this.state.currencies = data.currencies;
         this.state.groups = data.groups;
     }
 
@@ -106,6 +109,11 @@ export class ExecutiveSummary extends Component {
 
     async onAccountingBasisChange(event) {
         this.state.cashBasis = event.target.value === "cash";
+        await this.reload();
+    }
+
+    async onCurrencyChange(event) {
+        this.state.currencyId = Number(event.target.value);
         await this.reload();
     }
 

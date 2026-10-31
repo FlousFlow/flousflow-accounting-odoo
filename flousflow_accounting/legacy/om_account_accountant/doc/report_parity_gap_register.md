@@ -6,11 +6,12 @@ Reviewed against the Enterprise Reporting menu and live report screens on 2026-1
 
 `Cashflow Analysis` is already supplied by Odoo's `account` module. The local database has `account.action_account_cashflow_analysis` on `account.bank.statement.line`, with `graph,pivot` views, and the Reporting > Management menu entry. Keep using this native action; do not add a duplicate.
 
-## Missing destinations
+## Report destinations and gaps
 
 | Enterprise destination | Local state | Evidence / distinction |
 | --- | --- | --- |
-| Executive Summary (`/odoo/executive-summary`) | No matching route or action | The local Annual Report is a user-authored PDF document with editable sections. Its template includes a section named “Executive Summary”, but it is not the interactive report shown in Enterprise. |
+| Customer Statement (`/odoo/customer-statement`) | Available locally as `apr__action_interactive_customer_statement` | Date, account scope, partner, posted-entry, currency-scale, print and send flows are present. Arabic labels now resolve in the web client; the empty-state total is hidden and the table fits an 890px viewport. The local database currently has zero `account.move` records, while Enterprise FY 2026 shows Gemini Furniture and Ready Mat totaling -$10,031.50. Populated-screen parity cannot be confirmed until the local comparison database has accounting entries. Backend tests cover filters, signs, access, PDF and e-mail actions. |
+| Executive Summary (`/odoo/executive-summary`) | Implemented as `apr__action_executive_summary` over the existing financial-report engine | Includes Cash, Profitability, Balance Sheet, Performance, and Operational groups; date range, posted/all moves, accrual/cash basis, comparison with the previous period, and reporting-currency conversion. Backend tests cover posted values, zero denominators, the fixed 365-day formula, currency conversion, invalid dates, and unknown currencies. A headless browser tour covers KPI groups and comparison. Live visual parity against the Enterprise page is still unverified. |
 | Loan Analysis (`/odoo/loans-analysis`) | No matching action, menu, or loan-analysis model | Enterprise exposes Pivot and List views with Year and Loan dimensions and Principal, Interest, and Payment measures. Local recurring payments and cash forecasting do not provide loan schedules or this analysis. |
 
 ## Executive Summary screen contract observed
@@ -28,6 +29,7 @@ The local source does not contain the Enterprise `account_reports` report defini
 
 ## Next implementation work
 
-1. Implement the interactive Executive Summary using the existing local report engine and the observed formulas, with company, date, target-move, currency, and comparison behavior covered by tests.
-2. Locate an existing Odoo 20 loan-analysis source component before deciding whether the Loan Analysis destination can be merged or needs a separately designed equivalent. Do not present recurring payment lines as loan analytics.
-3. Compare rendered local screens with Enterprise at desktop and narrow widths after authentication is available in the local browser.
+1. Compare the rendered Executive Summary against the Enterprise screen at desktop and narrow widths, then close remaining presentation and filter gaps (including its settings controls and comparison modes).
+2. Locate an existing Odoo 20 loan-analysis source component before deciding whether the Loan Analysis destination can be merged. The local Odoo Community source and current module do not contain the Enterprise loan report/model. Do not present recurring payment lines as loan analytics or invent loan accounting behavior without the source contract.
+3. Repeat the Customer Statement comparison with populated local accounting data, including expanded lines and print/send output.
+4. Continue the broader Enterprise-vs-local screen/action audit; this register is a focused report audit, not proof that every Accounting screen is at parity.

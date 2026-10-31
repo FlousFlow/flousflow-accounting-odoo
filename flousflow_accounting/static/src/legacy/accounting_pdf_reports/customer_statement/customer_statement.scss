@@ -21,7 +21,7 @@
 
     .ff_cs_selected_partners { max-width: 78rem; margin: 0 auto 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
     .ff_cs_table_wrap { width: calc(100% - 2rem); max-width: 78rem; min-width: 0; margin: 0 auto; padding: 1rem 1.5rem; background: #fff; border: 1px solid #dee2e6; border-radius: .25rem; overflow-x: auto; overscroll-behavior-inline: contain; }
-    .ff_cs_table { min-width: 60rem; margin: 0; }
+    .ff_cs_table { width: 100%; min-width: 44rem; margin: 0; }
     .ff_cs_table th, .ff_cs_table td { white-space: nowrap; }
     .ff_cs_report_row { background: #fff; }
     .ff_cs_partner_row { border-top: 2px solid #d8dde3; background: #e9ecef; }

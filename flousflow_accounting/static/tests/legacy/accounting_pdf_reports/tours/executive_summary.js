@@ -18,6 +18,30 @@ registry.category("web_tour.tours").add("ff_executive_summary", {
             },
         },
         {
+            trigger: ".ff_es_group",
+            run() {
+                const currencySelect = [...document.querySelectorAll(".ff_es_select")]
+                    .find((label) => label.textContent.includes("In Currency"))?.querySelector("select");
+                const alternative = [...(currencySelect?.options || [])]
+                    .find((option) => option.value !== currencySelect.value);
+                if (!currencySelect || !alternative) {
+                    throw new Error("The reporting-currency selector does not offer another currency.");
+                }
+                currencySelect.value = alternative.value;
+                currencySelect.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+        },
+        {
+            trigger: ".ff_es_group",
+            run() {
+                const currencySelect = [...document.querySelectorAll(".ff_es_select")]
+                    .find((label) => label.textContent.includes("In Currency"))?.querySelector("select");
+                if (!currencySelect?.value) {
+                    throw new Error("The selected reporting currency was lost while the Summary reloaded.");
+                }
+            },
+        },
+        {
             trigger: ".ff_es_check input[type='checkbox']",
             run() {
                 const comparison = [...document.querySelectorAll(".ff_es_check")]

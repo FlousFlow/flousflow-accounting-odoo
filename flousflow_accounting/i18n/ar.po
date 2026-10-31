@@ -431,6 +431,8 @@ msgid "Target Moves"
 msgstr "القيود المستهدفة"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 msgid "Posted Entries"
 msgstr "القيود المُرحّلة"
 
@@ -481,6 +483,36 @@ msgid "In Currency"
 msgstr "بعملة الشركة"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
+msgid "Amount in Currency"
+msgstr "المبلغ بالعملة"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
+msgid "In .$"
+msgstr "في .$"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
+msgid "In $"
+msgstr "في $"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
+msgid "In k$"
+msgstr "في ألف $"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
+msgid "In M$"
+msgstr "في مليون $"
+
+#. module: flousflow_accounting
 msgid "In Thousands"
 msgstr "بالآلاف"
 
@@ -505,10 +537,14 @@ msgid "Change"
 msgstr "التغير"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 msgid "Total"
 msgstr "الإجمالي"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 msgid "Print"
 msgstr "طباعة"
 
@@ -594,6 +630,8 @@ msgid "Percentage"
 msgstr "النسبة المئوية"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 msgid "Amount"
 msgstr "المبلغ"
 
@@ -1571,8 +1609,10 @@ msgstr "مُخصص"
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_general_ledger
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 msgid "Date"
-msgstr "تاريخ"
+msgstr "التاريخ"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__date_from
@@ -2240,6 +2280,8 @@ msgid "Partner's"
 msgstr "شريك"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_aged_trial_balance__partner_ids
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_balance_report__partner_ids
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_common_account_report__partner_ids
@@ -2248,7 +2290,7 @@ msgstr "شريك"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__partner_ids
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_agedpartnerbalance
 msgid "Partners"
-msgstr "شركاء"
+msgstr "الشركاء"
 
 #. module: flousflow_accounting
 #: model:account.account.type,name:flousflow_accounting.apr__data_account_type_payable
@@ -8119,6 +8161,8 @@ msgstr ""
 "القياسية فوقها. اتركها 0 عندما ينتهي الشيك مع نهاية الصفحة."
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.chk__check_pages
 msgid "Due Date"
 msgstr "تاريخ الاستحقاق"
@@ -9315,7 +9359,9 @@ msgstr "رقم العميل المرجعي"
 
 #. module: flousflow_accounting
 #. odoo-python
+#. odoo-javascript
 #: code:addons/flousflow_accounting/legacy/om_account_followup/models/partner.py:0
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.js:0
 #: model:ir.actions.report,name:flousflow_accounting.fol__action_report_customer_statement
 #: model:ir.model,name:flousflow_accounting.model_report_om_account_followup_report_customer_statement
 #: model:mail.template,name:flousflow_accounting.fol__email_template_customer_statement
@@ -13550,6 +13596,10 @@ msgstr "جارٍ التحميل..."
 #. module: flousflow_accounting
 msgid "Executive Summary could not be loaded."
 msgstr "تعذر تحميل الملخص التنفيذي."
+
+#. module: flousflow_accounting
+msgid "Accounting Basis"
+msgstr "أساس المحاسبة"
 
 #. module: flousflow_accounting
 #. odoo-javascript

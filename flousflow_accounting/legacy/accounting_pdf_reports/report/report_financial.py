@@ -10,7 +10,8 @@ class ReportFinancial(models.AbstractModel):
     _description = 'Financial Reports'
 
     @api.model
-    def get_executive_summary_data(self, date_from, date_to, target_move='posted', cash_basis=False):
+    def get_executive_summary_data(self, date_from, date_to, target_move='posted', cash_basis=False,
+                                   currency_id=False):
         """Return Executive Summary KPIs using the same journal-item accounting engine.
 
         Balances are scoped to the active company and the requested date context. This
@@ -24,6 +25,10 @@ class ReportFinancial(models.AbstractModel):
         date_from = fields.Date.to_date(date_from) if date_from else company.compute_fiscalyear_dates(date_to)['date_from']
         if date_from and date_from > date_to:
             raise UserError(_('The start date must be on or before the end date.'))
+        currencies = self.env['res.currency'].search([('active', '=', True)], order='name')
+        currency = self.env['res.currency'].browse(int(currency_id)).exists() if currency_id else company.currency_id
+        if not currency or currency not in currencies:
+            raise UserError(_('Select an active reporting currency.'))
         period_context = {
             'date_from': date_from.isoformat() if date_from else False,
             'date_to': date_to.isoformat(),
@@ -138,9 +143,18 @@ class ReportFinancial(models.AbstractModel):
                  'formula': _('Current Assets divided by Current Liabilities')},
             ]},
         ]
+        if currency != company.currency_id:
+            for group in groups:
+                for item in group['items']:
+                    if item.get('unit') not in {'percent', 'days', 'ratio'}:
+                        item['value'] = company.currency_id._convert(
+                            item['value'], currency, company, date_to,
+                        )
         return {
             'company_name': company.display_name,
-            'currency_id': company.currency_id.id,
+            'currency_id': currency.id,
+            'currencies': [{'id': item.id, 'name': item.name, 'symbol': item.symbol}
+                           for item in currencies],
             'date_from': date_from.isoformat() if date_from else False,
             'date_to': date_to.isoformat(),
             'target_move': target_move,
