@@ -2,7 +2,7 @@ from io import BytesIO
 from zipfile import ZipFile
 
 from odoo.tests import tagged
-from odoo.exceptions import ValidationError
+from odoo.exceptions import AccessError, ValidationError
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -362,6 +362,43 @@ class TestBalanceSheet(AccountTestInvoicingCommon):
         self.assertAlmostEqual(line['balance'], 420.0)
         self.assertIn('debit', line)
         self.assertIn('credit', line)
+
+    def test_interactive_report_accepts_a_custom_root_report(self):
+        """Reports configured by an accountant must be usable in the interactive renderer."""
+        revenue = self.init_invoice('out_invoice', amounts=[420.0], invoice_date='2025-06-01',
+                                    taxes=[], post=True).invoice_line_ids.account_id
+        custom_report = self.env['account.financial.report'].create({
+            'name': 'Custom Interactive Report',
+            'type': 'sum',
+            'sign': '-1',
+            'children_ids': [(0, 0, {
+                'name': 'Custom Revenue',
+                'type': 'accounts',
+                'sign': '-1',
+                'account_ids': [(6, 0, revenue.ids)],
+                'display_detail': 'detail_flat',
+            })],
+        })
+
+        result = self.env['report.flousflow_accounting.apr__report_financial'].get_interactive_data(
+            custom_report.id, False, '2025-12-31', 'posted',
+            self.env['account.journal'].search([('company_id', '=', self.env.company.id)]).ids,
+            False, False,
+        )
+
+        self.assertEqual(result['name'], 'Custom Interactive Report')
+        self.assertIn('Custom Revenue', [line['name'] for line in result['lines']])
+        custom_revenue = next(line for line in result['lines'] if line['name'] == 'Custom Revenue')
+        self.assertAlmostEqual(custom_revenue['balance'], 420.0)
+
+    def test_interactive_report_rejects_a_non_root_report(self):
+        root = self.env.ref('flousflow_accounting.apr__account_financial_report_balancesheet0')
+        child = root.children_ids[:1]
+
+        with self.assertRaises(AccessError):
+            self.env['report.flousflow_accounting.apr__report_financial'].get_interactive_data(
+                child.id, False, '2025-12-31', 'posted', [], False, False,
+            )
 
     def test_profit_and_loss_revenue_formula_metadata_uses_negative_sum(self):
         invoice = self.init_invoice('out_invoice', amounts=[420.0], invoice_date='2025-06-10',

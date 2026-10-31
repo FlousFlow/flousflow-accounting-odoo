@@ -206,11 +206,9 @@ class ReportFinancial(models.AbstractModel):
             from odoo.exceptions import AccessError
             raise AccessError(_('You are not allowed to read accounting reports.'))
         report = self.env['account.financial.report'].browse(int(report_id)).exists()
-        allowed = self.env.ref('flousflow_accounting.apr__account_financial_report_balancesheet0') | self.env.ref(
-            'flousflow_accounting.apr__account_financial_report_profitandloss0')
-        if not report or report not in allowed:
+        if not report or report.parent_id:
             from odoo.exceptions import AccessError
-            raise AccessError(_('This report is not available.'))
+            raise AccessError(_('Select an available root financial report.'))
         company = self.env.company
         profit_loss = self.env.ref('flousflow_accounting.apr__account_financial_report_profitandloss0')
         financial_budget = self.env['account.financial.budget']
