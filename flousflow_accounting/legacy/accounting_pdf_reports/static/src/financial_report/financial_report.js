@@ -23,10 +23,13 @@ export class FinancialReport extends Component {
             this.props.action.context?.profit_loss_report_id
         );
         this.isProfitLoss = isProfitLoss;
+        const genericReportSelector = Boolean(this.props.action.context?.generic_report_selector);
         this.state = proxy({
-            reportId: this.props.action.context?.report_id,
+            reportId: this.props.action.context?.report_id || false,
             printActionXmlid: this.props.action.context?.print_action_xmlid,
-            title: "",
+            genericReportSelector,
+            availableReports: [],
+            title: genericReportSelector ? _t("Financial Report") : "",
             dateFrom: isProfitLoss ? false : "",
             dateTo: isProfitLoss ? false : serializeDate(today),
             periodType: isProfitLoss ? "fiscal_year" : "as_of",
@@ -67,7 +70,56 @@ export class FinancialReport extends Component {
             canEditFinancialBudget: false,
             formulaInfoKey: null,
         });
-        onWillStart(() => this.loadReport());
+        onWillStart(() => genericReportSelector && !this.state.reportId
+            ? this.loadAvailableReports()
+            : this.loadReport());
+    }
+
+    get selectedReport() {
+        return this.state.availableReports.find((report) => report.id === this.state.reportId);
+    }
+
+    async loadAvailableReports() {
+        this.state.loading = true;
+        try {
+            this.state.availableReports = await this.orm.searchRead(
+                "account.financial.report",
+                [["parent_id", "=", false]],
+                ["name", "sequence"],
+            );
+        } catch (error) {
+            this.notification.add(error.message || _t("Financial reports could not be loaded."), {
+                type: "danger",
+            });
+        } finally {
+            this.state.loading = false;
+        }
+    }
+
+    async selectFinancialReport(reportId) {
+        const report = this.state.availableReports.find((item) => item.id === Number(reportId));
+        if (!report) {
+            return;
+        }
+        this.state.reportId = report.id;
+        this.state.title = report.name;
+        this.isProfitLoss = String(report.id) === String(
+            this.props.action.context?.profit_loss_report_id
+        );
+        if (this.isProfitLoss) {
+            this.state.periodType = "fiscal_year";
+            const dates = await this.orm.call(
+                "report.flousflow_accounting.apr__report_financial",
+                "get_interactive_period_dates",
+                [report.id, "fiscal_year", this.state.periodAnchor],
+            );
+            this.state.dateFrom = dates.date_from;
+            this.state.dateTo = dates.date_to;
+        } else {
+            this.state.periodType = "as_of";
+            this.state.dateFrom = false;
+        }
+        return this.loadReport();
     }
 
     get visibleLines() {
@@ -274,6 +326,9 @@ export class FinancialReport extends Component {
     }
 
     async loadReport() {
+        if (!this.state.reportId) {
+            return;
+        }
         this.state.loading = true;
         try {
             const data = await this.orm.call(
@@ -542,11 +597,15 @@ export class FinancialReport extends Component {
     }
 
     async openPrintOptions() {
+        if (!this.state.reportId) {
+            return;
+        }
         const action = await this.action.loadAction(this.state.printActionXmlid);
         const comparisonContext = this.state.comparisonContext || {};
         const hasPeriodComparison = this.state.comparison && this.state.comparisonMode !== "percentage_of";
         action.context = {
             ...action.context,
+            default_account_report_id: this.state.reportId,
             default_date_from: this.state.dateFrom || false,
             default_date_to: this.state.dateTo,
             default_target_move: this.state.targetMove,
@@ -571,6 +630,9 @@ export class FinancialReport extends Component {
     }
 
     async exportXlsx() {
+        if (!this.state.reportId) {
+            return;
+        }
         try {
             const comparisonContext = this.state.comparisonContext || {};
             const hasPeriodComparison = this.state.comparison && this.state.comparisonMode !== "percentage_of";

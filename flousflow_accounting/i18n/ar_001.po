@@ -680,7 +680,7 @@ msgstr ""
 #. module: flousflow_accounting
 #: model:ir.actions.report,name:flousflow_accounting.apr__action_report_financial
 msgid "Financial Report"
-msgstr ""
+msgstr "التقرير المالي"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_financial_report__style_overwrite
@@ -4703,3 +4703,19 @@ msgstr "للمراجعة"
 #: model:ir.actions.act_window,help:flousflow_accounting.apr__action_account_tax_returns
 msgid "Create a tax filing task, review its period using the existing tax report, then track submission and payment."
 msgstr "أنشئ مهمة للإقرار الضريبي، وراجع الفترة من خلال تقرير الضرائب، ثم تابع الإرسال والسداد."
+
+#. module: flousflow_accounting
+msgid "Select report"
+msgstr "اختر تقريرًا"
+
+#. module: flousflow_accounting
+msgid "No root financial reports are available."
+msgstr "لا توجد تقارير مالية رئيسية متاحة."
+
+#. module: flousflow_accounting
+msgid "Financial reports could not be loaded."
+msgstr "تعذّر تحميل التقارير المالية."
+
+#. module: flousflow_accounting
+msgid "Select an available root financial report."
+msgstr "اختر تقريرًا ماليًا رئيسيًا متاحًا."

@@ -14380,3 +14380,19 @@ msgstr "مراجعة الأرباح والخسائر"
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_create_wizard_view
 msgid "Create Tax Return"
 msgstr "إنشاء إقرار"
+
+#. module: flousflow_accounting
+msgid "Select report"
+msgstr "اختر تقريرًا"
+
+#. module: flousflow_accounting
+msgid "No root financial reports are available."
+msgstr "لا توجد تقارير مالية رئيسية متاحة."
+
+#. module: flousflow_accounting
+msgid "Financial reports could not be loaded."
+msgstr "تعذّر تحميل التقارير المالية."
+
+#. module: flousflow_accounting
+msgid "Select an available root financial report."
+msgstr "اختر تقريرًا ماليًا رئيسيًا متاحًا."

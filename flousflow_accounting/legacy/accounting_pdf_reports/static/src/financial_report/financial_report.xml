@@ -3,15 +3,30 @@
     <t t-name="flousflow_accounting.apr__FinancialReport" owl="1">
         <div class="o_action ff_financial_report">
             <div class="ff_fr_toolbar">
-                <button class="btn btn-primary" t-on-click="this.openPrintOptions">Print</button>
+                <button t-if="this.state.reportId" class="btn btn-primary" t-on-click="this.openPrintOptions">Print</button>
                 <div class="ff_fr_title">
                     <h2><t t-out="this.state.title"/></h2>
+                    <div t-if="this.state.genericReportSelector" class="dropdown d-inline-block ff_fr_report_selector">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <t t-if="this.selectedReport" t-out="this.selectedReport.name"/>
+                            <t t-else="">Select report</t>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <button t-foreach="this.state.availableReports" t-as="report" t-key="report.id"
+                                    class="dropdown-item" type="button"
+                                    t-on-click="() => this.selectFinancialReport(report.id)"
+                                    t-out="report.name"/>
+                            <div t-if="!this.state.availableReports.length" class="dropdown-item-text text-muted">
+                                No root financial reports are available.
+                            </div>
+                        </div>
+                    </div>
                     <div class="dropdown d-inline-block">
                         <button class="btn btn-link" title="Report actions" data-bs-toggle="dropdown" aria-label="Report actions">
                             <i class="fa fa-cog"/>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <button class="dropdown-item" type="button" t-on-click="this.exportXlsx">
+                            <button t-if="this.state.reportId" class="dropdown-item" type="button" t-on-click="this.exportXlsx">
                                 <i class="fa fa-file-excel-o me-2"/>XLSX
                             </button>
                         </div>

@@ -164,4 +164,17 @@
               parent="account.account_reports_legal_statements_menu"
               groups="account.group_account_readonly,account.group_account_manager"/>
 
+    <record id="apr__action_interactive_financial_report" model="ir.actions.client">
+        <field name="name">Financial Report</field>
+        <field name="tag">flousflow_accounting.apr__financial_report</field>
+        <field name="context" eval="{'generic_report_selector': True, 'profit_loss_report_id': ref('flousflow_accounting.apr__account_financial_report_profitandloss0'), 'print_action_xmlid': 'flousflow_accounting.apr__action_account_report_bs'}"/>
+    </record>
+
+    <menuitem id="apr__menu_account_report_financial"
+              name="Financial Report"
+              sequence="30"
+              action="apr__action_interactive_financial_report"
+              parent="account.account_reports_legal_statements_menu"
+              groups="account.group_account_readonly,account.group_account_manager"/>
+
 </odoo>

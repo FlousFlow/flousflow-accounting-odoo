@@ -6,6 +6,7 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 FINANCIAL_MENUS = (
     'flousflow_accounting.apr__menu_account_report_bs',
     'flousflow_accounting.apr__menu_account_report_pl',
+    'flousflow_accounting.apr__menu_account_report_financial',
     'flousflow_accounting.apr__menu_general_ledger',
     'flousflow_accounting.apr__menu_general_balance_report',
     'flousflow_accounting.apr__menu_account_report',
@@ -61,6 +62,11 @@ class TestMenuAccess(AccountTestInvoicingCommon):
                     self.env.ref('flousflow_accounting.apr__menu_general_balance_report').action._name,
                     'ir.actions.client',
                 )
+                financial_action = self.env.ref(
+                    'flousflow_accounting.apr__action_interactive_financial_report'
+                )
+                self.assertEqual(financial_action.tag, 'flousflow_accounting.apr__financial_report')
+                self.assertIn('generic_report_selector', financial_action.context)
                 # The interactive destination retains the original printable wizard.
                 balance_wizard = self.env['account.balance.report'].with_user(user).create({})
                 balance_wizard = balance_wizard.with_context(
