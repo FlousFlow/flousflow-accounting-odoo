@@ -35,7 +35,7 @@
 }
 
 .ff_ds_category_filter .form-select {
-    width: min(15rem, 35vw);
+    width: unquote("min(15rem, 35vw)");
     min-width: 10rem;
 }
 
