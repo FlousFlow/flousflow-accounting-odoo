@@ -8,7 +8,12 @@ class AccountJournal(models.Model):
 
     @api.model
     def get_account_dashboard_kpis(self):
-        cards = super().get_account_dashboard_kpis()
+        # Match the Enterprise dashboard KPI row; cash flow remains available
+        # from the Accounting reports menu.
+        cards = [
+            card for card in super().get_account_dashboard_kpis()
+            if card['id'] != 'cash'
+        ]
         # Keep each Community tile pointed at the same report destination as Enterprise.
         # The Enterprise account_reports action IDs are not installed on Community.
         report_actions = {

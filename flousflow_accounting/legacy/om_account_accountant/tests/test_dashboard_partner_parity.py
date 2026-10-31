@@ -14,7 +14,7 @@ class TestDashboardPartnerParity(AccountTestInvoicingCommon):
 
         self.assertSetEqual(
             set(cards),
-            {"invoices", "expenses", "cash", "receivable", "payable", "invoice_layout"},
+            {"invoices", "expenses", "receivable", "payable", "invoice_layout"},
         )
         self.assertEqual(
             cards["invoices"]["action_id"],
@@ -23,10 +23,6 @@ class TestDashboardPartnerParity(AccountTestInvoicingCommon):
         self.assertEqual(
             cards["expenses"]["action_id"],
             self.env.ref("flousflow_accounting.apr__action_interactive_profit_and_loss").id,
-        )
-        self.assertEqual(
-            cards["cash"]["action_id"],
-            self.env.ref("account.action_account_cashflow_analysis").id,
         )
         self.assertEqual(
             cards["receivable"]["action_id"],
