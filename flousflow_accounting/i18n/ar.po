@@ -14283,3 +14283,8 @@ msgstr "إنشاء القوائم المالية"
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_annual_report_templates
 msgid "Annual Report Templates"
 msgstr "قوالب التقارير السنوية"
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/models/dashboard_kpi.py:0
+msgid "Activate E-Invoicing"
+msgstr "تفعيل الفوترة الإلكترونية"

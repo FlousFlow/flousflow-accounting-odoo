@@ -4552,3 +4552,8 @@ msgstr "المتابعة اليدوية"
 #: model:ir.ui.menu,name:flousflow_accounting.fol__menu_action_followup_stat_follow
 msgid "Follow-Up Analysis"
 msgstr "تحليل المتابعة"
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/models/dashboard_kpi.py:0
+msgid "Activate E-Invoicing"
+msgstr "تفعيل الفوترة الإلكترونية"

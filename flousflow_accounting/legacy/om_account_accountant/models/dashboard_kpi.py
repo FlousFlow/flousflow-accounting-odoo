@@ -6,6 +6,13 @@ from odoo import api, fields, models
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
+    def _get_onboarding_action_data(self):
+        self.ensure_one()
+        action_data = super()._get_onboarding_action_data()
+        if action_data.get('title') == 'Activate E-Invoicing':
+            action_data['title'] = self.env._('Activate E-Invoicing')
+        return action_data
+
     @api.model
     def get_account_dashboard_kpis(self):
         # Match the Enterprise dashboard KPI row; cash flow remains available

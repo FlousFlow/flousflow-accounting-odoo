@@ -40,6 +40,16 @@ class TestDashboardPartnerParity(AccountTestInvoicingCommon):
 
         self.assertEqual(self.env["res.users"].get_account_dashboard_kpi_order(), requested_order)
 
+    def test_einvoicing_onboarding_label_is_translated_in_arabic(self):
+        sales_journal = self.env["account.journal"].search(
+            [("type", "=", "sale"), ("company_id", "=", self.env.company.id)],
+            limit=1,
+        )
+
+        action_data = sales_journal.with_context(lang="ar_001")._get_onboarding_action_data()
+
+        self.assertEqual(action_data["title"], "تفعيل الفوترة الإلكترونية")
+
     def test_partner_open_items_button_uses_current_company_residuals(self):
         invoice = self.init_invoice(
             "in_invoice", amounts=[125.0], taxes=[], invoice_date="2026-01-15", post=True,
