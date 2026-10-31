@@ -9,6 +9,145 @@ class ReportFinancial(models.AbstractModel):
     _name = 'report.flousflow_accounting.apr__report_financial'
     _description = 'Financial Reports'
 
+    @api.model
+    def get_executive_summary_data(self, date_from, date_to, target_move='posted', cash_basis=False):
+        """Return Executive Summary KPIs using the same journal-item accounting engine.
+
+        Balances are scoped to the active company and the requested date context. This
+        is intentionally read-only: it never creates or alters accounting entries.
+        """
+        from odoo.exceptions import AccessError
+        if not self.env.user.has_group('account.group_account_readonly'):
+            raise AccessError(_('You are not allowed to read accounting reports.'))
+        company = self.env.company
+        date_to = fields.Date.to_date(date_to) if date_to else fields.Date.context_today(self)
+        date_from = fields.Date.to_date(date_from) if date_from else company.compute_fiscalyear_dates(date_to)['date_from']
+        if date_from and date_from > date_to:
+            raise UserError(_('The start date must be on or before the end date.'))
+        period_context = {
+            'date_from': date_from.isoformat() if date_from else False,
+            'date_to': date_to.isoformat(),
+            'strict_range': bool(date_from),
+            'state': 'all' if target_move == 'all' else 'posted',
+            'company_id': company.id,
+            'journal_ids': self.env['account.journal'].search([
+                ('company_id', 'child_of', company.id),
+            ]).ids,
+            'tax_exigible': bool(cash_basis),
+        }
+        balance_context = dict(period_context, date_from=False, strict_range=False)
+
+        def totals(account_types, report_context=period_context):
+            accounts = self.env['account.account'].search([
+                ('account_type', 'in', list(account_types)),
+                ('company_ids', 'child_of', company.id),
+            ])
+            amounts = self.with_context(report_context)._compute_account_balance(accounts)
+            return {
+                field: sum(value.get(field, 0.0) for value in amounts.values())
+                for field in ('debit', 'credit', 'balance')
+            }
+
+        cash_types = {'asset_cash', 'liability_credit_card'}
+        income = totals({'income'})
+        other_income = totals({'income_other'})
+        cost = totals({'expense_direct_cost'})
+        expenses = totals({'expense'})
+        other_expenses = totals({'expense_depreciation', 'expense_other'})
+        cash = totals(cash_types)
+        cash_closing = totals(cash_types, balance_context)
+        receivables = totals({'asset_receivable'}, balance_context)
+        payables = totals({'liability_payable'}, balance_context)
+        current_assets = totals({'asset_cash', 'asset_receivable', 'asset_current', 'asset_prepayments'}, balance_context)
+        current_liabilities = totals({'liability_current', 'liability_credit_card', 'liability_payable'}, balance_context)
+        all_assets = totals({
+            'asset_cash', 'asset_receivable', 'asset_current', 'asset_prepayments',
+            'asset_fixed', 'asset_non_current',
+        }, balance_context)
+        all_liabilities = totals({
+            'liability_current', 'liability_credit_card', 'liability_payable', 'liability_non_current',
+        }, balance_context)
+
+        revenue = -income['balance']
+        cost_of_revenue = cost['balance']
+        operating_expenses = expenses['balance']
+        non_operating_expenses = other_expenses['balance']
+        other_revenue = -other_income['balance']
+        gross_profit = revenue - cost_of_revenue
+        net_profit = revenue + other_revenue - cost_of_revenue - operating_expenses - non_operating_expenses
+        assets = all_assets['balance']
+        liabilities = -all_liabilities['balance']
+        current_asset_value = current_assets['balance']
+        current_liability_value = -current_liabilities['balance']
+        # Match Enterprise's NDays formula function, which returns a fixed 365.
+        days = 365
+
+        def ratio(numerator, denominator, multiplier=1.0):
+            return numerator / denominator * multiplier if denominator else 0.0
+
+        groups = [
+            {'key': 'cash', 'name': _('Cash'), 'items': [
+                {'key': 'cash_earnings', 'label': _('Cash Earnings'), 'value': cash['debit'],
+                 'formula': _('Debit entries on cash and credit-card accounts')},
+                {'key': 'amount_spent', 'label': _('Amount Spent'), 'value': cash['credit'],
+                 'formula': _('Credit entries on cash and credit-card accounts')},
+                {'key': 'cash_surplus', 'label': _('Cash Surplus'), 'value': cash['debit'] - cash['credit'],
+                 'formula': _('Cash Earnings minus Amount Spent')},
+                {'key': 'bank_closing', 'label': _('Bank Closing'), 'value': cash_closing['balance'],
+                 'formula': _('Net balance of cash and credit-card accounts')},
+            ]},
+            {'key': 'profitability', 'name': _('Profitability'), 'items': [
+                {'key': 'revenue', 'label': _('Revenue'), 'value': revenue, 'formula': _('Income account balance')},
+                {'key': 'cost_of_revenue', 'label': _('Cost of Revenue'), 'value': cost_of_revenue,
+                 'formula': _('Direct cost account balance')},
+                {'key': 'gross_profit', 'label': _('Gross Profit'), 'value': gross_profit,
+                 'formula': _('Revenue minus Cost of Revenue')},
+                {'key': 'expenses', 'label': _('Expenses'), 'value': operating_expenses,
+                 'formula': _('Operating expense account balance')},
+                {'key': 'net_profit', 'label': _('Net Profit'), 'value': net_profit,
+                 'formula': _('Revenue plus Other Income minus Cost of Revenue and Expenses')},
+            ]},
+            {'key': 'balance_sheet', 'name': _('Balance Sheet'), 'items': [
+                {'key': 'net_assets', 'label': _('Net Assets'), 'value': assets - liabilities,
+                 'formula': _('Total Assets minus Total Liabilities')},
+                {'key': 'current_assets', 'label': _('Current Assets'), 'value': current_asset_value,
+                 'formula': _('Cash, receivables, current assets, and prepayments')},
+                {'key': 'current_liabilities', 'label': _('Current Liabilities'), 'value': current_liability_value,
+                 'formula': _('Current liabilities, credit cards, and payables')},
+            ]},
+            {'key': 'performance', 'name': _('Performance'), 'items': [
+                {'key': 'gross_margin', 'label': _('Gross Margin'), 'value': ratio(gross_profit, revenue, 100),
+                 'unit': 'percent', 'formula': _('Gross Profit divided by Revenue')},
+                {'key': 'net_margin', 'label': _('Net Margin'), 'value': ratio(net_profit, revenue, 100),
+                 'unit': 'percent', 'formula': _('Net Profit divided by Revenue')},
+                {'key': 'roi', 'label': _('Return on Investment'), 'value': ratio(net_profit, assets, 100),
+                 'unit': 'percent', 'formula': _('Net Profit divided by Total Assets')},
+            ]},
+            {'key': 'operational', 'name': _('Operational'), 'items': [
+                {'key': 'debtor_days', 'label': _('Debtor Days'),
+                 'value': ratio(receivables['balance'], revenue, days), 'unit': 'days',
+                 'formula': _('Receivables divided by Revenue times days in period')},
+                {'key': 'creditor_days', 'label': _('Creditor Days'),
+                 'value': ratio(-payables['balance'], cost_of_revenue + operating_expenses, days),
+                 'unit': 'days', 'formula': _('Payables divided by Cost of Revenue and Expenses times days in period')},
+                {'key': 'short_term_cash_forecast', 'label': _('Short-term Cash Forecast'),
+                 'value': receivables['balance'] + payables['balance'],
+                 'formula': _('Receivables plus signed Payables balance')},
+                {'key': 'current_ratio', 'label': _('Current Ratio'),
+                 'value': ratio(current_asset_value, current_liability_value), 'unit': 'ratio',
+                 'formula': _('Current Assets divided by Current Liabilities')},
+            ]},
+        ]
+        return {
+            'company_name': company.display_name,
+            'currency_id': company.currency_id.id,
+            'date_from': date_from.isoformat() if date_from else False,
+            'date_to': date_to.isoformat(),
+            'target_move': target_move,
+            'cash_basis': bool(cash_basis),
+            'groups': groups,
+        }
+
     def _compute_account_balance(self, accounts):
         """ compute the balance, debit and credit for the provided accounts
         """

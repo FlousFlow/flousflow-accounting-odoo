@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="apr__action_executive_summary" model="ir.actions.client">
+        <field name="name">Executive Summary</field>
+        <field name="tag">flousflow_accounting.apr__executive_summary</field>
+    </record>
+
+    <menuitem id="apr__menu_executive_summary"
+              name="Executive Summary"
+              parent="account.menu_finance_reports"
+              action="apr__action_executive_summary"
+              groups="account.group_account_readonly"
+              sequence="1"/>
+</odoo>

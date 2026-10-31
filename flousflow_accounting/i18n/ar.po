@@ -13488,6 +13488,70 @@ msgid "Current Ratio"
 msgstr "نسبة التداول"
 
 #. module: flousflow_accounting
+msgid "Executive Summary"
+msgstr "الملخص التنفيذي"
+
+#. module: flousflow_accounting
+msgid "Cash"
+msgstr "النقدية"
+
+#. module: flousflow_accounting
+msgid "Profitability"
+msgstr "الربحية"
+
+#. module: flousflow_accounting
+msgid "Performance"
+msgstr "الأداء"
+
+#. module: flousflow_accounting
+msgid "Operational"
+msgstr "التشغيل"
+
+#. module: flousflow_accounting
+msgid "Cash Earnings"
+msgstr "المتحصلات النقدية"
+
+#. module: flousflow_accounting
+msgid "Amount Spent"
+msgstr "المصروفات النقدية"
+
+#. module: flousflow_accounting
+msgid "Cash Surplus"
+msgstr "صافي التدفق النقدي"
+
+#. module: flousflow_accounting
+msgid "Bank Closing"
+msgstr "الرصيد النقدي الختامي"
+
+#. module: flousflow_accounting
+msgid "Net Assets"
+msgstr "صافي الأصول"
+
+#. module: flousflow_accounting
+msgid "Return on Investment"
+msgstr "العائد على الاستثمار"
+
+#. module: flousflow_accounting
+msgid "Debtor Days"
+msgstr "أيام التحصيل"
+
+#. module: flousflow_accounting
+msgid "Creditor Days"
+msgstr "أيام السداد"
+
+#. module: flousflow_accounting
+msgid "Short-term Cash Forecast"
+msgstr "توقعات النقدية قصيرة الأجل"
+
+#. module: flousflow_accounting
+msgid "Loading..."
+msgstr "جارٍ التحميل..."
+
+#. module: flousflow_accounting
+msgid "Executive Summary could not be loaded."
+msgstr "تعذر تحميل الملخص التنفيذي."
+
+#. module: flousflow_accounting
 #. odoo-javascript
 #: code:addons/flousflow_accounting/legacy/om_spreadsheet_account/data/files/receivables_payables_dashboard.json:0
 #: code:addons/flousflow_accounting/legacy/om_spreadsheet_account/data/files/receivables_payables_sample_dashboard.json:0

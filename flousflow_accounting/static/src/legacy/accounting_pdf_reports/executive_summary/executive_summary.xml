@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.apr__ExecutiveSummary" owl="1">
+        <div class="o_action ff_executive_summary">
+            <header class="ff_es_toolbar">
+                <div class="ff_es_heading">
+                    <button class="btn btn-primary" type="button" t-on-click="this.print">Print</button>
+                    <div>
+                        <h2>Executive Summary</h2>
+                        <span class="text-muted" t-out="this.state.companyName"/>
+                    </div>
+                </div>
+                <div class="ff_es_filters">
+                    <label class="ff_es_date">
+                        <span>Start Date</span>
+                        <input class="form-control" type="date" t-att-value="this.state.dateFrom"
+                               t-on-change="this.onDateFromChange"/>
+                    </label>
+                    <label class="ff_es_date">
+                        <span>End Date</span>
+                        <input class="form-control" type="date" t-att-value="this.state.dateTo"
+                               t-on-change="this.onDateToChange"/>
+                    </label>
+                    <label class="ff_es_select">
+                        <span>Target Moves</span>
+                        <select class="form-select" t-att-value="this.state.targetMove" t-on-change="this.onTargetMoveChange">
+                            <option value="posted">Posted Entries</option>
+                            <option value="all">All Entries</option>
+                        </select>
+                    </label>
+                    <label class="ff_es_check">
+                        <input class="form-check-input" type="checkbox" t-att-checked="this.state.comparison"
+                               t-on-change="this.onComparisonChange"/>
+                        <span>Comparison</span>
+                    </label>
+                    <label class="ff_es_select">
+                        <span>Accounting Basis</span>
+                        <select class="form-select" t-att-value="this.state.cashBasis ? 'cash' : 'accrual'"
+                                t-on-change="this.onAccountingBasisChange">
+                            <option value="accrual">Accrual Basis</option>
+                            <option value="cash">Cash Basis</option>
+                        </select>
+                    </label>
+                </div>
+            </header>
+            <main class="ff_es_content">
+                <div t-if="this.state.loading" class="text-center p-5">
+                    <i class="fa fa-spinner fa-spin me-2"/>Loading...
+                </div>
+                <section t-else="" t-foreach="this.state.groups" t-as="group" t-key="group.key"
+                         class="ff_es_group">
+                    <h3 t-out="group.name"/>
+                    <div class="ff_es_cards">
+                        <article t-foreach="group.items" t-as="item" t-key="item.key" class="ff_es_card">
+                            <div class="ff_es_card_heading">
+                                <h4 t-out="item.label"/>
+                                <button class="btn btn-link p-0" type="button" t-att-title="item.formula"
+                                        t-att-aria-label="item.label + ': ' + item.formula">
+                                    <i class="fa fa-info-circle"/>
+                                </button>
+                            </div>
+                            <strong t-out="this.formatValue(item)"/>
+                            <div t-if="this.state.comparison" class="ff_es_compare">
+                                <span>Previous period:</span>
+                                <b t-out="this.formatComparison(group.key, item)"/>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </t>
+</templates>

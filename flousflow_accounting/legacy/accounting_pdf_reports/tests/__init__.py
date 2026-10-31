@@ -21,3 +21,4 @@ from . import test_customer_statement
 from . import test_open_items
 from . import test_open_items_tour
 from . import test_financial_report_formula_tour
+from . import test_executive_summary
