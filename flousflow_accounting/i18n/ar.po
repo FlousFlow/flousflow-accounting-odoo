@@ -83,8 +83,9 @@ msgstr "التدقيق"
 
 #. module: flousflow_accounting
 #: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/journal_audit/journal_audit.xml:0
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
 msgid "Mark Reviewed"
-msgstr "تعليم كمُراجَع"
+msgstr "تأكيد المراجعة"
 
 #. module: flousflow_accounting
 #. odoo-javascript
@@ -14288,3 +14289,81 @@ msgstr "قوالب التقارير السنوية"
 #: code:addons/flousflow_accounting/legacy/om_account_accountant/models/dashboard_kpi.py:0
 msgid "Activate E-Invoicing"
 msgstr "تفعيل الفوترة الإلكترونية"
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_tax_returns
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_tax_returns
+msgid "Tax Returns"
+msgstr "الإقرارات الضريبية"
+
+#. module: flousflow_accounting
+msgid "Return Type"
+msgstr "نوع الإقرار"
+
+#. module: flousflow_accounting
+msgid "Annual Closing: Corporate Tax"
+msgstr "الإقفال السنوي: ضريبة الشركات"
+
+#. module: flousflow_accounting
+msgid "To Submit"
+msgstr "للإرسال"
+
+#. module: flousflow_accounting
+msgid "Submitted"
+msgstr "تم الإرسال"
+
+#. module: flousflow_accounting
+msgid "Paid"
+msgstr "تم السداد"
+
+#. module: flousflow_accounting
+msgid "Reviewed By"
+msgstr "راجع بواسطة"
+
+#. module: flousflow_accounting
+msgid "Submitted By"
+msgstr "أرسل بواسطة"
+
+#. module: flousflow_accounting
+msgid "Marked Paid By"
+msgstr "سجل السداد بواسطة"
+
+#. module: flousflow_accounting
+msgid "Reviewed On"
+msgstr "تاريخ المراجعة"
+
+#. module: flousflow_accounting
+msgid "Submitted On"
+msgstr "تاريخ الإرسال"
+
+#. module: flousflow_accounting
+msgid "Marked Paid On"
+msgstr "تاريخ تسجيل السداد"
+
+#. module: flousflow_accounting
+msgid "Internal Notes"
+msgstr "ملاحظات داخلية"
+
+#. module: flousflow_accounting
+msgid "Create your first tax return"
+msgstr "أنشئ أول إقرار ضريبي"
+
+#. module: flousflow_accounting
+msgid "Mark Submitted"
+msgstr "تسجيل الإرسال"
+
+#. module: flousflow_accounting
+msgid "Mark Paid"
+msgstr "تسجيل السداد"
+
+#. module: flousflow_accounting
+msgid "Review Tax Report"
+msgstr "مراجعة تقرير الضرائب"
+
+#. module: flousflow_accounting
+msgid "Create Tax Closing Entry"
+msgstr "إنشاء قيد إقفال الضرائب"
+
+#. module: flousflow_accounting
+msgid "Review Profit and Loss"
+msgstr "مراجعة الأرباح والخسائر"

@@ -37,3 +37,7 @@ apr__access_account_financial_budget_line_readonly,account.financial.budget.line
 apr__access_account_financial_budget_line_user,account.financial.budget.line.user,account.financial.budget.line,account.group_account_user,r,"[('company_id','in',company_ids)]"
 apr__access_account_financial_budget_line_manager,account.financial.budget.line.manager,account.financial.budget.line,account.group_account_manager,crud,"[('company_id','in',company_ids)]"
 apr__access_account_tax_closing_wizard,access.account.tax.closing.wizard,account.tax.closing.wizard,account.group_account_manager,crud,
+apr__account_tax_return_company_access,Tax Returns: allowed companies,account.tax.return,,crud,"[('company_id', 'in', company_ids)]"
+apr__access_account_tax_return_readonly,Tax Return: read,account.tax.return,account.group_account_readonly,r,
+apr__access_account_tax_return_user,Tax Return: accountant,account.tax.return,account.group_account_user,crud,
+apr__access_account_tax_return_manager,Tax Return: manager,account.tax.return,account.group_account_manager,crud,

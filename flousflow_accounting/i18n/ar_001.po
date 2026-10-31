@@ -641,6 +641,7 @@ msgstr "تمكين المقارنة"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_general_ledger__date_to
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__date_to
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__date_to
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__date_to
 msgid "End Date"
 msgstr "تاريخ الانتهاء"
 
@@ -1145,6 +1146,7 @@ msgstr "ترتيب حسب"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_general_ledger__date_from
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__date_from
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__date_from
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__date_from
 msgid "Start Date"
 msgstr "تاريخ البدء"
 
@@ -2621,6 +2623,7 @@ msgstr "تاريخ المدفوعة"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.bgt__crossovered_budget_view_form
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
 msgid "Period"
 msgstr "فترة"
 
@@ -4557,3 +4560,125 @@ msgstr "تحليل المتابعة"
 #: code:addons/flousflow_accounting/legacy/om_account_accountant/models/dashboard_kpi.py:0
 msgid "Activate E-Invoicing"
 msgstr "تفعيل الفوترة الإلكترونية"
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_tax_returns
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_tax_returns
+msgid "Tax Returns"
+msgstr "الإقرارات الضريبية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__return_type
+msgid "Return Type"
+msgstr "نوع الإقرار"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return__return_type__annual_corporate_tax
+msgid "Annual Closing: Corporate Tax"
+msgstr "الإقفال السنوي: ضريبة الشركات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return__state__to_submit
+msgid "To Submit"
+msgstr "للإرسال"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return__state__submitted
+msgid "Submitted"
+msgstr "تم الإرسال"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return__state__paid
+msgid "Paid"
+msgstr "تم السداد"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__reviewed_by
+msgid "Reviewed By"
+msgstr "راجع بواسطة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__submitted_by
+msgid "Submitted By"
+msgstr "أرسل بواسطة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__paid_by
+msgid "Marked Paid By"
+msgstr "سجل السداد بواسطة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__reviewed_on
+msgid "Reviewed On"
+msgstr "تاريخ المراجعة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__submitted_on
+msgid "Submitted On"
+msgstr "تاريخ الإرسال"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__paid_on
+msgid "Marked Paid On"
+msgstr "تاريخ تسجيل السداد"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__note
+msgid "Internal Notes"
+msgstr "ملاحظات داخلية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Create your first tax return"
+msgstr "أنشئ أول إقرار ضريبي"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Mark Submitted"
+msgstr "تسجيل الإرسال"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Mark Paid"
+msgstr "تسجيل السداد"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Review Tax Report"
+msgstr "مراجعة تقرير الضرائب"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Create Tax Closing Entry"
+msgstr "إنشاء قيد إقفال الضرائب"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Review Profit and Loss"
+msgstr "مراجعة الأرباح والخسائر"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Workflow History"
+msgstr "سجل الإجراءات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Internal notes..."
+msgstr "ملاحظات داخلية..."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return__state__to_review
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_search
+msgid "To Review"
+msgstr "للمراجعة"
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,help:flousflow_accounting.apr__action_account_tax_returns
+msgid "Create a tax filing task, review its period using the existing tax report, then track submission and payment."
+msgstr "أنشئ مهمة للإقرار الضريبي، وراجع الفترة من خلال تقرير الضرائب، ثم تابع الإرسال والسداد."

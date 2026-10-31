@@ -10,6 +10,7 @@ from . import test_optional_columns
 from . import test_tax_report
 from . import test_tax_report_tour
 from . import test_tax_closing
+from . import test_tax_return
 from . import test_tax_grid
 from . import test_branch_reports
 from . import test_partner_ledger

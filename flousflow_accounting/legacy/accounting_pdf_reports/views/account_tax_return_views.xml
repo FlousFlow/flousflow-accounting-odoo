@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="apr__account_tax_return_view_list" model="ir.ui.view">
+        <field name="name">account.tax.return.list</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <list string="Tax Returns" default_order="date_to desc">
+                <field name="name"/>
+                <field name="return_type"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'to_review'"
+                       decoration-warning="state == 'to_submit'"
+                       decoration-success="state in ('submitted', 'paid')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="apr__account_tax_return_view_kanban" model="ir.ui.view">
+        <field name="name">account.tax.return.kanban</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="return_type"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <strong><field name="name"/></strong>
+                            <span class="badge text-bg-secondary"><field name="state"/></span>
+                        </div>
+                        <div class="mt-2"><field name="return_type"/></div>
+                        <div class="text-muted mt-1">
+                            <field name="date_from"/> – <field name="date_to"/>
+                        </div>
+                        <div t-if="record.company_id.raw_value" class="text-muted mt-1">
+                            <field name="company_id"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="apr__account_tax_return_view_calendar" model="ir.ui.view">
+        <field name="name">account.tax.return.calendar</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <calendar string="Tax Returns" date_start="date_from" date_stop="date_to"
+                      color="state" mode="month" quick_create="false">
+                <field name="name"/>
+                <field name="return_type"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="apr__account_tax_return_view_search" model="ir.ui.view">
+        <field name="name">account.tax.return.search</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <search string="Tax Returns">
+                <field name="name"/>
+                <field name="return_type"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter name="to_review" string="To Review" domain="[('state', '=', 'to_review')]"/>
+                <filter name="to_submit" string="To Submit" domain="[('state', '=', 'to_submit')]"/>
+                <filter name="submitted" string="Submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+                <group>
+                    <filter name="group_return_type" string="Return Type" context="{'group_by': 'return_type'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="apr__account_tax_return_view_form" model="ir.ui.view">
+        <field name="name">account.tax.return.form</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <form string="Tax Return">
+                <header>
+                    <button name="action_mark_reviewed" string="Mark Reviewed" type="object"
+                            class="btn-primary" invisible="state != 'to_review'"/>
+                    <button name="action_mark_submitted" string="Mark Submitted" type="object"
+                            class="btn-primary" invisible="state != 'to_submit'"/>
+                    <button name="action_mark_paid" string="Mark Paid" type="object"
+                            class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_open_tax_report" string="Review Profit and Loss" type="object"
+                            invisible="state != 'to_review' or return_type != 'annual_corporate_tax'"/>
+                    <button name="action_open_tax_report" string="Review Tax Report" type="object"
+                            invisible="state != 'to_review' or return_type != 'tax'"/>
+                    <button name="action_open_tax_closing" string="Create Tax Closing Entry" type="object"
+                            groups="account.group_account_manager"
+                            invisible="state == 'to_review' or return_type != 'tax'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="to_review,to_submit,submitted,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="return_type" readonly="state != 'to_review'"/>
+                            <field name="company_id" groups="base.group_multi_company"
+                                   readonly="state != 'to_review'"/>
+                        </group>
+                        <group string="Period">
+                            <field name="date_from" readonly="state != 'to_review'"/>
+                            <field name="date_to" readonly="state != 'to_review'"/>
+                        </group>
+                    </group>
+                    <group string="Workflow History">
+                        <group>
+                            <field name="reviewed_by"/>
+                            <field name="reviewed_on"/>
+                        </group>
+                        <group>
+                            <field name="submitted_by"/>
+                            <field name="submitted_on"/>
+                            <field name="paid_by"/>
+                            <field name="paid_on"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes"><field name="note" placeholder="Internal notes..."/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="apr__action_account_tax_returns" model="ir.actions.act_window">
+        <field name="name">Tax Returns</field>
+        <field name="res_model">account.tax.return</field>
+        <field name="view_mode">kanban,calendar,list,form</field>
+        <field name="search_view_id" ref="apr__account_tax_return_view_search"/>
+        <field name="context">{'search_default_to_review': 1}</field>
+        <field name="help" type="html">
+            <p>No tax return to do! Time to relax 🌴</p>
+        </field>
+    </record>
+
+    <menuitem id="apr__menu_account_tax_returns" name="Tax Returns" sequence="15"
+              action="apr__action_account_tax_returns"
+              parent="account.account_reports_taxes_and_fiscal_menu"
+              groups="account.group_account_readonly,account.group_account_user,account.group_account_manager"/>
+</odoo>
