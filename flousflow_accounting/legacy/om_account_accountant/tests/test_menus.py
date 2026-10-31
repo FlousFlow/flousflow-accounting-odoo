@@ -56,6 +56,19 @@ class TestMenus(TransactionCase):
         for xmlid in REMOVED:
             self.assertFalse(self.env.ref(xmlid, raise_if_not_found=False), xmlid)
 
+    def test_account_settings_tab_uses_accounting_suite_icon(self):
+        settings_view = self.env['res.config.settings'].get_view(
+            view_id=self.env.ref('account.res_config_settings_view_form').id,
+        )
+        self.assertIn(
+            'logo="/flousflow_accounting/static/legacy/om_account_accountant/description/icon.png"',
+            settings_view['arch'],
+        )
+        self.assertEqual(
+            self.env.ref('account.menu_finance').web_icon,
+            'flousflow_accounting,static/legacy/om_account_accountant/description/icon.png',
+        )
+
     def test_reconciliation_menu_has_no_duplicate_actions(self):
         reconciliation = self.env.ref('flousflow_accounting.rec__menu_reconciliation')
         duplicate_menu_xmlids = (
