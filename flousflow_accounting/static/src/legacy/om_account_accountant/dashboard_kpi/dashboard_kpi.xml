@@ -5,6 +5,9 @@
         <xpath expr="//div[hasclass('o_account_dashboard_kpis')]" position="attributes">
             <attribute name="t-on-dragstart">this.onKpiDragStart</attribute>
             <attribute name="t-on-dragover">this.onKpiDragOver</attribute>
+            <attribute name="t-on-dragenter">this.onKpiDragBoundary</attribute>
+            <attribute name="t-on-dragleave">this.onKpiDragBoundary</attribute>
+            <attribute name="t-on-dragend">this.onKpiDragBoundary</attribute>
             <attribute name="t-on-drop">this.onKpiDrop</attribute>
         </xpath>
     </t>

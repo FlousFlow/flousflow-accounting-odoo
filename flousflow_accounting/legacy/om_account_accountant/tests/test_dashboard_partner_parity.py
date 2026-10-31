@@ -1,4 +1,4 @@
-from odoo.tests import tagged
+from odoo.tests import HttpCase, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -68,3 +68,16 @@ class TestDashboardPartnerParity(AccountTestInvoicingCommon):
         self.assertIn("action_open_accounting_items", partner_view.arch_db)
         self.assertIn("account.group_account_readonly", partner_view.arch_db)
         self.assertIn("account.group_account_manager", partner_view.arch_db)
+
+
+@tagged("post_install", "-at_install")
+class TestDashboardKpiReorderTour(HttpCase):
+
+    def test_dashboard_kpi_reorder_is_applied_and_saved(self):
+        user = self.env.ref("base.user_admin")
+        user.account_dashboard_kpi_order = "[]"
+        self.start_tour(
+            "/odoo/accounting",
+            "ff_account_dashboard_kpi_reorder",
+            login=user.login,
+        )

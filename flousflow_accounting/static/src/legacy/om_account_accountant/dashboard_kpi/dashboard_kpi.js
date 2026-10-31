@@ -24,27 +24,38 @@ patch(AccountDashboardKpis.prototype, {
     },
 
     onKpiDragStart(event) {
+        event.stopPropagation();
         const card = event.target.closest("[data-kpi-id]");
         if (!card) {
             event.preventDefault();
             return;
         }
         this.draggedKpiId = card.dataset.kpiId;
-        event.dataTransfer.effectAllowed = "move";
-        event.dataTransfer.setData("text/plain", this.draggedKpiId);
+        if (event.dataTransfer) {
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", this.draggedKpiId);
+        }
     },
 
     onKpiDragOver(event) {
+        event.stopPropagation();
         if (this.draggedKpiId) {
             event.preventDefault();
-            event.dataTransfer.dropEffect = "move";
+            if (event.dataTransfer) {
+                event.dataTransfer.dropEffect = "move";
+            }
         }
+    },
+
+    onKpiDragBoundary(event) {
+        event.stopPropagation();
     },
 
     async onKpiDrop(event) {
         event.preventDefault();
+        event.stopPropagation();
         const target = event.target.closest("[data-kpi-id]");
-        const sourceId = this.draggedKpiId || event.dataTransfer.getData("text/plain");
+        const sourceId = this.draggedKpiId || event.dataTransfer?.getData("text/plain");
         this.draggedKpiId = null;
         if (!target || !sourceId || sourceId === target.dataset.kpiId) {
             return;
