@@ -41,3 +41,5 @@ apr__account_tax_return_company_access,Tax Returns: allowed companies,account.ta
 apr__access_account_tax_return_readonly,Tax Return: read,account.tax.return,account.group_account_readonly,r,
 apr__access_account_tax_return_user,Tax Return: accountant,account.tax.return,account.group_account_user,crud,
 apr__access_account_tax_return_manager,Tax Return: manager,account.tax.return,account.group_account_manager,crud,
+apr__access_account_tax_return_create_wizard_user,Tax Return creation: accountant,account.tax.return.create.wizard,account.group_account_user,crud,
+apr__access_account_tax_return_create_wizard_manager,Tax Return creation: manager,account.tax.return.create.wizard,account.group_account_manager,crud,

@@ -1,5 +1,6 @@
 from datetime import date
 
+from lxml import etree
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 from psycopg2.errors import UniqueViolation
@@ -51,6 +52,40 @@ class TestTaxReturn(AccountTestInvoicingCommon):
             record.action_mark_submitted()
         with self.assertRaises(UserError):
             record.action_mark_paid()
+
+    def test_create_wizard_creates_return_for_selected_period(self):
+        wizard = self.env['account.tax.return.create.wizard'].create({
+            'return_type': 'tax',
+            'date_from': '2034-04-01',
+            'date_to': '2034-06-30',
+        })
+
+        action = wizard.action_create_return()
+        record = self.env['account.tax.return'].search([
+            ('company_id', '=', self.env.company.id),
+            ('return_type', '=', 'tax'),
+            ('date_from', '=', '2034-04-01'),
+            ('date_to', '=', '2034-06-30'),
+        ])
+        self.assertEqual(len(record), 1)
+        self.assertEqual(action, {'type': 'ir.actions.client', 'tag': 'reload'})
+
+    def test_create_entrypoints_open_the_enterprise_style_wizard(self):
+        create_action = self.env.ref(
+            'flousflow_accounting.apr__action_account_tax_return_create')
+        self.assertEqual(create_action.res_model, 'account.tax.return.create.wizard')
+        self.assertEqual(create_action.target, 'new')
+
+        kanban_arch = etree.fromstring(self.env.ref(
+            'flousflow_accounting.apr__account_tax_return_view_kanban').arch_db.encode())
+        self.assertEqual(kanban_arch.get('on_create'), str(create_action.id))
+
+        list_arch = etree.fromstring(self.env.ref(
+            'flousflow_accounting.apr__account_tax_return_view_list').arch_db.encode())
+        self.assertEqual(list_arch.get('create'), 'false')
+        create_buttons = list_arch.xpath("./header/button[@type='action']")
+        self.assertEqual(len(create_buttons), 1)
+        self.assertEqual(create_buttons[0].get('name'), str(create_action.id))
 
     def test_tax_report_action_uses_return_period_and_company(self):
         record = self._new_return()

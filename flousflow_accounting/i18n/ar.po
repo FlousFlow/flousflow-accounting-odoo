@@ -664,10 +664,12 @@ msgid "Refresh Accounts"
 msgstr "تحديث الحسابات"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return_create_wizard__date_from
 msgid "Start Date"
 msgstr "تاريخ البداية"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return_create_wizard__date_to
 msgid "End Date"
 msgstr "تاريخ النهاية"
 
@@ -1586,8 +1588,9 @@ msgstr "إلى تاريخ"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__accounting_report_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_create_wizard_view
 msgid "Dates"
-msgstr "تواريخ"
+msgstr "التواريخ"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_financial
@@ -2560,6 +2563,7 @@ msgstr "تقارير الضرائب"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__tax_grid_report_id
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return_create_wizard__return_type__tax
 msgid "Tax Return"
 msgstr "الإقرار الضريبي"
 
@@ -4160,6 +4164,7 @@ msgstr "تم استئناف الإهلاك في %(date)s. %(note)s"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__asset_modify_form
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_create_wizard_view
 msgid "Discard"
 msgstr "إهمال"
 
@@ -14297,10 +14302,12 @@ msgid "Tax Returns"
 msgstr "الإقرارات الضريبية"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return_create_wizard__return_type
 msgid "Return Type"
 msgstr "نوع الإقرار"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return_create_wizard__return_type__annual_corporate_tax
 msgid "Annual Closing: Corporate Tax"
 msgstr "الإقفال السنوي: ضريبة الشركات"
 
@@ -14367,3 +14374,9 @@ msgstr "إنشاء قيد إقفال الضرائب"
 #. module: flousflow_accounting
 msgid "Review Profit and Loss"
 msgstr "مراجعة الأرباح والخسائر"
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_tax_return_create
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_create_wizard_view
+msgid "Create Tax Return"
+msgstr "إنشاء إقرار"

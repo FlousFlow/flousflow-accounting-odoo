@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="apr__account_tax_return_create_wizard_view" model="ir.ui.view">
+        <field name="name">account.tax.return.create.wizard.form</field>
+        <field name="model">account.tax.return.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Tax Return">
+                <group>
+                    <field name="return_type"/>
+                    <div class="o_form_label">Dates</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <field name="date_from" nolabel="1"/>
+                        <span>→</span>
+                        <field name="date_to" nolabel="1"/>
+                    </div>
+                </group>
+                <footer>
+                    <button name="action_create_return" string="Create Tax Return"
+                            type="object" class="btn-primary"/>
+                    <button string="Discard" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="apr__action_account_tax_return_create" model="ir.actions.act_window">
+        <field name="name">Create Tax Return</field>
+        <field name="res_model">account.tax.return.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="apr__account_tax_return_create_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
     <record id="apr__account_tax_return_view_list" model="ir.ui.view">
         <field name="name">account.tax.return.list</field>
         <field name="model">account.tax.return</field>
         <field name="arch" type="xml">
-            <list string="Tax Returns" default_order="date_to desc">
+            <list string="Tax Returns" default_order="date_to desc" create="false">
+                <header>
+                    <button name="%(apr__action_account_tax_return_create)d" string="New"
+                            type="action" class="btn-primary"
+                            groups="account.group_account_user,account.group_account_manager"/>
+                </header>
                 <field name="name"/>
                 <field name="return_type"/>
                 <field name="date_from"/>
@@ -22,7 +58,8 @@
         <field name="name">account.tax.return.kanban</field>
         <field name="model">account.tax.return</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="state" class="o_kanban_small_column">
+            <kanban default_group_by="state" class="o_kanban_small_column"
+                    on_create="%(apr__action_account_tax_return_create)d">
                 <field name="name"/>
                 <field name="return_type"/>
                 <field name="date_from"/>
