@@ -26,6 +26,10 @@ class AssetDepreciationSchedule(models.TransientModel):
         help="Leave empty to include every asset category.",
     )
     group_by_category = fields.Boolean(string='Group the Register by Category', default=True)
+    target_move = fields.Selection(
+        [('posted', 'Posted Entries'), ('draft', 'Draft Entries'), ('all', 'All Entries')],
+        string='Target Moves', default='posted', required=True,
+    )
     excel_report_available = fields.Boolean(compute='_compute_excel_report_available')
 
     def _compute_excel_report_available(self):
@@ -56,8 +60,7 @@ class AssetDepreciationSchedule(models.TransientModel):
             domain, order='category_id, date, id')
 
     def _get_asset_movements(self, asset):
-        """ Movements of the cost and of the accumulated depreciation of `asset` between `date_from` and
-        `date_to`, in company currency, from posted entries. """
+        """Movements of the cost and accumulated depreciation for this asset and filter."""
         company = self.company_id
         currency = company.currency_id
 
@@ -65,8 +68,12 @@ class AssetDepreciationSchedule(models.TransientModel):
             return asset.currency_id._convert(amount, currency, company, date)
 
         acquired_before = asset.date < self.date_from
-        posted_moves = asset._get_board_moves().filtered(lambda m: m.state == 'posted')
-        partial_disposals = posted_moves.filtered(lambda m: m.asset_entry_type == 'partial_disposal')
+        board_moves = asset._get_board_moves()
+        if self.target_move in ('posted', 'draft'):
+            board_moves = board_moves.filtered(lambda move: move.state == self.target_move)
+        else:
+            board_moves = board_moves.filtered(lambda move: move.state != 'cancel')
+        partial_disposals = board_moves.filtered(lambda m: m.asset_entry_type == 'partial_disposal')
         # the asset as acquired, before its partial disposals
         cost = convert(asset.value, asset.date) + sum(
             convert(move.asset_disposed_value, asset.date) for move in partial_disposals)
@@ -76,7 +83,7 @@ class AssetDepreciationSchedule(models.TransientModel):
         movements = dict.fromkeys(MOVEMENT_KEYS, 0.0)
         movements['cost_opening' if acquired_before else 'cost_additions'] = cost
         movements['depreciation_opening' if acquired_before else 'depreciation_acquired'] = imported
-        for move in posted_moves.filtered(lambda m: m.date <= self.date_to):
+        for move in board_moves.filtered(lambda m: m.date <= self.date_to):
             before_period = move.date < self.date_from and acquired_before
             if move.asset_entry_type == 'partial_disposal':
                 disposed_cost, disposed_depreciation = asset._get_disposed_company_amounts(
@@ -165,6 +172,123 @@ class AssetDepreciationSchedule(models.TransientModel):
         else:
             register = [{'name': _('All Assets'), 'lines': all_lines, 'totals': add_up(all_lines)}] if all_lines else []
         return {'register': register, 'categories': categories, 'total': add_up(all_lines)}
+
+    @api.model
+    def get_interactive_metadata(self):
+        company = self.env.company
+        dates = company.compute_fiscalyear_dates(fields.Date.context_today(self))
+        categories = self.env['account.asset.category'].search_read(
+            [('type', '=', 'purchase'), ('company_id', '=', company.id)],
+            ['name'], order='name, id',
+        )
+        return {
+            'company_name': company.display_name,
+            'currency_name': company.currency_id.name,
+            'currency_symbol': company.currency_id.symbol,
+            'currency_position': company.currency_id.position,
+            'currency_digits': company.currency_id.decimal_places,
+            'date_from': fields.Date.to_string(dates['date_from']),
+            'date_to': fields.Date.to_string(dates['date_to']),
+            'categories': categories,
+        }
+
+    @api.model
+    def get_interactive_period_dates(self, anchor_date):
+        dates = self.env.company.compute_fiscalyear_dates(fields.Date.to_date(anchor_date))
+        return {
+            'date_from': fields.Date.to_string(dates['date_from']),
+            'date_to': fields.Date.to_string(dates['date_to']),
+        }
+
+    @api.model
+    def get_interactive_data(self, date_from, date_to, category_ids=None, target_move='posted'):
+        if target_move not in ('posted', 'draft', 'all'):
+            raise UserError(_('Unsupported target move filter.'))
+        wizard = self.new({
+            'company_id': self.env.company.id,
+            'date_from': date_from,
+            'date_to': date_to,
+            'category_ids': [(6, 0, category_ids or [])],
+            'target_move': target_move,
+            'group_by_category': True,
+        })
+        schedule = wizard._get_schedule_data()
+
+        def asset_row(line):
+            asset = line['asset']
+            method_label = dict(asset._fields['method']._description_selection(self.env)).get(
+                asset.method, asset.method)
+            movements = line
+            if asset.method_time == 'rate':
+                annual_rate = asset.method_rate
+            elif asset.method_time == 'number':
+                life_months = asset.method_number * asset.method_period
+                annual_rate = 1200.0 / life_months if life_months else 0.0
+            elif asset.method_end:
+                life_months = asset._get_lifetime_months()
+                annual_rate = 1200.0 / life_months if life_months else 0.0
+            else:
+                annual_rate = 0.0
+            return {
+                'id': asset.id,
+                'category': asset.category_id.display_name,
+                'date': fields.Date.to_string(asset.date),
+                'method': method_label,
+                'rate': annual_rate,
+                'asset_opening': movements['cost_opening'],
+                'asset_additions': movements['cost_additions'],
+                'asset_disposals': movements['cost_disposals'],
+                'asset_closing': movements['cost_closing'],
+                'depreciation_opening': movements['depreciation_opening'],
+                'depreciation_additions': movements['depreciation_acquired'] + movements['depreciation_charge'],
+                'depreciation_disposals': movements['depreciation_disposals'],
+                'depreciation_closing': movements['depreciation_closing'],
+                'nbv_opening': movements['nbv_opening'],
+                'nbv_additions': movements['cost_additions'] - movements['depreciation_acquired'],
+                'nbv_decrease': movements['depreciation_charge'] + line['disposed_nbv'],
+                'nbv_closing': movements['nbv_closing'],
+            }
+
+        def group_totals(lines):
+            total = self.env.company.currency_id
+            amounts = [asset_row(line) for line in lines]
+            keys = (
+                'asset_opening', 'asset_additions', 'asset_disposals', 'asset_closing',
+                'depreciation_opening', 'depreciation_additions', 'depreciation_disposals', 'depreciation_closing',
+                'nbv_opening', 'nbv_additions', 'nbv_decrease', 'nbv_closing',
+            )
+            return {key: total.round(sum(row[key] for row in amounts)) for key in keys}
+
+        return {
+            'company_name': wizard.company_id.display_name,
+            'currency_name': wizard.company_id.currency_id.name,
+            'currency_symbol': wizard.company_id.currency_id.symbol,
+            'currency_position': wizard.company_id.currency_id.position,
+            'currency_digits': wizard.company_id.currency_id.decimal_places,
+            'date_from': fields.Date.to_string(wizard.date_from),
+            'date_to': fields.Date.to_string(wizard.date_to),
+            'target_move': target_move,
+            'groups': [{
+                'id': group['lines'][0]['asset'].category_id.id,
+                'name': group['name'],
+                'rows': [asset_row(line) for line in group['lines']],
+                'totals': group_totals(group['lines']),
+            } for group in schedule['register']],
+            'total': group_totals([line for group in schedule['register'] for line in group['lines']]),
+        }
+
+    @api.model
+    def action_print_interactive(self, date_from, date_to, category_ids=None, target_move='posted'):
+        wizard = self.create({
+            'company_id': self.env.company.id,
+            'date_from': date_from,
+            'date_to': date_to,
+            'category_ids': [(6, 0, category_ids or [])],
+            'target_move': target_move,
+            'group_by_category': True,
+        })
+        wizard._get_schedule_data()
+        return self.env.ref('flousflow_accounting.ast__action_report_depreciation_schedule').report_action(wizard)
 
     def _get_statement_rows(self, categories):
         """ Rows of the movement statement: (section, label, key, sign). A depreciation reduces the value, so it

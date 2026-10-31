@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="flousflow_accounting.ast__DepreciationSchedule" owl="1">
+        <div class="o_action ff_depreciation_schedule">
+            <div class="ff_ds_toolbar">
+                <button class="btn btn-primary" type="button" t-on-click="printReport">Print</button>
+                <h2>Depreciation Schedule</h2>
+                <button class="btn btn-outline-secondary d-md-none" type="button"
+                        t-on-click="() => this.state.filtersOpen = !this.state.filtersOpen"
+                        aria-label="Filters"><i class="fa fa-filter"/></button>
+            </div>
+            <div t-att-class="'ff_ds_filters ' + (this.state.filtersOpen ? 'is-open' : '')">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-label="Period">
+                        <span class="oi oi-fw oi-filled" data-icon="calendar_today"/>
+                        <t t-out="this.periodLabel"/>
+                    </button>
+                    <div class="dropdown-menu p-2 ff_ds_period_menu">
+                        <div t-foreach="[['month', 'Month'], ['quarter', 'Quarter'], ['fiscal_year', 'Fiscal Year']]"
+                             t-as="period" t-key="period[0]" class="ff_ds_period_option">
+                            <button class="dropdown-item" type="button"
+                                    t-on-click="(event) => this.onPeriodTypeClick(period[0], event)">
+                                <i t-if="this.state.periodType === period[0]" class="oi oi-fw oi-check me-2"/>
+                                <i t-else="" class="oi oi-fw me-2"/><t t-out="period[1]"/>
+                            </button>
+                            <div class="ff_ds_period_navigation">
+                                <button class="btn btn-link" type="button" t-att-aria-label="'Previous ' + period[1]"
+                                        t-on-click="(event) => this.onPeriodNavigationClick(period[0], -1, event)">
+                                    <span class="oi oi-fw oi-filled" data-icon="arrow_left"/>
+                                </button>
+                                <span t-out="this.getPeriodOptionLabel(period[0])"/>
+                                <button class="btn btn-link" type="button" t-att-aria-label="'Next ' + period[1]"
+                                        t-on-click="(event) => this.onPeriodNavigationClick(period[0], 1, event)">
+                                    <span class="oi oi-fw oi-filled" data-icon="arrow_right"/>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="dropdown-item" type="button"
+                                t-on-click="(event) => this.onPeriodTypeClick('custom', event)">
+                            <i t-if="this.state.periodType === 'custom'" class="oi oi-fw oi-check me-2"/>
+                            <i t-else="" class="oi oi-fw me-2"/>Custom Dates
+                        </button>
+                        <div t-if="this.state.periodType === 'custom'" class="px-3 py-2">
+                            <label class="form-label">Start Date
+                                <input class="form-control" type="date" t-att-value="this.state.customDateFrom"
+                                       t-on-change="(event) => this.onCustomDateChange('customDateFrom', event)"/>
+                            </label>
+                            <label class="form-label mb-0">End Date
+                                <input class="form-control" type="date" t-att-value="this.state.customDateTo"
+                                       t-on-change="(event) => this.onCustomDateChange('customDateTo', event)"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="oi oi-fw oi-filled" data-icon="tune"/>
+                        <t t-if="this.state.targetMove === 'posted'">Posted Entries</t>
+                        <t t-elif="this.state.targetMove === 'draft'">Draft Entries</t>
+                        <t t-else="">All Entries</t>
+                    </button>
+                    <div class="dropdown-menu p-3 ff_ds_target_menu">
+                        <button class="dropdown-item" type="button" t-on-click="() => this.onTargetMoveChange('posted')">Posted Entries</button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.onTargetMoveChange('draft')">Draft Entries</button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.onTargetMoveChange('all')">All Entries</button>
+                        <div class="dropdown-divider"/>
+                        <label class="form-check mb-0">
+                            <input class="form-check-input" type="checkbox" t-att-checked="this.state.hideZero"
+                                   t-on-change="(event) => this.state.hideZero = event.target.checked"/>
+                            <span class="form-check-label">Hide lines at 0</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="oi oi-fw oi-filled" data-icon="book"/>Depreciation Schedule
+                    </button>
+                    <div class="dropdown-menu"><span class="dropdown-item-text">Depreciation Schedule</span></div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <t t-if="this.state.scale === 'unit'">In .<t t-out="this.state.data?.currency_symbol"/></t>
+                        <t t-elif="this.state.scale === 'rounded'">In <t t-out="this.state.data?.currency_symbol"/></t>
+                        <t t-elif="this.state.scale === 'thousand'">In k<t t-out="this.state.data?.currency_symbol"/></t>
+                        <t t-else="">In M<t t-out="this.state.data?.currency_symbol"/></t>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setScale('unit')">In .<t t-out="this.state.data?.currency_symbol"/></button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setScale('rounded')">In <t t-out="this.state.data?.currency_symbol"/></button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setScale('thousand')">In k<t t-out="this.state.data?.currency_symbol"/></button>
+                        <button class="dropdown-item" type="button" t-on-click="() => this.setScale('million')">In M<t t-out="this.state.data?.currency_symbol"/></button>
+                    </div>
+                </div>
+                <label class="ff_ds_category_filter">
+                    <span>Asset Categories</span>
+                    <select class="form-select" multiple="multiple" size="1" aria-label="Asset Categories"
+                            t-on-change="onCategoryChange">
+                        <option t-foreach="this.state.categories" t-as="category" t-key="category.id"
+                                t-att-value="category.id" t-att-selected="this.state.categoryIds.includes(category.id)"
+                                t-out="category.name"/>
+                    </select>
+                </label>
+            </div>
+            <div class="o_content ff_ds_content">
+                <div t-if="this.state.loading" class="text-center p-5"><i class="fa fa-spinner fa-spin me-2"/>Loading…</div>
+                <div t-elif="!this.groups.length" class="text-center text-muted p-5">No asset for this period.</div>
+                <div t-else="" class="table-responsive ff_ds_table_wrap">
+                    <table class="table table-hover ff_ds_table">
+                        <thead>
+                            <tr class="ff_ds_group_headers">
+                                <th colspan="3">Attributes</th><th colspan="4">Assets</th>
+                                <th colspan="4">Depreciation</th><th colspan="4">Book Value</th>
+                            </tr>
+                            <tr>
+                                <th>Acquisition Date</th><th>Method</th><th>Rate</th>
+                                <th t-out="this.formatDate(this.state.dateFrom)"/><th>+</th><th>-</th><th t-out="this.formatDate(this.state.dateTo)"/>
+                                <th t-out="this.formatDate(this.state.dateFrom)"/><th>+</th><th>-</th><th t-out="this.formatDate(this.state.dateTo)"/>
+                                <th t-out="this.formatDate(this.state.dateFrom)"/><th>+</th><th>-</th><th t-out="this.formatDate(this.state.dateTo)"/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="this.groups" t-as="group" t-key="group.id">
+                                <tr class="ff_ds_category_row"><th colspan="15" t-out="group.name"/></tr>
+                                <tr t-foreach="group.rows" t-as="row" t-key="row.id">
+                                    <td t-out="this.formatDate(row.date)"/><td t-out="row.method"/><td t-out="this.formatRate(row.rate)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.asset_opening)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.asset_additions)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.asset_disposals)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.asset_closing)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.depreciation_opening)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.depreciation_additions)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.depreciation_disposals)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.depreciation_closing)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.nbv_opening)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.nbv_additions)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.nbv_decrease)"/>
+                                    <td class="text-end" t-out="this.formatAmount(row.nbv_closing)"/>
+                                </tr>
+                                <tr class="ff_ds_subtotal_row">
+                                    <th colspan="3">Subtotal <t t-out="group.name"/></th>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.asset_opening)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.asset_additions)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.asset_disposals)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.asset_closing)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.depreciation_opening)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.depreciation_additions)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.depreciation_disposals)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.depreciation_closing)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.nbv_opening)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.nbv_additions)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.nbv_decrease)"/>
+                                    <th class="text-end" t-out="this.formatAmount(group.totals.nbv_closing)"/>
+                                </tr>
+                            </t>
+                            <tr class="ff_ds_total_row">
+                                <th colspan="3">Total</th>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.asset_opening)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.asset_additions)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.asset_disposals)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.asset_closing)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.depreciation_opening)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.depreciation_additions)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.depreciation_disposals)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.depreciation_closing)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.nbv_opening)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.nbv_additions)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.nbv_decrease)"/>
+                                <th class="text-end" t-out="this.formatAmount(this.state.data.total.nbv_closing)"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

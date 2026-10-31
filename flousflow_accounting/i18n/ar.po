@@ -14396,3 +14396,27 @@ msgstr "تعذّر تحميل التقارير المالية."
 #. module: flousflow_accounting
 msgid "Select an available root financial report."
 msgstr "اختر تقريرًا ماليًا رئيسيًا متاحًا."
+
+#. module: flousflow_accounting
+msgid "Attributes"
+msgstr "البيانات الأساسية"
+
+#. module: flousflow_accounting
+msgid "Acquisition Date"
+msgstr "تاريخ الاقتناء"
+
+#. module: flousflow_accounting
+msgid "Method"
+msgstr "الطريقة"
+
+#. module: flousflow_accounting
+msgid "Opening"
+msgstr "أول المدة"
+
+#. module: flousflow_accounting
+msgid "On Acquired Assets"
+msgstr "على الأصول المقتناة"
+
+#. module: flousflow_accounting
+msgid "Rate"
+msgstr "المعدل"

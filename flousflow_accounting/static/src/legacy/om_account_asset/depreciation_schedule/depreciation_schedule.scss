@@ -1,0 +1,154 @@
+.ff_depreciation_schedule {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background: var(--body-bg, #f8f9fa);
+}
+
+.ff_ds_toolbar,
+.ff_ds_filters {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    background: var(--o-view-background-color, #fff);
+    border-bottom: 1px solid var(--border-color, #dee2e6);
+}
+
+.ff_ds_toolbar h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.ff_ds_filters {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+}
+
+.ff_ds_category_filter {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.ff_ds_category_filter .form-select {
+    width: min(15rem, 35vw);
+    min-width: 10rem;
+}
+
+.ff_ds_period_menu {
+    min-width: 19rem;
+}
+
+.ff_ds_period_option {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.ff_ds_period_navigation {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+    color: var(--body-color, #212529);
+}
+
+.ff_ds_period_navigation .btn {
+    padding: .2rem .4rem;
+}
+
+.ff_ds_target_menu {
+    min-width: 15rem;
+}
+
+.ff_ds_currency {
+    color: var(--body-color, #212529);
+    font-weight: 600;
+}
+
+.ff_ds_content {
+    min-height: 0;
+    overflow: auto;
+    padding: 1rem;
+}
+
+.ff_ds_table_wrap {
+    min-height: 100%;
+    padding: 1.25rem;
+    background: var(--o-view-background-color, #fff);
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: .375rem;
+}
+
+.ff_ds_table {
+    min-width: 88rem;
+    white-space: nowrap;
+}
+
+.ff_ds_table th,
+.ff_ds_table td {
+    vertical-align: middle;
+}
+
+.ff_ds_table thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--o-view-background-color, #fff);
+}
+
+.ff_ds_table .ff_ds_group_headers th {
+    text-align: center;
+    background: var(--bs-secondary-bg, #dfe3e8);
+}
+
+.ff_ds_table thead tr:nth-child(2) th {
+    position: sticky;
+    top: 2.5rem;
+    z-index: 2;
+    background: var(--o-view-background-color, #fff);
+}
+
+.ff_ds_table .ff_ds_category_row th {
+    background: var(--bs-tertiary-bg, #f1f3f5);
+}
+
+.ff_ds_table .ff_ds_subtotal_row,
+.ff_ds_table .ff_ds_total_row {
+    font-weight: 700;
+    border-top: 1px solid var(--border-color, #dee2e6);
+}
+
+@media (max-width: 767.98px) {
+    .ff_ds_toolbar,
+    .ff_ds_filters {
+        align-items: stretch;
+    }
+
+    .ff_ds_toolbar h2 {
+        flex: 1;
+        align-self: center;
+    }
+
+    .ff_ds_filters:not(.is-open) {
+        display: none;
+    }
+
+    .ff_ds_category_filter {
+        align-items: stretch;
+        flex: 1 1 100%;
+        flex-direction: column;
+    }
+
+    .ff_ds_category_filter .form-select {
+        width: 100%;
+        min-height: 5rem;
+    }
+
+    .ff_ds_table_wrap {
+        padding: .5rem;
+    }
+}

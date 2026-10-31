@@ -658,11 +658,56 @@ class TestAssetFeatures(AccountTestInvoicingCommon):
         self.assertNotIn('depreciation_acquired', [row[2] for row in rows])
         self.assertEqual(wizard._get_statement_tables(schedule['categories'], total)[-1][-1][1], total)
 
+        interactive = self.env['asset.depreciation.schedule'].get_interactive_data(
+            date_from='2025-01-01', date_to='2025-12-31', category_ids=self.category.ids,
+            target_move='posted',
+        )
+        self.assertEqual(interactive['total']['asset_closing'], schedule['total']['cost_closing'])
+        self.assertEqual(interactive['total']['depreciation_closing'], schedule['total']['depreciation_closing'])
+        self.assertEqual(interactive['total']['nbv_closing'], schedule['total']['nbv_closing'])
+        self.assertEqual(len(interactive['groups']), 1)
+        self.assertEqual(
+            {row['id'] for row in interactive['groups'][0]['rows']},
+            set((running | sold).ids),
+        )
+        self.assertEqual(
+            interactive['groups'][0]['totals']['asset_closing'], schedule['total']['cost_closing'])
+        self.assertEqual(
+            interactive['groups'][0]['totals']['depreciation_additions'],
+            schedule['total']['depreciation_acquired'] + schedule['total']['depreciation_charge'],
+        )
+        self.assertEqual(interactive['groups'][0]['totals']['nbv_closing'], schedule['total']['nbv_closing'])
+        self.assertEqual(interactive['currency_name'], self.env.company.currency_id.name)
+        interactive_total = interactive['total']
+        self.assertEqual(
+            interactive_total['asset_opening'] + interactive_total['asset_additions']
+            - interactive_total['asset_disposals'], interactive_total['asset_closing'])
+        self.assertEqual(
+            interactive_total['depreciation_opening'] + interactive_total['depreciation_additions']
+            - interactive_total['depreciation_disposals'], interactive_total['depreciation_closing'])
+        self.assertEqual(
+            interactive_total['nbv_opening'] + interactive_total['nbv_additions']
+            - interactive_total['nbv_decrease'], interactive_total['nbv_closing'])
+        fiscal_dates = self.env['asset.depreciation.schedule'].get_interactive_period_dates('2025-06-15')
+        self.assertEqual(fiscal_dates, {'date_from': '2025-01-01', 'date_to': '2025-12-31'})
+
         html = self.env['ir.actions.report']._render_qweb_html(
             'flousflow_accounting.ast__report_depreciation_schedule', wizard.ids)[0]
         self.assertIn(b'Depreciation Schedule', html)
         self.assertIn(b'Movement by Category', html)
         self.assertIn(b'Asset Register', html)
+
+    def test_interactive_depreciation_schedule_target_moves(self):
+        asset = self._create_asset(date=date(2024, 7, 1), validate_on='2024-12-15')
+        Schedule = self.env['asset.depreciation.schedule']
+        values = {'date_from': '2025-01-01', 'date_to': '2025-03-31', 'category_ids': self.category.ids}
+        posted = Schedule.get_interactive_data(**values, target_move='posted')
+        draft = Schedule.get_interactive_data(**values, target_move='draft')
+        all_entries = Schedule.get_interactive_data(**values, target_move='all')
+        self.assertEqual(posted['total']['depreciation_additions'], 0.0)
+        self.assertGreater(draft['total']['depreciation_additions'], 0.0)
+        self.assertEqual(all_entries['total']['depreciation_additions'], draft['total']['depreciation_additions'])
+        self.assertEqual(draft['groups'][0]['rows'][0]['id'], asset.id)
 
     def test_smart_buttons_of_the_bill_and_the_category(self):
         self.category.write({'create_from_bill': True, 'asset_per_unit': True})

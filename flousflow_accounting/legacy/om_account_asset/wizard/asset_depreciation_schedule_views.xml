@@ -15,6 +15,7 @@
                         <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                         <field name="category_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         <field name="group_by_category"/>
+                        <field name="target_move"/>
                     </group>
                 </group>
                 <footer>
@@ -36,9 +37,14 @@
         <field name="target">new</field>
     </record>
 
+    <record id="ast__action_depreciation_schedule_interactive" model="ir.actions.client">
+        <field name="name">Depreciation Schedule</field>
+        <field name="tag">flousflow_accounting.ast__depreciation_schedule</field>
+    </record>
+
     <menuitem id="ast__menu_asset_depreciation_schedule"
               name="Depreciation Schedule"
-              action="ast__action_asset_depreciation_schedule"
+              action="ast__action_depreciation_schedule_interactive"
               parent="account.account_reports_legal_statements_menu"
               sequence="40"
               groups="account.group_account_manager"/>

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//app[@name='account']" position="attributes">
-                <attribute name="logo">/flousflow_accounting/static/description/icon.png</attribute>
+                <attribute name="logo">/flousflow_accounting/static/legacy/om_account_accountant/description/icon.png</attribute>
             </xpath>
         </field>
     </record>
