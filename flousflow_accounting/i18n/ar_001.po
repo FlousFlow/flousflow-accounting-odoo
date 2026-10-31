@@ -15,7 +15,6 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.acc__action_account_group_action
-#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_account_group
 msgid "Account Groups"
 msgstr "مجموعات الحساب"
 
@@ -23,10 +22,9 @@ msgstr "مجموعات الحساب"
 #: model:ir.actions.act_window,name:flousflow_accounting.acc__action_account_account_tag
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_account_tag
 msgid "Account Tags"
-msgstr "علامات تصنيف الحساب "
+msgstr "وسوم الحسابات"
 
 #. module: flousflow_accounting
-#: model:ir.ui.menu,name:flousflow_accounting.acc__account_type_menu
 msgid "Account Types"
 msgstr "أنواع الحسابات"
 
@@ -44,12 +42,13 @@ msgstr "المحاسبة الأنجلو سكسونية"
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_statement_bank
 msgid "Bank Statements"
-msgstr "كشوفات الحساب البنكية"
+msgstr "كشوفات البنك"
 
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_bank_and_cash
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_action_account_moves_journal_bank_cash
 msgid "Bank and Cash"
-msgstr "البنك والنقد "
+msgstr "البنوك والنقدية"
 
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_statement_cash
@@ -57,7 +56,6 @@ msgid "Cash Registers"
 msgstr "آلات تسجيل النقد "
 
 #. module: flousflow_accounting
-#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_account_coa_template
 msgid "Chart of Accounts Templates"
 msgstr "قوالب مخطط الحسابات "
 
@@ -68,7 +66,6 @@ msgstr "ضبط الاعدادات"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.acc__action_account_fiscal_position_template
-#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_account_fiscal_position_template
 msgid "Fiscal Position Templates"
 msgstr "قوالب الأوضاع الضريبية"
 
@@ -89,7 +86,7 @@ msgstr "طرق السداد"
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_payment_method_search
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_payment_method_tree
 msgid "Payment Methods"
-msgstr "طرق السداد"
+msgstr "طرق الدفع"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_payment_method_search
@@ -121,7 +118,6 @@ msgstr ""
 "سجل تكلفة سلعة كمصروف عندما يتم إصدار فاتورة بهذه السلعة للعميل النهائي."
 
 #. module: flousflow_accounting
-#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_account_templates
 msgid "Templates"
 msgstr "القوالب "
 
@@ -347,13 +343,13 @@ msgstr "أعمار أرصدة الشركاء"
 #: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_aged_payable
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_aged_payable
 msgid "Aged Payable"
-msgstr "الذمم الدائنة المتقادمة"
+msgstr "أعمار الذمم الدائنة"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_aged_receivable
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_aged_receivable
 msgid "Aged Receivable"
-msgstr "مستحق قديم"
+msgstr "أعمار الذمم المدينة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_balance_report__display_account__all
@@ -414,8 +410,9 @@ msgstr "كما في تاريخ"
 
 #. module: flousflow_accounting
 #: model:account.financial.report,name:flousflow_accounting.apr__account_financial_report_assets0
+#: model:ir.ui.menu,name:flousflow_accounting.ast__menu_action_account_asset_asset_form
 msgid "Assets"
-msgstr "أصول"
+msgstr "الأصول"
 
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_finance_audit_reports
@@ -690,10 +687,9 @@ msgstr ""
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_financial_report_tree
 #: model:ir.model,name:flousflow_accounting.model_report_accounting_pdf_reports_report_financial
-#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_finance_legal_statement
-#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_finance_reports_settings
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_reports
 msgid "Financial Reports"
-msgstr "تقارير مالية"
+msgstr "التقارير المالية"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__res_config_settings_view_form
@@ -828,6 +824,7 @@ msgstr "دفتر اليومية:"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__journal_ids
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__journal_ids
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__journal_ids
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_finance_entries_accounting_journals
 msgid "Journals"
 msgstr "دفاتر اليومية"
 
@@ -962,7 +959,7 @@ msgstr ""
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_partner_ledger
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
 msgid "Partner Ledger"
-msgstr "دفتر الأستاذ العام للشركاء"
+msgstr "دفتر أستاذ الشركاء"
 
 #. module: flousflow_accounting
 #: model:ir.model,name:flousflow_accounting.model_report_accounting_pdf_reports_report_partnerledger
@@ -970,7 +967,6 @@ msgid "Partner Ledger Report"
 msgstr "تقرير دفتر الأستاذ الشريك"
 
 #. module: flousflow_accounting
-#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_finance_partner_reports
 msgid "Partner Reports"
 msgstr "تقارير الشريك"
 
@@ -1045,7 +1041,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_report_pl
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_report_pl
 msgid "Profit and Loss"
-msgstr "الربح والخسارة"
+msgstr "الأرباح والخسائر"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_aged_trial_balance__result_selection__customer
@@ -1187,7 +1183,7 @@ msgstr ""
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_report
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_tax
 msgid "Tax Report"
-msgstr "التقارير الضريبية"
+msgstr "تقرير الضرائب"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.apr__action_account_tax_report
@@ -1516,7 +1512,6 @@ msgid "Assets Depreciation Lines"
 msgstr "خطوط إهلاك الأصول"
 
 #. module: flousflow_accounting
-#: model:ir.ui.menu,name:flousflow_accounting.ast__menu_finance_config_assets
 msgid "Assets and Revenues"
 msgstr "الأصول والإيرادات"
 
@@ -1696,8 +1691,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_account_asset_category_search
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_deferred_revenues
 msgid "Deferred Revenues"
-msgstr ""
+msgstr "الإيرادات المؤجلة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_asset_asset__method__degressive
@@ -1859,7 +1855,6 @@ msgstr ""
 "استخدام شريط البحث لتخصيص تقارير إهلاك الأصول الخاصة بك."
 
 #. module: flousflow_accounting
-#: model:ir.ui.menu,name:flousflow_accounting.ast__menu_asset_depreciation_confirmation_wizard
 msgid "Generate Assets Entries"
 msgstr "إنشاء إدخالات الأصول"
 
@@ -2218,8 +2213,10 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_account_asset_category_search
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_action_account_moves_journal_sales
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_sales
 msgid "Sales"
-msgstr ""
+msgstr "المبيعات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__salvage_value
@@ -2357,7 +2354,6 @@ msgid "Vendor"
 msgstr ""
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/om_account_asset/models/account_move.py:0
 #: code:addons/flousflow_accounting/legacy/om_account_asset/models/account_move.py:0
 #, python-format
 msgid "Vendor bill cancelled."
@@ -2547,20 +2543,19 @@ msgstr "المركز الموازني"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.bgt__open_budget_post_form
-#: model:ir.ui.menu,name:flousflow_accounting.bgt__menu_budget_post_form
+#: model:ir.ui.menu,name:flousflow_accounting.bgt__menu_account_budget_position
 msgid "Budgetary Positions"
-msgstr "المراكز الموازنية"
+msgstr "بنود الموازنة"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.bgt__act_crossovered_budget_view
-#: model:ir.ui.menu,name:flousflow_accounting.bgt__menu_act_crossovered_budget_view
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.bgt__view_crossovered_budget_line_search
+#: model:ir.ui.menu,name:flousflow_accounting.bgt__menu_account_budget
 msgid "Budgets"
 msgstr "الميزانيات"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.bgt__act_crossovered_budget_lines_view
-#: model:ir.ui.menu,name:flousflow_accounting.bgt__menu_act_crossovered_budget_lines_view
 msgid "Budgets Analysis"
 msgstr "تحليل الميزانيات"
 
@@ -2765,7 +2760,7 @@ msgstr "تقرير دفتر البنك"
 #: model:ir.model,name:flousflow_accounting.model_report_om_account_daily_reports_report_cashbook
 #: model:ir.ui.menu,name:flousflow_accounting.day__menu_cashbook
 msgid "Cash Book"
-msgstr "دفتر النقدية"
+msgstr "دفتر الصندوق"
 
 #. module: flousflow_accounting
 #: model:ir.model,name:flousflow_accounting.model_account_cashbook_report
@@ -2783,7 +2778,7 @@ msgstr "التقارير اليومية"
 #: model:ir.model,name:flousflow_accounting.model_report_om_account_daily_reports_report_daybook
 #: model:ir.ui.menu,name:flousflow_accounting.day__menu_daybook
 msgid "Day Book"
-msgstr "دفتر اليومية"
+msgstr "دفتر اليومية العامة"
 
 #. module: flousflow_accounting
 #: model:ir.model,name:flousflow_accounting.model_account_daybook_report
@@ -3259,7 +3254,6 @@ msgstr "المتابعات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_followup_followup__followup_line
-#: model:ir.ui.menu,name:flousflow_accounting.fol__om_account_followup_main_menu
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.fol__view_om_account_followup_followup_form
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.fol__view_om_account_followup_followup_tree
 msgid "Follow-up"
@@ -3470,8 +3464,9 @@ msgstr "المتابعات الخاصة بي"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.fol__customer_followup_search_view
+#: model:ir.ui.menu,name:flousflow_accounting.fol__menu_sale_followup
 msgid "My Follow-ups"
-msgstr "المتابعات الخاصة بي"
+msgstr "متابعاتي"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_followup_sending_results__needprinting
@@ -3883,6 +3878,7 @@ msgstr "السنة المالية"
 #: model:ir.actions.act_window,name:flousflow_accounting.fyi__actions_account_fiscal_year
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__group_fiscal_year
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.fyi__res_config_settings_view_form
+#: model:ir.ui.menu,name:flousflow_accounting.fyi__menu_fiscal_year
 msgid "Fiscal Years"
 msgstr "السنوات المالية"
 
@@ -3924,7 +3920,7 @@ msgstr "تاريخ القفل لغير المستشارين"
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.fyi__menu_action_change_lock_date
 msgid "Lock Dates"
-msgstr "تواريخ القفل"
+msgstr "تواريخ الإقفال"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.fyi__action_view_change_lock_date
@@ -4140,7 +4136,6 @@ msgstr ""
 #: model:ir.model,name:flousflow_accounting.model_recurring_payment
 #: model:ir.model.fields,field_description:flousflow_accounting.field_recurring_payment_line__recurring_payment_id
 #: model:ir.ui.menu,name:flousflow_accounting.rcp__menu_recurring_payment
-#: model:ir.ui.menu,name:flousflow_accounting.rcp__menu_recurring_payments
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.rcp__view_recurring_payment_form
 msgid "Recurring Payment"
 msgstr "دفع متكرر"
@@ -4154,8 +4149,9 @@ msgstr "خط الدفع المتكرر"
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.rcp__view_account_recurring_payment_search
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.rcp__view_account_recurring_payment_tree
+#: model:ir.ui.menu,name:flousflow_accounting.rcp__menu_recurring_payment
 msgid "Recurring Payments"
-msgstr "دفع متكرر"
+msgstr "المدفوعات المتكررة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_recurring_template__recurring_period
@@ -4276,3 +4272,283 @@ msgstr ""
 #: code:addons/flousflow_accounting/legacy/om_recurring_payments/models/recurring_payment.py:0
 msgid "You cannot Set to Draft as one of the line is already in done state"
 msgstr "لا يمكنك التعيين إلى \"مسودة\" لأن أحد السطور في حالة \"تم\" بالفعل"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fyi__menu_fiscal_year_closing
+msgid "Year-End Closing"
+msgstr "إقفال نهاية السنة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fyi__menu_account_period_closing
+msgid "Period Closing"
+msgstr "إقفال الفترة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.crv__menu_currency_revaluation
+msgid "Currency Revaluation"
+msgstr "إعادة تقييم العملات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_finance_entries_accounting_ledgers
+msgid "Grouped Journal Items"
+msgstr "بنود اليومية المجمعة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_action_account_moves_ledger_general
+msgid "General Ledger Items"
+msgstr "بنود دفتر الأستاذ العام"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_action_account_moves_ledger_partner
+msgid "Partner Ledger Items"
+msgstr "بنود دفتر أستاذ الشركاء"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fat__menu_action_account_payments_transfer
+msgid "Internal Transfers"
+msgstr "التحويلات الداخلية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rcp__menu_move_auto_post
+msgid "Auto-Post Entries"
+msgstr "ترحيل القيود تلقائيًا"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rec__menu_reconciliation
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_reconciliation
+msgid "Reconciliation"
+msgstr "التسوية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rec__menu_bank_reconciliation
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_bank_reconciliation
+msgid "Bank Reconciliation"
+msgstr "التسوية البنكية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rec__menu_open_items_reconciliation
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_open_items
+msgid "Open Items"
+msgstr "البنود المفتوحة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rec__menu_move_line_match
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_match_journal_items
+msgid "Match Journal Items"
+msgstr "مطابقة بنود اليومية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rec__menu_bank_reconciliation_report
+msgid "Bank Reconciliation Statement"
+msgstr "كشف التسوية البنكية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_bank_rec_to_review
+msgid "Transactions to Review"
+msgstr "معاملات بانتظار المراجعة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.csh__menu_cash_forecast_item
+msgid "Cash Forecast Items"
+msgstr "بنود توقعات التدفق النقدي"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_action_account_moves_journal_purchase
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_purchases
+msgid "Purchases"
+msgstr "المشتريات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_action_account_moves_journal_misc
+msgid "Miscellaneous"
+msgstr "متفرقات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_work_queues
+msgid "Work Queues"
+msgstr "قوائم انتظار العمل"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_moves_to_review
+msgid "Entries to Review"
+msgstr "قيود بانتظار المراجعة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_moves_unposted
+msgid "Draft Entries"
+msgstr "القيود المسودة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_statement_cash
+msgid "Cash Statements"
+msgstr "كشوفات الصندوق"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_journal_items
+msgid "Journal Items"
+msgstr "بنود اليومية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_journal_audit
+msgid "Journal Audit"
+msgstr "تدقيق دفتر اليومية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_audit
+msgid "Audit"
+msgstr "التدقيق"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_report_annual
+msgid "Annual Report"
+msgstr "التقرير السنوي"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_working_files
+msgid "Working Files"
+msgstr "ملفات العمل"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_inventory
+msgid "Inventory"
+msgstr "المخزون"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_inventory_valuation
+msgid "Inventory Valuation"
+msgstr "تقييم المخزون"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_regularization
+msgid "Regulatory"
+msgstr "التسويات النظامية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_unrealized_currencies
+msgid "Unrealized Currencies"
+msgstr "فروق العملات غير المحققة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_deferred_expenses
+msgid "Deferred Expenses"
+msgstr "المصروفات المؤجلة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_bill_to_receive
+msgid "Bills To Receive"
+msgstr "فواتير بانتظار الاستلام"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_billed_not_received
+msgid "Billed Not Received"
+msgstr "مفوتر ولم يُستلم"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_invoice_to_be_issued
+msgid "Invoices To Be Issued"
+msgstr "فواتير بانتظار الإصدار"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_invoiced_not_delivered
+msgid "Invoiced Not Delivered"
+msgstr "مفوتر ولم يُسلّم"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_interactive_customer_statement
+msgid "Customer / Vendor Statement"
+msgstr "كشف حساب العميل / المورد"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ast__menu_action_asset_asset_report
+msgid "Asset Analysis"
+msgstr "تحليل الأصول"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.bgt__menu_account_budget_line_analysis
+msgid "Budget Analysis"
+msgstr "تحليل الميزانية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.csh__menu_cash_forecast_report
+msgid "Cash Forecast"
+msgstr "توقعات التدفق النقدي"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_report_cash_flow
+msgid "Cash Flow Statement"
+msgstr "قائمة التدفقات النقدية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_account_annual_report_generator
+msgid "Generate Financial Statements"
+msgstr "إنشاء القوائم المالية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ast__menu_asset_depreciation_schedule
+msgid "Depreciation Schedule"
+msgstr "جدول الإهلاك"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_finance_reporting_ledgers
+msgid "Ledgers"
+msgstr "دفاتر الأستاذ"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fol__om_account_followup_menu
+msgid "Follow-up Plans"
+msgstr "خطط المتابعة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.chk__menu_check_format
+msgid "Cheque Formats"
+msgstr "نماذج الشيكات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ocr__menu_om_bill_ocr_profile
+msgid "Vendor Bill Recognition"
+msgstr "التعرف الضوئي على فواتير الموردين"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_annual_report_templates
+msgid "Annual Report Templates"
+msgstr "قوالب التقارير السنوية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.bsi__menu_account_statement_import_map
+msgid "Bank Statement File Maps"
+msgstr "تعيينات ملفات كشوف البنك"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_account_management_config
+msgid "Management"
+msgstr "الإدارة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ast__menu_action_account_asset_asset_list_normal_purchase
+msgid "Asset Categories"
+msgstr "فئات الأصول"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fyi__menu_account_period_closing_task
+msgid "Closing Tasks"
+msgstr "مهام الإقفال"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.rcp__menu_recurring_template
+msgid "Recurring Templates"
+msgstr "قوالب الدفعات المتكررة"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fol__om_account_followup_print_menu
+msgid "Send All Reminders"
+msgstr "إرسال جميع التذكيرات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fol__om_account_followup_s
+msgid "Follow-ups"
+msgstr "المتابعة اليدوية"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.fol__menu_action_followup_stat_follow
+msgid "Follow-Up Analysis"
+msgstr "تحليل المتابعة"
