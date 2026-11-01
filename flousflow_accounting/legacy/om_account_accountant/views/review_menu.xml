@@ -216,9 +216,10 @@
     <menuitem id="acc__menu_review_work_queues" name="Work Queues"
               parent="account.menu_finance_entries" groups="account.group_account_readonly" sequence="80"/>
     <!-- Journal Items already has its canonical entry under Accounting > Transactions. -->
-    <record id="acc__menu_review_journal_items" model="ir.ui.menu">
-        <field name="active" eval="False"/>
-    </record>
+    <menuitem id="acc__menu_review_journal_items" name="Journal Items"
+              action="account.action_account_moves_all"
+              parent="account.account_audit_control_menu"
+              groups="account.group_account_readonly" sequence="6" active="False"/>
     <menuitem id="acc__menu_review_moves_to_review" name="Entries to Review" action="acc__action_moves_to_review"
               parent="acc__menu_review_work_queues" groups="account.group_account_readonly" sequence="10"/>
     <menuitem id="acc__menu_review_moves_unposted" name="Draft Entries" action="acc__action_moves_unposted"

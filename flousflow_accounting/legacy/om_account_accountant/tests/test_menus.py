@@ -98,11 +98,11 @@ class TestMenus(TransactionCase):
             key=lambda menu: (menu.sequence, menu.id)
         )
         expected = [
-            self.env.ref('flousflow_accounting.acc__menu_review_journal_items'),
             self.env.ref('account.account_audit_trail_menu'),
             self.env.ref('flousflow_accounting.acc__menu_review_journal_audit'),
         ]
         self.assertEqual(actual.ids, [menu.id for menu in expected])
+        self.assertFalse(self.env.ref('flousflow_accounting.acc__menu_review_journal_items').active)
         self.assertEqual(
             self.env.ref('flousflow_accounting.acc__menu_review_moves_to_review').parent_id,
             self.env.ref('flousflow_accounting.acc__menu_review_work_queues'),
@@ -185,4 +185,4 @@ class TestMenus(TransactionCase):
                       'flousflow_accounting.apr__menu_account_report_bs',
                       'flousflow_accounting.apr__menu_account_report'):
             self.assertIn(self.env.ref(xmlid).id, visible, xmlid)
-        self.assertIn(self.env.ref('flousflow_accounting.acc__menu_review_journal_items').id, visible)
+        self.assertNotIn(self.env.ref('flousflow_accounting.acc__menu_review_journal_items').id, visible)

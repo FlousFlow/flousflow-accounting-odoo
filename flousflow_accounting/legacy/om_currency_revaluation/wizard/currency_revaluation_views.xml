@@ -63,8 +63,12 @@
     </record>
 
     <!-- The same wizard is already available as Review > Regulatory > Unrealized Currencies. -->
-    <record id="crv__menu_currency_revaluation" model="ir.ui.menu">
-        <field name="active" eval="False"/>
-    </record>
+    <menuitem id="crv__menu_currency_revaluation"
+              name="Currency Revaluation"
+              sequence="30"
+              action="crv__action_currency_revaluation"
+              groups="account.group_account_user,account.group_account_manager"
+              parent="account.account_closing_menu"
+              active="False"/>
 
 </odoo>
