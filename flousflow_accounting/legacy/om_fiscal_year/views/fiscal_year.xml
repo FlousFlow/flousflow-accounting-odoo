@@ -87,11 +87,10 @@
               action="fyi__actions_account_fiscal_year"
               groups="flousflow_accounting.fyi__group_fiscal_year"/>
 
-    <menuitem id="fyi__menu_fiscal_year_closing"
-              name="Year-End Closing"
-              sequence="10"
-              parent="account.account_closing_menu"
-              action="fyi__actions_account_fiscal_year"
-              groups="account.group_account_manager"/>
+    <!-- Year-End Closing is a separate workflow; this action only opens the fiscal-year list,
+         which already has its canonical entry under Accounting. -->
+    <record id="fyi__menu_fiscal_year_closing" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 
 </odoo>

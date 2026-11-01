@@ -8,9 +8,6 @@
 
     <record id="account.menu_action_account_moves_all" model="ir.ui.menu">
         <field name="group_ids" eval="[(5,0,0)]" />
-    </record>
-
-    <record id="account.menu_action_account_moves_all" model="ir.ui.menu">
         <field name="parent_id" ref="account.account_transactions_menu"/>
         <field name="sequence">20</field>
     </record>
@@ -35,6 +32,12 @@
                   groups="account.group_account_readonly" sequence="4"/>
 
     </menuitem>
+
+    <!-- Journal-specific invoice and bill shortcuts are already on the Accounting dashboard.
+         Keep their actions intact, but hide this duplicate menu group to match Enterprise navigation. -->
+    <record id="acc__menu_finance_entries_accounting_journals" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 
     <!-- The menus of the accounting apps, arranged together: the daily work under Accounting, the reports
          under Reporting and the settings under Configuration. Each app places its menus on its own when it is
