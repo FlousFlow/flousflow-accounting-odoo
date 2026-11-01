@@ -373,4 +373,63 @@ class ReportPartnerLedger(models.AbstractModel):
             'confirmation_closing_balance': lambda partner: self._confirmation_closing_balance(
                 data, partner
             ),
+            'confirmation_labels': self._get_confirmation_labels(),
+        }
+
+    @api.model
+    def _get_confirmation_labels(self):
+        """Return every static balance-confirmation label in the report language."""
+        if (self.env.lang or '').startswith('ar'):
+            return {
+                'title': 'طلب مصادقة الرصيد',
+                'period': 'الفترة:',
+                'target_moves': 'الحركات المستهدفة:',
+                'all_entries': 'كافة القيود',
+                'all_posted_entries': 'كافة القيود المرحّلة',
+                'partners': 'الشركاء:',
+                'receivable_accounts': 'حسابات القبض',
+                'payable_accounts': 'حسابات الدفع',
+                'receivable_and_payable_accounts': 'حسابات القبض والدفع',
+                'dear': 'السادة',
+                'request_review': (
+                    'نرجو مراجعة الرصيد الختامي أدناه وتأكيد مطابقته لسجلاتكم.'
+                ),
+                'closing_balance': 'الرصيد الختامي في',
+                'balance_sign_note': (
+                    'الرصيد الموجب يعني أن على الشريك مبلغًا للشركة، والرصيد السالب '
+                    'يعني أن على الشركة مبلغًا للشريك.'
+                ),
+                'agree': 'أوافق على هذا الرصيد.',
+                'disagree': 'لا أوافق على هذا الرصيد؛ يرجى التواصل معي.',
+                'disclaimer': (
+                    'هذا المستند لطلب مصادقة الرصيد، ولا يُعد إيصالًا أو إثباتًا '
+                    'للسداد، ولا يغيّر السجلات المحاسبية.'
+                ),
+            }
+        return {
+            'title': 'Balance Confirmation Request',
+            'period': 'Period:',
+            'target_moves': 'Target Moves:',
+            'all_entries': 'All Entries',
+            'all_posted_entries': 'All Posted Entries',
+            'partners': 'Partners:',
+            'receivable_accounts': 'Receivable Accounts',
+            'payable_accounts': 'Payable Accounts',
+            'receivable_and_payable_accounts': 'Receivable and Payable Accounts',
+            'dear': 'Dear',
+            'request_review': (
+                'We request that you review the closing balance below and confirm '
+                'whether it agrees with your records.'
+            ),
+            'closing_balance': 'Closing balance as of',
+            'balance_sign_note': (
+                'A positive amount means the partner owes the company; a negative '
+                'amount means the company owes the partner.'
+            ),
+            'agree': 'I agree with this balance.',
+            'disagree': 'I disagree with this balance; please contact me.',
+            'disclaimer': (
+                'This document requests balance confirmation. It is not a receipt '
+                'or proof of payment and does not change accounting records.'
+            ),
         }

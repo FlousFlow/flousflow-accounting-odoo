@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="acc__tax_return_check_cash_basis_sequences" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">10</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Cash Basis sequences</field>
+        <field name="description">All the Journal Entries used to record received taxes amounts in the Cash Basis journal are in sequence.</field>
+    </record>
+    <record id="acc__tax_return_check_tax_rate_country" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">20</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Tax Rate &amp; Country Consistency</field>
+        <field name="description">Ensures that applied taxes and fiscal positions match the customer or vendor country location.</field>
+    </record>
+    <record id="acc__tax_return_check_reconciliation" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">30</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Tax Reconciliation</field>
+        <field name="description">Audit journal items and accounts to ensure they are correctly assigned to taxes.</field>
+    </record>
+    <record id="acc__tax_return_check_drafts_reviews" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">40</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Drafts &amp; Reviews</field>
+        <field name="description">Review invoices, bills and entries which are either in draft or marked as Anomaly/To Review.</field>
+    </record>
+    <record id="acc__tax_return_check_bank_reconciliation" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">50</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Bank Reconciliation</field>
+        <field name="description">Bank reconciliation helps identify missing invoices or bills that may affect taxes.</field>
+    </record>
+    <record id="acc__tax_return_check_company_details" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">60</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Company Details</field>
+        <field name="description">Missing company details (like Tax ID or country) can cause errors in your report, such as using the wrong tax rate or wrongly exempting transactions.</field>
+    </record>
+    <record id="acc__tax_return_check_vendor_bill_attachments" model="account.working.file.template">
+        <field name="scope">tax_return</field>
+        <field name="sequence">70</field>
+        <field name="section">Tax Return</field>
+        <field name="name">Vendor Bill Attachments</field>
+        <field name="description">Each vendor bill should have its own document attached as evidence in case of an audit.</field>
+        <field name="evidence_required">True</field>
+    </record>
+</odoo>

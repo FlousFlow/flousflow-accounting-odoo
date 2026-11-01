@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="loan_upload_wizard_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.upload.form</field>
+        <field name="model">flousflow.account.loan.upload</field>
+        <field name="arch" type="xml">
+            <form string="Upload Amortization Schedule">
+                <group>
+                    <field name="loan_id"/>
+                    <field name="file_name"/>
+                    <field name="file_data" filename="file_name"/>
+                </group>
+                <footer>
+                    <button name="action_import" type="object" string="Upload" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

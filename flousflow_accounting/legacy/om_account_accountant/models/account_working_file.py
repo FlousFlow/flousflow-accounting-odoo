@@ -13,6 +13,10 @@ class AccountWorkingFileTemplate(models.Model):
     name = fields.Char(required=True, translate=True)
     section = fields.Char(required=True, translate=True)
     description = fields.Text(translate=True)
+    scope = fields.Selection(
+        [("working_file", "Working File"), ("tax_return", "Tax Return")],
+        required=True, default="working_file", index=True,
+    )
     sequence = fields.Integer(default=10)
     evidence_required = fields.Boolean(default=False)
     active = fields.Boolean(default=True)
@@ -96,7 +100,7 @@ class AccountWorkingFile(models.Model):
         values = super().default_get(fields_list)
         if "check_ids" in fields_list:
             templates = self.env["account.working.file.template"].search(
-                [("active", "=", True)]
+                [("active", "=", True), ("scope", "=", "working_file")]
             )
             values["check_ids"] = [
                 fields.Command.create({
@@ -145,7 +149,9 @@ class AccountWorkingFile(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         files = super().create(vals_list)
-        templates = self.env["account.working.file.template"].search([("active", "=", True)])
+        templates = self.env["account.working.file.template"].search([
+            ("active", "=", True), ("scope", "=", "working_file")
+        ])
         for vals, file_record in zip(vals_list, files):
             if "check_ids" not in vals and not file_record.check_ids:
                 file_record.check_ids = [
@@ -281,10 +287,15 @@ class AccountWorkingFileCheck(models.Model):
     _check_company_auto = True
 
     file_id = fields.Many2one(
-        "account.working.file", required=True, ondelete="cascade", index=True,
+        "account.working.file", ondelete="cascade", index=True,
         check_company=True,
     )
-    company_id = fields.Many2one(related="file_id.company_id", store=True, index=True)
+    tax_return_id = fields.Many2one(
+        "account.tax.return", ondelete="cascade", index=True, check_company=True,
+    )
+    company_id = fields.Many2one(
+        "res.company", compute="_compute_company_id", store=True, index=True,
+    )
     template_id = fields.Many2one(
         "account.working.file.template", ondelete="set null", copy=False,
     )
@@ -319,6 +330,17 @@ class AccountWorkingFileCheck(models.Model):
     )
     evidence_attachment_count = fields.Integer(compute="_compute_evidence_attachment_ids")
 
+    @api.depends("file_id.company_id", "tax_return_id.company_id")
+    def _compute_company_id(self):
+        for check in self:
+            check.company_id = check.file_id.company_id or check.tax_return_id.company_id
+
+    @api.constrains("file_id", "tax_return_id")
+    def _check_single_owner(self):
+        for check in self:
+            if bool(check.file_id) == bool(check.tax_return_id):
+                raise ValidationError(_("A review check must belong to exactly one working file or tax return."))
+
     def _check_supervised_status_access(self, vals):
         if (
             vals.get("state") == "supervised"
@@ -338,8 +360,10 @@ class AccountWorkingFileCheck(models.Model):
 
     def write(self, vals):
         self._check_supervised_status_access(vals)
-        if any(check.file_id.state == "validated" for check in self):
+        if any(check.file_id.state == "validated" for check in self if check.file_id):
             raise UserError(_("Reopen the working file before changing its review checks."))
+        if any(check.tax_return_id.state == "paid" for check in self if check.tax_return_id):
+            raise UserError(_("A paid tax return's review checks cannot be changed."))
         if vals.get("file_id"):
             target_file = self.env["account.working.file"].browse(vals["file_id"])
             if target_file.state == "validated":
@@ -354,6 +378,9 @@ class AccountWorkingFileCheck(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             self._check_supervised_status_access(vals)
+        for vals in vals_list:
+            if bool(vals.get("file_id")) == bool(vals.get("tax_return_id")):
+                raise ValidationError(_("A review check must belong to exactly one working file or tax return."))
         file_ids = {vals.get("file_id") for vals in vals_list if vals.get("file_id")}
         files = self.env["account.working.file"].browse(file_ids)
         if any(file_record.state == "validated" for file_record in files):
@@ -364,8 +391,10 @@ class AccountWorkingFileCheck(models.Model):
         return super().create(vals_list)
 
     def unlink(self):
-        if any(check.file_id.state == "validated" for check in self):
+        if any(check.file_id.state == "validated" for check in self if check.file_id):
             raise UserError(_("Reopen the working file before removing its review checks."))
+        if any(check.tax_return_id.state == "paid" for check in self if check.tax_return_id):
+            raise UserError(_("A paid tax return's review checks cannot be removed."))
         return super().unlink()
 
 
@@ -378,8 +407,10 @@ class IrAttachment(models.Model):
             if res_model == "account.working.file.check" and res_id
         }
         checks = self.env["account.working.file.check"].browse(check_ids).exists()
-        if any(check.file_id.state == "validated" for check in checks):
+        if any(check.file_id.state == "validated" for check in checks if check.file_id):
             raise UserError(_("Reopen the working file before changing its supporting evidence."))
+        if any(check.tax_return_id.state == "paid" for check in checks if check.tax_return_id):
+            raise UserError(_("A paid tax return's supporting evidence cannot be changed."))
 
     @api.model_create_multi
     def create(self, vals_list):

@@ -47,6 +47,25 @@ class TestInteractiveCustomerStatement(AccountTestInvoicingCommon):
         )
         self.assertEqual(without_tag_match['line_count'], 0)
 
+    def test_posted_statement_reports_draft_entries_before_or_in_period(self):
+        self.init_invoice('out_invoice', partner=self.partner_a, amounts=[100.0], taxes=[],
+                          invoice_date='2025-01-15', post=False)
+        self.init_invoice('out_invoice', partner=self.partner_b, amounts=[200.0], taxes=[],
+                          invoice_date='2025-03-15', post=False)
+        report = self.env['report.flousflow_accounting.apr__customer_statement_data']
+
+        posted = report.get_interactive_data(
+            period_type='custom', custom_date_from='2025-02-01', custom_date_to='2025-02-28',
+            account_scopes=['receivable'], target_move='posted',
+        )
+        all_entries = report.get_interactive_data(
+            period_type='custom', custom_date_from='2025-02-01', custom_date_to='2025-02-28',
+            account_scopes=['receivable'], target_move='all',
+        )
+
+        self.assertEqual(posted['draft_count'], 1)
+        self.assertEqual(all_entries['draft_count'], 0)
+
     def test_access_and_filter_validation(self):
         report = self.env['report.flousflow_accounting.apr__customer_statement_data']
         with self.assertRaises(ValidationError):

@@ -447,6 +447,9 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.day__account_report_bankbook_view
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.day__account_report_cashbook_view
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.day__account_report_daybook_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_close_wizard_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_upload_wizard_view
 msgid "Cancel"
 msgstr "إلغاء"
 
@@ -480,6 +483,8 @@ msgstr "تسمية العمود"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__company_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__company_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__company_id
 msgid "Company"
 msgstr "الشركة"
 
@@ -499,6 +504,10 @@ msgstr "مقارنة"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__create_uid
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__create_uid
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__create_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__create_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__create_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__create_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__create_uid
 msgid "Created by"
 msgstr "أنشئ بواسطة"
 
@@ -513,6 +522,10 @@ msgstr "أنشئ بواسطة"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__create_date
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__create_date
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__create_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__create_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__create_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__create_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__create_date
 msgid "Created on"
 msgstr "أنشئ في"
 
@@ -530,8 +543,10 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_general_ledger
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__currency_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__currency_id
 msgid "Currency"
-msgstr ""
+msgstr "عملة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_print_journal__sort_selection__date
@@ -541,6 +556,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal_entries
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__date
 msgid "Date"
 msgstr "التاريخ"
 
@@ -600,6 +617,10 @@ msgstr "عرض أعمدة المدين / الدائن"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__display_name
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__display_name
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__display_name
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__display_name
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__display_name
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__display_name
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__display_name
 msgid "Display Name"
 msgstr "اسم العرض"
 
@@ -644,6 +665,7 @@ msgstr "تمكين المقارنة"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__date_to
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__date_to
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return_create_wizard__date_to
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__end_date
 msgid "End Date"
 msgstr "تاريخ الانتهاء"
 
@@ -745,6 +767,10 @@ msgstr "تقرير دفتر الأستاذ العام"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__id
 msgid "ID"
 msgstr "المُعرف"
 
@@ -788,6 +814,7 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__journal_id
 msgid "Journal"
 msgstr "دفتر اليومية"
 
@@ -874,6 +901,10 @@ msgstr "آخر تعديل في"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__write_uid
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__write_uid
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__write_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__write_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__write_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__write_uid
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__write_uid
 msgid "Last Updated by"
 msgstr "آخر تحديث بواسطة"
 
@@ -888,6 +919,10 @@ msgstr "آخر تحديث بواسطة"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_report_partner_ledger__write_date
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__write_date
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__write_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__write_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__write_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__write_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__write_date
 msgid "Last Updated on"
 msgstr "آخر تحديث في"
 
@@ -916,8 +951,9 @@ msgstr ""
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_financial
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__name
 msgid "Name"
-msgstr ""
+msgstr "اسم"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_tax
@@ -1122,8 +1158,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_financial_report__sequence
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__sequence
 msgid "Sequence"
-msgstr ""
+msgstr "تسلسل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_financial_report__sign
@@ -1150,6 +1187,8 @@ msgstr "ترتيب حسب"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__date_from
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__date_from
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return_create_wizard__date_from
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_list_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
 msgid "Start Date"
 msgstr "تاريخ البدء"
 
@@ -1380,8 +1419,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_needaction
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "إجراء مطلوب"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__active
@@ -1542,8 +1582,9 @@ msgstr "الأصول في حالة التشغيل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_attachment_count
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "عدد المرفقات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_category__open_asset
@@ -1611,13 +1652,16 @@ msgstr ""
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_asset_asset__state__close
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__asset_asset_report__state__close
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
 msgid "Close"
-msgstr ""
+msgstr "إغلاق"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_account_asset_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan__state__closed
 msgid "Closed"
-msgstr ""
+msgstr "مغلق"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__method
@@ -1637,8 +1681,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_account_asset_asset_form
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
 msgid "Confirm"
-msgstr ""
+msgstr "تأكيد"
 
 #. module: flousflow_accounting
 #: code:addons/flousflow_accounting/legacy/om_account_asset/wizard/asset_depreciation_confirmation_wizard.py:0
@@ -1814,8 +1859,10 @@ msgstr ""
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_asset_asset__state__draft
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__asset_asset_report__state__draft
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_asset_asset_report_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan__state__draft
 msgid "Draft"
-msgstr ""
+msgstr "مسودة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__method_end
@@ -1842,13 +1889,15 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_follower_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "المتابعين"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_partner_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "المتابعين (الشركاء)"
 
 #. module: flousflow_accounting
 #: model_terms:ir.actions.act_window,help:flousflow_accounting.ast__action_asset_asset_report
@@ -1896,20 +1945,24 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__has_message
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "يحتوي على رسالة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_needaction
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_unread
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "إذا كان محددًا، فهناك رسائل جديدة عليك رؤيتها."
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_has_error
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_has_sms_error
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__message_has_error
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "إذا كان محددًا، فقد حدث خطأ في تسليم بعض الرسائل."
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__prorata
@@ -1939,8 +1992,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_is_follower
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "متابع"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__salvage_value
@@ -1997,13 +2051,15 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_has_error
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "خطأ في تسليم الرسائل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "الرسائل"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__asset_modify_form
@@ -2054,8 +2110,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_needaction_counter
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "عدد الإجراءات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__method_number
@@ -2078,8 +2135,9 @@ msgstr "عدد الأشهر في فترة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_has_error_counter
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "عدد الأخطاء"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_needaction_counter
@@ -2088,8 +2146,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_has_error_counter
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "عدد الرسائل الحادث بها خطأ في التسليم"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__message_unread_counter
@@ -2123,9 +2182,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_depreciation_line__move_posted_check
 #: model:ir.model.fields,field_description:flousflow_accounting.field_asset_asset_report__move_check
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_asset_asset_report_search
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan_line__state__posted
 #, python-format
 msgid "Posted"
-msgstr ""
+msgstr "مُرحّل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_asset_asset_report__posted_value
@@ -2203,13 +2263,16 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.rcp__view_account_recurring_payment_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan__state__running
 msgid "Running"
-msgstr "جارية"
+msgstr "ساري"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__message_has_sms_error
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "خطأ في تسليم الرسائل النصية القصيرة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_asset_category__type__sale
@@ -2256,8 +2319,9 @@ msgstr ""
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__state
 #: model:ir.model.fields,field_description:flousflow_accounting.field_asset_asset_report__state
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
 msgid "Status"
-msgstr ""
+msgstr "الحالة"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_account_asset_asset__method_period
@@ -2385,8 +2449,9 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_asset_asset_report__name
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_search_view
 msgid "Year"
-msgstr ""
+msgstr "السنة"
 
 #. module: flousflow_accounting
 #: code:addons/flousflow_accounting/legacy/om_account_asset/models/account_asset.py:0
@@ -2571,8 +2636,9 @@ msgstr "إلغاء الميزانية"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__crossovered_budget__state__cancel
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan__state__cancelled
 msgid "Cancelled"
-msgstr ""
+msgstr "ملغي"
 
 #. module: flousflow_accounting
 #: model_terms:ir.actions.act_window,help:flousflow_accounting.bgt__act_crossovered_budget_view
@@ -3088,8 +3154,12 @@ msgstr ""
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_partner__payment_amount_due
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_users__payment_amount_due
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__amount_due
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__amount_due
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_list_view
 msgid "Amount Due"
-msgstr ""
+msgstr "المبلغ المستحق"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_partner__payment_amount_overdue
@@ -4083,8 +4153,9 @@ msgstr "شهور"
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/om_recurring_payments/models/recurring_payment.py:0
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
 msgid "New"
-msgstr ""
+msgstr "جديد"
 
 #. module: flousflow_accounting
 #: model:ir.module.module,shortdesc:base.module_om_recurring_payments
@@ -4112,8 +4183,10 @@ msgstr "يمكن إعادة تعيين البنود المتخطاة لدفع م
 #. module: flousflow_accounting
 #: model:ir.model,name:flousflow_accounting.model_account_payment
 #: model:ir.model.fields,field_description:flousflow_accounting.field_recurring_payment_line__payment_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_list_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_pivot_view
 msgid "Payment"
-msgstr ""
+msgstr "الدفع"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__recurring_payment__payment_type__inbound
@@ -4328,6 +4401,7 @@ msgstr "التسوية"
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.rec__menu_bank_reconciliation
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_review_bank_reconciliation
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_bank_reconciliation
 msgid "Bank Reconciliation"
 msgstr "التسوية البنكية"
 
@@ -4558,6 +4632,7 @@ msgstr "المتابعة اليدوية"
 #: model:ir.ui.menu,name:flousflow_accounting.fol__menu_action_followup_stat_follow
 msgid "Follow-Up Analysis"
 msgstr "تحليل المتابعة"
+
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/om_account_accountant/models/dashboard_kpi.py:0
@@ -4584,6 +4659,21 @@ msgstr "الإقفال السنوي: ضريبة الشركات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return_create_wizard__return_type__tax
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_cash_basis_sequences
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_bank_reconciliation
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_company_details
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_drafts_reviews
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_reconciliation
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_tax_rate_country
+#: model:account.working.file.template,section:flousflow_accounting.acc__tax_return_check_vendor_bill_attachments
+#: model:ir.model,name:flousflow_accounting.model_account_tax_return
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__tax_grid_report_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_working_file_check__tax_return_id
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_tax_return__return_type__tax
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_template__scope__tax_return
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
 msgid "Tax Return"
 msgstr "الإقرار الضريبي"
 
@@ -4701,8 +4791,12 @@ msgstr "للمراجعة"
 
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,help:flousflow_accounting.apr__action_account_tax_returns
-msgid "Create a tax filing task, review its period using the existing tax report, then track submission and payment."
-msgstr "أنشئ مهمة للإقرار الضريبي، وراجع الفترة من خلال تقرير الضرائب، ثم تابع الإرسال والسداد."
+msgid ""
+"Create a tax filing task, review its period using the existing tax report, "
+"then track submission and payment."
+msgstr ""
+"أنشئ مهمة للإقرار الضريبي، وراجع الفترة من خلال تقرير الضرائب، ثم تابع "
+"الإرسال والسداد."
 
 #. module: flousflow_accounting
 msgid "Select report"
@@ -4775,3 +4869,766 @@ msgstr "تواريخ مخصصة"
 #. module: flousflow_accounting
 msgid "Hide lines at 0"
 msgstr "إخفاء البنود التي قيمتها صفر"
+
+#. module: flousflow_accounting
+#: model:ir.actions.report,name:flousflow_accounting.apr__action_report_partnerledger
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid "Balance Confirmation Request"
+msgstr "طلب مصادقة الرصيد"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid "Dear"
+msgstr "السادة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid ""
+"We request that you review the closing balance below and confirm whether it "
+"agrees with your records."
+msgstr "نرجو مراجعة الرصيد الختامي أدناه وتأكيد مطابقته لسجلاتكم."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid "Closing balance as of"
+msgstr "الرصيد الختامي في"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid ""
+"A positive amount means the partner owes the company; a negative amount "
+"means the company owes the partner."
+msgstr ""
+"الرصيد الموجب يعني أن على الشريك مبلغًا للشركة، والرصيد السالب يعني أن على "
+"الشركة مبلغًا للشريك."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid "I agree with this balance."
+msgstr "أوافق على هذا الرصيد."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid "I disagree with this balance; please contact me."
+msgstr "لا أوافق على هذا الرصيد؛ يرجى التواصل معي."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
+msgid ""
+"This document requests balance confirmation. It is not a receipt or proof of"
+" payment and does not change accounting records."
+msgstr ""
+"هذا المستند لطلب مصادقة الرصيد، ولا يعد إيصالًا أو إثباتًا للسداد ولا يغيّر "
+"السجلات المحاسبية."
+
+#. module: flousflow_accounting
+msgid ""
+"There are unposted Journal Entries prior to or included in this period."
+msgstr "هناك قيود يومية غير مُرحلة قبل هذه الفترة أو مشمولة فيها."
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.loan_action
+#: model:ir.ui.menu,name:flousflow_accounting.loan_menu
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
+msgid "Loans"
+msgstr "القروض"
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.loan_analysis_action
+#: model:ir.ui.menu,name:flousflow_accounting.loan_analysis_menu
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_graph_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_list_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_pivot_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_search_view
+msgid "Loans Analysis"
+msgstr "تحليل القروض"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__line_ids
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+msgid "Amortization Schedule"
+msgstr "جدول السداد"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+msgid "Loan Settings"
+msgstr "إعدادات القرض"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__asset_group_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
+msgid "Asset Group"
+msgstr "مجموعة الأصول"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__amount_borrowed
+msgid "Amount Borrowed"
+msgstr "المبلغ المقترض"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__interest
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_list_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_pivot_view
+msgid "Interest"
+msgstr "الفائدة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_list_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_pivot_view
+msgid "Principal"
+msgstr "أصل القرض"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+msgid "Payments"
+msgstr "المدفوعات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__long_term_account_id
+msgid "Long Term Account"
+msgstr "حساب الالتزام طويل الأجل"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__short_term_account_id
+msgid "Short Term Account"
+msgstr "حساب الالتزام قصير الأجل"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__expense_account_id
+msgid "Expense Account"
+msgstr "حساب مصروف الفائدة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__skip_until_date
+msgid "Transfer to First Amortization Schedule"
+msgstr "تاريخ أول قسط"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_upload_wizard_view
+msgid "Upload"
+msgstr "استيراد"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+msgid "Compute"
+msgstr "احتساب"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_close_wizard_view
+msgid "Close Loan"
+msgstr "إغلاق القرض"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "The borrowed amount must be greater than zero."
+msgstr "يجب أن يكون المبلغ المقترض أكبر من صفر."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "The duration must be at least one month."
+msgstr "يجب ألا تقل مدة القرض عن شهر واحد."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "The schedule principal total must equal the borrowed amount."
+msgstr "يجب أن يساوي إجمالي أصل الدين في الجدول المبلغ المقترض."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "The schedule interest total must equal the loan interest."
+msgstr "يجب أن يساوي إجمالي الفوائد في الجدول فائدة القرض."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "The number of schedule lines must match the loan duration."
+msgstr "يجب أن يطابق عدد بنود الجدول مدة القرض."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "%s - Current portion reclassification"
+msgstr "إعادة تصنيف الجزء المتداول للقرض %s"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "%s - Installment %s"
+msgstr "القرض %s - القسط %s"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "%s - Interest"
+msgstr "%s - الفائدة"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "%s - Payment due"
+msgstr "%s - استحقاق السداد"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "%s - Principal"
+msgstr "%s - أصل القرض"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "%s - Reverse current portion reclassification"
+msgstr "عكس إعادة تصنيف الجزء المتداول للقرض %s"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "A confirmed loan schedule cannot be edited."
+msgstr "لا يمكن تعديل جدول السداد بعد تأكيد القرض."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "A schedule can only be imported for a draft loan."
+msgstr "لا يمكن استيراد جدول السداد إلا لقرض في حالة المسودة."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__move_ids
+msgid "Accounting Entries"
+msgstr "القيود المحاسبية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_ids
+msgid "Activities"
+msgstr "الأنشطة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "زخرفة استثناء النشاط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_plans_ids
+msgid "Activity Plans"
+msgstr "خطط النشاط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "أيقونة نوع النشاط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__analytic_distribution
+msgid "Analytic Distribution"
+msgstr "التوزيع التحليلي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__analytic_precision
+msgid "Analytic Precision"
+msgstr "الدقة التحليلية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_list_view
+msgid "Borrowed Amount"
+msgstr "قيمة القرض"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__file_data
+msgid "CSV File"
+msgstr "ملف CSV"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__close_date
+msgid "Close Date"
+msgstr "تاريخ الإغلاق"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__distribution_analytic_account_ids
+msgid "Distribution Analytic Account"
+msgstr "حساب التوزيع التحليلي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__duration
+msgid "Duration"
+msgstr "المدة بالأشهر"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "Each schedule line must have a unique date."
+msgstr "يجب أن يكون تاريخ كل قسط فريدًا."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__file_name
+msgid "File Name"
+msgstr "اسم الملف"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_exception_icon
+msgid "Icon"
+msgstr "الأيقونة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "الأيقونة للإشارة إلى النشاط المستثنى."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__interest_amount
+msgid "Interest Amount"
+msgstr "مبلغ الفائدة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__line_count
+msgid "Line Count"
+msgstr "عدد الأقساط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_close__loan_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__loan_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_upload__loan_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_line_search_view
+msgid "Loan"
+msgstr "القرض"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_form_view
+msgid "Loan Name"
+msgstr "اسم القرض"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Long-term, short-term, and expense accounts must be different."
+msgstr "يجب أن تكون حسابات الالتزام طويل الأجل وقصير الأجل والمصروف مختلفة."
+
+#. module: flousflow_accounting
+#: model_terms:ir.actions.act_window,help:flousflow_accounting.loan_action
+msgid "Manage your loans with automated adjustments."
+msgstr "أدِر قروضك وتسوياتها الآلية."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__activity_type_icon
+msgid "Material Symbols icon e.g. checklist"
+msgstr "أيقونة Material Symbols مثلًا checklist"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "الموعد النهائي لنشاطاتي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "الموعد النهائي للنشاط التالي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_summary
+msgid "Next Activity Summary"
+msgstr "ملخص النشاط التالي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع النشاط التالي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "عدد الرسائل التي تتطلب اتخاذ إجراء"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__duration
+msgid "Number of monthly amortization installments."
+msgstr "عدد أقساط السداد الشهرية."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Only Accounting Managers can cancel loans."
+msgstr "يقتصر إلغاء القروض على مديري المحاسبة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_close.py:0
+msgid "Only Accounting Managers can close loans."
+msgstr "يقتصر إغلاق القروض على مديري المحاسبة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Only Accounting Managers can confirm loans."
+msgstr "يقتصر تأكيد القروض على مديري المحاسبة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Only draft loans can be confirmed."
+msgstr "لا يمكن تأكيد إلا القروض التي في حالة المسودة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Only draft loans can compute a schedule."
+msgstr "لا يمكن احتساب جدول السداد إلا للقروض التي في حالة المسودة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Only draft loans without accounting entries can be deleted."
+msgstr "لا يمكن حذف إلا القروض المسودة التي لا ترتبط بقيود محاسبية."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Only draft or running loans can be cancelled."
+msgstr "لا يمكن إلغاء إلا القروض المسودة أو السارية."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_close.py:0
+msgid "Only running loans can be closed."
+msgstr "لا يمكن إغلاق إلا القروض السارية."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__opening_balance
+msgid "Opening Balance"
+msgstr "الرصيد الافتتاحي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__asset_group_id
+msgid "Optional asset group used to classify the financed asset."
+msgstr "مجموعة أصول اختيارية لتصنيف الأصل المموّل."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__payment_amount
+msgid "Payment Amount"
+msgstr "مبلغ القسط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__payment_move_id
+msgid "Payment Move"
+msgstr "قيد السداد"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__principal_amount
+msgid "Principal Amount"
+msgstr "مبلغ أصل القرض"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Principal and interest amounts cannot be negative."
+msgstr "لا يجوز أن تكون مبالغ أصل القرض والفائدة سالبة."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__reclassification_move_id
+msgid "Reclassification Move"
+msgstr "قيد إعادة التصنيف"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__reclassification_reversal_id
+msgid "Reclassification Reversal"
+msgstr "قيد عكس إعادة التصنيف"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__activity_user_id
+msgid "Responsible User"
+msgstr "المستخدم المسؤول"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Reversal of %s"
+msgstr "عكس القيد %s"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_close.py:0
+msgid "Reversal of future loan entry %s"
+msgstr "عكس قيد القرض المستقبلي %s"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "Row %s contains an invalid date or amount."
+msgstr "يحتوي الصف %s على تاريخ أو مبلغ غير صالح."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "Row %s must contain a valid date and non-negative amounts."
+msgstr "يجب أن يحتوي الصف %s على تاريخ صالح ومبالغ غير سالبة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "Row %s must contain date, principal, and interest."
+msgstr "يجب أن يحتوي الصف %s على التاريخ وأصل القرض والفائدة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Schedule dates must be in chronological order."
+msgstr "يجب ترتيب تواريخ الأقساط زمنيًا."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Schedule dates must be unique."
+msgstr "يجب أن تكون تواريخ الأقساط فريدة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Schedule lines linked to accounting entries cannot be deleted."
+msgstr "لا يمكن حذف أقساط مرتبطة بقيود محاسبية."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "Schedule principal and interest amounts cannot be negative."
+msgstr "لا يجوز أن تكون مبالغ أصل القرض والفائدة في الجدول سالبة."
+
+#. module: flousflow_accounting
+#: model_terms:ir.actions.act_window,help:flousflow_accounting.loan_action
+msgid ""
+"Set or import the amortization schedule and let Odoo handle monthly interest"
+" and principal adjustments."
+msgstr ""
+"أنشئ جدول السداد أو استورده، ودع أودو ينشئ تسويات أصل القرض والفائدة شهريًا."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__state
+#: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__state
+msgid "State"
+msgstr "الحالة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"الأنشطة المعتمدة على الحالة\n"
+"المتأخرة: تاريخ الاستحقاق مر\n"
+"اليوم: تاريخ النشاط هو اليوم\n"
+"المخطط: الأنشطة المستقبلية."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "The CSV file could not be read as UTF-8."
+msgstr "تعذرت قراءة ملف CSV بترميز UTF-8."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "The CSV file does not contain any schedule lines."
+msgstr "لا يحتوي ملف CSV على أي أقساط."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+msgid "The transfer date cannot be earlier than the loan date."
+msgstr "لا يجوز أن يسبق تاريخ التحويل تاريخ القرض."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__interest
+msgid "Total interest across the amortization schedule."
+msgstr "إجمالي الفائدة على كامل جدول السداد."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_flousflow_account_loan__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "نوع النشاط المستثنى في السجل."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_upload_wizard_view
+msgid "Upload Amortization Schedule"
+msgstr "استيراد جدول السداد"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/wizard/loan_upload.py:0
+msgid "Upload a CSV file with date, principal, and interest columns."
+msgstr "ارفع ملف CSV يحتوي على أعمدة التاريخ وأصل القرض والفائدة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan_line__state__draft
+msgid "Scheduled"
+msgstr "مجدول"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_account_loans/models/loan.py:0
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan_line__state__reversed
+msgid "Reversed"
+msgstr "معكوس"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/models/account_working_file.py:0
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__check_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_working_file__check_ids
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_check_list
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_check_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Review Checks"
+msgstr "فحوصات المراجعة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__reviewed_check_count
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Completed Checks"
+msgstr "الفحوصات المكتملة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_return__check_count
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__account_tax_return_view_form
+msgid "Total Checks"
+msgstr "إجمالي الفحوصات"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_cash_basis_sequences
+msgid "Cash Basis sequences"
+msgstr "تسلسلات الأساس النقدي"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_cash_basis_sequences
+msgid ""
+"All the Journal Entries used to record received taxes amounts in the Cash "
+"Basis journal are in sequence."
+msgstr ""
+"جميع قيود اليومية المستخدمة لتسجيل مبالغ الضرائب المستلمة في دفتر اليومية "
+"على الأساس النقدي متسلسلة."
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_tax_rate_country
+msgid "Tax Rate & Country Consistency"
+msgstr "اتساق معدل الضريبة والبلد"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_tax_rate_country
+msgid ""
+"Ensures that applied taxes and fiscal positions match the customer or vendor"
+" country location."
+msgstr "يضمن توافق الضرائب المطبقة والمراكز المالية مع بلد العميل أو المورد."
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_reconciliation
+msgid "Tax Reconciliation"
+msgstr "تسوية الضرائب"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_reconciliation
+msgid ""
+"Audit journal items and accounts to ensure they are correctly assigned to "
+"taxes."
+msgstr "راجع بنود اليومية والحسابات للتأكد من إسنادها إلى الضرائب بشكل صحيح."
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_drafts_reviews
+msgid "Drafts & Reviews"
+msgstr "المسودات والمراجعات"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_drafts_reviews
+msgid ""
+"Review invoices, bills and entries which are either in draft or marked as "
+"Anomaly/To Review."
+msgstr ""
+"راجع الفواتير وفواتير الموردين والقيود التي ما زالت مسودة أو موسومة كشذوذ أو"
+" قيد المراجعة."
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_bank_reconciliation
+msgid ""
+"Bank reconciliation helps identify missing invoices or bills that may affect"
+" taxes."
+msgstr ""
+"تساعد التسوية البنكية على تحديد الفواتير أو فواتير الموردين المفقودة التي قد"
+" تؤثر في الضرائب."
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_company_details
+msgid "Company Details"
+msgstr "بيانات الشركة"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_company_details
+msgid ""
+"Missing company details (like Tax ID or country) can cause errors in your "
+"report, such as using the wrong tax rate or wrongly exempting transactions."
+msgstr ""
+"قد يؤدي نقص بيانات الشركة، مثل الرقم الضريبي أو البلد، إلى أخطاء في التقرير "
+"كاستخدام معدل ضريبة خاطئ أو إعفاء معاملات دون وجه حق."
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,name:flousflow_accounting.acc__tax_return_check_vendor_bill_attachments
+msgid "Vendor Bill Attachments"
+msgstr "مرفقات فواتير الموردين"
+
+#. module: flousflow_accounting
+#: model:account.working.file.template,description:flousflow_accounting.acc__tax_return_check_vendor_bill_attachments
+msgid ""
+"Each vendor bill should have its own document attached as evidence in case "
+"of an audit."
+msgstr "يجب إرفاق مستند خاص بكل فاتورة مورد ليكون دليلًا عند التدقيق."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_balance__state__pending
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_check__state__pending
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_balance_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_check_search
+msgid "Pending Review"
+msgstr "بانتظار المراجعة"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file__state__reviewed
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_balance__state__reviewed
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_check__state__reviewed
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_balance_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_check_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_search
+msgid "Reviewed"
+msgstr "تمت مراجعته"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_check__state__supervised
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_check_search
+msgid "Supervised"
+msgstr "تمت مراجعته واعتماده"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_working_file_check__state__exception
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_account_working_file_check_search
+msgid "Exception"
+msgstr "حالة استثنائية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+msgid "Add notes..."
+msgstr "أضف ملاحظات..."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+msgid "Review status"
+msgstr "حالة المراجعة"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+msgid "Review notes"
+msgstr "ملاحظات المراجعة"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+msgid "Upload File"
+msgstr "رفع ملف"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/working_file_check_cards/working_file_check_cards.js:1
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/static/src/working_file_check_cards/working_file_check_cards.js:0
+#: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
+msgid "Remove file"
+msgstr "إزالة الملف"

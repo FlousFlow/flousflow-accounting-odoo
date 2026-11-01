@@ -47,6 +47,7 @@ export class CustomerStatement extends Component {
             partners: [],
             expandedPartnerIds: [],
             lineCount: 0,
+            draftCount: 0,
             companyName: "",
             currencyId: false,
         });
@@ -130,6 +131,7 @@ export class CustomerStatement extends Component {
             this.state.dateTo = data.date_to;
             this.state.partners = data.partners;
             this.state.lineCount = data.line_count;
+            this.state.draftCount = data.draft_count;
             this.state.companyName = data.company_name;
             this.state.currencyId = data.currency_id;
         } catch (error) {

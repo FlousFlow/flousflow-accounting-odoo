@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="loan_close_wizard_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.close.form</field>
+        <field name="model">flousflow.account.loan.close</field>
+        <field name="arch" type="xml">
+            <form string="Close Loan">
+                <group>
+                    <field name="loan_id"/>
+                    <field name="close_date"/>
+                </group>
+                <footer>
+                    <button name="action_close" type="object" string="Close Loan" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

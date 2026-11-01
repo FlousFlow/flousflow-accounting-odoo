@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="loan_list_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.list</field>
+        <field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'closed'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date" string="Start Date"/>
+                <field name="end_date"/>
+                <field name="amount_borrowed" sum="Borrowed Amount"/>
+                <field name="amount_due" sum="Amount Due"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="loan_form_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.form</field>
+        <field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml">
+            <form string="Loans">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" class="oe_highlight"
+                            groups="account.group_account_manager" invisible="state != 'draft'"/>
+                    <button name="action_open_upload" type="object" string="Upload"
+                            invisible="state != 'draft'"/>
+                    <button name="action_compute" type="object" string="Compute"
+                            invisible="state != 'draft'"/>
+                    <button name="action_close" type="object" string="Close"
+                            groups="account.group_account_manager" invisible="state != 'running'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            groups="account.group_account_manager" invisible="state not in ('draft', 'running')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="closed,running,draft"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Loan Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="amount_borrowed" readonly="state != 'draft'"/>
+                            <field name="interest" readonly="state != 'draft'"/>
+                            <field name="amount_due" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="duration" readonly="state != 'draft'"/>
+                            <field name="asset_group_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Amortization Schedule">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" default_order="date,sequence">
+                                    <field name="sequence" column_invisible="True"/>
+                                    <field name="date"/>
+                                    <field name="principal_amount" sum="Principal"/>
+                                    <field name="interest_amount" sum="Interest"/>
+                                    <field name="payment_amount" sum="Payments" readonly="1"/>
+                                    <field name="amount_due" sum="Amount Due" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Loan Settings">
+                            <group>
+                                <group>
+                                    <field name="long_term_account_id" readonly="state != 'draft'"/>
+                                    <field name="short_term_account_id" readonly="state != 'draft'"/>
+                                </group>
+                                <group>
+                                    <field name="expense_account_id" readonly="state != 'draft'"/>
+                                    <field name="journal_id" readonly="state != 'draft'"/>
+                                    <field name="skip_until_date" readonly="state != 'draft'"/>
+                                </group>
+                            </group>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                   readonly="state != 'draft'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="loan_search_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.search</field>
+        <field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml">
+            <search string="Loans">
+                <field name="name"/>
+                <field name="asset_group_id"/>
+                <filter name="running" string="Running" domain="[('state', '=', 'running')]"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="closed" string="Closed" domain="[('state', '=', 'closed')]"/>
+                <separator/>
+                <filter name="group_date" string="Start Date" domain="[]" context="{'group_by': 'date:year'}"/>
+                <filter name="group_asset_group" string="Asset Group" domain="[]" context="{'group_by': 'asset_group_id'}"/>
+                <filter name="group_state" string="Status" domain="[]" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+    <record id="loan_kanban_view" model="ir.ui.view">
+        <field name="name">flousflow.account.loan.kanban</field>
+        <field name="model">flousflow.account.loan</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/><field name="amount_borrowed"/><field name="amount_due"/>
+                <field name="date"/><field name="end_date"/><field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between">
+                            <strong><field name="name"/></strong>
+                            <field name="state" widget="badge"/>
+                        </div>
+                        <div><field name="date"/> – <field name="end_date"/></div>
+                        <div class="mt-2"><field name="amount_borrowed"/> · <field name="amount_due"/></div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="loan_action" model="ir.actions.act_window">
+        <field name="name">Loans</field>
+        <field name="res_model">flousflow.account.loan</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="loan_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Manage your loans with automated adjustments.</p>
+            <p>Set or import the amortization schedule and let Odoo handle monthly interest and principal adjustments.</p>
+        </field>
+    </record>
+    <menuitem id="loan_menu" name="Loans" parent="account.menu_finance_entries"
+              action="loan_action" sequence="40" groups="account.group_account_user"/>
+</odoo>

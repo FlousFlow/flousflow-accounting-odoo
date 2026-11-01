@@ -41,17 +41,64 @@ class AccountTaxReturn(models.Model):
     paid_by = fields.Many2one('res.users', string='Marked Paid By', readonly=True, copy=False)
     paid_on = fields.Datetime(readonly=True, copy=False)
     note = fields.Text(string='Internal Notes')
+    check_ids = fields.One2many(
+        'account.working.file.check', 'tax_return_id', string='Review Checks', copy=True,
+    )
+    check_count = fields.Integer(compute='_compute_check_progress')
+    reviewed_check_count = fields.Integer(compute='_compute_check_progress')
+    check_progress = fields.Float(compute='_compute_check_progress')
 
     _period_unique = models.Constraint(
         'UNIQUE(company_id, return_type, date_from, date_to)',
         'A tax return of this type already exists for this company and period.',
     )
 
+    @api.depends('check_ids', 'check_ids.state')
+    def _compute_check_progress(self):
+        for record in self:
+            record.check_count = len(record.check_ids)
+            record.reviewed_check_count = len(record.check_ids.filtered(
+                lambda check: check.state != 'pending'
+            ))
+            record.check_progress = (
+                100.0 * record.reviewed_check_count / record.check_count
+                if record.check_count else 0.0
+            )
+
+    @api.model
+    def default_get(self, fields_list):
+        values = super().default_get(fields_list)
+        if 'check_ids' in fields_list:
+            templates = self.env['account.working.file.template'].search([
+                ('active', '=', True), ('scope', '=', 'tax_return'),
+            ])
+            values['check_ids'] = [fields.Command.create({
+                'sequence': template.sequence,
+                'section': template.section,
+                'name': template.name,
+                'description': template.description,
+                'template_id': template.id,
+                'evidence_required': template.evidence_required,
+            }) for template in templates]
+        return values
+
     @api.model_create_multi
     def create(self, vals_list):
+        templates = self.env['account.working.file.template'].search([
+            ('active', '=', True), ('scope', '=', 'tax_return'),
+        ])
         for vals in vals_list:
             if vals.get('name', 'New') == 'New':
                 vals['name'] = self.env['ir.sequence'].next_by_code('account.tax.return') or _('New')
+            if 'check_ids' not in vals and templates:
+                vals['check_ids'] = [fields.Command.create({
+                    'sequence': template.sequence,
+                    'section': template.section,
+                    'name': template.name,
+                    'description': template.description,
+                    'template_id': template.id,
+                    'evidence_required': template.evidence_required,
+                }) for template in templates]
         return super().create(vals_list)
 
     @api.model

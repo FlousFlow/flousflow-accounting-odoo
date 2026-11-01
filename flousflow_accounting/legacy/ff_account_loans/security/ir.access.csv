@@ -1,0 +1,9 @@
+id,name,model_id/id,group_id/id,operation,domain
+loan_access_user,account.loan.user,model_flousflow_account_loan,account.group_account_user,cru,
+loan_access_manager,account.loan.manager,model_flousflow_account_loan,account.group_account_manager,crud,
+loan_line_access_user,account.loan.line.user,model_flousflow_account_loan_line,account.group_account_user,cru,
+loan_line_access_manager,account.loan.line.manager,model_flousflow_account_loan_line,account.group_account_manager,crud,
+loan_upload_access_user,account.loan.upload.user,model_flousflow_account_loan_upload,account.group_account_user,crud,
+loan_close_access_user,account.loan.close.user,model_flousflow_account_loan_close,account.group_account_user,crud,
+loan_company_rule,account.loan.company,model_flousflow_account_loan,,crud,"[('company_id', 'in', company_ids)]"
+loan_line_company_rule,account.loan.line.company,model_flousflow_account_loan_line,,crud,"[('company_id', 'in', company_ids)]"

@@ -169,6 +169,15 @@
                         </group>
                     </group>
                     <notebook>
+                        <page string="Review Checks" name="review_checks">
+                            <group>
+                                <field name="check_progress" widget="progressbar" readonly="1"/>
+                                <field name="reviewed_check_count" string="Completed Checks" readonly="1"/>
+                                <field name="check_count" string="Total Checks" readonly="1"/>
+                            </group>
+                            <field name="check_ids" widget="ff_working_file_check_cards"
+                                   readonly="state == 'paid'" nolabel="1"/>
+                        </page>
                         <page string="Notes"><field name="note" placeholder="Internal notes..."/></page>
                     </notebook>
                 </sheet>

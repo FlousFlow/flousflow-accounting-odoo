@@ -121,6 +121,13 @@ class ReportCustomerStatement(models.AbstractModel):
 
         partners = self.env['res.partner'].browse(list(grouped))
         partners = partners.sorted(lambda partner: (partner.name or '').casefold())
+        draft_count = 0
+        if target_move == 'posted':
+            draft_count = self.env['account.move'].search_count([
+                ('state', '=', 'draft'),
+                ('company_id', 'in', companies.ids),
+                ('date', '<=', date_to),
+            ])
         return {
             'date_from': date_from,
             'date_to': date_to,
@@ -131,6 +138,7 @@ class ReportCustomerStatement(models.AbstractModel):
             'currency_id': company.currency_id.id,
             'currency_name': company.currency_id.name,
             'currency_symbol': company.currency_id.symbol,
+            'draft_count': draft_count,
             'partners': [{
                 'id': partner.id,
                 'name': partner.display_name,

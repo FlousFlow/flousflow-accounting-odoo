@@ -1,4 +1,5 @@
 from . import accounting_pdf_reports
+from . import ff_account_loans
 from . import ff_account_transfer
 from . import flousflow_branch_analytic
 from . import om_account_asset

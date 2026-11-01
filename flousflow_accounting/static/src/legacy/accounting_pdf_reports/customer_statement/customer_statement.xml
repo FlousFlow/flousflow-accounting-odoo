@@ -120,6 +120,10 @@
                 </div>
             </div>
             <div class="o_content">
+                <div t-if="this.state.targetMove === 'posted' &amp;&amp; this.state.draftCount"
+                     class="alert alert-info mb-2" role="status">
+                    There are unposted Journal Entries prior to or included in this period.
+                </div>
                 <div t-if="this.state.selectedPartners.length" class="ff_cs_selected_partners">
                     <span t-foreach="this.state.selectedPartners" t-as="partner" t-key="partner.id" class="badge rounded-pill text-bg-secondary">
                         <t t-out="partner.name"/>

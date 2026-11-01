@@ -130,9 +130,12 @@ export class WorkingFileCheckCards extends Component {
     async loadChecks(recordId = this.props.record.resId) {
         this.state.loading = true;
         try {
+            const ownerField = this.props.record.resModel === "account.tax.return"
+                ? "tax_return_id"
+                : "file_id";
             const checks = recordId
                 ? await this.orm.call(CHECK_MODEL, "search_read", [
-                      [["file_id", "=", recordId]],
+                      [[ownerField, "=", recordId]],
                   ], { fields: ["id", ...CHECK_FIELDS], order: "sequence,id" })
                 : [];
             const ids = checks.map((check) => check.id);
@@ -157,7 +160,7 @@ export class WorkingFileCheckCards extends Component {
             for (const check of checks) {
                 const sectionName = check.section || _t("Other");
                 if (!sections.has(sectionName)) {
-                    sections.set(sectionName, { name: sectionName, checks: [] });
+                    sections.set(sectionName, { name: _t(sectionName), checks: [] });
                 }
                 sections.get(sectionName).checks.push(check);
             }

@@ -7,12 +7,15 @@
                 data_report_dpi="110">
                 <div class="page o_om_report">
                         <t t-call="flousflow_accounting.apr__report_style"/>
-                    <h2 t-if="data['form'].get('document_type') == 'balance_confirmation'">Balance Confirmation Request</h2>
+                    <h2 t-if="data['form'].get('document_type') == 'balance_confirmation'"
+                        t-out="confirmation_labels['title']"/>
                     <h2 t-else="">Partner Ledger</h2>
 
                     <div id="informations" class="row mb-4">
                         <div class="col" t-if="data['form']['date_from'] or data['form']['date_to']">
-                            <strong>Period:</strong>
+                            <strong t-if="data['form'].get('document_type') == 'balance_confirmation'"
+                                    t-out="confirmation_labels['period']"/>
+                            <strong t-else="">Period:</strong>
                             <div>
                                 <t t-if="data['form']['date_from'] and data['form']['date_to']"><span t-out="data['form']['date_from']" t-options="{'widget': 'date'}"/> - <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/></t>
                                 <t t-elif="data['form']['date_from']">From <span t-out="data['form']['date_from']" t-options="{'widget': 'date'}"/></t>
@@ -20,35 +23,49 @@
                             </div>
                         </div>
                         <div class="col">
-                            <strong>Target Moves:</strong>
-                            <div t-if="data['form']['target_move'] == 'all'">All Entries</div>
-                            <div t-if="data['form']['target_move'] == 'posted'">All Posted Entries</div>
+                            <strong t-if="data['form'].get('document_type') == 'balance_confirmation'"
+                                    t-out="confirmation_labels['target_moves']"/>
+                            <strong t-else="">Target Moves:</strong>
+                            <div t-if="data['form']['target_move'] == 'all' and data['form'].get('document_type') == 'balance_confirmation'"
+                                 t-out="confirmation_labels['all_entries']"/>
+                            <div t-elif="data['form']['target_move'] == 'all'">All Entries</div>
+                            <div t-if="data['form']['target_move'] == 'posted' and data['form'].get('document_type') == 'balance_confirmation'"
+                                 t-out="confirmation_labels['all_posted_entries']"/>
+                            <div t-elif="data['form']['target_move'] == 'posted'">All Posted Entries</div>
                         </div>
                         <div class="col">
-                            <strong>Partners:</strong>
-                            <div t-if="data['form'].get('result_selection') == 'customer'">Receivable Accounts</div>
-                            <div t-if="data['form'].get('result_selection') == 'supplier'">Payable Accounts</div>
-                            <div t-if="data['form'].get('result_selection') == 'customer_supplier'">Receivable and Payable Accounts</div>
+                            <strong t-if="data['form'].get('document_type') == 'balance_confirmation'"
+                                    t-out="confirmation_labels['partners']"/>
+                            <strong t-else="">Partners:</strong>
+                            <div t-if="data['form'].get('result_selection') == 'customer' and data['form'].get('document_type') == 'balance_confirmation'"
+                                 t-out="confirmation_labels['receivable_accounts']"/>
+                            <div t-elif="data['form'].get('result_selection') == 'customer'">Receivable Accounts</div>
+                            <div t-if="data['form'].get('result_selection') == 'supplier' and data['form'].get('document_type') == 'balance_confirmation'"
+                                 t-out="confirmation_labels['payable_accounts']"/>
+                            <div t-elif="data['form'].get('result_selection') == 'supplier'">Payable Accounts</div>
+                            <div t-if="data['form'].get('result_selection') == 'customer_supplier' and data['form'].get('document_type') == 'balance_confirmation'"
+                                 t-out="confirmation_labels['receivable_and_payable_accounts']"/>
+                            <div t-elif="data['form'].get('result_selection') == 'customer_supplier'">Receivable and Payable Accounts</div>
                         </div>
                     </div>
 
                     <div t-if="data['form'].get('document_type') == 'balance_confirmation'"
                          class="o_ff_balance_confirmation" t-foreach="docs" t-as="o">
-                        <p>Dear <strong t-out="o.display_name"/>,</p>
-                        <p>We request that you review the closing balance below and confirm whether it agrees with your records.</p>
+                        <p><t t-out="confirmation_labels['dear']"/> <strong t-out="o.display_name"/>,</p>
+                        <p t-out="confirmation_labels['request_review']"/>
                         <div class="o_ff_confirmation_amount">
-                            <strong>Closing balance as of</strong>
+                            <strong t-out="confirmation_labels['closing_balance']"/>
                             <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/>
                             <span>:</span>
                             <strong t-out="confirmation_closing_balance(o)"
                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                         </div>
-                        <p class="text-muted">A positive amount means the partner owes the company; a negative amount means the company owes the partner.</p>
+                        <p class="text-muted" t-out="confirmation_labels['balance_sign_note']"/>
                         <div class="o_ff_confirmation_responses">
-                            <div><span class="o_ff_confirmation_checkbox"/> I agree with this balance.</div>
-                            <div><span class="o_ff_confirmation_checkbox"/> I disagree with this balance; please contact me.</div>
+                            <div><span class="o_ff_confirmation_checkbox"/><t t-out="confirmation_labels['agree']"/></div>
+                            <div><span class="o_ff_confirmation_checkbox"/><t t-out="confirmation_labels['disagree']"/></div>
                         </div>
-                        <p class="text-muted">This document requests balance confirmation. It is not a receipt or proof of payment and does not change accounting records.</p>
+                        <p class="text-muted" t-out="confirmation_labels['disclaimer']"/>
                     </div>
 
                     <t t-if="data['form'].get('document_type') != 'balance_confirmation'">

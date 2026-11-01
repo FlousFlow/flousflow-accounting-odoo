@@ -1,4 +1,5 @@
 from odoo.tests import tagged
+from odoo import fields
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -83,10 +84,88 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             data=data,
         )
         self.assertEqual(report_type, 'html')
-        self.assertIn(b'Balance Confirmation Request', html)
+        for english_text in (
+            'Balance Confirmation Request', 'Period:', 'Target Moves:', 'Partners:',
+            'Receivable Accounts', 'Dear', 'We request that you review the closing balance',
+            'Closing balance as of', 'A positive amount means the partner owes the company',
+            'I agree with this balance.', 'I disagree with this balance',
+            'This document requests balance confirmation.',
+        ):
+            self.assertIn(english_text.encode(), html)
         self.assertIn(b'110.00', html)
-        self.assertIn(b'I agree with this balance.', html)
-        self.assertIn(b'I disagree with this balance', html)
+
+        arabic_wizard = wizard.with_context(lang='ar_001', active_model=wizard._name, active_id=wizard.id)
+        arabic_data = arabic_wizard.check_report()['data']
+        arabic_html, _ = self.env['ir.actions.report'].with_context(lang='ar_001')._render_qweb_html(
+            'flousflow_accounting.apr__report_partnerledger',
+            wizard.ids,
+            data=arabic_data,
+        )
+        for arabic_text in (
+            'طلب مصادقة الرصيد', 'الفترة:', 'الحركات المستهدفة:', 'الشركاء:',
+            'حسابات القبض', 'السادة', 'نرجو مراجعة الرصيد الختامي أدناه',
+            'الرصيد الختامي في', 'الرصيد الموجب يعني أن على الشريك مبلغًا للشركة',
+            'أوافق على هذا الرصيد.', 'لا أوافق على هذا الرصيد؛ يرجى التواصل معي.',
+            'هذا المستند لطلب مصادقة الرصيد',
+        ):
+            self.assertIn(arabic_text.encode(), arabic_html)
+        for english_text in (
+            'Balance Confirmation Request', 'Period:', 'Target Moves:', 'Partners:',
+            'Receivable Accounts', 'Dear', 'We request that you review',
+            'Closing balance as of', 'A positive amount means', 'I agree with this balance.',
+            'I disagree with this balance', 'This document requests balance confirmation.',
+        ):
+            self.assertNotIn(english_text.encode(), arabic_html)
+
+    def test_balance_confirmation_keeps_customer_and_vendor_balances_separate(self):
+        partner = self.partner_a
+        partner.write({'customer_rank': 1, 'supplier_rank': 1})
+        self.init_invoice(
+            'out_invoice', partner=partner, amounts=[100.0], taxes=[],
+            invoice_date='2025-06-01', post=True,
+        )
+        self.init_invoice(
+            'in_invoice', partner=partner, amounts=[70.0], taxes=[],
+            invoice_date='2025-06-02', post=True,
+        )
+
+        LedgerWizard = self.env['account.report.partner.ledger']
+        customer_defaults = LedgerWizard.with_context(
+            active_model='res.partner', active_ids=partner.ids,
+            res_partner_search_mode='customer',
+        ).default_get(['result_selection'])
+        vendor_defaults = LedgerWizard.with_context(
+            active_model='res.partner', active_ids=partner.ids,
+            res_partner_search_mode='supplier',
+        ).default_get(['result_selection'])
+        contact_defaults = LedgerWizard.with_context(
+            active_model='res.partner', active_ids=partner.ids,
+        ).default_get(['result_selection'])
+        confirmation_defaults = LedgerWizard.with_context(
+            default_document_type='balance_confirmation',
+        ).default_get(['document_type', 'date_to'])
+        self.assertEqual(customer_defaults['result_selection'], 'customer')
+        self.assertEqual(vendor_defaults['result_selection'], 'supplier')
+        self.assertEqual(contact_defaults['result_selection'], 'customer')
+        self.assertEqual(confirmation_defaults['date_to'], fields.Date.context_today(LedgerWizard))
+
+        confirmation_wizard = LedgerWizard.new({'document_type': 'balance_confirmation'})
+        confirmation_wizard._onchange_document_type()
+        self.assertEqual(confirmation_wizard.date_to, fields.Date.context_today(LedgerWizard))
+
+        customer_values = self._ledger(
+            result_selection='customer', partner_ids=[(6, 0, partner.ids)],
+            date_to='2025-12-31', target_move='posted',
+            document_type='balance_confirmation',
+        )
+        vendor_values = self._ledger(
+            result_selection='supplier', partner_ids=[(6, 0, partner.ids)],
+            date_to='2025-12-31', target_move='posted',
+            document_type='balance_confirmation',
+        )
+
+        self.assertEqual(customer_values['confirmation_closing_balance'](partner), 100.0)
+        self.assertEqual(vendor_values['confirmation_closing_balance'](partner), -70.0)
 
     def test_interactive_lines_show_journal_entry_and_account_code(self):
         move = self.init_invoice(
