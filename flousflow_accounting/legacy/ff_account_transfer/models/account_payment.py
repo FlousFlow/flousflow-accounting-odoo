@@ -168,3 +168,68 @@ class AccountJournal(models.Model):
 
     def create_internal_transfer(self):
         return self.open_payments_action('transfer', mode='form')
+
+
+class PosConfig(models.Model):
+    _inherit = 'pos.config'
+
+    def _get_opening_balance(self):
+        self.ensure_one()
+        balance = super()._get_opening_balance()
+        cash_method = self.sudo()._get_cash_payment_method()
+        if not cash_method:
+            return balance
+
+        journal = cash_method.journal_id
+        company = journal.company_id
+        balance_currency = journal.currency_id or company.currency_id
+        liquidity_accounts = (
+            journal.default_account_id
+            | journal.inbound_payment_method_line_ids.payment_account_id
+            | journal.outbound_payment_method_line_ids.payment_account_id
+        )
+
+        # Use the same effective statement checkpoint as Odoo's running-balance
+        # computation. Open POS sessions are not checkpoints: their opening
+        # balance may be stale until the session is closed.
+        last_statement = self.env['account.bank.statement'].sudo().search([
+            ('journal_id', '=', journal.id),
+            ('company_id', '=', company.id),
+            ('first_line_index', '!=', False),
+            '|',
+            ('pos_session_id', '=', False),
+            ('pos_session_id.state', '=', 'closed'),
+        ], order='date desc, id desc', limit=1)
+        payment_domain = [
+            ('journal_id', '=', journal.id),
+            ('company_id', '=', company.id),
+            ('is_internal_transfer', '=', True),
+            ('move_id.state', '=', 'posted'),
+        ]
+        if last_statement:
+            checkpoint_datetime = (
+                last_statement.pos_session_id.write_date
+                if last_statement.pos_session_id
+                else last_statement.write_date
+            )
+            payment_domain.append(('create_date', '>', checkpoint_datetime))
+
+        pending_transfers = self.env['account.payment'].sudo().search(payment_domain)
+        for payment in pending_transfers:
+            cash_lines = payment.move_id.line_ids.filtered(
+                lambda line: line.account_id in liquidity_accounts
+            )
+            if cash_lines.filtered('reconciled'):
+                continue
+
+            signed_amount = payment.amount_company_currency_signed
+            if balance_currency != company.currency_id:
+                signed_amount = company.currency_id._convert(
+                    signed_amount,
+                    balance_currency,
+                    company,
+                    payment.date,
+                )
+            balance += signed_amount
+
+        return balance
