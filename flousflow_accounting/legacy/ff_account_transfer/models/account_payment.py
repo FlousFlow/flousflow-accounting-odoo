@@ -131,6 +131,16 @@ class AccountPayment(models.Model):
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
+    def _select_action_to_open(self):
+        self.ensure_one()
+        if self.type == 'cash':
+            # The standard cash-journal Transactions button opens statement
+            # headers, which cannot list account.payment internal transfers.
+            # Open the journal's posted entries instead; Statements stays
+            # available from the dashboard menu.
+            return 'action_move_journal_line'
+        return super()._select_action_to_open()
+
     def _get_dashboard_liquidity_account_ids(self):
         """Return the ledger accounts that define this journal's balance."""
         self.ensure_one()

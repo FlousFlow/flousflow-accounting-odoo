@@ -72,6 +72,10 @@ class TestPosOpeningBalanceIncludesTransfers(AccountTestInvoicingCommon):
             transfer.move_id and transfer.move_id.state == 'posted',
             f'Transfer state={transfer.state}, paired state={transfer.paired_internal_transfer_payment_id.state}',
         )
+        action = cash_journal.open_action()
+        self.assertEqual(action['res_model'], 'account.move')
+        visible_moves = self.env['account.move'].sudo().search(action['domain'])
+        self.assertIn(transfer.move_id, visible_moves)
 
         self.assertAlmostEqual(config._get_opening_balance(), 0.0)
 
