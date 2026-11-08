@@ -7,6 +7,13 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 class TestAutomaticPaymentReconciliation(AccountTestInvoicingCommon):
     """Payments created outside an invoice must still clear open documents."""
 
+    @classmethod
+    def setup_independent_company(cls, **kwargs):
+        # The shared training database enables a required-phone duplicate
+        # detector; reuse its configured company instead of creating a test
+        # company without contact data.
+        return cls.env.company
+
     def _invoice(self, move_type, amount, invoice_date='2026-01-10'):
         return self.init_invoice(
             move_type,
