@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-width: 0;
+    color: var(--o-main-text-color, inherit);
+    background: var(--o-view-background-color, transparent);
 
     .ff_cf_toolbar {
         display: flex;
@@ -49,15 +52,15 @@
         margin: 0;
         padding: 2rem;
         overflow-x: auto;
-        background: var(--body-bg, white);
+        background: var(--o-view-background-color, transparent);
         border: 1px solid var(--border-color, #dee2e6);
         border-radius: 0.25rem;
     }
     .ff_cf_table { margin-bottom: 0; }
     .ff_cf_table th:last-child { width: 14rem; }
     .ff_cf_table td { padding-block: 0.6rem; border-color: var(--border-color, #dee2e6); }
-    .ff_cf_summary_row { background: var(--bs-secondary-bg, #dfe3e7); font-weight: 700; }
-    .ff_cf_band_row { background: var(--bs-secondary-bg, #dfe3e7); font-weight: 700; }
+    .ff_cf_summary_row { background: var(--o-gray-100, rgba(127,127,127,.12)); font-weight: 700; }
+    .ff_cf_band_row { background: var(--o-gray-100, rgba(127,127,127,.12)); font-weight: 700; }
     .ff_cf_section_row { font-weight: 600; }
     .ff_cf_empty_row td { padding-block: 0.45rem; }
     .ff_cf_line_row td:first-child { padding-inline-start: 2rem; }

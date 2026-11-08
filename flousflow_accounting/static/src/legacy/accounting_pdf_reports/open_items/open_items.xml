@@ -6,7 +6,7 @@
                 <button class="btn btn-primary" t-on-click="this.printReport">Print</button>
                 <h2>Open Items</h2>
                 <div class="dropdown">
-                    <button class="btn btn-secondary" type="button" aria-label="Report options"
+                    <button class="btn btn-link" type="button" aria-label="Report options"
                             t-att-aria-expanded="this.state.settingsOpen"
                             t-on-click="() => this.state.settingsOpen = !this.state.settingsOpen">
                         <i class="fa fa-cog"/>

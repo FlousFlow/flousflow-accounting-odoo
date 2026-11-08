@@ -14,3 +14,8 @@
 - Problem: the interactive Partner Ledger toolbar and table used hard-coded light colors, which conflicted with the active Odoo dark/RTL theme and made controls low-contrast.
 - Fix: replaced hard-coded backgrounds, borders, and partner-row colors with Odoo theme variables and retained the existing responsive breakpoints.
 - Verification: after upgrading both databases, the live training page rendered the Partner Ledger controls and table; computed styles showed transparent/theme-backed surfaces, readable `rgb(235, 235, 235)` text, and a 1176px responsive viewport without overflow in the container.
+## 2026-11-08 - Accounting report views aligned with native Odoo theme
+
+- Normalized report toolbar, content, table, alert, and popover surfaces across customer statement, financial report, cash flow, open items, general ledger, trial balance, aged partner, tax report, and executive summary.
+- Replaced hard-coded light backgrounds/text colors with Odoo theme variables and changed Open Items report actions to the native icon-link treatment.
+- Preserved existing report behavior and responsive breakpoints; the change is visual/semantic only.

@@ -1,6 +1,7 @@
 .ff_tax_report {
     min-width: 0;
-    background: var(--o-view-background-color, #f8f9fa);
+    color: var(--o-main-text-color, inherit);
+    background: var(--o-view-background-color, transparent);
 
     .ff_tax_toolbar,
     .ff_tax_filters {
@@ -8,7 +9,7 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem 1rem;
-        background: var(--o-view-background-color, #fff);
+        background: var(--o-view-background-color, transparent);
         border-bottom: 1px solid var(--border-color, #dee2e6);
     }
 
@@ -56,11 +57,11 @@
     .ff_tax_table {
         min-width: 34rem;
         margin: 0;
-        background: var(--o-view-background-color, #fff);
+        background: var(--o-view-background-color, transparent);
     }
 
     .ff_tax_group th {
-        background: #dce1e7;
+        background: var(--o-gray-100, rgba(127,127,127,.12));
         font-weight: 700;
     }
 

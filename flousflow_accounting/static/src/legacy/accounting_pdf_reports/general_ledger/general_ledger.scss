@@ -1,5 +1,7 @@
 .ff_general_ledger {
     min-width: 0;
+    color: var(--o-main-text-color, inherit);
+    background: var(--o-view-background-color, transparent);
     .ff_gl_toolbar {
         display: flex;
         flex-wrap: wrap;
@@ -7,8 +9,8 @@
         justify-content: space-between;
         gap: 1rem;
         padding: 0.75rem 1.5rem;
-        border-bottom: 1px solid #dee2e6;
-        background: #fff;
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+        background: var(--o-view-background-color, transparent);
     }
 
     .ff_gl_filters {
@@ -83,12 +85,12 @@
 
         .ff_gl_account_row td {
             border-top: 1px solid #dce0e4;
-            background-color: #fff;
+            background-color: transparent;
         }
 
         .ff_gl_move_row td {
             color: #555b61;
-            background-color: #fbfbfc;
+            background-color: var(--o-gray-100, rgba(127,127,127,.06));
         }
 
         .ff_gl_total_row td {

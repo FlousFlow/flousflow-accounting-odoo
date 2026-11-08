@@ -1,13 +1,15 @@
 .ff_customer_statement {
     min-width: 0;
+    color: var(--o-main-text-color, inherit);
+    background: var(--o-view-background-color, transparent);
     .ff_cs_toolbar {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 1rem;
         padding: .75rem 1.5rem;
-        border-bottom: 1px solid #dee2e6;
-        background: #fff;
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+        background: var(--o-view-background-color, transparent);
     }
 
     .ff_cs_title { margin: 0 .5rem 0 0; font-size: 1.25rem; white-space: nowrap; }
@@ -20,11 +22,11 @@
     .ff_cs_scale { width: 7rem; }
 
     .ff_cs_selected_partners { max-width: 78rem; margin: 0 auto 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
-    .ff_cs_table_wrap { width: calc(100% - 2rem); max-width: 78rem; min-width: 0; margin: 0 auto; padding: 1rem 1.5rem; background: #fff; border: 1px solid #dee2e6; border-radius: .25rem; overflow-x: auto; overscroll-behavior-inline: contain; }
+    .ff_cs_table_wrap { width: calc(100% - 2rem); max-width: 78rem; min-width: 0; margin: 0 auto; padding: 1rem 1.5rem; background: var(--o-view-background-color, transparent); border: 1px solid var(--border-color, #dee2e6); border-radius: var(--border-radius, .25rem); overflow-x: auto; overscroll-behavior-inline: contain; }
     .ff_cs_table { width: 100%; min-width: 44rem; margin: 0; }
     .ff_cs_table th, .ff_cs_table td { white-space: nowrap; }
-    .ff_cs_report_row { background: #fff; }
-    .ff_cs_partner_row { border-top: 2px solid #d8dde3; background: #e9ecef; }
+    .ff_cs_report_row { background: transparent; }
+    .ff_cs_partner_row { border-top: 2px solid var(--border-color, #d8dde3); background: var(--o-gray-100, rgba(127,127,127,.12)); }
     .ff_cs_info_cell { position: relative; width: 2.5rem; text-align: center; }
     .ff_cs_info_button { color: #87909a; padding: 0 .25rem; }
     .ff_cs_info_popover {
@@ -35,10 +37,10 @@
         width: 34rem;
         max-width: calc(100vw - 2rem);
         padding: 1rem 1.25rem;
-        color: #343a40;
+        color: var(--o-main-text-color, inherit);
         text-align: left;
-        background: #fff;
-        border: 1px solid #dee2e6;
+        background: var(--o-view-background-color, #fff);
+        border: 1px solid var(--border-color, #dee2e6);
         border-radius: .75rem;
         box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .16);
         white-space: normal;
@@ -53,7 +55,7 @@
     .ff_cs_move_actions .dropdown-menu { inset-inline-start: 0; inset-inline-end: auto; }
     .ff_cs_move_row td { border-bottom-color: #e4e7ea; }
     .ff_cs_total_row { border-top: 2px solid #6c757d; }
-    .ff_cs_empty { max-width: 78rem; margin: 0 auto; padding: 3rem; text-align: center; color: #6c757d; background: #fff; border: 1px solid #dee2e6; }
+    .ff_cs_empty { max-width: 78rem; margin: 0 auto; padding: 3rem; text-align: center; color: var(--text-muted, #6c757d); background: var(--o-view-background-color, transparent); border: 1px solid var(--border-color, #dee2e6); }
 }
 
 @media (max-width: 1100px) {
