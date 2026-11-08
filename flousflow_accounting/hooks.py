@@ -50,6 +50,12 @@ LEGACY_MENU_XMLIDS = (
     "om_account_accountant.menu_account_payment_method",
 )
 
+LEGACY_PARTNER_ACTION_XMLIDS = (
+    "accounting_pdf_reports.action_partner_report_partnerledger",
+    "om_account_followup.action_report_customer_statement",
+    "om_account_followup.action_report_vendor_statement",
+)
+
 
 def hide_legacy_duplicate_menus(env):
     """Hide standalone legacy menus duplicated by this consolidated module."""
@@ -57,6 +63,11 @@ def hide_legacy_duplicate_menus(env):
         menu = env.ref(xmlid, raise_if_not_found=False)
         if menu and menu.active:
             menu.write({"active": False})
+
+    for xmlid in LEGACY_PARTNER_ACTION_XMLIDS:
+        action = env.ref(xmlid, raise_if_not_found=False)
+        if action and action.binding_model_id:
+            action.write({"binding_model_id": False, "binding_type": False})
 
 
 def pre_init_hook(env):
