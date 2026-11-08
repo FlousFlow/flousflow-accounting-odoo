@@ -28,12 +28,15 @@ class AccountPayment(models.Model):
             payment.destination_account_id = payment.company_id.transfer_account_id
 
     def _auto_reconcile_open_invoices(self):
-        """Match a manually created payment against the partner's open invoices.
+        """Match a posted payment against the partner's open invoices/bills.
 
         The standard Register Payment wizard already reconciles its active
-        invoices. This covers payments created from the Payments menus, using
-        the oldest open receivable/payable items first and preserving any
+        invoices. This also covers payments created from the Payments menus,
+        using the oldest open receivable/payable items first and preserving any
         overpayment as an unreconciled credit.
+
+        Only the payment's partner control line is considered. Internal
+        transfers and non-reconcilable accounts are deliberately excluded.
         """
         move_line = self.env['account.move.line']
         valid_accounts = ('asset_receivable', 'liability_payable')
@@ -44,6 +47,7 @@ class AccountPayment(models.Model):
                 lambda line: (
                     line.partner_id == payment.partner_id
                     and line.account_id.account_type in valid_accounts
+                    and line.account_id.reconcile
                     and not line.reconciled
                 )
             )
@@ -58,13 +62,15 @@ class AccountPayment(models.Model):
             for payment_line in payment_lines:
                 candidates = move_line.search([
                     ('partner_id', '=', payment.partner_id.id),
+                    ('company_id', '=', payment.company_id.id),
                     ('account_id', '=', payment_line.account_id.id),
+                    ('account_id.reconcile', '=', True),
                     ('parent_state', '=', 'posted'),
                     ('reconciled', '=', False),
                     ('move_id', '!=', payment.move_id.id),
                     ('move_id.move_type', 'in', invoice_types),
                     ('balance', '>', 0) if payment_line.balance < 0 else ('balance', '<', 0),
-                ], order='date, id')
+                ], order='date_maturity, date, id')
                 for candidate in candidates:
                     (payment_line + candidate).reconcile()
                     if payment_line.reconciled:
