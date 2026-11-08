@@ -684,4 +684,7 @@ export class OmBankReconciliation extends Component {
     }
 }
 
-registry.category("actions").add("om_bank_reconciliation", OmBankReconciliation);
+// The upstream reconciliation addon already owns the generic action key.
+// Keep this merged implementation under a module-scoped key to avoid aborting
+// the entire asset loader with a duplicate registry entry.
+registry.category("actions").add("flousflow_accounting.om_bank_reconciliation", OmBankReconciliation);
