@@ -16,8 +16,8 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='payment_type']" position="after">
-                <label class="o_form_label" string="Send" invisible="partner_type != 'supplier' or is_internal_transfer"/>
-                <label class="o_form_label" string="Receive" invisible="partner_type != 'customer' or is_internal_transfer"/>
+                <div class="o_form_label" invisible="partner_type != 'supplier' or is_internal_transfer">Send</div>
+                <div class="o_form_label" invisible="partner_type != 'customer' or is_internal_transfer">Receive</div>
             </xpath>
             <xpath expr="//field[@name='partner_id'][1]" position="attributes">
                 <attribute name="invisible">partner_type != 'customer' or is_internal_transfer</attribute>
