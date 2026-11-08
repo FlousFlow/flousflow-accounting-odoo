@@ -56,6 +56,11 @@ LEGACY_PARTNER_ACTION_XMLIDS = (
     "om_account_followup.action_report_vendor_statement",
 )
 
+LEGACY_VIEW_XMLIDS = (
+    "ff_account_transfer.view_account_payment_form_inherit_transfer",
+    "ff_account_transfer.account_journal_dashboard_kanban_view_inherit",
+)
+
 
 def hide_legacy_duplicate_menus(env):
     """Hide standalone legacy menus duplicated by this consolidated module."""
@@ -68,6 +73,11 @@ def hide_legacy_duplicate_menus(env):
         action = env.ref(xmlid, raise_if_not_found=False)
         if action and action.binding_model_id:
             action.write({"binding_model_id": False})
+
+    for xmlid in LEGACY_VIEW_XMLIDS:
+        view = env.ref(xmlid, raise_if_not_found=False)
+        if view and view.active:
+            view.write({"active": False})
 
 
 def pre_init_hook(env):
