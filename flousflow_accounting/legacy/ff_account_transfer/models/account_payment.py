@@ -27,6 +27,49 @@ class AccountPayment(models.Model):
                 ))
             payment.destination_account_id = payment.company_id.transfer_account_id
 
+    def _auto_reconcile_open_invoices(self):
+        """Match a manually created payment against the partner's open invoices.
+
+        The standard Register Payment wizard already reconciles its active
+        invoices. This covers payments created from the Payments menus, using
+        the oldest open receivable/payable items first and preserving any
+        overpayment as an unreconciled credit.
+        """
+        move_line = self.env['account.move.line']
+        valid_accounts = ('asset_receivable', 'liability_payable')
+        for payment in self.filtered(
+            lambda pay: pay.partner_id and not pay.is_internal_transfer and pay.move_id
+        ):
+            payment_lines = payment.move_id.line_ids.filtered(
+                lambda line: (
+                    line.partner_id == payment.partner_id
+                    and line.account_id.account_type in valid_accounts
+                    and not line.reconciled
+                )
+            )
+            if not payment_lines:
+                continue
+
+            invoice_types = (
+                ('out_invoice', 'out_refund')
+                if payment.partner_type == 'customer'
+                else ('in_invoice', 'in_refund')
+            )
+            for payment_line in payment_lines:
+                candidates = move_line.search([
+                    ('partner_id', '=', payment.partner_id.id),
+                    ('account_id', '=', payment_line.account_id.id),
+                    ('parent_state', '=', 'posted'),
+                    ('reconciled', '=', False),
+                    ('move_id', '!=', payment.move_id.id),
+                    ('move_id.move_type', 'in', invoice_types),
+                    ('balance', '>', 0) if payment_line.balance < 0 else ('balance', '<', 0),
+                ], order='date, id')
+                for candidate in candidates:
+                    (payment_line + candidate).reconcile()
+                    if payment_line.reconciled:
+                        break
+
     def _prepare_paired_transfer_vals(self):
         self.ensure_one()
         paired_payment_type = (
@@ -75,6 +118,7 @@ class AccountPayment(models.Model):
                         super(AccountPayment, transfer_payment).action_post()
             else:
                 super(AccountPayment, payment).action_post()
+                payment._auto_reconcile_open_invoices()
         return True
 
     def action_cancel(self):
