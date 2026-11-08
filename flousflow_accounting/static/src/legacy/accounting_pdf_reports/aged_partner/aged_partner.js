@@ -1,6 +1,7 @@
 /** @odoo-module **/
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
+import "../open_items/open_items";
 import { useService } from "@web/core/utils/hooks";
 import { formatMonetary } from "@web/views/fields/formatters";
 import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
