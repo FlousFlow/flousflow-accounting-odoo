@@ -17,15 +17,15 @@
             </xpath>
             <xpath expr="//field[@name='payment_type']" position="after">
                 <label for="payment_type" string="إرسال"
-                       invisible="partner_type != 'supplier' or is_internal_transfer"/>
+                       invisible="payment_type != 'outbound' or is_internal_transfer"/>
                 <label for="payment_type" string="استلام"
-                       invisible="partner_type != 'customer' or is_internal_transfer"/>
+                       invisible="payment_type != 'inbound' or is_internal_transfer"/>
             </xpath>
             <xpath expr="//field[@name='partner_id'][1]" position="attributes">
-                <attribute name="invisible">partner_type != 'customer' or is_internal_transfer</attribute>
+                <attribute name="invisible">payment_type != 'inbound' or is_internal_transfer</attribute>
             </xpath>
             <xpath expr="//field[@name='partner_id'][2]" position="attributes">
-                <attribute name="invisible">partner_type != 'supplier' or is_internal_transfer</attribute>
+                <attribute name="invisible">payment_type != 'outbound' or is_internal_transfer</attribute>
             </xpath>
         </field>
     </record>
