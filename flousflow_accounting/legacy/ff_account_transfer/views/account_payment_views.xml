@@ -12,23 +12,6 @@
                        required="is_internal_transfer"
                        readonly="state != 'draft'"/>
             </xpath>
-            <xpath expr="//field[@name='payment_type']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='payment_type']" position="after">
-                <label for="payment_type" string="إرسال"
-                       invisible="payment_type != 'outbound' or is_internal_transfer"/>
-                <label for="payment_type" string="استلام"
-                       invisible="payment_type != 'inbound' or is_internal_transfer"/>
-            </xpath>
-            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
-                <attribute name="invisible">payment_type != 'inbound' or is_internal_transfer</attribute>
-                <attribute name="placeholder">اختر العميل</attribute>
-            </xpath>
-            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
-                <attribute name="invisible">payment_type != 'outbound' or is_internal_transfer</attribute>
-                <attribute name="placeholder">اختر المورد</attribute>
-            </xpath>
         </field>
     </record>
 
