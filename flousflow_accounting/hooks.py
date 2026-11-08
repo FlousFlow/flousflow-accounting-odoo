@@ -67,7 +67,7 @@ def hide_legacy_duplicate_menus(env):
     for xmlid in LEGACY_PARTNER_ACTION_XMLIDS:
         action = env.ref(xmlid, raise_if_not_found=False)
         if action and action.binding_model_id:
-            action.write({"binding_model_id": False, "binding_type": False})
+            action.write({"binding_model_id": False})
 
 
 def pre_init_hook(env):
