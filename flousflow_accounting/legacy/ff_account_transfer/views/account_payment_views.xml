@@ -12,45 +12,24 @@
                        required="is_internal_transfer"
                        readonly="state != 'draft'"/>
             </xpath>
-        </field>
-    </record>
-
-    <record id="fat__customer_payment_form" model="ir.ui.view">
-        <field name="name">account.payment.form.customer.direction</field>
-        <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_form"/>
-        <field name="mode">primary</field>
-        <field name="arch" type="xml">
             <xpath expr="//field[@name='payment_type']" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="invisible">context.get('default_partner_type') in ('customer', 'supplier')</attribute>
             </xpath>
             <xpath expr="//field[@name='payment_type']" position="after">
-                <label for="payment_type" string="استلام" class="o_form_label"/>
-            </xpath>
-        </field>
-    </record>
-
-    <record id="fat__vendor_payment_form" model="ir.ui.view">
-        <field name="name">account.payment.form.vendor.direction</field>
-        <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_form"/>
-        <field name="mode">primary</field>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='payment_type']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='payment_type']" position="after">
-                <label for="payment_type" string="إرسال" class="o_form_label"/>
+                <label for="payment_type" string="استلام" class="o_form_label"
+                       invisible="context.get('default_partner_type') != 'customer'"/>
+                <label for="payment_type" string="إرسال" class="o_form_label"
+                       invisible="context.get('default_partner_type') != 'supplier'"/>
             </xpath>
         </field>
     </record>
 
     <record id="account.action_account_payments" model="ir.actions.act_window">
-        <field name="context" eval="{'default_payment_type': 'inbound', 'default_partner_type': 'customer', 'search_default_inbound_filter': 1, 'default_move_journal_types': ('bank', 'cash'), 'form_view_ref': 'flousflow_accounting.fat__customer_payment_form'}"/>
+        <field name="context" eval="{'default_payment_type': 'inbound', 'default_partner_type': 'customer', 'search_default_inbound_filter': 1, 'default_move_journal_types': ('bank', 'cash')}"/>
     </record>
 
     <record id="account.action_account_payments_payable" model="ir.actions.act_window">
-        <field name="context" eval="{'default_payment_type': 'outbound', 'default_partner_type': 'supplier', 'search_default_outbound_filter': 1, 'default_move_journal_types': ('bank', 'cash'), 'form_view_ref': 'flousflow_accounting.fat__vendor_payment_form'}"/>
+        <field name="context" eval="{'default_payment_type': 'outbound', 'default_partner_type': 'supplier', 'search_default_outbound_filter': 1, 'default_move_journal_types': ('bank', 'cash')}"/>
     </record>
 
     <record id="fat__account_journal_dashboard_kanban_view_inherit" model="ir.ui.view">
