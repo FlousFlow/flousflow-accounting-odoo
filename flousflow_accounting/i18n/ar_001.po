@@ -5632,3 +5632,7 @@ msgstr "رفع ملف"
 #: code:addons/flousflow_accounting/static/src/legacy/om_account_accountant/working_file_check_cards/working_file_check_cards.js:0
 msgid "Remove file"
 msgstr "إزالة الملف"
+
+#. module: flousflow_accounting
+msgid "Net Balance"
+msgstr "الرصيد الصافي"
