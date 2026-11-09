@@ -295,5 +295,16 @@
             <field name="act_window_id" ref="fol__action_customer_followup"/>
         </record>
 
+        <record id="fol__view_partner_tree_net_balance" model="ir.ui.view">
+            <field name="name">res.partner.list.net.balance</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='display_name']" position="after">
+                    <field name="ff_net_balance" string="Net Balance" widget="monetary" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>

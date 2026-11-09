@@ -71,10 +71,24 @@ class ResPartner(models.Model):
         compute='_get_amounts_and_date',
         string="Amount Overdue", search='_payment_overdue_search'
     )
+    ff_net_balance = fields.Monetary(
+        string='Net Balance',
+        compute='_compute_ff_net_balance',
+        currency_field='currency_id',
+        groups='account.group_account_invoice,account.group_account_readonly',
+        help='Receivable balance minus payable balance for the current company. '
+             'A positive value means the contact owes the company; a negative value means the company owes the contact.',
+    )
     payment_earliest_due_date = fields.Date(
         compute='_get_amounts_and_date', string="Worst Due Date",
         search='_payment_earliest_date_search'
     )
+
+    @api.depends('credit', 'debit')
+    @api.depends_context('company')
+    def _compute_ff_net_balance(self):
+        for partner in self:
+            partner.ff_net_balance = partner.credit - partner.debit
 
     followup_plan_id = fields.Many2one(
         'followup.followup', string='Follow-up Plan', company_dependent=True, tracking=True,
