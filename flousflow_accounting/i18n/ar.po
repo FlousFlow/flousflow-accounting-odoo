@@ -14534,3 +14534,7 @@ msgstr "على الأصول المقتناة"
 #. module: flousflow_accounting
 msgid "Rate"
 msgstr "المعدل"
+
+#. module: flousflow_accounting
+msgid "Net Balance"
+msgstr "الرصيد الصافي"
