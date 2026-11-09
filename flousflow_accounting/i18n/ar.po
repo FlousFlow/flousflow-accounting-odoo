@@ -14536,5 +14536,6 @@ msgid "Rate"
 msgstr "المعدل"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_partner__ff_net_balance
 msgid "Net Balance"
 msgstr "الرصيد الصافي"
