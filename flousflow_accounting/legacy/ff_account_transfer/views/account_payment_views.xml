@@ -67,5 +67,8 @@
             </t>
         </xpath>
     </template>
-    <template id="report_payment_receipt_ar" inherit_id="account.report_payment_receipt"><xpath expr="//t[@t-call='account.report_payment_receipt_document']" position="replace"><t t-call="flousflow_accounting.report_payment_receipt_document_ar" t-lang="lang"/></xpath></template>
+    <template id="report_payment_receipt_ar" inherit_id="account.report_payment_receipt">
+        <xpath expr="//t[@t-set='lang']" position="attributes"><attribute name="t-value">o.env.context.get('lang') or env.user.lang or o.company_id.partner_id.lang</attribute></xpath>
+        <xpath expr="//t[@t-call='account.report_payment_receipt_document']" position="replace"><t t-call="flousflow_accounting.report_payment_receipt_document_ar" t-lang="lang"/></xpath>
+    </template>
 </odoo>
