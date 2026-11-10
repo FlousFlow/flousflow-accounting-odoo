@@ -7,11 +7,10 @@
                 data_report_dpi="110">
                 <div class="page o_om_report">
                         <t t-call="flousflow_accounting.apr__report_style"/>
-                    <h2 t-if="data['form'].get('document_type') == 'balance_confirmation'"
-                        t-out="confirmation_labels['title']"/>
-                    <h2 t-else="">Partner Ledger</h2>
+                    <h2 t-if="data['form'].get('document_type') != 'balance_confirmation'">Partner Ledger</h2>
 
-                    <div id="informations" class="row mb-4">
+                    <div id="informations" class="row mb-4"
+                         t-if="data['form'].get('document_type') != 'balance_confirmation'">
                         <div class="col" t-if="data['form']['date_from'] or data['form']['date_to']">
                             <strong t-if="data['form'].get('document_type') == 'balance_confirmation'"
                                     t-out="confirmation_labels['period']"/>
@@ -51,6 +50,7 @@
 
                     <div t-if="data['form'].get('document_type') == 'balance_confirmation'"
                          class="o_ff_balance_confirmation" t-foreach="docs" t-as="o" dir="rtl">
+                        <style>.header, .footer { display: none !important; }</style>
                         <div class="o_ff_confirmation_meta">
                             <div>
                                 <span t-out="res_company.name"/>
