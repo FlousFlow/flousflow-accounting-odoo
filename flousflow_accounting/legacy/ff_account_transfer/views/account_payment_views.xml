@@ -54,6 +54,10 @@
                         <tr><td><strong><t t-if="is_arabic">طريقة الدفع</t><t t-else="">Payment Method</t></strong></td><td><span t-if="values['display_payment_method'] and o.payment_method_line_id" t-field="o.payment_method_line_id.name"/><span t-if="not (values['display_payment_method'] and o.payment_method_line_id)">—</span></td><td><strong><t t-if="is_arabic">قيمة الدفعة</t><t t-else="">Payment Amount</t></strong></td><td><strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></strong></td></tr>
                         <tr t-if="o.memo"><td><strong><t t-if="is_arabic">البيان</t><t t-else="">Memo</t></strong></td><td colspan="3"><span t-field="o.memo"/></td></tr>
                     </tbody></table>
+                    <div style="border: 1px solid #888; padding: 8px; margin-top: 10px;">
+                        <strong><t t-if="is_arabic">المبلغ بالحروف: </t><t t-else="">Amount in Words: </t></strong>
+                        <span t-out="o.currency_id.with_context(lang=lang).amount_to_text(o.amount)"/>
+                    </div>
                     <div style="border: 1px solid #888; padding: 10px; margin-top: 18px; text-align: center;">
                         <strong><t t-if="is_arabic"><t t-if="o.partner_type == 'customer'">صافي رصيد العميل بعد الدفعة: </t><t t-else="">صافي رصيد المورد بعد الدفعة: </t></t><t t-else=""><t t-if="o.partner_type == 'customer'">Customer Net Balance After Payment: </t><t t-else="">Vendor Net Balance After Payment: </t></t></strong>
                         <span t-out="o._get_payment_receipt_net_after_payment()" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
