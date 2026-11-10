@@ -5,7 +5,7 @@
         <field name="name">Balance Confirmation</field>
         <field name="model">account.report.partner.ledger</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">flousflow_accounting.apr__report_partnerledger_confirmation</field>
+        <field name="report_name">flousflow_accounting.ff_partner_confirmation</field>
         <field name="paperformat_id" ref="apr__paperformat_om_report"/>
         <field name="group_ids" eval="[(4, ref('account.group_account_readonly')), (4, ref('account.group_account_invoice')), (4, ref('account.group_account_user')), (4, ref('account.group_account_manager'))]"/>
         <field name="print_report_name">'Balance Confirmation - %s' % (object.partner_ids[:1].name or '')</field>
@@ -247,7 +247,7 @@
         </t>
     </template>
 
-    <template id="apr__report_partnerledger_confirmation">
+    <template id="ff_partner_confirmation">
         <t t-call="web.basic_layout">
             <t t-call="flousflow_accounting.apr__report_style"/>
             <t t-foreach="docs" t-as="o">
