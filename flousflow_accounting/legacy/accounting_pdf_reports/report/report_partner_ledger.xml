@@ -3,6 +3,9 @@
 
     <template id="apr__report_partnerledger">
         <t t-call="web.html_container">
+            <t t-if="data['form'].get('document_type') == 'balance_confirmation'">
+                <style>.header, .footer { display: none !important; }</style>
+            </t>
             <t t-call="web.internal_layout"
                 data_report_dpi="110">
                 <div class="page o_om_report">
@@ -50,7 +53,6 @@
 
                     <div t-if="data['form'].get('document_type') == 'balance_confirmation'"
                          class="o_ff_balance_confirmation" t-foreach="docs" t-as="o" dir="rtl">
-                        <style>.header, .footer { display: none !important; }</style>
                         <div class="o_ff_confirmation_meta">
                             <div>
                                 <span t-out="res_company.name"/>
