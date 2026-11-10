@@ -47,7 +47,7 @@
             <t t-call="web.external_layout" o="o" company="o.company_id.sudo()">
                 <t t-set="values" t-value="o._get_payment_receipt_report_values()"/>
                 <div class="page" dir="rtl" style="font-family: DejaVu Sans, sans-serif;">
-                    <div class="text-center" style="border: 1px solid #222; padding: 12px; margin-bottom: 18px;"><h2 style="margin: 0 0 6px 0;"><t t-if="o.payment_type == 'in'">سند قبض</t><t t-else="">سند صرف</t></h2><div>رقم السند: <span t-field="o.name"/></div></div>
+                    <div class="text-center" style="border: 1px solid #222; padding: 12px; margin-bottom: 18px;"><h2 style="margin: 0 0 6px 0;"><t t-if="o.payment_type == 'inbound'">سند قبض</t><t t-else="">سند صرف</t></h2><div>رقم السند: <span t-field="o.name"/></div></div>
                     <table class="table table-sm" style="width: 100%; margin-bottom: 18px;"><tbody>
                         <tr><td style="width: 22%;"><strong>الطرف</strong></td><td><t t-if="o.partner_type == 'customer'">عميل: </t><t t-else="">مورد: </t><span t-field="o.partner_id"/></td><td style="width: 22%;"><strong>التاريخ</strong></td><td><span t-field="o.date"/></td></tr>
                         <tr><td><strong>طريقة الدفع</strong></td><td><span t-if="values['display_payment_method'] and o.payment_method_line_id" t-field="o.payment_method_line_id.name"/><span t-if="not (values['display_payment_method'] and o.payment_method_line_id)">—</span></td><td><strong>قيمة الدفعة</strong></td><td><strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></strong></td></tr>
