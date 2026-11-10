@@ -100,6 +100,6 @@ class AccountPartnerLedger(models.TransientModel):
                 ))
         data = self._get_report_data(data)
         return self.env.ref('flousflow_accounting.apr__action_report_partnerledger').with_context(
-            landscape=True, lang=self.env.user.lang,
+            landscape=self.document_type != 'balance_confirmation', lang=self.env.user.lang,
         ).\
             report_action(self, data=data)

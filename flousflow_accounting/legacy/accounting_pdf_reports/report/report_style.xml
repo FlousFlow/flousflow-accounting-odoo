@@ -69,11 +69,29 @@
 
             .o_om_report .text-muted { color: #6b7280 !important; }
 
-            .o_om_report .o_ff_balance_confirmation { margin: 28px 0; font-size: 15px; line-height: 1.8; }
-            .o_om_report .o_ff_confirmation_amount { display: flex; align-items: baseline; gap: 8px; margin: 24px 0; padding: 16px; border: 1px solid #adb5bd; font-size: 18px; }
-            .o_om_report .o_ff_confirmation_responses { margin: 24px 0; }
-            .o_om_report .o_ff_confirmation_responses > div { margin: 12px 0; }
-            .o_om_report .o_ff_confirmation_checkbox { display: inline-block; width: 14px; height: 14px; margin-inline-end: 8px; border: 1px solid #343a40; vertical-align: -2px; }
+            .o_om_report .o_ff_balance_confirmation { margin: 8px 0; font-size: 13px; line-height: 1.65; direction: rtl; text-align: right; }
+            .o_om_report .o_ff_confirmation_meta { border: 1.5px solid #111; border-radius: 10px; padding: 6px 14px 8px; margin-bottom: 14px; text-align: right; }
+            .o_om_report .o_ff_confirmation_meta_title { margin: 4px 0; text-align: center; font-size: 16px; font-weight: 700; }
+            .o_om_report .o_ff_confirmation_recipient { margin: 0 8px 12px; line-height: 1.9; }
+            .o_om_report .o_ff_confirmation_request,
+            .o_om_report .o_ff_confirmation_response { border: 2px solid #111; padding: 10px 14px 12px; margin: 0 0 14px; }
+            .o_om_report .o_ff_confirmation_response { border-style: dashed; }
+            .o_om_report .o_ff_confirmation_request h3,
+            .o_om_report .o_ff_confirmation_response h3 { margin: 0 0 6px; color: #7a1b16; font-size: 15px; font-weight: 700; }
+            .o_om_report .o_ff_confirmation_request p,
+            .o_om_report .o_ff_confirmation_response p { margin: 5px 0; }
+            .o_om_report .o_ff_confirmation_amount_grid { display: table; width: 100%; margin: 8px 0; border-spacing: 0 3px; font-size: 14px; }
+            .o_om_report .o_ff_confirmation_amount_grid > div { display: table-cell; vertical-align: middle; padding-left: 10px; }
+            .o_om_report .o_ff_confirmation_amount_words { display: block !important; padding-top: 2px; font-size: 12px; }
+            .o_om_report .o_ff_confirmation_note { font-size: 11px; }
+            .o_om_report .o_ff_confirmation_signatures { position: relative; min-height: 84px; margin-top: 8px; padding-left: 52%; }
+            .o_om_report .o_ff_confirmation_signatures > div { margin: 4px 0; white-space: nowrap; }
+            .o_om_report .o_ff_signature_line { display: inline-block; min-width: 130px; margin-right: 6px; border-bottom: 1px dotted #111; height: 1em; vertical-align: bottom; }
+            .o_om_report .o_ff_confirmation_manager { position: absolute; left: 7%; bottom: 3px; font-weight: 600; }
+            .o_om_report .o_ff_confirmation_response_fields { margin-top: 12px; width: 58%; margin-right: 0; }
+            .o_om_report .o_ff_confirmation_response_fields > div { margin: 5px 0; white-space: nowrap; }
+            .o_om_report .o_ff_confirmation_response_fields .o_ff_signature_line { min-width: 165px; }
+            .o_om_report .o_ff_confirmation_closing { margin-top: 10px !important; }
         </style>
     </template>
 

@@ -362,6 +362,15 @@ class ReportPartnerLedger(models.AbstractModel):
                 return self._sum_partner(data, partner, field)
             return sums[partner.id][field]
 
+        res_company = self.env.company
+        confirmation_accounts = self.env['account.account'].browse(
+            data['computed']['account_ids']
+        ).sorted(lambda account: (account.code or '', account.name or ''))
+
+        def confirmation_amount_words(partner):
+            amount = self._confirmation_closing_balance(data, partner)
+            return res_company.currency_id.with_context(lang=self.env.lang).amount_to_text(amount)
+
         return {
             'doc_ids': partner_ids,
             'doc_model': self.env['res.partner'],
@@ -373,6 +382,8 @@ class ReportPartnerLedger(models.AbstractModel):
             'confirmation_closing_balance': lambda partner: self._confirmation_closing_balance(
                 data, partner
             ),
+            'confirmation_amount_words': confirmation_amount_words,
+            'confirmation_accounts': confirmation_accounts,
             'confirmation_labels': self._get_confirmation_labels(),
         }
 
@@ -381,55 +392,77 @@ class ReportPartnerLedger(models.AbstractModel):
         """Return every static balance-confirmation label in the report language."""
         if (self.env.lang or '').startswith('ar'):
             return {
-                'title': 'طلب مصادقة الرصيد',
-                'period': 'الفترة:',
-                'target_moves': 'الحركات المستهدفة:',
+                'title': 'كشف حساب إجمالي - مطابقة الرصيد',
+                'period': 'من تاريخ',
+                'to_date': 'إلى تاريخ',
+                'target_moves': 'نوع القيود',
                 'all_entries': 'كافة القيود',
                 'all_posted_entries': 'كافة القيود المرحّلة',
-                'partners': 'الشركاء:',
-                'receivable_accounts': 'حسابات القبض',
-                'payable_accounts': 'حسابات الدفع',
-                'receivable_and_payable_accounts': 'حسابات القبض والدفع',
+                'partners': 'نوع الحساب',
+                'receivable_accounts': 'المدينون',
+                'payable_accounts': 'الدائنون',
+                'receivable_and_payable_accounts': 'المدينون والدائنون',
                 'dear': 'السادة',
+                'honored': 'المحترمون',
+                'greeting': 'تحية طيبة وبعد',
+                'request_title': 'طلب مصادقة حساب:',
                 'request_review': (
-                    'نرجو مراجعة الرصيد الختامي أدناه وتأكيد مطابقته لسجلاتكم.'
+                    'تهديكم الشركة أطيب تحياتها وتتمنى لكم دوام التقدم والازدهار، '
+                    'وبناءً على طلب المراقب المالي للشركة نرجو شاكرين تكرمكم بالمصادقة '
+                    'على رصيد مدين الشركة كما في التاريخ الموضح أدناه.'
                 ),
-                'closing_balance': 'الرصيد الختامي في',
+                'closing_balance': 'رصيد مدين الحساب',
+                'currency': 'العملة',
                 'balance_sign_note': (
-                    'الرصيد الموجب يعني أن على الشريك مبلغًا للشركة، والرصيد السالب '
-                    'يعني أن على الشركة مبلغًا للشريك.'
+                    'ملاحظة: يعتبر رصيدكم مصادقاً عليه كما هو في سجلاتنا ما لم نستلم ردكم '
+                    'خلال أسبوع من تاريخ استلامكم.'
                 ),
-                'agree': 'أوافق على هذا الرصيد.',
-                'disagree': 'لا أوافق على هذا الرصيد؛ يرجى التواصل معي.',
-                'disclaimer': (
-                    'هذا المستند لطلب مصادقة الرصيد، ولا يُعد إيصالًا أو إثباتًا '
-                    'للسداد، ولا يغيّر السجلات المحاسبية.'
-                ),
+                'recipient': 'المستلم',
+                'received_date': 'تاريخ الاستلام',
+                'signature': 'التوقيع',
+                'accounting_manager': 'مدير الحسابات',
+                'response_title': 'المصادقة على الحساب:',
+                'response_text': 'نصادق على أن رصيدكم في سجلاتنا رصيد دائن بمبلغ',
+                'only': 'فقط',
+                'as_of': 'كما هو في تاريخ',
+                'name': 'الاسم',
+                'job_title': 'صفة',
+                'stamp_signature': 'التوقيع والختم',
+                'disclaimer': 'وتقبلوا خالص التحايا،،،،،،،،',
             }
         return {
-            'title': 'Balance Confirmation Request',
-            'period': 'Period:',
-            'target_moves': 'Target Moves:',
+            'title': 'Account Statement - Balance Confirmation',
+            'period': 'From date',
+            'to_date': 'To date',
+            'target_moves': 'Entry type',
             'all_entries': 'All Entries',
             'all_posted_entries': 'All Posted Entries',
-            'partners': 'Partners:',
+            'partners': 'Account type',
             'receivable_accounts': 'Receivable Accounts',
             'payable_accounts': 'Payable Accounts',
             'receivable_and_payable_accounts': 'Receivable and Payable Accounts',
             'dear': 'Dear',
+            'honored': 'Dear Sir/Madam',
+            'greeting': 'Greetings,',
+            'request_title': 'Account Confirmation Request:',
             'request_review': (
-                'We request that you review the closing balance below and confirm '
-                'whether it agrees with your records.'
+                'Please review the balance below and confirm it against your records.'
             ),
-            'closing_balance': 'Closing balance as of',
+            'closing_balance': 'Account balance',
+            'currency': 'Currency',
             'balance_sign_note': (
-                'A positive amount means the partner owes the company; a negative '
-                'amount means the company owes the partner.'
+                'Unless we receive a response within one week, the balance will be considered confirmed.'
             ),
-            'agree': 'I agree with this balance.',
-            'disagree': 'I disagree with this balance; please contact me.',
-            'disclaimer': (
-                'This document requests balance confirmation. It is not a receipt '
-                'or proof of payment and does not change accounting records.'
-            ),
+            'recipient': 'Received by',
+            'received_date': 'Received date',
+            'signature': 'Signature',
+            'accounting_manager': 'Accounting Manager',
+            'response_title': 'Account Confirmation:',
+            'response_text': 'We confirm that your balance in our records is a credit balance of',
+            'only': 'only',
+            'as_of': 'as of',
+            'name': 'Name',
+            'job_title': 'Title',
+            'stamp_signature': 'Signature and stamp',
+            'disclaimer': 'With best regards,',
         }

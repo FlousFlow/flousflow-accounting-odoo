@@ -50,22 +50,92 @@
                     </div>
 
                     <div t-if="data['form'].get('document_type') == 'balance_confirmation'"
-                         class="o_ff_balance_confirmation" t-foreach="docs" t-as="o">
-                        <p><t t-out="confirmation_labels['dear']"/> <strong t-out="o.display_name"/>,</p>
-                        <p t-out="confirmation_labels['request_review']"/>
-                        <div class="o_ff_confirmation_amount">
-                            <strong t-out="confirmation_labels['closing_balance']"/>
-                            <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/>
-                            <span>:</span>
-                            <strong t-out="confirmation_closing_balance(o)"
-                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                         class="o_ff_balance_confirmation" t-foreach="docs" t-as="o" dir="rtl">
+                        <div class="o_ff_confirmation_meta">
+                            <div>
+                                <span t-out="res_company.name"/>
+                                <t t-if="res_company.partner_id.city"> - <span t-out="res_company.partner_id.city"/></t>
+                            </div>
+                            <div class="o_ff_confirmation_meta_title" t-out="confirmation_labels['title']"/>
+                            <div>
+                                <span t-out="confirmation_labels['period']"/>:
+                                <span t-out="data['form']['date_from']" t-options="{'widget': 'date'}"/>
+                                <span> - </span>
+                                <span t-out="confirmation_labels['to_date']"/>
+                                <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/>
+                            </div>
                         </div>
-                        <p class="text-muted" t-out="confirmation_labels['balance_sign_note']"/>
-                        <div class="o_ff_confirmation_responses">
-                            <div><span class="o_ff_confirmation_checkbox"/><t t-out="confirmation_labels['agree']"/></div>
-                            <div><span class="o_ff_confirmation_checkbox"/><t t-out="confirmation_labels['disagree']"/></div>
+
+                        <div class="o_ff_confirmation_recipient">
+                            <span t-out="confirmation_labels['dear']"/> :
+                            <strong t-out="o.display_name"/>
+                            <t t-if="o.ref"> (<span t-out="o.ref"/>)</t>
+                            <span t-out="confirmation_labels['honored']"/>
+                            <div t-if="confirmation_accounts">
+                                <span t-out="confirmation_accounts[0].code"/> -
+                                <span t-out="confirmation_accounts[0].name"/>
+                                <t t-if="len(confirmation_accounts) &gt; 1"> (<span t-out="len(confirmation_accounts)"/> accounts)</t>
+                            </div>
+                            <div t-out="confirmation_labels['greeting']"/>
                         </div>
-                        <p class="text-muted" t-out="confirmation_labels['disclaimer']"/>
+
+                        <section class="o_ff_confirmation_request">
+                            <h3 t-out="confirmation_labels['request_title']"/>
+                            <p t-out="confirmation_labels['request_review']"/>
+                            <div class="o_ff_confirmation_amount_grid">
+                                <div>
+                                    <span t-out="confirmation_labels['closing_balance']"/>:
+                                    <strong t-out="confirmation_closing_balance(o)"
+                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </div>
+                                <div>
+                                    <span t-out="confirmation_labels['currency']"/>:
+                                    <strong t-out="res_company.currency_id.name"/>
+                                </div>
+                                <div class="o_ff_confirmation_amount_words">
+                                    <span t-out="confirmation_amount_words(o)"/>
+                                </div>
+                            </div>
+                            <p class="o_ff_confirmation_note" t-out="confirmation_labels['balance_sign_note']"/>
+                            <div class="o_ff_confirmation_signatures">
+                                <div>
+                                    <span t-out="confirmation_labels['recipient']"/>:
+                                    <span class="o_ff_signature_line"/>
+                                </div>
+                                <div>
+                                    <span t-out="confirmation_labels['received_date']"/>:
+                                    <span class="o_ff_signature_line"/>
+                                </div>
+                                <div>
+                                    <span t-out="confirmation_labels['signature']"/>:
+                                    <span class="o_ff_signature_line"/>
+                                </div>
+                                <strong class="o_ff_confirmation_manager" t-out="confirmation_labels['accounting_manager']"/>
+                            </div>
+                        </section>
+
+                        <section class="o_ff_confirmation_response">
+                            <h3 t-out="confirmation_labels['response_title']"/>
+                            <p>
+                                <t t-out="confirmation_labels['dear']"/> : <strong t-out="o.display_name"/>
+                            </p>
+                            <p>
+                                <span t-out="confirmation_labels['response_text']"/>
+                                <strong t-out="confirmation_closing_balance(o)"
+                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                <span t-out="confirmation_labels['only']"/>
+                            </p>
+                            <p>
+                                <span t-out="confirmation_labels['as_of']"/>:
+                                <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/>
+                            </p>
+                            <div class="o_ff_confirmation_response_fields">
+                                <div><span t-out="confirmation_labels['name']"/>: <span class="o_ff_signature_line"/></div>
+                                <div><span t-out="confirmation_labels['job_title']"/>: <span class="o_ff_signature_line"/></div>
+                                <div><span t-out="confirmation_labels['stamp_signature']"/>: <span class="o_ff_signature_line"/></div>
+                            </div>
+                            <p class="o_ff_confirmation_closing" t-out="confirmation_labels['disclaimer']"/>
+                        </section>
                     </div>
 
                     <t t-if="data['form'].get('document_type') != 'balance_confirmation'">

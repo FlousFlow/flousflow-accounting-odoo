@@ -85,11 +85,10 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         )
         self.assertEqual(report_type, 'html')
         for english_text in (
-            'Balance Confirmation Request', 'Period:', 'Target Moves:', 'Partners:',
-            'Receivable Accounts', 'Dear', 'We request that you review the closing balance',
-            'Closing balance as of', 'A positive amount means the partner owes the company',
-            'I agree with this balance.', 'I disagree with this balance',
-            'This document requests balance confirmation.',
+            'Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
+            'Account type', 'Receivable Accounts', 'Dear', 'Please review the balance below',
+            'Account balance', 'Received by', 'Account Confirmation:',
+            'We confirm that your balance in our records',
         ):
             self.assertIn(english_text.encode(), html)
         self.assertIn(b'110.00', html)
@@ -102,18 +101,17 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             data=arabic_data,
         )
         for arabic_text in (
-            'طلب مصادقة الرصيد', 'الفترة:', 'الحركات المستهدفة:', 'الشركاء:',
-            'حسابات القبض', 'السادة', 'نرجو مراجعة الرصيد الختامي أدناه',
-            'الرصيد الختامي في', 'الرصيد الموجب يعني أن على الشريك مبلغًا للشركة',
-            'أوافق على هذا الرصيد.', 'لا أوافق على هذا الرصيد؛ يرجى التواصل معي.',
-            'هذا المستند لطلب مصادقة الرصيد',
+            'كشف حساب إجمالي - مطابقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'نوع القيود',
+            'نوع الحساب', 'المدينون', 'السادة', 'طلب مصادقة حساب:',
+            'تهديكم الشركة أطيب تحياتها', 'رصيد مدين الحساب', 'العملة',
+            'المستلم', 'المصادقة على الحساب:', 'التوقيع والختم',
         ):
             self.assertIn(arabic_text.encode(), arabic_html)
         for english_text in (
-            'Balance Confirmation Request', 'Period:', 'Target Moves:', 'Partners:',
-            'Receivable Accounts', 'Dear', 'We request that you review',
-            'Closing balance as of', 'A positive amount means', 'I agree with this balance.',
-            'I disagree with this balance', 'This document requests balance confirmation.',
+            'Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
+            'Account type', 'Receivable Accounts', 'Dear', 'Please review the balance below',
+            'Account balance', 'Received by', 'Account Confirmation:',
+            'We confirm that your balance in our records',
         ):
             self.assertNotIn(english_text.encode(), arabic_html)
 
