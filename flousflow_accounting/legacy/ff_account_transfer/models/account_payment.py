@@ -7,6 +7,20 @@ from odoo.exceptions import UserError
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
+    def _get_payment_receipt_net_after_payment(self):
+        """Return the partner's remaining balance for invoices matched by this payment."""
+        self.ensure_one()
+        documents = self.reconciled_invoice_ids | self.reconciled_bill_ids
+        return sum(
+            document.currency_id._convert(
+                document.amount_residual,
+                self.currency_id,
+                self.company_id,
+                self.date,
+            )
+            for document in documents
+        )
+
     is_internal_transfer = fields.Boolean(
         string='Internal Transfer', default=False, tracking=True,
     )
