@@ -387,6 +387,7 @@ class ReportPartnerLedger(models.AbstractModel):
             'confirmation_labels': self._get_confirmation_labels(),
         }
 
+
     @api.model
     def _get_confirmation_labels(self):
         """Return every static balance-confirmation label in the report language."""
@@ -466,3 +467,10 @@ class ReportPartnerLedger(models.AbstractModel):
             'stamp_signature': 'Signature and stamp',
             'disclaimer': 'With best regards,',
         }
+
+
+class ReportPartnerLedgerConfirmation(ReportPartnerLedger):
+    """Dedicated balance-confirmation report without the generic ledger chrome."""
+
+    _name = 'report.flousflow_accounting.apr__report_partnerledger_confirmation'
+    _description = 'Balance Confirmation Report'

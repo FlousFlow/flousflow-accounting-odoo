@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="apr__action_report_partnerledger_confirmation" model="ir.actions.report">
+        <field name="name">Balance Confirmation</field>
+        <field name="model">account.report.partner.ledger</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.apr__report_partnerledger_confirmation</field>
+        <field name="paperformat_id" ref="apr__paperformat_om_report"/>
+        <field name="group_ids" eval="[(4, ref('account.group_account_readonly')), (4, ref('account.group_account_invoice')), (4, ref('account.group_account_user')), (4, ref('account.group_account_manager'))]"/>
+        <field name="print_report_name">'Balance Confirmation - %s' % (object.partner_ids[:1].name or '')</field>
+    </record>
+
     <template id="apr__report_partnerledger">
         <t t-call="web.html_container">
             <t t-if="data['form'].get('document_type') == 'balance_confirmation'">
@@ -232,6 +242,71 @@
                         </tfoot>
                     </table>
                     </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="apr__report_partnerledger_confirmation">
+        <t t-call="web.basic_layout">
+            <t t-call="flousflow_accounting.apr__report_style"/>
+            <t t-foreach="docs" t-as="o">
+                <div class="page o_om_report o_ff_confirmation_page" dir="rtl">
+                    <div class="o_ff_confirmation_brand">
+                        <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/>
+                        <div>
+                            <strong t-out="res_company.name"/>
+                            <div t-if="res_company.report_header" t-field="res_company.report_header"/>
+                            <div t-if="res_company.partner_id.city" t-out="res_company.partner_id.city"/>
+                        </div>
+                    </div>
+                    <div class="o_ff_confirmation_meta">
+                        <div class="o_ff_confirmation_meta_title" t-out="confirmation_labels['title']"/>
+                        <div>
+                            <span t-out="confirmation_labels['period']"/>:
+                            <span t-out="data['form']['date_from']" t-options="{'widget': 'date'}"/>
+                            <span> - </span>
+                            <span t-out="confirmation_labels['to_date']"/>
+                            <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/>
+                        </div>
+                    </div>
+                    <div class="o_ff_confirmation_recipient">
+                        <span t-out="confirmation_labels['dear']"/> : <strong t-out="o.display_name"/>
+                        <t t-if="o.ref"> (<span t-out="o.ref"/>)</t>
+                        <span t-out="confirmation_labels['honored']"/>
+                        <div t-if="confirmation_accounts">
+                            <span t-out="confirmation_accounts[0].code"/> - <span t-out="confirmation_accounts[0].name"/>
+                        </div>
+                        <div t-out="confirmation_labels['greeting']"/>
+                    </div>
+                    <section class="o_ff_confirmation_request">
+                        <h3 t-out="confirmation_labels['request_title']"/>
+                        <p t-out="confirmation_labels['request_review']"/>
+                        <div class="o_ff_confirmation_amount_grid">
+                            <div><span t-out="confirmation_labels['closing_balance']"/>: <strong t-out="confirmation_closing_balance(o)" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></div>
+                            <div><span t-out="confirmation_labels['currency']"/>: <strong t-out="res_company.currency_id.name"/></div>
+                            <div class="o_ff_confirmation_amount_words"><span t-out="confirmation_amount_words(o)"/></div>
+                        </div>
+                        <p class="o_ff_confirmation_note" t-out="confirmation_labels['balance_sign_note']"/>
+                        <div class="o_ff_confirmation_signatures">
+                            <div><span t-out="confirmation_labels['recipient']"/>: <span class="o_ff_signature_line"/></div>
+                            <div><span t-out="confirmation_labels['received_date']"/>: <span class="o_ff_signature_line"/></div>
+                            <div><span t-out="confirmation_labels['signature']"/>: <span class="o_ff_signature_line"/></div>
+                            <strong class="o_ff_confirmation_manager" t-out="confirmation_labels['accounting_manager']"/>
+                        </div>
+                    </section>
+                    <section class="o_ff_confirmation_response">
+                        <h3 t-out="confirmation_labels['response_title']"/>
+                        <p><t t-out="confirmation_labels['dear']"/> : <strong t-out="res_company.name"/></p>
+                        <p><span t-out="confirmation_labels['response_text']"/> <strong t-out="confirmation_closing_balance(o)" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/> <span t-out="confirmation_labels['only']"/></p>
+                        <p><span t-out="confirmation_labels['as_of']"/>: <span t-out="data['form']['date_to']" t-options="{'widget': 'date'}"/></p>
+                        <div class="o_ff_confirmation_response_fields">
+                            <div><span t-out="confirmation_labels['name']"/>: <span class="o_ff_signature_line"/></div>
+                            <div><span t-out="confirmation_labels['job_title']"/>: <span class="o_ff_signature_line"/></div>
+                            <div><span t-out="confirmation_labels['stamp_signature']"/>: <span class="o_ff_signature_line"/></div>
+                        </div>
+                        <p class="o_ff_confirmation_closing" t-out="confirmation_labels['disclaimer']"/>
+                    </section>
                 </div>
             </t>
         </t>

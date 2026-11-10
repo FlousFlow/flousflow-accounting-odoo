@@ -99,7 +99,12 @@ class AccountPartnerLedger(models.TransientModel):
                     'Choose Receivable Accounts or Payable Accounts for a balance confirmation.'
                 ))
         data = self._get_report_data(data)
-        return self.env.ref('flousflow_accounting.apr__action_report_partnerledger').with_context(
+        report_xmlid = (
+            'flousflow_accounting.apr__action_report_partnerledger_confirmation'
+            if self.document_type == 'balance_confirmation'
+            else 'flousflow_accounting.apr__action_report_partnerledger'
+        )
+        return self.env.ref(report_xmlid).with_context(
             landscape=self.document_type != 'balance_confirmation', lang=self.env.user.lang,
         ).\
             report_action(self, data=data)

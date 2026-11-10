@@ -92,6 +92,10 @@
             .o_om_report .o_ff_confirmation_response_fields > div { margin: 5px 0; white-space: nowrap; }
             .o_om_report .o_ff_confirmation_response_fields .o_ff_signature_line { min-width: 165px; }
             .o_om_report .o_ff_confirmation_closing { margin-top: 10px !important; }
+            .o_om_report .o_ff_confirmation_brand { display: flex; align-items: center; gap: 14px; min-height: 58px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #343a40; }
+            .o_om_report .o_ff_confirmation_brand img { max-width: 110px; max-height: 55px; object-fit: contain; }
+            .o_om_report .o_ff_confirmation_brand strong { font-size: 16px; }
+            .o_om_report .o_ff_confirmation_page { padding-top: 0; }
         </style>
     </template>
 
