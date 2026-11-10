@@ -13,7 +13,7 @@
                        readonly="state != 'draft'"/>
             </xpath>
             <xpath expr="//field[@name='partner_id'][1]" position="after">
-                <field name="salesperson_id" string="Collector" invisible="partner_type != 'customer'" readonly="state != 'draft'"/>
+                <field name="salesperson_id" invisible="partner_type != 'customer'" readonly="state != 'draft'"/>
             </xpath>
         </field>
     </record>
@@ -24,7 +24,7 @@
         <field name="inherit_id" ref="account.view_account_payment_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="salesperson_id" string="Collector" optional="show" invisible="partner_type != 'customer'"/>
+                <field name="salesperson_id" optional="show" invisible="partner_type != 'customer'"/>
             </xpath>
         </field>
     </record>
@@ -35,7 +35,7 @@
         <field name="inherit_id" ref="account.view_account_payment_search"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="salesperson_id" string="Collector"/>
+                <field name="salesperson_id"/>
             </xpath>
             <xpath expr="//filter[@name='partner']" position="after">
                 <filter string="Collector" name="salesperson" domain="[]" context="{'group_by': 'salesperson_id'}"/>
