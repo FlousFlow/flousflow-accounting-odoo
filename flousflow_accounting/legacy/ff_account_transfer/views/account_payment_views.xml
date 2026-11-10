@@ -55,7 +55,7 @@
                         <tr t-if="o.memo"><td><strong><t t-if="is_arabic">البيان</t><t t-else="">Memo</t></strong></td><td colspan="3"><span t-field="o.memo"/></td></tr>
                     </tbody></table>
                     <div style="border: 1px solid #888; padding: 10px; margin-top: 18px; text-align: center;">
-                        <strong><t t-if="is_arabic"><t t-if="o.partner_type == 'customer'">صافي رصيد العميل بعد الدفعة: </t><t t-else="">صافي رصيد المورد بعد الدفعة: </t></t><t t-else=""><t t-if="o.partner_type == 'customer'">Customer Net Balance After Payment: </t><t t-else="">Vendor Net Balance After Payment: </t></t></strong>
+                        <strong><t t-if="is_arabic"><t t-if="o.partner_type == 'customer'">صافي رصيد العميل بعد الدفعة (المدين − الدائن): </t><t t-else="">صافي رصيد المورد بعد الدفعة (المدين − الدائن): </t></t><t t-else=""><t t-if="o.partner_type == 'customer'">Customer Net Balance After Payment (Debit − Credit): </t><t t-else="">Vendor Net Balance After Payment (Debit − Credit): </t></t></strong>
                         <span t-esc="o._get_payment_receipt_net_after_payment()" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                     </div>
                     <div class="row" style="margin-top: 42px;"><div class="col-6 text-center"><t t-if="is_arabic">توقيع المستلم</t><t t-else="">Recipient Signature</t><br/><br/>................................</div><div class="col-6 text-center"><t t-if="is_arabic">توقيع المسؤول</t><t t-else="">Authorized Signature</t><br/><br/>................................</div></div>

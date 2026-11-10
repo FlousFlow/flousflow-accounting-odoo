@@ -8,17 +8,20 @@ class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
     def _get_payment_receipt_net_after_payment(self):
-        """Return the partner's remaining balance for invoices matched by this payment."""
+        """Return the partner balance as total debit minus total credit."""
         self.ensure_one()
-        documents = self.reconciled_invoice_ids | self.reconciled_bill_ids
-        return sum(
-            document.currency_id._convert(
-                document.amount_residual,
-                self.currency_id,
-                self.company_id,
-                self.date,
-            )
-            for document in documents
+        lines = self.env['account.move.line'].search([
+            ('partner_id', '=', self.partner_id.id),
+            ('company_id', '=', self.company_id.id),
+            ('parent_state', '=', 'posted'),
+            ('account_id.account_type', 'in', ('asset_receivable', 'liability_payable')),
+        ])
+        net_company = sum(lines.mapped('debit')) - sum(lines.mapped('credit'))
+        return self.company_id.currency_id._convert(
+            net_company,
+            self.currency_id,
+            self.company_id,
+            self.date,
         )
 
     is_internal_transfer = fields.Boolean(
