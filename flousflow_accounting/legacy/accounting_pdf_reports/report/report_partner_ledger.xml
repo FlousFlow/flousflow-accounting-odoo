@@ -83,11 +83,6 @@
                             <strong t-out="o.display_name"/>
                             <t t-if="o.ref"> (<span t-out="o.ref"/>)</t>
                             <span t-out="confirmation_labels['honored']"/>
-                            <div t-if="confirmation_accounts">
-                                <span t-out="confirmation_accounts[0].code"/> -
-                                <span t-out="confirmation_accounts[0].name"/>
-                                <t t-if="len(confirmation_accounts) &gt; 1"> (<span t-out="len(confirmation_accounts)"/> accounts)</t>
-                            </div>
                             <div t-out="confirmation_labels['greeting']"/>
                         </div>
 
@@ -274,9 +269,6 @@
                         <span t-out="confirmation_labels['dear']"/> : <strong t-out="o.display_name"/>
                         <t t-if="o.ref"> (<span t-out="o.ref"/>)</t>
                         <span t-out="confirmation_labels['honored']"/>
-                        <div t-if="confirmation_accounts">
-                            <span t-out="confirmation_accounts[0].code"/> - <span t-out="confirmation_accounts[0].name"/>
-                        </div>
                         <div t-out="confirmation_labels['greeting']"/>
                     </div>
                     <section class="o_ff_confirmation_request">

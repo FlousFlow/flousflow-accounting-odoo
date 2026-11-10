@@ -363,10 +363,6 @@ class ReportPartnerLedger(models.AbstractModel):
             return sums[partner.id][field]
 
         res_company = self.env.company
-        confirmation_accounts = self.env['account.account'].browse(
-            data['computed']['account_ids']
-        ).sorted(lambda account: (account.code or '', account.name or ''))
-
         def confirmation_amount_words(partner):
             amount = self._confirmation_closing_balance(data, partner)
             return res_company.currency_id.with_context(lang=self.env.lang).amount_to_text(amount)
@@ -383,7 +379,6 @@ class ReportPartnerLedger(models.AbstractModel):
                 data, partner
             ),
             'confirmation_amount_words': confirmation_amount_words,
-            'confirmation_accounts': confirmation_accounts,
             'confirmation_labels': self._get_confirmation_labels(),
         }
 
