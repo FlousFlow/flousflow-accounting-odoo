@@ -12,6 +12,34 @@
                        required="is_internal_transfer"
                        readonly="state != 'draft'"/>
             </xpath>
+            <xpath expr="//field[@name='partner_id'][1]" position="after">
+                <field name="salesperson_id" readonly="state != 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="fat__view_account_payment_tree_salesperson" model="ir.ui.view">
+        <field name="name">account.payment.list.salesperson</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="salesperson_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="fat__view_account_payment_search_salesperson" model="ir.ui.view">
+        <field name="name">account.payment.search.salesperson</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="salesperson_id" string="Salesperson"/>
+            </xpath>
+            <xpath expr="//filter[@name='partner']" position="after">
+                <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'salesperson_id'}"/>
+            </xpath>
         </field>
     </record>
 
@@ -42,6 +70,22 @@
               action="fat__action_account_payments_transfer_custom"
               sequence="25"
               groups="account.group_account_readonly"/>
+
+    <record id="fat__action_salesperson_collections" model="ir.actions.act_window">
+        <field name="name">Salesperson Collections</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,graph,pivot,form</field>
+        <field name="domain">[('partner_type', '=', 'customer'), ('payment_type', '=', 'inbound'), ('state', 'not in', ('draft', 'canceled')), ('is_internal_transfer', '=', False)]</field>
+        <field name="context">{'search_default_salesperson': 1, 'group_by': ['salesperson_id', 'date:month']}</field>
+        <field name="view_id" ref="account.view_account_payment_tree"/>
+    </record>
+
+    <menuitem id="fat__menu_salesperson_collections"
+              name="Salesperson Collections"
+              parent="account.menu_finance_reports"
+              action="fat__action_salesperson_collections"
+              sequence="35"
+              groups="account.group_account_readonly,account.group_account_invoice"/>
     <template id="report_payment_receipt_document_ar" inherit_id="account.report_payment_receipt_document">
         <xpath expr="//t[@t-call='web.external_layout']" position="replace">
             <t t-call="web.external_layout" o="o" company="o.company_id.sudo()">

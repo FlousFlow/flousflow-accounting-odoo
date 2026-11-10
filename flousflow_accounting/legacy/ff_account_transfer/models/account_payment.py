@@ -7,6 +7,20 @@ from odoo.exceptions import UserError
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
+    salesperson_id = fields.Many2one(
+        'res.users',
+        string='Salesperson',
+        tracking=True,
+        index=True,
+        help='Salesperson responsible for collecting this payment.',
+    )
+
+    @api.onchange('partner_id')
+    def _onchange_salesperson_from_partner(self):
+        for payment in self:
+            if payment.partner_id and not payment.salesperson_id:
+                payment.salesperson_id = payment.partner_id.user_id
+
     def _get_payment_receipt_net_after_payment(self):
         """Return the partner balance as total debit minus total credit."""
         self.ensure_one()
