@@ -474,3 +474,4 @@ class ReportPartnerLedgerConfirmation(ReportPartnerLedger):
 
     _name = 'report.flousflow_accounting.apr__report_partnerledger_confirmation'
     _description = 'Balance Confirmation Report'
+    _auto = False
