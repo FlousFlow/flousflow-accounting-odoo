@@ -60,7 +60,11 @@
                     </div>
                     <div style="border: 1px solid #888; padding: 10px; margin-top: 18px; text-align: center;">
                         <strong><t t-if="is_arabic"><t t-if="o.partner_type == 'customer'">صافي رصيد العميل بعد الدفعة: </t><t t-else="">صافي رصيد المورد بعد الدفعة: </t></t><t t-else=""><t t-if="o.partner_type == 'customer'">Customer Net Balance After Payment: </t><t t-else="">Vendor Net Balance After Payment: </t></t></strong>
-                        <span t-out="o._get_payment_receipt_net_after_payment()" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                        <t t-set="net_after_payment" t-value="o._get_payment_receipt_net_after_payment()"/>
+                        <span t-out="net_after_payment" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                        <br/>
+                        <strong><t t-if="is_arabic">بالحروف: </t><t t-else="">In Words: </t></strong>
+                        <span t-out="o.currency_id.with_context(lang=lang).amount_to_text(net_after_payment)"/>
                     </div>
                     <div class="row" style="margin-top: 42px;"><div class="col-6 text-center"><t t-if="is_arabic">توقيع المستلم</t><t t-else="">Recipient Signature</t><br/><br/>................................</div><div class="col-6 text-center"><t t-if="is_arabic">توقيع المسؤول</t><t t-else="">Authorized Signature</t><br/><br/>................................</div></div>
                 </div>
