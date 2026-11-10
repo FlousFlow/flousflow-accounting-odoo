@@ -14539,3 +14539,14 @@ msgstr "المعدل"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_partner__ff_net_balance
 msgid "Net Balance"
 msgstr "الرصيد الصافي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_payment__salesperson_id
+msgid "Collector"
+msgstr "المحصل"
+
+#. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.fat__action_salesperson_collections
+#: model:ir.ui.menu,name:flousflow_accounting.fat__menu_salesperson_collections
+msgid "Collections by Collector"
+msgstr "تحصيلات المحصلين"
