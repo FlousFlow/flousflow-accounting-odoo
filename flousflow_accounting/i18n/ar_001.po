@@ -5649,3 +5649,7 @@ msgstr "المحصل"
 #: model:ir.ui.menu,name:flousflow_accounting.fat__menu_salesperson_collections
 msgid "Collections by Collector"
 msgstr "تحصيلات المحصلين"
+
+#. module: flousflow_accounting
+msgid "Withholding Amount"
+msgstr "مبلغ الاستقطاع"
