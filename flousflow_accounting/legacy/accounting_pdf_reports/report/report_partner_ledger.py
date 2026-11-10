@@ -472,6 +472,6 @@ class ReportPartnerLedger(models.AbstractModel):
 class ReportPartnerLedgerConfirmation(ReportPartnerLedger):
     """Dedicated balance-confirmation report without the generic ledger chrome."""
 
-    _name = 'report.ff_partner_confirmation'
+    _name = 'report.flousflow_accounting.ff_partner_confirmation'
     _description = 'Balance Confirmation Report'
     _auto = False
