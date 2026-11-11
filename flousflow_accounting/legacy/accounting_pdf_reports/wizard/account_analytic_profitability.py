@@ -92,9 +92,11 @@ class AccountAnalyticProfitability(models.TransientModel):
             return {'cogs': -amount}
         if account_type.startswith('expense'):
             return {'operating_expenses': -amount}
-        if amount >= 0:
-            return {'other_income': amount}
-        return {'other_expenses': -amount}
+        # Balance-sheet analytic lines (inventory, receivable, payable, cash,
+        # and similar accounts) are deliberately excluded from a P&L report.
+        # They may carry analytic distributions for auditability, but must not
+        # inflate income or expenses.
+        return {}
 
     def _populate_lines(self):
         self.ensure_one()
@@ -102,6 +104,9 @@ class AccountAnalyticProfitability(models.TransientModel):
         grouped = {}
         analytic_lines = self.env['account.analytic.line'].search(self._analytic_line_domain())
         for line in analytic_lines:
+            classified = self._classify_amount(line)
+            if not classified:
+                continue
             key = line.account_id.id
             values = grouped.setdefault(key, {
                 'analytic_account_id': key,
@@ -113,7 +118,7 @@ class AccountAnalyticProfitability(models.TransientModel):
                 'other_expenses': 0.0,
             })
             values['movement_count'] += 1
-            for field, amount in self._classify_amount(line).items():
+            for field, amount in classified.items():
                 values[field] += amount
         for values in grouped.values():
             values['net_profit'] = (
