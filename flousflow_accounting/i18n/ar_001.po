@@ -1693,70 +1693,104 @@ msgid "Revenue"
 msgstr "الإيرادات"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Cost of Revenue"
 msgstr "تكلفة الإيرادات"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Gross Profit"
 msgstr "إجمالي الربح"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Cash Earnings"
 msgstr "المتحصلات النقدية"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Amount Spent"
 msgstr "المصروفات النقدية"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Cash Surplus"
 msgstr "صافي التدفق النقدي"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Bank Closing"
 msgstr "الرصيد النقدي الختامي"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Balance Sheet"
 msgstr "الميزانية العمومية"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Performance"
 msgstr "الأداء"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Operational"
 msgstr "التشغيل"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Gross Margin"
 msgstr "الهامش الإجمالي"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Net Margin"
 msgstr "هامش صافي الربح"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Debtor Days"
 msgstr "أيام التحصيل"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Creditor Days"
 msgstr "أيام السداد"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Print"
 msgstr "طباعة"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Start Date"
 msgstr "تاريخ البداية"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "End Date"
 msgstr "تاريخ النهاية"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Target Moves"
 msgstr "القيود المستهدفة"
 
@@ -1769,22 +1803,32 @@ msgid "All Entries"
 msgstr "كل القيود"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Comparison"
 msgstr "مقارنة"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Accounting Basis"
 msgstr "أساس المحاسبة"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Accrual Basis"
 msgstr "أساس الاستحقاق"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "Cash Basis"
 msgstr "الأساس النقدي"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
 msgid "In Currency"
 msgstr "العملة"
 
@@ -5866,6 +5910,42 @@ msgstr "مبلغ الاستقطاع"
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_analytic_profitability
 msgid "Analytic Profitability"
 msgstr "الربحية التحليلية"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
+msgid "Executive Summary"
+msgstr "الملخص التنفيذي"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
+msgid "Cash"
+msgstr "النقدية"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
+msgid "Profitability"
+msgstr "الربحية"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
+msgid "Revenue"
+msgstr "الإيرادات"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
+msgid "Expenses"
+msgstr "المصروفات"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/executive_summary/executive_summary.xml:0
+msgid "Net Profit"
+msgstr "صافي الربح"
 
 #. module: flousflow_accounting
 msgid "From"
