@@ -93,6 +93,16 @@
               action="apr__action_analytic_profitability"
               groups="account.group_account_readonly,account.group_account_invoice"/>
 
+    <!-- Retain the legacy report engines for backward compatibility, but remove
+         their obsolete menu shortcuts from the user-facing reports navigation. -->
+    <record id="apr__menu_account_report_financial" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="account.menu_action_analytic_reporting" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
     <record id="apr__access_account_analytic_profitability" model="ir.access">
         <field name="name">Analytic Profitability</field>
         <field name="model_id" ref="model_account_analytic_profitability"/>

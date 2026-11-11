@@ -1693,6 +1693,106 @@ msgid "Revenue"
 msgstr "الإيرادات"
 
 #. module: flousflow_accounting
+msgid "Cost of Revenue"
+msgstr "تكلفة الإيرادات"
+
+#. module: flousflow_accounting
+msgid "Gross Profit"
+msgstr "إجمالي الربح"
+
+#. module: flousflow_accounting
+msgid "Cash Earnings"
+msgstr "المتحصلات النقدية"
+
+#. module: flousflow_accounting
+msgid "Amount Spent"
+msgstr "المصروفات النقدية"
+
+#. module: flousflow_accounting
+msgid "Cash Surplus"
+msgstr "صافي التدفق النقدي"
+
+#. module: flousflow_accounting
+msgid "Bank Closing"
+msgstr "الرصيد النقدي الختامي"
+
+#. module: flousflow_accounting
+msgid "Balance Sheet"
+msgstr "الميزانية العمومية"
+
+#. module: flousflow_accounting
+msgid "Performance"
+msgstr "الأداء"
+
+#. module: flousflow_accounting
+msgid "Operational"
+msgstr "التشغيل"
+
+#. module: flousflow_accounting
+msgid "Gross Margin"
+msgstr "الهامش الإجمالي"
+
+#. module: flousflow_accounting
+msgid "Net Margin"
+msgstr "هامش صافي الربح"
+
+#. module: flousflow_accounting
+msgid "Debtor Days"
+msgstr "أيام التحصيل"
+
+#. module: flousflow_accounting
+msgid "Creditor Days"
+msgstr "أيام السداد"
+
+#. module: flousflow_accounting
+msgid "Print"
+msgstr "طباعة"
+
+#. module: flousflow_accounting
+msgid "Start Date"
+msgstr "تاريخ البداية"
+
+#. module: flousflow_accounting
+msgid "End Date"
+msgstr "تاريخ النهاية"
+
+#. module: flousflow_accounting
+msgid "Target Moves"
+msgstr "القيود المستهدفة"
+
+#. module: flousflow_accounting
+msgid "Posted Entries"
+msgstr "القيود المرحلة"
+
+#. module: flousflow_accounting
+msgid "All Entries"
+msgstr "كل القيود"
+
+#. module: flousflow_accounting
+msgid "Comparison"
+msgstr "مقارنة"
+
+#. module: flousflow_accounting
+msgid "Accounting Basis"
+msgstr "أساس المحاسبة"
+
+#. module: flousflow_accounting
+msgid "Accrual Basis"
+msgstr "أساس الاستحقاق"
+
+#. module: flousflow_accounting
+msgid "Cash Basis"
+msgstr "الأساس النقدي"
+
+#. module: flousflow_accounting
+msgid "In Currency"
+msgstr "العملة"
+
+#. module: flousflow_accounting
+msgid "Previous period:"
+msgstr "الفترة السابقة:"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_cogs
 msgid "Cost of Goods Sold"
 msgstr "تكلفة البضاعة المباعة"
@@ -5762,6 +5862,8 @@ msgid "Withholding Amount"
 msgstr "مبلغ الاستقطاع"
 
 #. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.apr__action_analytic_profitability
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_analytic_profitability
 msgid "Analytic Profitability"
 msgstr "الربحية التحليلية"
 

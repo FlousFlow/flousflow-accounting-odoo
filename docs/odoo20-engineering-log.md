@@ -44,3 +44,10 @@
 - Verification: Odoo 20 test upgrade, ORM summary (200 revenue - 120 COGS = 80 net / 40%), Arabic UI flow, movement drill-down, and QWeb PDF (`%PDF`) render.
 - Test backup: `/var/backups/odoo/al_yamen_test_pre_analytic_translation_20261111.dump`.
 - Latest branch commit: `925c836` on `20.0`; production deployment remains pending until final approval after test review.
+
+## 2026-11-11 - Report navigation cleanup and Arabic labels
+
+- Hid the obsolete `Financial Report` shortcut and the standard legacy `Analytic Report` shortcut from the user-facing report menus without removing their internal engines, because the Executive Summary and existing tests still use the financial report service.
+- Kept `Analytic Profitability` and added explicit Arabic menu/action translation references (`الربحية التحليلية`).
+- Added missing Arabic labels for the Executive Summary KPI groups, filters, and profitability cards.
+- Verification target: upgrade both test and production databases, confirm menu visibility and Arabic labels in a fresh browser session, then re-run the Executive Summary and analytic profitability smoke flows.

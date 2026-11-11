@@ -6,7 +6,6 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 FINANCIAL_MENUS = (
     'flousflow_accounting.apr__menu_account_report_bs',
     'flousflow_accounting.apr__menu_account_report_pl',
-    'flousflow_accounting.apr__menu_account_report_financial',
     'flousflow_accounting.apr__menu_general_ledger',
     'flousflow_accounting.apr__menu_general_balance_report',
     'flousflow_accounting.apr__menu_account_report',
