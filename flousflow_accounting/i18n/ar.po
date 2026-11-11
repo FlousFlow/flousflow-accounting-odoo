@@ -13752,6 +13752,66 @@ msgid "Previous period:"
 msgstr "الفترة السابقة:"
 
 #. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cash"
+msgstr "النقدية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Profitability"
+msgstr "الربحية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Balance Sheet"
+msgstr "الميزانية العمومية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Performance"
+msgstr "الأداء"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Operational"
+msgstr "التشغيل"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cash Earnings"
+msgstr "المتحصلات النقدية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Amount Spent"
+msgstr "المصروفات النقدية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cash Surplus"
+msgstr "صافي التدفق النقدي"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Bank Closing"
+msgstr "الرصيد النقدي الختامي"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cost of Revenue"
+msgstr "تكلفة الإيرادات"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Expenses"
+msgstr "المصروفات"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Net Profit"
+msgstr "صافي الربح"
+
+#. module: flousflow_accounting
 msgid "Performance"
 msgstr "الأداء"
 
