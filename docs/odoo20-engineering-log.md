@@ -50,4 +50,6 @@
 - Hid the obsolete `Financial Report` shortcut and the standard legacy `Analytic Report` shortcut from the user-facing report menus without removing their internal engines, because the Executive Summary and existing tests still use the financial report service.
 - Kept `Analytic Profitability` and added explicit Arabic menu/action translation references (`الربحية التحليلية`).
 - Added missing Arabic labels for the Executive Summary KPI groups, filters, and profitability cards.
-- Verification target: upgrade both test and production databases, confirm menu visibility and Arabic labels in a fresh browser session, then re-run the Executive Summary and analytic profitability smoke flows.
+- Verification: test and production upgrades completed; both obsolete menus are inactive, the new analytic profitability menu remains active, and a fresh Arabic browser session shows the Executive Summary labels and formulas in Arabic.
+- Production backup: `/var/backups/odoo/al_yamen_pre_report_menu_cleanup_20261111.dump`.
+- Final branch commit for this change: `ac39fbf` on `20.0`.
