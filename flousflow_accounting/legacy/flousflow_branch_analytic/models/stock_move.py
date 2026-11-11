@@ -27,6 +27,8 @@ class StockMove(models.Model):
         vals_list = super()._get_account_move_line_vals()
         order = self.picking_id.pos_order_id
         account = order.config_id.analytic_account_id if order else False
+        sale_order = self.picking_id.sale_id
+        account = account or sale_order.analytic_account_id
         account = account or self.branch_analytic_account_id
         if not account:
             return vals_list
