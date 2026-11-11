@@ -19,3 +19,11 @@
 - Normalized report toolbar, content, table, alert, and popover surfaces across customer statement, financial report, cash flow, open items, general ledger, trial balance, aged partner, tax report, and executive summary.
 - Replaced hard-coded light backgrounds/text colors with Odoo theme variables and changed Open Items report actions to the native icon-link treatment.
 - Preserved existing report behavior and responsive breakpoints; the change is visual/semantic only.
+
+## 2026-11-11 - Partner analytic defaults and customer COGS propagation
+
+- Module: `flousflow_accounting`, branch `20.0`.
+- Added a company-dependent analytic account on `res.partner`; customer invoices default the header analytic account and retain draft-time manual override.
+- Reused the native analytic distribution and stock-accounting path; outgoing stock moves use the sale order/header analytic on the non-stock-valuation COGS line while the stock valuation line remains untagged.
+- Verification: XML/Python checks, Odoo 20 upgrade, partner/invoice ORM smoke test, existing branch-analytic test tag, service health, and HTTP checks on `al_yamen_test` and `al_yamen`.
+- Commit: `e8cc03e` on branch `20.0`.
