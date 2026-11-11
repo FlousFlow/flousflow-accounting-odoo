@@ -22,6 +22,34 @@ class AccountPartnerLedger(models.TransientModel):
         default='statement',
     )
 
+    def _infer_partner_result_selection(self, partner):
+        """Infer a single-role scope when the contact ranks are not populated.
+
+        Odoo contacts imported from external systems can have both ranks at
+        zero even though their posted ledger lines clearly identify them as a
+        customer or a vendor.  Use the posted partner accounts only as a
+        fallback; an explicit menu context or a dual-role contact remains
+        authoritative.
+        """
+        MoveLine = self.env['account.move.line'].with_company(self.env.company)
+        base_domain = [
+            ('partner_id.commercial_partner_id', '=', partner.commercial_partner_id.id),
+            ('company_id', '=', self.env.company.id),
+        ]
+        has_receivable = bool(MoveLine.search(
+            base_domain + [('account_id.account_type', '=', 'asset_receivable')],
+            limit=1,
+        ))
+        has_payable = bool(MoveLine.search(
+            base_domain + [('account_id.account_type', '=', 'liability_payable')],
+            limit=1,
+        ))
+        if has_payable and not has_receivable:
+            return 'supplier'
+        if has_receivable and not has_payable:
+            return 'customer'
+        return False
+
     @api.model
     def default_get(self, fields_list):
         values = super().default_get(fields_list)
@@ -58,6 +86,10 @@ class AccountPartnerLedger(models.TransientModel):
             # For a dual-role contact, start with receivables. The user can
             # choose Payable Accounts in the wizard before printing instead.
             values['result_selection'] = 'customer'
+        else:
+            inferred_scope = self._infer_partner_result_selection(partner)
+            if inferred_scope:
+                values['result_selection'] = inferred_scope
         return values
 
     @api.onchange('document_type')

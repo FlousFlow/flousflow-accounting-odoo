@@ -146,6 +146,20 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         self.assertEqual(contact_defaults['result_selection'], 'customer')
         self.assertEqual(confirmation_defaults['date_to'], fields.Date.context_today(LedgerWizard))
 
+        imported_vendor = self.env['res.partner'].create({
+            'name': 'Imported Vendor Without Ranks',
+            'customer_rank': 0,
+            'supplier_rank': 0,
+        })
+        self.init_invoice(
+            'in_invoice', partner=imported_vendor, amounts=[55.0], taxes=[],
+            invoice_date='2025-06-03', post=True,
+        )
+        inferred_vendor_defaults = LedgerWizard.with_context(
+            active_model='res.partner', active_ids=imported_vendor.ids,
+        ).default_get(['result_selection'])
+        self.assertEqual(inferred_vendor_defaults['result_selection'], 'supplier')
+
         confirmation_wizard = LedgerWizard.new({'document_type': 'balance_confirmation'})
         confirmation_wizard._onchange_document_type()
         self.assertEqual(confirmation_wizard.date_to, fields.Date.context_today(LedgerWizard))
