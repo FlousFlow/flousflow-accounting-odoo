@@ -34,3 +34,13 @@
 - Fix: place the field in the visible Accounting > General group and add a translatable label while keeping the field company-dependent and optional.
 - Verification: fresh test-browser reload exposed `analytic_account_id` on the contact Accounting tab; the test database was upgraded successfully.
 - Commit: `08568c5` plus the follow-up label/log change on branch `20.0`.
+
+## 2026-11-11 - Analytic profitability report
+
+- Added a native accounting report wizard beside Odoo's analytic-items report.
+- Filters: period, posted-only scope, analytic plan, and multiple analytic accounts.
+- Summary: revenue, COGS, operating expenses, other income/expenses, net profit, margin, movement count, PDF print, and drill-down to analytic movements.
+- Accounting rule: balance-sheet analytic lines remain auditable but are excluded from P&L totals; only income and expense account types affect profitability.
+- Verification: Odoo 20 test upgrade, ORM summary (200 revenue - 120 COGS = 80 net / 40%), Arabic UI flow, movement drill-down, and QWeb PDF (`%PDF`) render.
+- Test backup: `/var/backups/odoo/al_yamen_test_pre_analytic_translation_20261111.dump`.
+- Latest branch commit: `925c836` on `20.0`; production deployment remains pending until final approval after test review.
