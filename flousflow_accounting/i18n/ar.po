@@ -1167,6 +1167,7 @@ msgstr "جميع الحسابات"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_general_ledger
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__view_partner_form_branch_analytic
 msgid "Analytic Account"
 msgstr "الحساب التحليلي"
 
