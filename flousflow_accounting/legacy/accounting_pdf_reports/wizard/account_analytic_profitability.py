@@ -129,7 +129,7 @@ class AccountAnalyticProfitability(models.TransientModel):
                 - values['other_expenses']
             )
             values['margin_percent'] = (
-                values['net_profit'] / values['revenue'] * 100
+                values['net_profit'] / values['revenue']
                 if values['revenue'] else 0.0
             )
             values['report_id'] = self.id

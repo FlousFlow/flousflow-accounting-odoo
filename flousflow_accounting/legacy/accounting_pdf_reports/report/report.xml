@@ -168,7 +168,7 @@
                                     <td class="text-end"><span t-field="line.other_income"/></td>
                                     <td class="text-end"><span t-field="line.other_expenses"/></td>
                                     <td class="text-end fw-bold"><span t-field="line.net_profit"/></td>
-                                    <td class="text-end"><span t-out="str(round(line.margin_percent, 2)) + '%'"/></td>
+                                    <td class="text-end"><span t-out="str(round(line.margin_percent * 100, 2)) + '%'"/></td>
                                 </tr>
                                 <tr class="fw-bold">
                                     <td>Total</td>
