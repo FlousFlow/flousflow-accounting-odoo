@@ -43,3 +43,5 @@ apr__access_account_tax_return_user,Tax Return: accountant,account.tax.return,ac
 apr__access_account_tax_return_manager,Tax Return: manager,account.tax.return,account.group_account_manager,crud,
 apr__access_account_tax_return_create_wizard_user,Tax Return creation: accountant,account.tax.return.create.wizard,account.group_account_user,crud,
 apr__access_account_tax_return_create_wizard_manager,Tax Return creation: manager,account.tax.return.create.wizard,account.group_account_manager,crud,
+apr__access_account_analytic_profitability,Analytic Profitability,model_account_analytic_profitability,account.group_account_readonly,crud,
+apr__access_account_analytic_profitability_line,Analytic Profitability Lines,model_account_analytic_profitability_line,account.group_account_readonly,crud,
