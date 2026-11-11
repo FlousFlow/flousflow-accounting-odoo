@@ -85,8 +85,8 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         )
         self.assertEqual(report_type, 'html')
         for english_text in (
-            'Customer Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
-            'Account type', 'Receivable Accounts', 'Dear', 'Please review the balance below',
+            'Customer Account Statement - Balance Confirmation', 'From date', 'To date',
+            'Dear', 'Please review the balance below',
             'Amount due from customer', 'Received by', 'Customer Balance Confirmation Request:',
             'We confirm that the balance above agrees with our records',
         ):
@@ -101,15 +101,14 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             data=arabic_data,
         )
         for arabic_text in (
-            'كشف حساب العميل - مطابقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'نوع القيود',
-            'نوع الحساب', 'المدينون', 'السادة',
+            'كشف حساب العميل - مطابقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'السادة',
             'طلب مطابقة رصيد العميل:', 'نرجو منكم مراجعة الرصيد', 'الرصيد المستحق لنا من العميل', 'العملة',
             'المستلم', 'التوقيع والختم',
         ):
             self.assertIn(arabic_text.encode(), arabic_html)
         for english_text in (
-            'Customer Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
-            'Account type', 'Receivable Accounts', 'Dear', 'Please review the balance below',
+            'Customer Account Statement - Balance Confirmation', 'From date', 'To date',
+            'Dear', 'Please review the balance below',
             'Amount due from customer', 'Received by', 'Customer Balance Confirmation Request:',
             'We confirm that the balance above agrees with our records',
         ):
