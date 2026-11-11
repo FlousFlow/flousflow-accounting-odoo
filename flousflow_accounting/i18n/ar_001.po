@@ -5739,7 +5739,7 @@ msgstr "الإجماليات"
 #. module: flousflow_accounting
 msgid "No analytic movements match the selected filters."
 msgstr "لا توجد حركات تحليلية مطابقة للفلاتر المحددة."
-+
+
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
 msgid "Analytic Profitability"
