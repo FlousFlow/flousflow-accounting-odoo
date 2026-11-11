@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.orm.domains import Domain
+from odoo.tools.misc import get_lang
 
 
 class ReportFinancial(models.AbstractModel):
@@ -90,57 +91,62 @@ class ReportFinancial(models.AbstractModel):
         def ratio(numerator, denominator, multiplier=1.0):
             return numerator / denominator * multiplier if denominator else 0.0
 
+        language_code = get_lang(self.env).code or ''
+
+        def label(english, arabic):
+            return arabic if language_code.startswith('ar') else _(english)
+
         groups = [
-            {'key': 'cash', 'name': _('Cash'), 'items': [
-                {'key': 'cash_earnings', 'label': _('Cash Earnings'), 'value': cash['debit'],
-                 'formula': _('Debit entries on cash and credit-card accounts')},
-                {'key': 'amount_spent', 'label': _('Amount Spent'), 'value': cash['credit'],
-                 'formula': _('Credit entries on cash and credit-card accounts')},
-                {'key': 'cash_surplus', 'label': _('Cash Surplus'), 'value': cash['debit'] - cash['credit'],
-                 'formula': _('Cash Earnings minus Amount Spent')},
-                {'key': 'bank_closing', 'label': _('Bank Closing'), 'value': cash_closing['balance'],
-                 'formula': _('Net balance of cash and credit-card accounts')},
+            {'key': 'cash', 'name': label('Cash', 'النقدية'), 'items': [
+                {'key': 'cash_earnings', 'label': label('Cash Earnings', 'المتحصلات النقدية'), 'value': cash['debit'],
+                 'formula': label('Debit entries on cash and credit-card accounts', 'القيود المدينة على حسابات النقدية والبطاقات الائتمانية')},
+                {'key': 'amount_spent', 'label': label('Amount Spent', 'المصروفات النقدية'), 'value': cash['credit'],
+                 'formula': label('Credit entries on cash and credit-card accounts', 'القيود الدائنة على حسابات النقدية والبطاقات الائتمانية')},
+                {'key': 'cash_surplus', 'label': label('Cash Surplus', 'صافي التدفق النقدي'), 'value': cash['debit'] - cash['credit'],
+                 'formula': label('Cash Earnings minus Amount Spent', 'المتحصلات النقدية ناقص المصروفات النقدية')},
+                {'key': 'bank_closing', 'label': label('Bank Closing', 'الرصيد النقدي الختامي'), 'value': cash_closing['balance'],
+                 'formula': label('Net balance of cash and credit-card accounts', 'صافي رصيد حسابات النقدية والبطاقات الائتمانية')},
             ]},
-            {'key': 'profitability', 'name': _('Profitability'), 'items': [
-                {'key': 'revenue', 'label': _('Revenue'), 'value': revenue, 'formula': _('Income account balance')},
-                {'key': 'cost_of_revenue', 'label': _('Cost of Revenue'), 'value': cost_of_revenue,
-                 'formula': _('Direct cost account balance')},
-                {'key': 'gross_profit', 'label': _('Gross Profit'), 'value': gross_profit,
-                 'formula': _('Revenue minus Cost of Revenue')},
-                {'key': 'expenses', 'label': _('Expenses'), 'value': operating_expenses,
-                 'formula': _('Operating expense account balance')},
-                {'key': 'net_profit', 'label': _('Net Profit'), 'value': net_profit,
-                 'formula': _('Revenue plus Other Income minus Cost of Revenue and Expenses')},
+            {'key': 'profitability', 'name': label('Profitability', 'الربحية'), 'items': [
+                {'key': 'revenue', 'label': label('Revenue', 'الإيرادات'), 'value': revenue, 'formula': label('Income account balance', 'رصيد حسابات الإيرادات')},
+                {'key': 'cost_of_revenue', 'label': label('Cost of Revenue', 'تكلفة الإيرادات'), 'value': cost_of_revenue,
+                 'formula': label('Direct cost account balance', 'رصيد حسابات التكلفة المباشرة')},
+                {'key': 'gross_profit', 'label': label('Gross Profit', 'إجمالي الربح'), 'value': gross_profit,
+                 'formula': label('Revenue minus Cost of Revenue', 'الإيرادات ناقص تكلفة الإيرادات')},
+                {'key': 'expenses', 'label': label('Expenses', 'المصروفات'), 'value': operating_expenses,
+                 'formula': label('Operating expense account balance', 'رصيد حسابات المصروفات التشغيلية')},
+                {'key': 'net_profit', 'label': label('Net Profit', 'صافي الربح'), 'value': net_profit,
+                 'formula': label('Revenue plus Other Income minus Cost of Revenue and Expenses', 'الإيرادات والإيرادات الأخرى ناقص تكلفة الإيرادات والمصروفات')},
             ]},
-            {'key': 'balance_sheet', 'name': _('Balance Sheet'), 'items': [
-                {'key': 'net_assets', 'label': _('Net Assets'), 'value': assets - liabilities,
-                 'formula': _('Total Assets minus Total Liabilities')},
-                {'key': 'current_assets', 'label': _('Current Assets'), 'value': current_asset_value,
-                 'formula': _('Cash, receivables, current assets, and prepayments')},
-                {'key': 'current_liabilities', 'label': _('Current Liabilities'), 'value': current_liability_value,
-                 'formula': _('Current liabilities, credit cards, and payables')},
+            {'key': 'balance_sheet', 'name': label('Balance Sheet', 'الميزانية العمومية'), 'items': [
+                {'key': 'net_assets', 'label': label('Net Assets', 'صافي الأصول'), 'value': assets - liabilities,
+                 'formula': label('Total Assets minus Total Liabilities', 'إجمالي الأصول ناقص إجمالي الالتزامات')},
+                {'key': 'current_assets', 'label': label('Current Assets', 'الأصول المتداولة'), 'value': current_asset_value,
+                 'formula': label('Cash, receivables, current assets, and prepayments', 'النقدية والذمم المدينة والأصول المتداولة والمدفوعات المقدمة')},
+                {'key': 'current_liabilities', 'label': label('Current Liabilities', 'الالتزامات الجارية'), 'value': current_liability_value,
+                 'formula': label('Current liabilities, credit cards, and payables', 'الالتزامات الجارية والبطاقات الائتمانية والذمم الدائنة')},
             ]},
-            {'key': 'performance', 'name': _('Performance'), 'items': [
-                {'key': 'gross_margin', 'label': _('Gross Margin'), 'value': ratio(gross_profit, revenue, 100),
-                 'unit': 'percent', 'formula': _('Gross Profit divided by Revenue')},
-                {'key': 'net_margin', 'label': _('Net Margin'), 'value': ratio(net_profit, revenue, 100),
-                 'unit': 'percent', 'formula': _('Net Profit divided by Revenue')},
-                {'key': 'roi', 'label': _('Return on Investment'), 'value': ratio(net_profit, assets, 100),
-                 'unit': 'percent', 'formula': _('Net Profit divided by Total Assets')},
+            {'key': 'performance', 'name': label('Performance', 'الأداء'), 'items': [
+                {'key': 'gross_margin', 'label': label('Gross Margin', 'الهامش الإجمالي'), 'value': ratio(gross_profit, revenue, 100),
+                 'unit': 'percent', 'formula': label('Gross Profit divided by Revenue', 'إجمالي الربح مقسومًا على الإيرادات')},
+                {'key': 'net_margin', 'label': label('Net Margin', 'هامش صافي الربح'), 'value': ratio(net_profit, revenue, 100),
+                 'unit': 'percent', 'formula': label('Net Profit divided by Revenue', 'صافي الربح مقسومًا على الإيرادات')},
+                {'key': 'roi', 'label': label('Return on Investment', 'العائد على الاستثمار'), 'value': ratio(net_profit, assets, 100),
+                 'unit': 'percent', 'formula': label('Net Profit divided by Total Assets', 'صافي الربح مقسومًا على إجمالي الأصول')},
             ]},
-            {'key': 'operational', 'name': _('Operational'), 'items': [
-                {'key': 'debtor_days', 'label': _('Debtor Days'),
+            {'key': 'operational', 'name': label('Operational', 'التشغيل'), 'items': [
+                {'key': 'debtor_days', 'label': label('Debtor Days', 'أيام التحصيل'),
                  'value': ratio(receivables['balance'], revenue, days), 'unit': 'days',
-                 'formula': _('Receivables divided by Revenue times days in period')},
-                {'key': 'creditor_days', 'label': _('Creditor Days'),
+                 'formula': label('Receivables divided by Revenue times days in period', 'الذمم المدينة مقسومة على الإيرادات مضروبة في أيام الفترة')},
+                {'key': 'creditor_days', 'label': label('Creditor Days', 'أيام السداد'),
                  'value': ratio(-payables['balance'], cost_of_revenue + operating_expenses, days),
-                 'unit': 'days', 'formula': _('Payables divided by Cost of Revenue and Expenses times days in period')},
-                {'key': 'short_term_cash_forecast', 'label': _('Short-term Cash Forecast'),
+                 'unit': 'days', 'formula': label('Payables divided by Cost of Revenue and Expenses times days in period', 'الذمم الدائنة مقسومة على تكلفة الإيرادات والمصروفات مضروبة في أيام الفترة')},
+                {'key': 'short_term_cash_forecast', 'label': label('Short-term Cash Forecast', 'توقعات النقدية قصيرة الأجل'),
                  'value': receivables['balance'] + payables['balance'],
-                 'formula': _('Receivables plus signed Payables balance')},
-                {'key': 'current_ratio', 'label': _('Current Ratio'),
+                 'formula': label('Receivables plus signed Payables balance', 'الذمم المدينة مضافًا إليها رصيد الذمم الدائنة بالإشارة')},
+                {'key': 'current_ratio', 'label': label('Current Ratio', 'نسبة التداول'),
                  'value': ratio(current_asset_value, current_liability_value), 'unit': 'ratio',
-                 'formula': _('Current Assets divided by Current Liabilities')},
+                 'formula': label('Current Assets divided by Current Liabilities', 'الأصول المتداولة مقسومة على الالتزامات الجارية')},
             ]},
         ]
         if currency != company.currency_id:
