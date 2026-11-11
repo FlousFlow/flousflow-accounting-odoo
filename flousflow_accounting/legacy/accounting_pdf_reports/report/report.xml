@@ -168,7 +168,7 @@
                                     <td class="text-end"><span t-field="line.other_income"/></td>
                                     <td class="text-end"><span t-field="line.other_expenses"/></td>
                                     <td class="text-end fw-bold"><span t-field="line.net_profit"/></td>
-                                    <td class="text-end"><span t-out="'%.2f%%' % line.margin_percent"/></td>
+                                    <td class="text-end"><span t-out="str(round(line.margin_percent, 2)) + '%'"/></td>
                                 </tr>
                                 <tr class="fw-bold">
                                     <td>Total</td>
@@ -179,7 +179,7 @@
                                     <td class="text-end"><span t-field="o.total_other_income"/></td>
                                     <td class="text-end"><span t-field="o.total_other_expenses"/></td>
                                     <td class="text-end"><span t-field="o.total_net_profit"/></td>
-                                    <td class="text-end"><span t-out="'%.2f%%' % ((o.total_net_profit / o.total_revenue * 100) if o.total_revenue else 0.0)"/></td>
+                                    <td class="text-end"><span t-out="str(round((o.total_net_profit / o.total_revenue * 100) if o.total_revenue else 0.0, 2)) + '%'"/></td>
                                 </tr>
                             </tbody>
                         </table>
