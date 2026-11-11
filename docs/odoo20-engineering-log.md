@@ -27,3 +27,10 @@
 - Reused the native analytic distribution and stock-accounting path; outgoing stock moves use the sale order/header analytic on the non-stock-valuation COGS line while the stock valuation line remains untagged.
 - Verification: XML/Python checks, Odoo 20 upgrade, partner/invoice ORM smoke test, existing branch-analytic test tag, service health, and HTTP checks on `al_yamen_test` and `al_yamen`.
 - Commit: `e8cc03e` on branch `20.0`.
+
+## 2026-11-11 - Partner analytic field visibility
+
+- Problem: the partner analytic field was present in the form architecture but was inserted into a hidden accounting subsection and had no visible label.
+- Fix: place the field in the visible Accounting > General group and add a translatable label while keeping the field company-dependent and optional.
+- Verification: fresh test-browser reload exposed `analytic_account_id` on the contact Accounting tab; the test database was upgraded successfully.
+- Commit: `08568c5` plus the follow-up label/log change on branch `20.0`.
