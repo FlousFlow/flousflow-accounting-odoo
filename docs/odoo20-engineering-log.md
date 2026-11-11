@@ -53,3 +53,9 @@
 - Verification: test and production upgrades completed; both obsolete menus are inactive, the new analytic profitability menu remains active, and a fresh Arabic browser session shows the Executive Summary labels and formulas in Arabic.
 - Production backup: `/var/backups/odoo/al_yamen_pre_report_menu_cleanup_20261111.dump`.
 - Final branch commit for this change: `ac39fbf` on `20.0`.
+
+## 2026-11-11 - Neutral net-balance confirmations
+
+- Problem: balance confirmations were inferring customer/vendor wording and could reject a dual-role partner even when the partner had valid debit and credit activity.
+- Fix: confirmation defaults to the combined receivable/payable scope, sums the partner's net debit-credit balance through the end date, and uses neutral bilingual wording (`Balance Confirmation` / `مصادقة الرصيد`). Customer/vendor terminology is retained only for ordinary ledger scope selection, not in the confirmation document.
+- Verification: focused Odoo 20 partner-ledger tests cover mixed customer/vendor moves, neutral Arabic/English output, and combined-scope defaults. Deployment is gated on the test database run and backup-first rollout.

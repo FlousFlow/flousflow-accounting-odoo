@@ -59,6 +59,10 @@ class AccountPartnerLedger(models.TransientModel):
             and not values.get('date_to')
         ):
             values['date_to'] = fields.Date.context_today(self)
+        if values.get('document_type') == 'balance_confirmation':
+            # The confirmation document is always a net statement, not a
+            # customer-only or vendor-only report.
+            values['result_selection'] = 'customer_supplier'
 
         if 'result_selection' not in fields_list or self.env.context.get('default_result_selection'):
             return values
@@ -96,6 +100,8 @@ class AccountPartnerLedger(models.TransientModel):
     def _onchange_document_type(self):
         if self.document_type == 'balance_confirmation' and not self.date_to:
             self.date_to = fields.Date.context_today(self)
+        if self.document_type == 'balance_confirmation':
+            self.result_selection = 'customer_supplier'
 
     def _get_report_data(self, data):
         data = self.pre_print_report(data)
@@ -112,24 +118,12 @@ class AccountPartnerLedger(models.TransientModel):
                 raise UserError(_('Set an end date to calculate the confirmed balance.'))
             if self.target_move != 'posted':
                 raise UserError(_('Balance confirmations can include posted entries only.'))
-            if self.result_selection == 'customer_supplier':
-                partner = self.partner_ids
-                is_customer = bool(partner.customer_rank)
-                is_supplier = bool(partner.supplier_rank)
-                if is_customer != is_supplier:
-                    # The interactive ledger's default scope includes both account
-                    # types. Resolve it for a single-role partner so Print works
-                    # directly from the partner ledger and partner form.
-                    self.result_selection = 'customer' if is_customer else 'supplier'
-                else:
-                    raise UserError(_(
-                        'Choose Receivable Accounts or Payable Accounts for a balance '
-                        'confirmation. This partner has both or neither role.'
-                    ))
-            elif self.result_selection not in ('customer', 'supplier'):
-                raise UserError(_(
-                    'Choose Receivable Accounts or Payable Accounts for a balance confirmation.'
-                ))
+            # A balance confirmation is a statement of the partner's net balance.
+            # It must include both receivable and payable lines: payments, refunds,
+            # reclassifications, and dual-role partners can legitimately have both.
+            # Do not infer the scope from contact ranks or from the direction of a
+            # single move.
+            self.result_selection = 'customer_supplier'
         data = self._get_report_data(data)
         report_xmlid = (
             'flousflow_accounting.apr__action_report_partnerledger_confirmation'

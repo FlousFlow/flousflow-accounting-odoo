@@ -304,7 +304,14 @@ class ReportPartnerLedger(models.AbstractModel):
         data['computed']['move_state'] = ['draft', 'posted']
         if data['form'].get('target_move', 'all') == 'posted':
             data['computed']['move_state'] = ['posted']
-        result_selection = data['form'].get('result_selection', 'customer')
+        # Balance confirmations always use the complete trade-partner ledger.
+        # A partner can have both debit and credit activity regardless of its
+        # customer/vendor role, so never narrow this document to one account type.
+        result_selection = (
+            'customer_supplier'
+            if data['form'].get('document_type') == 'balance_confirmation'
+            else data['form'].get('result_selection', 'customer')
+        )
         if result_selection == 'supplier':
             data['computed']['ACCOUNT_TYPE'] = ['liability_payable']
         elif result_selection == 'customer':
@@ -367,7 +374,11 @@ class ReportPartnerLedger(models.AbstractModel):
             amount = abs(self._confirmation_closing_balance(data, partner))
             return res_company.currency_id.with_context(lang=self.env.lang).amount_to_text(amount)
 
-        result_selection = data['form'].get('result_selection', 'customer')
+        result_selection = (
+            'customer_supplier'
+            if data['form'].get('document_type') == 'balance_confirmation'
+            else data['form'].get('result_selection', 'customer')
+        )
 
         return {
             'doc_ids': partner_ids,
@@ -388,31 +399,29 @@ class ReportPartnerLedger(models.AbstractModel):
 
 
     @api.model
-    def _get_confirmation_labels(self, result_selection='customer'):
-        """Return role-aware balance-confirmation labels in the report language."""
-        is_vendor = result_selection == 'supplier'
+    def _get_confirmation_labels(self, result_selection='customer_supplier'):
+        """Return neutral balance-confirmation labels in the report language."""
         if (self.env.lang or '').startswith('ar'):
-            role = 'المورد' if is_vendor else 'العميل'
             return {
-                'title': f'كشف حساب {role} - مطابقة الرصيد',
+                'title': 'كشف حساب - مصادقة الرصيد',
                 'period': 'من تاريخ',
                 'to_date': 'إلى تاريخ',
                 'target_moves': 'نوع القيود',
                 'all_entries': 'كافة القيود',
                 'all_posted_entries': 'كافة القيود المرحّلة',
-                'partners': 'نوع الحساب',
-                'receivable_accounts': 'المدينون',
-                'payable_accounts': 'الدائنون',
-                'receivable_and_payable_accounts': 'المدينون والدائنون',
+                'partners': 'الرصيد',
+                'receivable_accounts': 'الرصيد',
+                'payable_accounts': 'الرصيد',
+                'receivable_and_payable_accounts': 'الرصيد المدين والدائن',
                 'dear': 'السادة',
                 'honored': 'المحترمون',
                 'greeting': 'تحية طيبة وبعد',
-                'request_title': f'طلب مطابقة رصيد {role}:',
+                'request_title': 'طلب مصادقة رصيد:',
                 'request_review': (
                     'نرجو منكم مراجعة الرصيد الموضح أدناه ومطابقته مع سجلاتكم، '
                     'وإفادتنا بأي اختلاف كما في التاريخ الموضح أدناه.'
                 ),
-                'closing_balance': 'الرصيد المستحق للمورد' if is_vendor else 'الرصيد المستحق لنا من العميل',
+                'closing_balance': 'الرصيد النهائي',
                 'currency': 'العملة',
                 'balance_sign_note': (
                     'ملاحظة: يعتبر رصيدكم مصادقاً عليه كما هو في سجلاتنا ما لم نستلم ردكم '
@@ -432,24 +441,24 @@ class ReportPartnerLedger(models.AbstractModel):
                 'disclaimer': 'وتقبلوا خالص التحايا،،،،،،،،',
             }
         return {
-            'title': f'{"Vendor" if is_vendor else "Customer"} Account Statement - Balance Confirmation',
+            'title': 'Account Statement - Balance Confirmation',
             'period': 'From date',
             'to_date': 'To date',
             'target_moves': 'Entry type',
             'all_entries': 'All Entries',
             'all_posted_entries': 'All Posted Entries',
-            'partners': 'Account type',
-            'receivable_accounts': 'Receivable Accounts',
-            'payable_accounts': 'Payable Accounts',
-            'receivable_and_payable_accounts': 'Receivable and Payable Accounts',
+            'partners': 'Balance',
+            'receivable_accounts': 'Balance',
+            'payable_accounts': 'Balance',
+            'receivable_and_payable_accounts': 'Debit and Credit Balance',
             'dear': 'Dear',
             'honored': 'Dear Sir/Madam',
             'greeting': 'Greetings,',
-            'request_title': f'{"Vendor" if is_vendor else "Customer"} Balance Confirmation Request:',
+            'request_title': 'Balance Confirmation Request:',
             'request_review': (
                 'Please review the balance below and confirm it against your records.'
             ),
-            'closing_balance': 'Amount due to vendor' if is_vendor else 'Amount due from customer',
+            'closing_balance': 'Final balance',
             'currency': 'Currency',
             'balance_sign_note': (
                 'Unless we receive a response within one week, the balance will be considered confirmed.'

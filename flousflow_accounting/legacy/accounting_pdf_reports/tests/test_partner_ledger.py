@@ -85,12 +85,14 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         )
         self.assertEqual(report_type, 'html')
         for english_text in (
-            'Customer Account Statement - Balance Confirmation', 'From date', 'To date',
-            'Dear', 'Please review the balance below',
-            'Amount due from customer', 'Received by', 'Customer Balance Confirmation Request:',
+            'Account Statement - Balance Confirmation', 'From date', 'To date',
+            'Dear', 'Please review the balance below', 'Final balance',
+            'Balance Confirmation Request:',
             'We confirm that the balance above agrees with our records',
         ):
             self.assertIn(english_text.encode(), html)
+        for role_text in ('Customer', 'Vendor', 'customer', 'vendor'):
+            self.assertNotIn(role_text.encode(), html)
         self.assertIn(b'110.00', html)
 
         arabic_wizard = wizard.with_context(lang='ar_001', active_model=wizard._name, active_id=wizard.id)
@@ -101,20 +103,21 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             data=arabic_data,
         )
         for arabic_text in (
-            'كشف حساب العميل - مطابقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'السادة',
-            'طلب مطابقة رصيد العميل:', 'نرجو منكم مراجعة الرصيد', 'الرصيد المستحق لنا من العميل', 'العملة',
+            'كشف حساب - مصادقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'السادة',
+            'طلب مصادقة رصيد:', 'نرجو منكم مراجعة الرصيد', 'الرصيد النهائي', 'العملة',
             'المستلم', 'التوقيع والختم',
         ):
             self.assertIn(arabic_text.encode(), arabic_html)
         for english_text in (
-            'Customer Account Statement - Balance Confirmation', 'From date', 'To date',
-            'Dear', 'Please review the balance below',
-            'Amount due from customer', 'Received by', 'Customer Balance Confirmation Request:',
+            'Account Statement - Balance Confirmation', 'From date', 'To date',
+            'Final balance', 'Balance Confirmation Request:',
             'We confirm that the balance above agrees with our records',
         ):
             self.assertNotIn(english_text.encode(), arabic_html)
+        for role_text in ('العميل', 'المورد', 'Customer', 'Vendor'):
+            self.assertNotIn(role_text.encode(), arabic_html)
 
-    def test_balance_confirmation_keeps_customer_and_vendor_balances_separate(self):
+    def test_balance_confirmation_uses_net_debit_and_credit_balance(self):
         partner = self.partner_a
         partner.write({'customer_rank': 1, 'supplier_rank': 1})
         self.init_invoice(
@@ -140,11 +143,12 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         ).default_get(['result_selection'])
         confirmation_defaults = LedgerWizard.with_context(
             default_document_type='balance_confirmation',
-        ).default_get(['document_type', 'date_to'])
+        ).default_get(['document_type', 'date_to', 'result_selection'])
         self.assertEqual(customer_defaults['result_selection'], 'customer')
         self.assertEqual(vendor_defaults['result_selection'], 'supplier')
         self.assertEqual(contact_defaults['result_selection'], 'customer')
         self.assertEqual(confirmation_defaults['date_to'], fields.Date.context_today(LedgerWizard))
+        self.assertEqual(confirmation_defaults['result_selection'], 'customer_supplier')
 
         imported_vendor = self.env['res.partner'].create({
             'name': 'Imported Vendor Without Ranks',
@@ -175,16 +179,15 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             document_type='balance_confirmation',
         )
 
-        self.assertEqual(customer_values['confirmation_closing_balance'](partner), 100.0)
-        self.assertEqual(vendor_values['confirmation_closing_balance'](partner), 70.0)
+        # The document must ignore the selected receivable/payable UI scope and
+        # calculate the net balance from both account types: 100 - 70 = 30.
+        self.assertEqual(customer_values['confirmation_closing_balance'](partner), 30.0)
+        self.assertEqual(vendor_values['confirmation_closing_balance'](partner), 30.0)
         self.assertEqual(
             vendor_values['confirmation_labels']['title'],
-            'Vendor Account Statement - Balance Confirmation',
+            'Account Statement - Balance Confirmation',
         )
-        self.assertEqual(
-            vendor_values['confirmation_labels']['closing_balance'],
-            'Amount due to vendor',
-        )
+        self.assertEqual(vendor_values['confirmation_labels']['closing_balance'], 'Final balance')
 
         vendor_wizard = LedgerWizard.with_context(
             lang='ar_001', active_model='res.partner', active_id=partner.id,
@@ -203,10 +206,12 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             vendor_wizard.ids,
             data=vendor_data,
         )
-        self.assertIn('كشف حساب المورد - مطابقة الرصيد'.encode(), vendor_html)
-        self.assertIn('طلب مطابقة رصيد المورد:'.encode(), vendor_html)
-        self.assertIn('الرصيد المستحق للمورد'.encode(), vendor_html)
-        self.assertNotIn('كشف حساب العميل - مطابقة الرصيد'.encode(), vendor_html)
+        self.assertIn('كشف حساب - مصادقة الرصيد'.encode(), vendor_html)
+        self.assertIn('طلب مصادقة رصيد:'.encode(), vendor_html)
+        self.assertIn('الرصيد النهائي'.encode(), vendor_html)
+        for role_text in ('العميل', 'المورد', 'Customer', 'Vendor'):
+            self.assertNotIn(role_text.encode(), vendor_html)
+
 
     def test_interactive_lines_show_journal_entry_and_account_code(self):
         move = self.init_invoice(
