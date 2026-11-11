@@ -5739,3 +5739,113 @@ msgstr "الإجماليات"
 #. module: flousflow_accounting
 msgid "No analytic movements match the selected filters."
 msgstr "لا توجد حركات تحليلية مطابقة للفلاتر المحددة."
++
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Analytic Profitability"
+msgstr "الربحية التحليلية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Period"
+msgstr "الفترة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "From"
+msgstr "من"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "To"
+msgstr "إلى"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Posted Entries Only"
+msgstr "القيود المرحلة فقط"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Analytic Scope"
+msgstr "نطاق التحليل"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Analytic Plan"
+msgstr "الخطة التحليلية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Analytic Accounts"
+msgstr "الحسابات التحليلية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Totals"
+msgstr "الإجماليات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Profitability by Analytic Account"
+msgstr "الربحية حسب الحساب التحليلي"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Movements"
+msgstr "الحركات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Revenue"
+msgstr "الإيرادات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Cost of Goods Sold"
+msgstr "تكلفة البضاعة المباعة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Operating Expenses"
+msgstr "المصروفات التشغيلية"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Other Income"
+msgstr "إيرادات أخرى"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Other Expenses"
+msgstr "مصروفات أخرى"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Net Profit"
+msgstr "صافي الربح"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Margin %"
+msgstr "هامش الربح %"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Generate Report"
+msgstr "إنشاء التقرير"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Print PDF"
+msgstr "طباعة PDF"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "View Movements"
+msgstr "عرض الحركات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
+msgid "Close"
+msgstr "إغلاق"
