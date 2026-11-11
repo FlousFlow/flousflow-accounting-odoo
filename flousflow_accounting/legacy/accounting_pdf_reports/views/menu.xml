@@ -25,5 +25,73 @@
         <field name="sequence" eval="40"/>
     </record>
 
+    <record id="apr__view_analytic_profitability_form" model="ir.ui.view">
+        <field name="name">account.analytic.profitability.form</field>
+        <field name="model">account.analytic.profitability</field>
+        <field name="arch" type="xml">
+            <form string="Analytic Profitability">
+                <group>
+                    <group string="Period">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="posted_only"/>
+                    </group>
+                    <group string="Analytic Scope">
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="analytic_plan_id" options="{'no_create': True}"/>
+                        <field name="analytic_account_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <group string="Totals" invisible="not line_ids">
+                    <group>
+                        <field name="total_revenue" readonly="1"/>
+                        <field name="total_cogs" readonly="1"/>
+                        <field name="total_operating_expenses" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="total_other_income" readonly="1"/>
+                        <field name="total_other_expenses" readonly="1"/>
+                        <field name="total_net_profit" readonly="1"/>
+                    </group>
+                </group>
+                <field name="movement_count" invisible="1"/>
+                <separator string="Profitability by Analytic Account"/>
+                <field name="line_ids" nolabel="1" readonly="1">
+                    <list create="0" delete="0" edit="0">
+                        <field name="analytic_account_id"/>
+                        <field name="movement_count"/>
+                        <field name="revenue" sum="Total Revenue"/>
+                        <field name="cogs" sum="Total COGS"/>
+                        <field name="operating_expenses" sum="Total Expenses"/>
+                        <field name="other_income" optional="hide"/>
+                        <field name="other_expenses" optional="hide"/>
+                        <field name="net_profit" sum="Net Profit" decoration-success="net_profit &gt;= 0" decoration-danger="net_profit &lt; 0"/>
+                        <field name="margin_percent" widget="percentage"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_generate" string="Generate Report" type="object" class="btn-primary" data-hotkey="g"/>
+                    <button name="action_print" string="Print PDF" type="object" class="btn-primary" data-hotkey="p"/>
+                    <button name="action_view_movements" string="View Movements" type="object" class="btn-secondary"/>
+                    <button string="Close" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="apr__action_analytic_profitability" model="ir.actions.act_window">
+        <field name="name">Analytic Profitability</field>
+        <field name="res_model">account.analytic.profitability</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="apr__menu_analytic_profitability"
+              name="Analytic Profitability"
+              sequence="25"
+              parent="account.account_reports_management_menu"
+              action="apr__action_analytic_profitability"
+              groups="account.group_account_readonly,account.group_account_invoice"/>
+
 </odoo>
 

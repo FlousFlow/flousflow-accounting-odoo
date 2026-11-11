@@ -14,3 +14,4 @@ from . import account_cash_flow
 from . import account_annual_report
 from . import account_tax_closing
 from . import account_tax_return_create
+from . import account_analytic_profitability

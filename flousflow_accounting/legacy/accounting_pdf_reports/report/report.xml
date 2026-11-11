@@ -18,6 +18,27 @@
         <field name="dpi">90</field>
     </record>
 
+    <record id="apr__paperformat_analytic_profitability" model="report.paperformat">
+        <field name="name">Analytic Profitability (A4 Landscape)</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">18</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="apr__action_report_analytic_profitability" model="ir.actions.report">
+        <field name="name">Analytic Profitability</field>
+        <field name="model">account.analytic.profitability</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.apr__report_analytic_profitability</field>
+        <field name="paperformat_id" ref="flousflow_accounting.apr__paperformat_analytic_profitability"/>
+    </record>
+
     <record id="apr__action_report_general_ledger" model="ir.actions.report">
         <field name="name">General Ledger</field>
         <field name="model">account.report.general.ledger</field>
@@ -111,5 +132,62 @@
         <field name="binding_model_id" ref="account.model_account_move"/>
         <field name="binding_type">report</field>
     </record>
+
+    <template id="apr__report_analytic_profitability">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <div class="page" t-att-dir="'rtl' if o.env.lang and o.env.lang.startswith('ar') else 'ltr'">
+                        <h2>Analytic Profitability</h2>
+                        <div class="row mb-3">
+                            <div class="col-4"><strong>Company:</strong> <span t-field="o.company_id"/></div>
+                            <div class="col-4"><strong>From:</strong> <span t-field="o.date_from"/></div>
+                            <div class="col-4"><strong>To:</strong> <span t-field="o.date_to"/></div>
+                        </div>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Analytic Account</th>
+                                    <th class="text-end">Movements</th>
+                                    <th class="text-end">Revenue</th>
+                                    <th class="text-end">COGS</th>
+                                    <th class="text-end">Operating Expenses</th>
+                                    <th class="text-end">Other Income</th>
+                                    <th class="text-end">Other Expenses</th>
+                                    <th class="text-end">Net Profit</th>
+                                    <th class="text-end">Margin %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-field="line.analytic_account_id"/></td>
+                                    <td class="text-end"><span t-out="line.movement_count"/></td>
+                                    <td class="text-end"><span t-field="line.revenue"/></td>
+                                    <td class="text-end"><span t-field="line.cogs"/></td>
+                                    <td class="text-end"><span t-field="line.operating_expenses"/></td>
+                                    <td class="text-end"><span t-field="line.other_income"/></td>
+                                    <td class="text-end"><span t-field="line.other_expenses"/></td>
+                                    <td class="text-end fw-bold"><span t-field="line.net_profit"/></td>
+                                    <td class="text-end"><span t-out="'%.2f%%' % line.margin_percent"/></td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td>Total</td>
+                                    <td class="text-end"><span t-out="o.movement_count"/></td>
+                                    <td class="text-end"><span t-field="o.total_revenue"/></td>
+                                    <td class="text-end"><span t-field="o.total_cogs"/></td>
+                                    <td class="text-end"><span t-field="o.total_operating_expenses"/></td>
+                                    <td class="text-end"><span t-field="o.total_other_income"/></td>
+                                    <td class="text-end"><span t-field="o.total_other_expenses"/></td>
+                                    <td class="text-end"><span t-field="o.total_net_profit"/></td>
+                                    <td class="text-end"><span t-out="'%.2f%%' % ((o.total_net_profit / o.total_revenue * 100) if o.total_revenue else 0.0)"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p t-if="not o.line_ids" class="text-muted">No analytic movements match the selected filters.</p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
 
 </odoo>
