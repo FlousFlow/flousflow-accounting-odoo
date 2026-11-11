@@ -1,8 +1,8 @@
-.ff_executive_summary {
+.o_action.ff_executive_summary {
     height: 100%;
     min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     overscroll-behavior: contain;
     color: var(--o-main-text-color, inherit);
     background: var(--o-view-background-color, transparent);
