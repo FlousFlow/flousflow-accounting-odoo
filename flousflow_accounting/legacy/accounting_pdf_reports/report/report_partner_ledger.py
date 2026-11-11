@@ -364,8 +364,10 @@ class ReportPartnerLedger(models.AbstractModel):
 
         res_company = self.env.company
         def confirmation_amount_words(partner):
-            amount = self._confirmation_closing_balance(data, partner)
+            amount = abs(self._confirmation_closing_balance(data, partner))
             return res_company.currency_id.with_context(lang=self.env.lang).amount_to_text(amount)
+
+        result_selection = data['form'].get('result_selection', 'customer')
 
         return {
             'doc_ids': partner_ids,
@@ -375,20 +377,24 @@ class ReportPartnerLedger(models.AbstractModel):
             'time': time,
             'lines': lines,
             'sum_partner': sum_partner,
-            'confirmation_closing_balance': lambda partner: self._confirmation_closing_balance(
-                data, partner
+            # The confirmation displays the amount owed, not the signed
+            # receivable/payable balance used internally by the ledger.
+            'confirmation_closing_balance': lambda partner: abs(
+                self._confirmation_closing_balance(data, partner)
             ),
             'confirmation_amount_words': confirmation_amount_words,
-            'confirmation_labels': self._get_confirmation_labels(),
+            'confirmation_labels': self._get_confirmation_labels(result_selection),
         }
 
 
     @api.model
-    def _get_confirmation_labels(self):
-        """Return every static balance-confirmation label in the report language."""
+    def _get_confirmation_labels(self, result_selection='customer'):
+        """Return role-aware balance-confirmation labels in the report language."""
+        is_vendor = result_selection == 'supplier'
         if (self.env.lang or '').startswith('ar'):
+            role = 'المورد' if is_vendor else 'العميل'
             return {
-                'title': 'كشف حساب إجمالي - مطابقة الرصيد',
+                'title': f'كشف حساب {role} - مطابقة الرصيد',
                 'period': 'من تاريخ',
                 'to_date': 'إلى تاريخ',
                 'target_moves': 'نوع القيود',
@@ -401,13 +407,12 @@ class ReportPartnerLedger(models.AbstractModel):
                 'dear': 'السادة',
                 'honored': 'المحترمون',
                 'greeting': 'تحية طيبة وبعد',
-                'request_title': 'طلب مصادقة حساب:',
+                'request_title': f'طلب مطابقة رصيد {role}:',
                 'request_review': (
-                    'تهديكم الشركة أطيب تحياتها وتتمنى لكم دوام التقدم والازدهار، '
-                    'وبناءً على طلب المراقب المالي للشركة نرجو شاكرين تكرمكم بالمصادقة '
-                    'على رصيد مدين الشركة كما في التاريخ الموضح أدناه.'
+                    'نرجو منكم مراجعة الرصيد الموضح أدناه ومطابقته مع سجلاتكم، '
+                    'وإفادتنا بأي اختلاف كما في التاريخ الموضح أدناه.'
                 ),
-                'closing_balance': 'رصيد مدين الحساب',
+                'closing_balance': 'الرصيد المستحق للمورد' if is_vendor else 'الرصيد المستحق لنا من العميل',
                 'currency': 'العملة',
                 'balance_sign_note': (
                     'ملاحظة: يعتبر رصيدكم مصادقاً عليه كما هو في سجلاتنا ما لم نستلم ردكم '
@@ -418,7 +423,7 @@ class ReportPartnerLedger(models.AbstractModel):
                 'signature': 'التوقيع',
                 'accounting_manager': 'مدير الحسابات',
                 'response_title': 'المصادقة على الحساب:',
-                'response_text': 'نصادق على أن رصيدكم في سجلاتنا رصيد دائن بمبلغ',
+                'response_text': 'نصادق على أن الرصيد الموضح أعلاه مطابق لسجلاتنا بمبلغ',
                 'only': 'فقط',
                 'as_of': 'كما هو في تاريخ',
                 'name': 'الاسم',
@@ -427,7 +432,7 @@ class ReportPartnerLedger(models.AbstractModel):
                 'disclaimer': 'وتقبلوا خالص التحايا،،،،،،،،',
             }
         return {
-            'title': 'Account Statement - Balance Confirmation',
+            'title': f'{"Vendor" if is_vendor else "Customer"} Account Statement - Balance Confirmation',
             'period': 'From date',
             'to_date': 'To date',
             'target_moves': 'Entry type',
@@ -440,11 +445,11 @@ class ReportPartnerLedger(models.AbstractModel):
             'dear': 'Dear',
             'honored': 'Dear Sir/Madam',
             'greeting': 'Greetings,',
-            'request_title': 'Account Confirmation Request:',
+            'request_title': f'{"Vendor" if is_vendor else "Customer"} Balance Confirmation Request:',
             'request_review': (
                 'Please review the balance below and confirm it against your records.'
             ),
-            'closing_balance': 'Account balance',
+            'closing_balance': 'Amount due to vendor' if is_vendor else 'Amount due from customer',
             'currency': 'Currency',
             'balance_sign_note': (
                 'Unless we receive a response within one week, the balance will be considered confirmed.'
@@ -454,7 +459,7 @@ class ReportPartnerLedger(models.AbstractModel):
             'signature': 'Signature',
             'accounting_manager': 'Accounting Manager',
             'response_title': 'Account Confirmation:',
-            'response_text': 'We confirm that your balance in our records is a credit balance of',
+            'response_text': 'We confirm that the balance above agrees with our records for',
             'only': 'only',
             'as_of': 'as of',
             'name': 'Name',

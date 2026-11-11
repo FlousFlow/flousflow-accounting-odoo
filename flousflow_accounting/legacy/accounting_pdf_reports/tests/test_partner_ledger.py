@@ -85,10 +85,10 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         )
         self.assertEqual(report_type, 'html')
         for english_text in (
-            'Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
+            'Customer Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
             'Account type', 'Receivable Accounts', 'Dear', 'Please review the balance below',
-            'Account balance', 'Received by', 'Account Confirmation:',
-            'We confirm that your balance in our records',
+            'Amount due from customer', 'Received by', 'Customer Balance Confirmation Request:',
+            'We confirm that the balance above agrees with our records',
         ):
             self.assertIn(english_text.encode(), html)
         self.assertIn(b'110.00', html)
@@ -101,17 +101,17 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
             data=arabic_data,
         )
         for arabic_text in (
-            'كشف حساب إجمالي - مطابقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'نوع القيود',
-            'نوع الحساب', 'المدينون', 'السادة', 'طلب مصادقة حساب:',
-            'تهديكم الشركة أطيب تحياتها', 'رصيد مدين الحساب', 'العملة',
-            'المستلم', 'المصادقة على الحساب:', 'التوقيع والختم',
+            'كشف حساب العميل - مطابقة الرصيد', 'من تاريخ', 'إلى تاريخ', 'نوع القيود',
+            'نوع الحساب', 'المدينون', 'السادة',
+            'طلب مطابقة رصيد العميل:', 'نرجو منكم مراجعة الرصيد', 'الرصيد المستحق لنا من العميل', 'العملة',
+            'المستلم', 'التوقيع والختم',
         ):
             self.assertIn(arabic_text.encode(), arabic_html)
         for english_text in (
-            'Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
+            'Customer Account Statement - Balance Confirmation', 'From date', 'To date', 'Entry type',
             'Account type', 'Receivable Accounts', 'Dear', 'Please review the balance below',
-            'Account balance', 'Received by', 'Account Confirmation:',
-            'We confirm that your balance in our records',
+            'Amount due from customer', 'Received by', 'Customer Balance Confirmation Request:',
+            'We confirm that the balance above agrees with our records',
         ):
             self.assertNotIn(english_text.encode(), arabic_html)
 
@@ -163,7 +163,37 @@ class TestPartnerLedger(AccountTestInvoicingCommon):
         )
 
         self.assertEqual(customer_values['confirmation_closing_balance'](partner), 100.0)
-        self.assertEqual(vendor_values['confirmation_closing_balance'](partner), -70.0)
+        self.assertEqual(vendor_values['confirmation_closing_balance'](partner), 70.0)
+        self.assertEqual(
+            vendor_values['confirmation_labels']['title'],
+            'Vendor Account Statement - Balance Confirmation',
+        )
+        self.assertEqual(
+            vendor_values['confirmation_labels']['closing_balance'],
+            'Amount due to vendor',
+        )
+
+        vendor_wizard = LedgerWizard.with_context(
+            lang='ar_001', active_model='res.partner', active_id=partner.id,
+        ).create({
+            'result_selection': 'supplier',
+            'partner_ids': [(6, 0, partner.ids)],
+            'date_to': '2025-12-31',
+            'target_move': 'posted',
+            'document_type': 'balance_confirmation',
+        })
+        vendor_data = vendor_wizard.check_report()['data']
+        vendor_html, _ = self.env['ir.actions.report'].with_context(
+            lang='ar_001'
+        )._render_qweb_html(
+            'flousflow_accounting.apr__report_partnerledger',
+            vendor_wizard.ids,
+            data=vendor_data,
+        )
+        self.assertIn('كشف حساب المورد - مطابقة الرصيد'.encode(), vendor_html)
+        self.assertIn('طلب مطابقة رصيد المورد:'.encode(), vendor_html)
+        self.assertIn('الرصيد المستحق للمورد'.encode(), vendor_html)
+        self.assertNotIn('كشف حساب العميل - مطابقة الرصيد'.encode(), vendor_html)
 
     def test_interactive_lines_show_journal_entry_and_account_code(self):
         move = self.init_invoice(
