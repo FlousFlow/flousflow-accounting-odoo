@@ -10,4 +10,14 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Keep the legacy report engines available to internal callers, but remove
+         obsolete shortcuts from the reports navigation after all menu data loads. -->
+    <record id="apr__menu_account_report_financial" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="account.menu_action_analytic_reporting" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
 </odoo>
