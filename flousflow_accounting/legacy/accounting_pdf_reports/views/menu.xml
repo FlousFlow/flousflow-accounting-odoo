@@ -93,5 +93,25 @@
               action="apr__action_analytic_profitability"
               groups="account.group_account_readonly,account.group_account_invoice"/>
 
+    <record id="apr__access_account_analytic_profitability" model="ir.model.access">
+        <field name="name">Analytic Profitability</field>
+        <field name="model_id" ref="model_account_analytic_profitability"/>
+        <field name="group_id" ref="account.group_account_readonly"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="apr__access_account_analytic_profitability_line" model="ir.model.access">
+        <field name="name">Analytic Profitability Lines</field>
+        <field name="model_id" ref="model_account_analytic_profitability_line"/>
+        <field name="group_id" ref="account.group_account_readonly"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
 </odoo>
 
