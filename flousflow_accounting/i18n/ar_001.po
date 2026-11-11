@@ -1658,6 +1658,111 @@ msgid "Close"
 msgstr "إغلاق"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__date_from
+msgid "From"
+msgstr "من"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__date_to
+msgid "To"
+msgstr "إلى"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__posted_only
+msgid "Posted Entries Only"
+msgstr "القيود المرحلة فقط"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__analytic_plan_id
+msgid "Analytic Plan"
+msgstr "الخطة التحليلية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__analytic_account_ids
+msgid "Analytic Accounts"
+msgstr "الحسابات التحليلية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__movement_count
+msgid "Movements"
+msgstr "الحركات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_revenue
+msgid "Revenue"
+msgstr "الإيرادات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_cogs
+msgid "Cost of Goods Sold"
+msgstr "تكلفة البضاعة المباعة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_operating_expenses
+msgid "Operating Expenses"
+msgstr "المصروفات التشغيلية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_other_income
+msgid "Other Income"
+msgstr "إيرادات أخرى"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_other_expenses
+msgid "Other Expenses"
+msgstr "مصروفات أخرى"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__total_net_profit
+msgid "Net Profit"
+msgstr "صافي الربح"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__analytic_account_id
+msgid "Analytic Account"
+msgstr "الحساب التحليلي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__movement_count
+msgid "Movements"
+msgstr "الحركات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__revenue
+msgid "Revenue"
+msgstr "الإيرادات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__cogs
+msgid "Cost of Goods Sold"
+msgstr "تكلفة البضاعة المباعة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__operating_expenses
+msgid "Operating Expenses"
+msgstr "المصروفات التشغيلية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__other_income
+msgid "Other Income"
+msgstr "إيرادات أخرى"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__other_expenses
+msgid "Other Expenses"
+msgstr "مصروفات أخرى"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__net_profit
+msgid "Net Profit"
+msgstr "صافي الربح"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__margin_percent
+msgid "Margin %"
+msgstr "هامش الربح %"
+
+#. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_account_asset_search
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__flousflow_account_loan__state__closed
