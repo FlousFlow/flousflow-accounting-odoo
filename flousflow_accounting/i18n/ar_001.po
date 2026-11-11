@@ -1862,6 +1862,106 @@ msgid "Net Profit"
 msgstr "صافي الربح"
 
 #. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cash"
+msgstr "النقدية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Profitability"
+msgstr "الربحية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Balance Sheet"
+msgstr "الميزانية العمومية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Performance"
+msgstr "الأداء"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Operational"
+msgstr "التشغيل"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cash Earnings"
+msgstr "المتحصلات النقدية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Amount Spent"
+msgstr "المصروفات النقدية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cash Surplus"
+msgstr "صافي التدفق النقدي"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Bank Closing"
+msgstr "الرصيد النقدي الختامي"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Cost of Revenue"
+msgstr "تكلفة الإيرادات"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Expenses"
+msgstr "المصروفات"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Net Profit"
+msgstr "صافي الربح"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Net Assets"
+msgstr "صافي الأصول"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Current Assets"
+msgstr "الأصول المتداولة"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Current Liabilities"
+msgstr "الالتزامات الجارية"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Return on Investment"
+msgstr "العائد على الاستثمار"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Debtor Days"
+msgstr "أيام التحصيل"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Creditor Days"
+msgstr "أيام السداد"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Short-term Cash Forecast"
+msgstr "توقعات النقدية قصيرة الأجل"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/report/report_financial.py:0
+msgid "Current Ratio"
+msgstr "نسبة التداول"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability_line__analytic_account_id
 msgid "Analytic Account"
 msgstr "الحساب التحليلي"
