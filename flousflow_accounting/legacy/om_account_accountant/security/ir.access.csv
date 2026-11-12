@@ -13,3 +13,6 @@ acc__access_account_working_file_template_manager,account.working.file.template 
 acc__access_account_working_file_balance_readonly,account.working.file.balance readonly,account.working.file.balance,account.group_account_readonly,r,"[('company_id', 'in', company_ids)]"
 acc__access_account_working_file_balance_user,account.working.file.balance accountant,account.working.file.balance,account.group_account_user,cru,"[('company_id', 'in', company_ids)]"
 acc__access_account_working_file_balance_manager,account.working.file.balance manager,account.working.file.balance,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__access_salesperson_credit_limit_sales_manager,Salesperson credit limits sales manager,salesperson.credit.limit,sales_team.group_sale_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__access_salesperson_credit_limit_account_manager,Salesperson credit limits accounting manager,salesperson.credit.limit,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__access_salesperson_credit_limit_salesman,Salesperson credit limits sales user,salesperson.credit.limit,sales_team.group_sale_salesman,r,"[('company_id', 'in', company_ids)]"

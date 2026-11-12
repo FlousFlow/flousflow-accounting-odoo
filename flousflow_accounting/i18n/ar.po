@@ -3517,6 +3517,26 @@ msgid "Active"
 msgstr "نشط"
 
 #. module: flousflow_accounting
+msgid "A salesperson can have only one credit limit per company."
+msgstr "لا يمكن أن يكون للمندوب أكثر من حد ائتماني واحد لكل شركة."
+
+#. module: flousflow_accounting
+msgid "The credit limit cannot be negative."
+msgstr "لا يمكن أن يكون الحد الائتماني سالبًا."
+
+#. module: flousflow_accounting
+msgid "A portal user cannot be assigned as a salesperson credit owner."
+msgstr "لا يمكن تعيين مستخدم البوابة كمسؤول عن حد ائتماني لمندوب."
+
+#. module: flousflow_accounting
+msgid "Salesperson %(salesperson)s cannot confirm this order.\nCredit limit: %(limit)s\nAlready used: %(used)s\nThis order: %(order)s\nProjected exposure: %(projected)s\nAvailable before this order: %(available)s"
+msgstr "لا يستطيع المندوب %(salesperson)s تأكيد هذا الأمر.\nالحد الائتماني: %(limit)s\nالمستخدم حاليًا: %(used)s\nهذا الأمر: %(order)s\nالتعرض المتوقع: %(projected)s\nالمتاح قبل هذا الأمر: %(available)s"
+
+#. module: flousflow_accounting
+msgid "Credit limit override used by %(user)s.\n%(message)s"
+msgstr "تم تجاوز حد الائتمان بواسطة %(user)s.\n%(message)s"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__activity_ids
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_category__activity_ids
 msgid "Activities"
@@ -3995,6 +4015,57 @@ msgstr "الشهر"
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
 msgid "Customer"
 msgstr "العميل"
+
+#. module: flousflow_accounting
+#: model:ir.model,name:flousflow_accounting.model_salesperson_credit_limit
+#: model:ir.actions.act_window,name:flousflow_accounting.acc__action_salesperson_credit_limit
+#: model:ir.ui.menu,name:flousflow_accounting.acc__menu_salesperson_credit_limit
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_list
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_search
+msgid "Salesperson Credit Limits"
+msgstr "حدود ائتمان مندوبي المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
+msgid "Salesperson Credit Limit"
+msgstr "حد ائتمان مندوب المبيعات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__credit_limit
+msgid "Credit Limit"
+msgstr "الحد الائتماني"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__used_credit
+msgid "Used Credit"
+msgstr "الائتمان المستخدم"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__available_credit
+msgid "Available Credit"
+msgstr "الائتمان المتاح"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__utilization_percent
+msgid "Utilization"
+msgstr "نسبة الاستخدام"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
+msgid "Current Usage"
+msgstr "الاستخدام الحالي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__salesperson_credit_limit_block
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__salesperson_credit_limit_block
+msgid "Enforce Salesperson Credit Limits"
+msgstr "تفعيل حدود ائتمان مندوبي المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_search
+msgid "Active"
+msgstr "نشط"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__analytic_plan_id
