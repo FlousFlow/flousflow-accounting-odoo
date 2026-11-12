@@ -3951,6 +3951,28 @@ msgid "Posted Entries Only"
 msgstr "القيود المرحلة فقط"
 
 #. module: flousflow_accounting
+#: model:ir.actions.act_window,name:flousflow_accounting.apr__action_salesperson_team_sales
+#: model:ir.ui.menu,name:flousflow_accounting.apr__menu_salesperson_team_sales
+msgid "Sales by Salesperson and Team"
+msgstr "مبيعات المندوبين والفرق"
+
+#. module: flousflow_accounting
+msgid "Salesperson"
+msgstr "مندوب المبيعات"
+
+#. module: flousflow_accounting
+msgid "Sales Team"
+msgstr "فريق المبيعات"
+
+#. module: flousflow_accounting
+msgid "Confirmed Sales"
+msgstr "المبيعات المؤكدة"
+
+#. module: flousflow_accounting
+msgid "Untaxed Sales"
+msgstr "المبيعات قبل الضريبة"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__analytic_plan_id
 msgid "Analytic Plan"
 msgstr "الخطة التحليلية"
