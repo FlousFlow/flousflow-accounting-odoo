@@ -59,3 +59,10 @@
 - Problem: balance confirmations were inferring customer/vendor wording and could reject a dual-role partner even when the partner had valid debit and credit activity.
 - Fix: confirmation defaults to the combined receivable/payable scope, sums the partner's net debit-credit balance through the end date, and uses neutral bilingual wording (`Balance Confirmation` / `مصادقة الرصيد`). Customer/vendor terminology is retained only for ordinary ledger scope selection, not in the confirmation document.
 - Verification: focused Odoo 20 partner-ledger tests cover mixed customer/vendor moves, neutral Arabic/English output, and combined-scope defaults. Deployment is gated on the test database run and backup-first rollout.
+# 2026-11-12 — Sales by salesperson and team report
+
+- Added a native `sale.order` reporting action under Accounting > Reports > Management.
+- The report covers confirmed quotations/orders (`sale` and `done`) and supports list, pivot, and graph views with salesperson, sales team, customer, and month grouping.
+- Added Arabic translations for the report title, filters, and measures.
+- Validation: XML parse, Python compile, `git diff --check`, Odoo 20 test-database module upgrade, and browser verification on `al_yamen_test`.
+- Test backup: `/var/backups/odoo/al_yamen_test_pre_salesperson_team_report_20261112.dump`.
