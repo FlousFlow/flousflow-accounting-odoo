@@ -45,7 +45,7 @@ class TestSalespersonCreditLimit(AccountTestInvoicingCommon):
 
     def test_order_over_salesperson_limit_is_refused(self):
         order = self._order(1200.0)
-        with self.assertRaisesRegex(UserError, "credit limit"):
+        with self.assertRaisesRegex(UserError, "(?i)credit limit"):
             order.with_user(self.salesperson).action_confirm()
         self.assertEqual(order.state, "draft")
 
