@@ -3515,6 +3515,7 @@ msgstr "إجراء مطلوب"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__active
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_category__active
 #: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__active
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
 msgid "Active"
 msgstr "نشط"
 

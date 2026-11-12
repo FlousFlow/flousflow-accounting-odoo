@@ -8,9 +8,10 @@ from odoo.tools import format_amount
 class SalespersonCreditLimit(models.Model):
     _name = "salesperson.credit.limit"
     _description = "Salesperson Credit Limit"
-    _rec_name = "salesperson_id"
+    _rec_name = "name"
     _order = "company_id, salesperson_id"
 
+    name = fields.Char(compute="_compute_name", store=True)
     salesperson_id = fields.Many2one(
         "res.users",
         string="Salesperson",
@@ -46,6 +47,11 @@ class SalespersonCreditLimit(models.Model):
         "CHECK(credit_limit >= 0)",
         "The credit limit cannot be negative.",
     )
+
+    @api.depends("salesperson_id", "company_id")
+    def _compute_name(self):
+        for record in self:
+            record.name = record.salesperson_id.display_name or _("New")
 
     @api.depends("credit_limit", "salesperson_id", "company_id", "active")
     def _compute_credit_usage(self):
