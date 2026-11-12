@@ -135,8 +135,8 @@
 
     <menuitem id="acc__menu_salesperson_credit_limit"
               name="Salesperson Credit Limits"
-              parent="account.account_reports_management_menu"
+              parent="account.menu_finance_configuration"
               action="acc__action_salesperson_credit_limit"
-              sequence="30"
+              sequence="35"
               groups="sales_team.group_sale_manager,account.group_account_manager"/>
 </odoo>

@@ -8,6 +8,7 @@ from odoo.tools import format_amount
 class SalespersonCreditLimit(models.Model):
     _name = "salesperson.credit.limit"
     _description = "Salesperson Credit Limit"
+    _rec_name = "salesperson_id"
     _order = "company_id, salesperson_id"
 
     salesperson_id = fields.Many2one(

@@ -3514,6 +3514,7 @@ msgstr "إجراء مطلوب"
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__active
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_category__active
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__active
 msgid "Active"
 msgstr "نشط"
 
@@ -4065,11 +4066,6 @@ msgstr "الاستخدام الحالي"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__salesperson_credit_limit_block
 msgid "Enforce Salesperson Credit Limits"
 msgstr "تفعيل حدود ائتمان مندوبي المبيعات"
-
-#. module: flousflow_accounting
-#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_search
-msgid "Active"
-msgstr "نشط"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_company__salesperson_credit_limit_block
