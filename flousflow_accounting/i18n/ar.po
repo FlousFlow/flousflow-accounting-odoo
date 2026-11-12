@@ -4068,6 +4068,31 @@ msgid "Active"
 msgstr "نشط"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_res_company__salesperson_credit_limit_block
+msgid "Refuse confirming sales orders when the salesperson's open exposure exceeds their configured limit."
+msgstr "رفض تأكيد أوامر البيع عندما يتجاوز الرصيد المفتوح للمندوب الحد المحدد له."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_salesperson_credit_limit__credit_limit
+msgid "Maximum open credit exposure this salesperson may confirm. Zero means no limit."
+msgstr "أقصى رصيد ائتماني مفتوح يمكن لهذا المندوب تأكيده. الصفر يعني عدم وجود حد."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
+msgid "The used amount includes unpaid customer invoices assigned to this salesperson and the un-invoiced balance of confirmed sales orders. Payments release the limit when they reduce the accounting residual."
+msgstr "يشمل المبلغ المستخدم فواتير العملاء غير المسددة المسندة إلى هذا المندوب والرصيد غير المفوتر من أوامر البيع المؤكدة. تُحرر المدفوعات الحد عندما تخفض الرصيد المتبقي محاسبياً."
+
+#. module: flousflow_accounting
+#: model_terms:ir.actions.act_window,help:flousflow_accounting.acc__action_salesperson_credit_limit
+msgid "Create a credit limit for a salesperson"
+msgstr "أنشئ حداً ائتمانياً لمندوب مبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.actions.act_window,help:flousflow_accounting.acc__action_salesperson_credit_limit
+msgid "Confirmed sales orders are blocked when the salesperson's open exposure exceeds this limit."
+msgstr "يُمنع تأكيد أوامر البيع عندما يتجاوز الرصيد المفتوح للمندوب هذا الحد."
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__analytic_plan_id
 msgid "Analytic Plan"
 msgstr "الخطة التحليلية"
