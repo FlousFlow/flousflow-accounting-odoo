@@ -37,14 +37,14 @@ class SalespersonCreditLimit(models.Model):
     )
     utilization_percent = fields.Float(string="Utilization", compute="_compute_credit_usage", compute_sudo=True)
 
-    _sql_constraints = [
-        (
-            "salesperson_company_unique",
-            "unique(salesperson_id, company_id)",
-            "A salesperson can have only one credit limit per company.",
-        ),
-        ("credit_limit_non_negative", "CHECK(credit_limit >= 0)", "The credit limit cannot be negative."),
-    ]
+    _salesperson_company_unique = models.Constraint(
+        "unique(salesperson_id, company_id)",
+        "A salesperson can have only one credit limit per company.",
+    )
+    _credit_limit_non_negative = models.Constraint(
+        "CHECK(credit_limit >= 0)",
+        "The credit limit cannot be negative.",
+    )
 
     @api.depends("credit_limit", "salesperson_id", "company_id", "active")
     def _compute_credit_usage(self):
