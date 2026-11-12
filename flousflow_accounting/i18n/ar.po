@@ -1463,6 +1463,7 @@ msgstr "تقرير دفتر اليومية المشترك"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_closing_wizard__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__company_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__company_id
 msgid "Company"
 msgstr "شركة"
 
@@ -3983,6 +3984,9 @@ msgstr "مبيعات المندوبين والفرق"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
+#: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__salesperson_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_list
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_search
 msgid "Salesperson"
 msgstr "مندوب المبيعات"
 
