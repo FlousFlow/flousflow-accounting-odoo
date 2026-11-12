@@ -119,7 +119,7 @@
                 <field name="date_order"/>
                 <filter name="confirmed_sales" string="Confirmed Sales" domain="[('state', 'in', ('sale', 'done'))]"/>
                 <filter name="this_year" string="This Year" domain="[('date_order', '&gt;=', context_today().strftime('%Y-01-01'))]"/>
-                <group string="Group By">
+                <group expand="0">
                     <filter name="group_salesperson" string="Salesperson" context="{'group_by': 'user_id'}"/>
                     <filter name="group_sales_team" string="Sales Team" context="{'group_by': 'team_id'}"/>
                     <filter name="group_month" string="Month" context="{'group_by': 'date_order:month'}"/>
