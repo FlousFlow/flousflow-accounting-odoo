@@ -2750,6 +2750,7 @@ msgstr "إجمالي المشتريات"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_tax
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_list
 msgid "Total Sales"
 msgstr "إجمالي المبيعات"
 
@@ -3953,24 +3954,47 @@ msgstr "القيود المرحلة فقط"
 #. module: flousflow_accounting
 #: model:ir.actions.act_window,name:flousflow_accounting.apr__action_salesperson_team_sales
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_salesperson_team_sales
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_list
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_pivot
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_graph
 msgid "Sales by Salesperson and Team"
 msgstr "مبيعات المندوبين والفرق"
 
 #. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
 msgid "Salesperson"
 msgstr "مندوب المبيعات"
 
 #. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
 msgid "Sales Team"
 msgstr "فريق المبيعات"
 
 #. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
 msgid "Confirmed Sales"
 msgstr "المبيعات المؤكدة"
 
 #. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_list
 msgid "Untaxed Sales"
 msgstr "المبيعات قبل الضريبة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
+msgid "This Year"
+msgstr "هذا العام"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
+msgid "Month"
+msgstr "الشهر"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_sale_order_sales_analysis_search
+msgid "Customer"
+msgstr "العميل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__analytic_plan_id
