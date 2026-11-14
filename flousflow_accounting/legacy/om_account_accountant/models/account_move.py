@@ -12,8 +12,8 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     def _get_effective_credit_limit(self, partner, company):
-        """Return the credit limit selected by the company's accounting policy."""
-        if company.credit_limit_scope == 'global':
+        """Return the effective limit, allowing an explicit contact limit to override the default."""
+        if company.credit_limit_scope == 'global' and not partner.use_partner_credit_limit:
             return company.account_credit_limit
         return partner.credit_limit
 

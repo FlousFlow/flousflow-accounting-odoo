@@ -23,7 +23,7 @@
                         <field name="credit_limit_scope" widget="radio" options="{'horizontal': true}"/>
                     </div>
                     <div class="text-muted">
-                        Use the company default for all customers, or choose a specific limit on each contact.
+                        Use the company default for all customers, while allowing an explicitly configured contact limit to override it.
                     </div>
                 </div>
             </xpath>

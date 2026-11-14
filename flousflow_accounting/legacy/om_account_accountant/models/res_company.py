@@ -16,5 +16,5 @@ class ResCompany(models.Model):
         string='Credit Limit Scope',
         default='global',
         required=True,
-        help='Choose whether the company default applies to every customer or each contact can use a specific limit.',
+        help='Use the company default for all customers, while allowing an explicitly configured contact limit to override it.',
     )

@@ -86,8 +86,13 @@ class TestCreditLimitBlock(AccountTestInvoicingCommon):
             invoices.with_user(self.accountant).action_post()
         self.assertEqual(set(invoices.mapped('state')), {'draft'})
 
-    def test_global_scope_ignores_a_partner_specific_value(self):
+    def test_global_scope_allows_a_partner_specific_override(self):
         self.partner_a.with_company(self.company).credit_limit = 2500.0
+        invoice = self._invoice(1500.0)
+        invoice.with_user(self.accountant).action_post()
+        self.assertEqual(invoice.state, 'posted')
+
+    def test_global_scope_uses_the_company_default_without_an_override(self):
         invoice = self._invoice(1500.0)
         with self.assertRaisesRegex(UserError, 'credit limit'):
             invoice.with_user(self.accountant).action_post()

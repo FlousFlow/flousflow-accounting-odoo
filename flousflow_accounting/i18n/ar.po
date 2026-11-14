@@ -150,7 +150,7 @@ msgstr "حد مستقل لكل جهة اتصال"
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_company__credit_limit_scope
 msgid "Choose whether the company default applies to every customer or each contact can use a specific limit."
-msgstr "اختر ما إذا كان حد الشركة سيطبق على جميع العملاء أو يمكن تحديد حد خاص لكل جهة اتصال."
+msgstr "استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز الحد العام."
 
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_statement_cash
@@ -345,7 +345,7 @@ msgstr ""
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
 msgid "Use the company default for all customers, or choose a specific limit on each contact."
-msgstr "استخدم حد الشركة لجميع العملاء، أو اختر حدًا خاصًا لكل جهة اتصال."
+msgstr "استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز الحد العام."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
