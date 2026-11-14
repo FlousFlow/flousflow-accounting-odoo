@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
+from odoo.tools import formatLang
 
 # the documents that add to what a customer owes
 CREDIT_LIMIT_TYPES = ('out_invoice', 'out_receipt')
@@ -9,6 +10,42 @@ CREDIT_LIMIT_TYPES = ('out_invoice', 'out_receipt')
 
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    def _get_effective_credit_limit(self, partner, company):
+        """Return the credit limit selected by the company's accounting policy."""
+        if company.credit_limit_scope == 'global':
+            return company.account_credit_limit
+        return partner.credit_limit
+
+    def _build_credit_warning_message(self, record, current_amount=0.0, exclude_current=False, exclude_amount=0.0):
+        if record.company_id.credit_limit_scope != 'global':
+            return super()._build_credit_warning_message(
+                record,
+                current_amount=current_amount,
+                exclude_current=exclude_current,
+                exclude_amount=exclude_amount,
+            )
+        partner_id = record.partner_id.commercial_partner_id
+        credit_to_invoice = partner_id.credit_to_invoice - exclude_amount
+        total_credit = partner_id.credit + credit_to_invoice + current_amount
+        credit_limit = self._get_effective_credit_limit(partner_id, record.company_id)
+        if not credit_limit or total_credit <= credit_limit:
+            return ''
+        msg = _(
+            '%(partner_name)s has reached its credit limit of: %(credit_limit)s',
+            partner_name=partner_id.name,
+            credit_limit=formatLang(self.env, credit_limit, currency_obj=record.company_id.currency_id),
+        )
+        total_credit_formatted = formatLang(self.env, total_credit, currency_obj=record.company_id.currency_id)
+        if credit_to_invoice > 0 and current_amount > 0:
+            detail = _('Total amount due (including sales orders and this document): %(total_credit)s', total_credit=total_credit_formatted)
+        elif credit_to_invoice > 0:
+            detail = _('Total amount due (including sales orders): %(total_credit)s', total_credit=total_credit_formatted)
+        elif current_amount > 0:
+            detail = _('Total amount due (including this document): %(total_credit)s', total_credit=total_credit_formatted)
+        else:
+            detail = _('Total amount due: %(total_credit)s', total_credit=total_credit_formatted)
+        return msg + '\n' + detail
 
     @api.model
     def _get_invoice_in_payment_state(self):

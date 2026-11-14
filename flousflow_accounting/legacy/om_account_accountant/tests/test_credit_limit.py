@@ -12,7 +12,12 @@ class TestCreditLimitBlock(AccountTestInvoicingCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.company.write({'account_use_credit_limit': True, 'credit_limit_block': True})
+        cls.company.write({
+            'account_use_credit_limit': True,
+            'credit_limit_block': True,
+            'credit_limit_scope': 'global',
+            'account_credit_limit': 1000.0,
+        })
         cls.partner_a.with_company(cls.company).credit_limit = 1000.0
         cls.accountant = new_test_user(
             cls.env, login='credit_accountant', groups='base.group_user,account.group_account_user',
@@ -79,3 +84,16 @@ class TestCreditLimitBlock(AccountTestInvoicingCommon):
         with self.assertRaisesRegex(UserError, 'credit limit'):
             invoices.with_user(self.accountant).action_post()
         self.assertEqual(set(invoices.mapped('state')), {'draft'})
+
+    def test_global_scope_ignores_a_partner_specific_value(self):
+        self.partner_a.with_company(self.company).credit_limit = 2500.0
+        invoice = self._invoice(1500.0)
+        with self.assertRaisesRegex(UserError, 'credit limit'):
+            invoice.with_user(self.accountant).action_post()
+
+    def test_partner_scope_uses_the_contact_specific_value(self):
+        self.company.credit_limit_scope = 'partner'
+        self.partner_a.with_company(self.company).credit_limit = 2500.0
+        invoice = self._invoice(1500.0)
+        invoice.with_user(self.accountant).action_post()
+        self.assertEqual(invoice.state, 'posted')

@@ -6,6 +6,8 @@ class ResConfigSettings(models.TransientModel):
 
     credit_limit_block = fields.Boolean(
         related="company_id.credit_limit_block", readonly=False)
+    credit_limit_scope = fields.Selection(
+        related="company_id.credit_limit_scope", readonly=False)
     anglo_saxon_accounting = fields.Boolean(
         related="company_id.anglo_saxon_accounting",
         readonly=False, string="Use anglo-saxon accounting",

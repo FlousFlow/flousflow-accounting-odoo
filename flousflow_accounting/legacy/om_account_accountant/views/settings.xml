@@ -18,6 +18,13 @@
                     <div class="text-muted">
                         The accounting managers can still post it: the override is logged on the invoice.
                     </div>
+                    <div class="row mt-2">
+                        <label for="credit_limit_scope" class="col-lg-4 o_light_label"/>
+                        <field name="credit_limit_scope" widget="radio" options="{'horizontal': true}"/>
+                    </div>
+                    <div class="text-muted">
+                        Use the company default for all customers, or choose a specific limit on each contact.
+                    </div>
                 </div>
             </xpath>
             <app name="account" position="inside">

@@ -132,6 +132,27 @@ msgid "Block Over the Credit Limit"
 msgstr "الحظر عند تجاوز الحد الائتماني"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__credit_limit_scope
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__credit_limit_scope
+msgid "Credit Limit Scope"
+msgstr "نطاق تطبيق الحد الائتماني"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,selection:flousflow_accounting.selection__res_company__credit_limit_scope__global
+msgid "One limit for all customers"
+msgstr "حد واحد على جميع العملاء"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,selection:flousflow_accounting.selection__res_company__credit_limit_scope__partner
+msgid "Individual limit per contact"
+msgstr "حد مستقل لكل جهة اتصال"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_res_company__credit_limit_scope
+msgid "Choose whether the company default applies to every customer or each contact can use a specific limit."
+msgstr "اختر ما إذا كان حد الشركة سيطبق على جميع العملاء أو يمكن تحديد حد خاص لكل جهة اتصال."
+
+#. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_statement_cash
 msgid "Cash Statements"
 msgstr "كشوفات الصندوق"
@@ -320,6 +341,11 @@ msgstr ""
 "رفض ترحيل فاتورة العميل التي تجعل العميل يتجاوز حده الائتماني. لا يزال "
 "بإمكان المستخدمين المسموح لهم بتجاوز الحد الائتماني ترحيلها، ويُسجَّل "
 "التجاوز في الفاتورة."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid "Use the company default for all customers, or choose a specific limit on each contact."
+msgstr "استخدم حد الشركة لجميع العملاء، أو اختر حدًا خاصًا لكل جهة اتصال."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
