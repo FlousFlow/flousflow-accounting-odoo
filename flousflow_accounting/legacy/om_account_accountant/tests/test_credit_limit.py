@@ -76,6 +76,7 @@ class TestCreditLimitBlock(AccountTestInvoicingCommon):
         self.assertEqual(refund.state, 'posted')
 
     def test_a_customer_without_a_limit_is_not_blocked(self):
+        self.company.credit_limit_scope = 'partner'
         partner = self.env['res.partner'].create({'name': 'No Limit', 'credit_limit': 0.0})
         self._invoice(9000.0, partner=partner).with_user(self.accountant).action_post()
 
