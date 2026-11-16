@@ -72,3 +72,4 @@
 - Customer payments now inherit `res.partner.user_id` into the accounting payment `salesperson_id` collector when the field is blank.
 - The rule runs through the ORM for normal creation, Register Payment, imports, and partner changes; a manually selected collector is preserved and supplier payments remain unchanged.
 - Added focused Odoo 20 tests for customer defaulting, manual override, supplier exclusion, and server-side partner changes.
+- Extended the standard Register Payment wizard so the collector is visible in invoice payments and is propagated to the created customer payment.

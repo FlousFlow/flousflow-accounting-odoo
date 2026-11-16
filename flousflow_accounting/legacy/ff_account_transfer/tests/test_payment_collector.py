@@ -70,3 +70,20 @@ class TestPaymentCollector(AccountTestInvoicingCommon):
         self.assertFalse(payment.salesperson_id)
         payment.write({'partner_id': other_partner.id})
         self.assertEqual(payment.salesperson_id, self.manual_collector)
+
+    def test_register_payment_values_include_collector(self):
+        invoice = self.init_invoice(
+            'out_invoice',
+            partner=self.partner_a,
+            amounts=[25.0],
+            taxes=[],
+            invoice_date='2026-01-10',
+            post=True,
+        )
+        wizard = self.env['account.payment.register'].with_context(
+            active_model='account.move',
+            active_ids=invoice.ids,
+        ).create({})
+        batch = wizard._get_batches()[0]
+        vals = wizard._create_payment_vals_from_wizard(batch)
+        self.assertEqual(vals['salesperson_id'], self.salesperson.id)

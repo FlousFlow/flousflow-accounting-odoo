@@ -18,6 +18,17 @@
         </field>
     </record>
 
+    <record id="fat__view_account_payment_register_form_collector" model="ir.ui.view">
+        <field name="name">account.payment.register.form.collector</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_bank_id']" position="after">
+                <field name="salesperson_id" invisible="partner_type != 'customer'"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="fat__view_account_payment_tree_salesperson" model="ir.ui.view">
         <field name="name">account.payment.list.salesperson</field>
         <field name="model">account.payment</field>

@@ -350,3 +350,46 @@ class PosConfig(models.Model):
             balance += signed_amount
 
         return balance
+
+
+class AccountPaymentRegister(models.TransientModel):
+    _inherit = 'account.payment.register'
+
+    salesperson_id = fields.Many2one(
+        'res.users',
+        string='Collector',
+        compute='_compute_salesperson_id',
+        store=True,
+        readonly=False,
+        help='Salesperson responsible for collecting this payment.',
+    )
+
+    @api.depends('partner_id', 'partner_type')
+    def _compute_salesperson_id(self):
+        for wizard in self:
+            if wizard.partner_type == 'customer' and wizard.partner_id:
+                wizard.salesperson_id = wizard.partner_id.user_id
+            else:
+                wizard.salesperson_id = False
+
+    def _get_collector_for_partner(self, partner):
+        self.ensure_one()
+        if partner and partner.id == self.partner_id.id and self.salesperson_id:
+            return self.salesperson_id
+        return partner.user_id if partner and self.partner_type == 'customer' else self.env['res.users']
+
+    def _create_payment_vals_from_wizard(self, batch_result):
+        payment_vals = super()._create_payment_vals_from_wizard(batch_result)
+        partner = self.env['res.partner'].browse(payment_vals.get('partner_id'))
+        collector = self._get_collector_for_partner(partner)
+        if collector:
+            payment_vals['salesperson_id'] = collector.id
+        return payment_vals
+
+    def _create_payment_vals_from_batch(self, batch_result):
+        payment_vals = super()._create_payment_vals_from_batch(batch_result)
+        partner = self.env['res.partner'].browse(payment_vals.get('partner_id'))
+        collector = self._get_collector_for_partner(partner)
+        if collector:
+            payment_vals['salesperson_id'] = collector.id
+        return payment_vals
