@@ -11,6 +11,10 @@
                        invisible="not is_internal_transfer"
                        required="is_internal_transfer"
                        readonly="state != 'draft'"/>
+                <field name="transfer_fee"
+                       invisible="not is_internal_transfer"
+                       readonly="state != 'draft'"/>
+                <field name="transfer_fee_move_id" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='partner_id'][1]" position="after">
                 <field name="salesperson_id" invisible="partner_type != 'customer'" readonly="state != 'draft'"/>
@@ -131,4 +135,26 @@
         <xpath expr="//t[@t-set='lang']" position="attributes"><attribute name="t-value">o.env.context.get('lang') or env.user.lang or o.company_id.partner_id.lang</attribute></xpath>
         <xpath expr="//t[@t-call='account.report_payment_receipt_document']" position="replace"><t t-call="flousflow_accounting.report_payment_receipt_document_ar" t-lang="lang"/></xpath>
     </template>
+
+    <record id="fat__res_config_settings_view_form_transfer_fee" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.transfer.fee</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='account']" position="inside">
+                <div class="row mt16 o_settings_container" name="internal_transfer_fee_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="internal_transfer_fee_account">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <label for="internal_transfer_fee_account_id"/>
+                            <field name="internal_transfer_fee_account_id" options="{'no_create': True}"/>
+                            <div class="text-muted">
+                                The expense account used for fees entered on internal bank or cash transfers.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
 </odoo>

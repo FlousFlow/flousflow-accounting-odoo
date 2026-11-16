@@ -70,6 +70,15 @@ class AccountPayment(models.Model):
         domain="[('type', 'in', ('bank', 'cash')), ('id', '!=', journal_id)]",
         check_company=True,
     )
+    transfer_fee = fields.Monetary(
+        string='Transfer Fee', currency_field='currency_id', default=0.0,
+        tracking=True,
+        help='Additional bank fee charged on the source journal. It is posted separately to the configured expense account.',
+    )
+    transfer_fee_move_id = fields.Many2one(
+        'account.move', string='Transfer Fee Journal Entry', readonly=True,
+        copy=False, check_company=True,
+    )
 
     @api.depends('is_internal_transfer', 'destination_journal_id', 'company_id')
     def _compute_destination_account_id(self):
@@ -160,9 +169,69 @@ class AccountPayment(models.Model):
             'currency_id': self.currency_id.id,
         }
 
+    def _check_transfer_fee_configuration(self):
+        for payment in self.filtered(lambda pay: pay.is_internal_transfer and pay.transfer_fee > 0):
+            account = payment.company_id.transfer_fee_account_id
+            if not account:
+                raise UserError(_(
+                    "Configure the internal transfer fee expense account before posting a transfer with a fee."
+                ))
+            if account.company_id and account.company_id != payment.company_id:
+                raise UserError(_(
+                    "The internal transfer fee expense account must belong to company '%s'.",
+                    payment.company_id.name,
+                ))
+            if account.account_type not in ('expense', 'expense_direct_cost'):
+                raise UserError(_("The internal transfer fee account must be an expense account."))
+
+    def _post_transfer_fee(self):
+        self.ensure_one()
+        if not self.is_internal_transfer or self.transfer_fee <= 0:
+            return
+        fee_move = self.transfer_fee_move_id
+        if fee_move and fee_move.state == 'canceled':
+            fee_move.button_draft()
+        if fee_move and fee_move.state == 'posted':
+            return
+        liquidity_line = self._seek_for_lines()[0][:1]
+        if not liquidity_line:
+            raise UserError(_("Unable to determine the source journal liquidity account for the transfer fee."))
+        fee_company_amount = self.currency_id._convert(
+            self.transfer_fee, self.company_id.currency_id, self.company_id, self.date,
+        )
+        fee_move_vals = {
+            'move_type': 'entry',
+            'journal_id': self.journal_id.id,
+            'company_id': self.company_id.id,
+            'date': self.date,
+            'ref': _("Transfer fee: %s", self.name),
+            'line_ids': [
+                (0, 0, {
+                    'name': _("Internal transfer fee"),
+                    'account_id': self.company_id.transfer_fee_account_id.id,
+                    'debit': fee_company_amount,
+                    'credit': 0.0,
+                    'currency_id': self.currency_id.id,
+                    'amount_currency': self.transfer_fee,
+                }),
+                (0, 0, {
+                    'name': _("Internal transfer fee"),
+                    'account_id': liquidity_line.account_id.id,
+                    'debit': 0.0,
+                    'credit': fee_company_amount,
+                    'currency_id': self.currency_id.id,
+                    'amount_currency': -self.transfer_fee,
+                }),
+            ],
+        }
+        fee_move = self.env['account.move'].create(fee_move_vals)
+        fee_move.action_post()
+        self.transfer_fee_move_id = fee_move
+
     def action_post(self):
         for payment in self:
             if payment.is_internal_transfer:
+                payment._check_transfer_fee_configuration()
                 paired_payment = payment.paired_internal_transfer_payment_id
                 if not paired_payment:
                     paired_payment = self.with_context(
@@ -177,6 +246,7 @@ class AccountPayment(models.Model):
                 for transfer_payment in payment | paired_payment:
                     if transfer_payment.state == 'draft':
                         super(AccountPayment, transfer_payment).action_post()
+                payment._post_transfer_fee()
             else:
                 super(AccountPayment, payment).action_post()
                 payment._auto_reconcile_open_invoices()
@@ -188,6 +258,8 @@ class AccountPayment(models.Model):
             paired = payment.paired_internal_transfer_payment_id
             if paired and paired.state != 'canceled':
                 paired.action_cancel()
+            if payment.transfer_fee_move_id and payment.transfer_fee_move_id.state == 'posted':
+                payment.transfer_fee_move_id.button_cancel()
         return result
 
     def action_draft(self):
@@ -215,6 +287,16 @@ class AccountPayment(models.Model):
             if paired_transfers:
                 raise UserError(_(
                     'You cannot change the amount of an internal transfer after its paired payment has been created. Cancel and recreate the transfer instead.'
+                ))
+        if 'transfer_fee' in vals:
+            changed_fee = self.filtered(
+                lambda payment: payment.is_internal_transfer
+                and payment.transfer_fee_move_id
+                and payment.transfer_fee != vals['transfer_fee']
+            )
+            if changed_fee:
+                raise UserError(_(
+                    'You cannot change the transfer fee after its journal entry has been created. Cancel and recreate the transfer instead.'
                 ))
         result = super().write(vals)
         if {'partner_id', 'partner_type'} & set(vals):

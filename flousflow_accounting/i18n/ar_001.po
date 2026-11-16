@@ -1658,6 +1658,22 @@ msgid "Close"
 msgstr "إغلاق"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_payment__transfer_fee
+msgid "Transfer Fee"
+msgstr "مصروف التحويل"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__transfer_fee_account_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__internal_transfer_fee_account_id
+msgid "Internal Transfer Fee Expense Account"
+msgstr "حساب مصروف التحويل الداخلي"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_account_payment__transfer_fee_move_id
+msgid "Transfer Fee Journal Entry"
+msgstr "قيد مصروف التحويل"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__date_from
 msgid "From"
 msgstr "من"

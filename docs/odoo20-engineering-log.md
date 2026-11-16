@@ -73,3 +73,9 @@
 - The rule runs through the ORM for normal creation, Register Payment, imports, and partner changes; a manually selected collector is preserved and supplier payments remain unchanged.
 - Added focused Odoo 20 tests for customer defaulting, manual override, supplier exclusion, and server-side partner changes.
 - Extended the standard Register Payment wizard so the collector is visible in invoice payments and is propagated to the created customer payment.
+
+## 2026-11-16 — Internal transfer fees
+
+- Added a configurable company-level expense account for internal bank/cash transfer fees.
+- Internal transfers now accept a separate fee amount; the destination receives only the transfer amount, while a separate posted entry debits the configured expense account and credits the source journal liquidity account.
+- Added lifecycle handling, validations, and a focused posting test.
