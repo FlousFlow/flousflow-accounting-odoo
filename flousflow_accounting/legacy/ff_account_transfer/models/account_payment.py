@@ -45,12 +45,6 @@ class AccountPayment(models.Model):
         payments._autofill_salesperson_from_partner()
         return payments
 
-    def write(self, vals):
-        result = super().write(vals)
-        if {'partner_id', 'partner_type'} & set(vals):
-            self._autofill_salesperson_from_partner()
-        return result
-
     def _get_payment_receipt_net_after_payment(self):
         """Return the partner balance as total debit minus total credit."""
         self.ensure_one()
@@ -223,6 +217,8 @@ class AccountPayment(models.Model):
                     'You cannot change the amount of an internal transfer after its paired payment has been created. Cancel and recreate the transfer instead.'
                 ))
         result = super().write(vals)
+        if {'partner_id', 'partner_type'} & set(vals):
+            self._autofill_salesperson_from_partner()
         if not self.env.context.get('skip_pairing_sync'):
             for payment in self.with_context(skip_pairing_sync=True):
                 paired = payment.paired_internal_transfer_payment_id
