@@ -1674,6 +1674,16 @@ msgid "Transfer Fee Journal Entry"
 msgstr "قيد مصروف التحويل"
 
 #. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fat__res_config_settings_view_form_transfer_fee
+msgid "The expense account used for fees entered on internal bank or cash transfers."
+msgstr "حساب المصروف المستخدم لرسوم التحويلات الداخلية البنكية أو النقدية."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_res_company__transfer_fee_account_id
+msgid "Expense account used for bank fees entered on internal transfers."
+msgstr "حساب المصروف المستخدم لرسوم البنوك المُدخلة على التحويلات الداخلية."
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_analytic_profitability__date_from
 msgid "From"
 msgstr "من"
