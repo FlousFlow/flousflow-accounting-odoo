@@ -52,10 +52,21 @@ class TestPaymentCollector(AccountTestInvoicingCommon):
         self.assertFalse(payment.salesperson_id)
 
     def test_server_side_partner_change_fills_blank_collector(self):
+        original_partner = self.env['res.partner'].create({
+            'name': 'Collector Original Partner',
+        })
         other_partner = self.env['res.partner'].create({
             'name': 'Collector Change Partner',
             'user_id': self.manual_collector.id,
         })
-        payment = self._payment()
+        payment = self.env['account.payment'].with_context(force_payment_move=True).create({
+            'payment_type': 'inbound',
+            'partner_type': 'customer',
+            'partner_id': original_partner.id,
+            'amount': 10.0,
+            'date': '2026-01-20',
+            'journal_id': self.company_data['default_journal_cash'].id,
+        })
+        self.assertFalse(payment.salesperson_id)
         payment.write({'partner_id': other_partner.id})
         self.assertEqual(payment.salesperson_id, self.manual_collector)
