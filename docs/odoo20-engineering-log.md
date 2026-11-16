@@ -89,3 +89,9 @@
 - Added Arabic translations for salesperson credit-limit settings, analytic-account requirements, GCC invoice format, and invoice-total-in-words settings, including their explanatory help text.
 - Kept the English source strings unchanged so the settings remain bilingual by user language and upgrade-safe.
 - Validation: targeted source inspection and `git diff --check`; the existing `ar_001.po` contains pre-existing duplicate catalog entries, so `msgfmt` still reports those unrelated baseline errors.
+
+## 2026-11-16 — Partner Ledger native control panel
+
+- Replaced the report's bespoke top toolbar with Odoo 20's standard `ControlPanel` component while keeping the existing ledger filters, XLSX export, print action, partner drill-down, and report data service unchanged.
+- Updated responsive styling so the standard control-panel actions remain visible on small screens.
+- Validation: JavaScript syntax check, XML parse, and `git diff --check`; deployment and browser smoke test pending.

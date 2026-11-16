@@ -1658,6 +1658,48 @@ msgid "Close"
 msgstr "إغلاق"
 
 #. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "Options"
+msgstr "الخيارات"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "Trade Partners"
+msgstr "الشركاء التجاريون"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "Search partners"
+msgstr "البحث عن الشركاء"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "Tags"
+msgstr "الوسوم"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "No partners found"
+msgstr "لم يتم العثور على شركاء"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "Matching"
+msgstr "التسوية"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/partner_ledger/partner_ledger.xml:0
+msgid "Amount Currency"
+msgstr "المبلغ بالعملة"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__salesperson_credit_limit_block
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__salesperson_credit_limit_block
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form

@@ -2,10 +2,18 @@
 <templates xml:space="preserve">
 <t t-name="flousflow_accounting.apr__PartnerLedger" owl="1">
 <div class="o_action ff_partner_ledger">
- <div class="ff_pl_toolbar"><button class="btn btn-primary" t-on-click="this.printReport">Print</button><h2>Partner Ledger</h2><div class="dropdown ff_pl_settings">
-  <button class="btn btn-outline-secondary" type="button" title="Report options" aria-label="Report options" t-att-aria-expanded="this.state.settingsOpen" t-on-click="()=>this.state.settingsOpen=!this.state.settingsOpen"><i class="fa fa-cog"/></button>
-  <div t-if="this.state.settingsOpen" class="dropdown-menu show"><button class="dropdown-item" type="button" t-on-click="this.exportXlsx"><i class="fa fa-file-excel-o me-2"/>XLSX</button></div>
- </div><button class="btn btn-outline-secondary ff_pl_mobile_filter_toggle" type="button" aria-label="Filters" t-att-aria-expanded="this.state.filtersOpen" t-on-click="()=>this.state.filtersOpen=!this.state.filtersOpen"><i class="fa fa-filter me-1"/>Filters</button><div t-att-class="'ff_pl_filters' + (this.state.filtersOpen ? ' is-open' : '')">
+ <ControlPanel>
+  <t t-set-slot="control-panel-buttons">
+   <button class="btn btn-secondary text-nowrap" type="button" t-on-click="this.printReport">Print</button>
+   <div class="dropdown ff_pl_settings">
+    <button class="btn btn-secondary dropdown-toggle" type="button" title="Report options" aria-label="Report options" t-att-aria-expanded="this.state.settingsOpen" t-on-click="()=>this.state.settingsOpen=!this.state.settingsOpen">Options</button>
+    <div t-if="this.state.settingsOpen" class="dropdown-menu show">
+     <button class="dropdown-item" type="button" t-on-click="this.exportXlsx"><i class="fa fa-file-excel-o me-2"/>XLSX</button>
+    </div>
+   </div>
+  </t>
+  <t t-set-slot="control-panel-actions">
+   <div class="d-flex gap-1 flex-wrap align-items-center ff_pl_filters">
   <div class="input-group ff_pl_period"><button class="btn btn-outline-secondary" title="Previous year" t-on-click="()=>this.changeYear(-1)"><i class="fa fa-chevron-left"/></button><button class="btn btn-outline-secondary" t-on-click="this.toggleCustom" t-out="this.periodLabel"/><button class="btn btn-outline-secondary" title="Next year" t-on-click="()=>this.changeYear(1)"><i class="fa fa-chevron-right"/></button></div>
   <div t-if="this.state.periodType==='custom'" class="d-flex gap-1"><input class="form-control" type="date" t-att-value="this.state.customFrom" t-on-change="(ev)=>this.setDate('customFrom',ev)"/><input class="form-control" type="date" t-att-value="this.state.customTo" t-on-change="(ev)=>this.setDate('customTo',ev)"/></div>
   <input class="form-control ff_pl_search" type="search" placeholder="Search partners" t-att-value="this.state.search" t-on-input="(ev)=>this.state.search=ev.target.value"/>
@@ -26,7 +34,9 @@
   </div>
   <select class="form-select" t-att-value="this.state.targetMove" t-on-change="(ev)=>{this.state.targetMove=ev.target.value;this.loadReport();}"><option value="posted">Posted Entries</option><option value="all">All Entries</option></select>
   <select class="form-select ff_pl_scale" t-att-value="this.state.scale" t-on-change="(ev)=>this.state.scale=ev.target.value"><option value="unit">In .$</option><option value="rounded">In $</option><option value="thousand">In k$</option><option value="million">In M$</option></select>
- </div></div>
+   </div>
+  </t>
+ </ControlPanel>
  <div t-if="this.state.selectedPartners.length" class="ff_pl_selected_partners">
   <span t-foreach="this.state.selectedPartners" t-as="partner" t-key="partner.id" class="badge rounded-pill text-bg-secondary">
    <t t-out="partner.name"/><button type="button" class="btn-close btn-close-white ms-1" aria-label="Remove partner" t-on-click="()=>this.removePartner(partner.id)"/>
