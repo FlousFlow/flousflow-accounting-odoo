@@ -17,7 +17,7 @@
                 <field name="transfer_fee_move_id" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='partner_id'][1]" position="after">
-                <field name="salesperson_id" invisible="partner_type != 'customer'" readonly="state != 'draft'"/>
+                <field name="salesperson_id" invisible="partner_type != 'customer' or is_internal_transfer" readonly="state != 'draft'"/>
             </xpath>
         </field>
     </record>
@@ -39,7 +39,7 @@
         <field name="inherit_id" ref="account.view_account_payment_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="salesperson_id" optional="show" invisible="partner_type != 'customer'"/>
+                <field name="salesperson_id" optional="show" invisible="partner_type != 'customer' or is_internal_transfer"/>
             </xpath>
         </field>
     </record>

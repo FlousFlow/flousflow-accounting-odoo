@@ -79,3 +79,7 @@
 - Added a configurable company-level expense account for internal bank/cash transfer fees.
 - Internal transfers now accept a separate fee amount; the destination receives only the transfer amount, while a separate posted entry debits the configured expense account and credits the source journal liquidity account.
 - Added lifecycle handling, validations, and a focused posting test.
+
+## 2026-11-16 — Hide collector on internal transfers
+
+- Internal bank/cash transfers no longer display the customer payment collector field; it remains available on ordinary customer payments only.
