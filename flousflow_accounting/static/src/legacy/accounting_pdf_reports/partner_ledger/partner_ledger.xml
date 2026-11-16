@@ -5,15 +5,13 @@
  <ControlPanel>
   <t t-set-slot="control-panel-buttons">
    <button class="btn btn-secondary text-nowrap" type="button" t-on-click="this.printReport">Print</button>
-   <div class="dropdown ff_pl_report_options">
-    <button class="btn btn-secondary dropdown-toggle" type="button" title="Report options" aria-label="Report options" t-on-click="()=>this.state.settingsOpen=!this.state.settingsOpen"><span class="ff_pl_settings_icon" aria-hidden="true">⚙</span><span>Options</span></button>
-    <div t-if="this.state.settingsOpen" class="dropdown-menu show">
-     <button class="dropdown-item" type="button" t-on-click="this.exportXlsx">XLSX</button>
-    </div>
-   </div>
   </t>
   <t t-set-slot="control-panel-actions">
    <div class="d-flex gap-1 flex-wrap align-items-center ff_pl_filters">
+  <div class="dropdown ff_pl_report_options">
+   <button class="btn btn-secondary dropdown-toggle" type="button" title="Report options" aria-label="Report options" t-on-click="()=>this.state.settingsOpen=!this.state.settingsOpen"><span class="ff_pl_settings_icon" aria-hidden="true">⚙</span><span>Options</span></button>
+   <div t-if="this.state.settingsOpen" class="dropdown-menu show"><button class="dropdown-item" type="button" t-on-click="this.exportXlsx">XLSX</button></div>
+  </div>
   <div class="btn-group ff_pl_period" role="group"><button class="btn btn-secondary" title="Previous year" aria-label="Previous year" t-on-click="()=>this.changeYear(-1)"><span aria-hidden="true">‹</span></button><button class="btn btn-secondary" t-on-click="this.toggleCustom" t-out="this.periodLabel"/><button class="btn btn-secondary" title="Next year" aria-label="Next year" t-on-click="()=>this.changeYear(1)"><span aria-hidden="true">›</span></button></div>
   <div t-if="this.state.periodType==='custom'" class="d-flex gap-1"><input class="form-control" type="date" t-att-value="this.state.customFrom" t-on-change="(ev)=>this.setDate('customFrom',ev)"/><input class="form-control" type="date" t-att-value="this.state.customTo" t-on-change="(ev)=>this.setDate('customTo',ev)"/></div>
   <input class="form-control ff_pl_search" type="search" placeholder="Search partners" t-att-value="this.state.search" t-on-input="(ev)=>this.state.search=ev.target.value"/>
