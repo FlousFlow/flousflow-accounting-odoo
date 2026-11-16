@@ -5,16 +5,16 @@
  <ControlPanel>
   <t t-set-slot="control-panel-buttons">
    <button class="btn btn-secondary text-nowrap" type="button" t-on-click="this.printReport">Print</button>
-   <Dropdown menuClass="'ff_pl_report_options'">
-    <button class="btn btn-secondary" type="button" title="Report options" aria-label="Report options"><i class="oi oi-fw me-1" data-icon="settings"/>Options</button>
-    <t t-set-slot="content">
-     <DropdownItem onSelected="() => this.exportXlsx()"><i class="oi oi-fw me-1" data-icon="file"/>XLSX</DropdownItem>
-    </t>
-   </Dropdown>
+   <div class="dropdown ff_pl_report_options">
+    <button class="btn btn-secondary dropdown-toggle" type="button" title="Report options" aria-label="Report options" t-on-click="()=>this.state.settingsOpen=!this.state.settingsOpen"><span class="ff_pl_settings_icon" aria-hidden="true">⚙</span><span>Options</span></button>
+    <div t-if="this.state.settingsOpen" class="dropdown-menu show">
+     <button class="dropdown-item" type="button" t-on-click="this.exportXlsx">XLSX</button>
+    </div>
+   </div>
   </t>
   <t t-set-slot="control-panel-actions">
    <div class="d-flex gap-1 flex-wrap align-items-center ff_pl_filters">
-  <div class="btn-group ff_pl_period" role="group"><button class="btn btn-secondary" title="Previous year" t-on-click="()=>this.changeYear(-1)"><i class="oi oi-fw" data-icon="arrow_left"/></button><button class="btn btn-secondary" t-on-click="this.toggleCustom" t-out="this.periodLabel"/><button class="btn btn-secondary" title="Next year" t-on-click="()=>this.changeYear(1)"><i class="oi oi-fw" data-icon="arrow_right"/></button></div>
+  <div class="btn-group ff_pl_period" role="group"><button class="btn btn-secondary" title="Previous year" aria-label="Previous year" t-on-click="()=>this.changeYear(-1)"><span aria-hidden="true">‹</span></button><button class="btn btn-secondary" t-on-click="this.toggleCustom" t-out="this.periodLabel"/><button class="btn btn-secondary" title="Next year" aria-label="Next year" t-on-click="()=>this.changeYear(1)"><span aria-hidden="true">›</span></button></div>
   <div t-if="this.state.periodType==='custom'" class="d-flex gap-1"><input class="form-control" type="date" t-att-value="this.state.customFrom" t-on-change="(ev)=>this.setDate('customFrom',ev)"/><input class="form-control" type="date" t-att-value="this.state.customTo" t-on-change="(ev)=>this.setDate('customTo',ev)"/></div>
   <input class="form-control ff_pl_search" type="search" placeholder="Search partners" t-att-value="this.state.search" t-on-input="(ev)=>this.state.search=ev.target.value"/>
   <select class="form-select" t-att-value="this.state.accountScope" t-on-change="(ev)=>{this.state.accountScope=ev.target.value;this.loadReport();}"><option value="trade">Trade Partners</option><option value="receivable">Receivable</option><option value="payable">Payable</option></select>

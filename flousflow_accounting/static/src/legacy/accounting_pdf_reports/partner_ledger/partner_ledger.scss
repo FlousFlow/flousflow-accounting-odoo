@@ -3,7 +3,7 @@
  color:var(--o-main-text-color, inherit);
  background:var(--o-view-background-color, transparent);
  .ff_pl_toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:.75rem;padding:.75rem 1.5rem;border-bottom:1px solid var(--border-color, #dee2e6);background:var(--o-view-background-color, transparent)}
- .ff_pl_report_options{min-width:10rem}
+ .ff_pl_report_options{position:relative;min-width:10rem}.ff_pl_report_options .dropdown-menu{inset-inline-start:0;inset-inline-end:auto}.ff_pl_settings_icon{display:inline-block;margin-inline-end:.35rem;font-size:1rem;line-height:1}
  .ff_pl_toolbar h2{margin:0;white-space:nowrap;font-size:1.25rem}.ff_pl_filters{display:flex;align-items:center;flex:1 1 36rem;flex-wrap:wrap;gap:.5rem;margin-inline-start:auto;min-width:0}
  .ff_pl_filters select{width:auto;max-width:100%}.ff_pl_filters > *{min-width:0}.ff_pl_period{width:auto;max-width:100%}.ff_pl_search{width:14rem;max-width:100%}.ff_pl_scale{min-width:6rem}
  .ff_pl_partner_filter{position:relative}.ff_pl_partner_menu{min-width:19rem;max-height:25rem;overflow-y:auto}.ff_pl_partner_menu .form-check{padding-inline-start:1.5rem}
