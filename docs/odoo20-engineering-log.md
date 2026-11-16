@@ -96,3 +96,4 @@
 - Updated responsive styling so the standard control-panel actions remain visible on small screens.
 - Validation: JavaScript syntax check, XML parse, and `git diff --check`; deployment and browser smoke test pending.
 - Follow-up: replaced the report-options menu with Odoo's `Dropdown`/`DropdownItem` components and changed the fiscal-year navigation to a native button group with Odoo icons.
+- Follow-up verification found the first icon names were not rendered in the deployed theme; switched the period controls to the supported `arrow_left`/`arrow_right` icons and removed the caret class that collapsed the options button.
