@@ -21,6 +21,36 @@ class AccountPayment(models.Model):
             if payment.partner_type == 'customer' and payment.partner_id and not payment.salesperson_id:
                 payment.salesperson_id = payment.partner_id.user_id
 
+    def _autofill_salesperson_from_partner(self):
+        """Set the collector from the customer's salesperson when it is blank.
+
+        The onchange below covers the interactive payment form.  This helper is
+        also called after ORM creates/updates so payments created by the
+        Register Payment wizard, imports, or integrations follow the same rule.
+        A manually selected collector always wins.
+        """
+        for payment in self.filtered(
+            lambda pay: (
+                pay.partner_type == 'customer'
+                and pay.partner_id
+                and not pay.salesperson_id
+                and pay.partner_id.user_id
+            )
+        ):
+            payment.salesperson_id = payment.partner_id.user_id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        payments = super().create(vals_list)
+        payments._autofill_salesperson_from_partner()
+        return payments
+
+    def write(self, vals):
+        result = super().write(vals)
+        if {'partner_id', 'partner_type'} & set(vals):
+            self._autofill_salesperson_from_partner()
+        return result
+
     def _get_payment_receipt_net_after_payment(self):
         """Return the partner balance as total debit minus total credit."""
         self.ensure_one()

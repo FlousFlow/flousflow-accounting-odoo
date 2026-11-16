@@ -66,3 +66,9 @@
 - Added Arabic translations for the report title, filters, and measures.
 - Validation: XML parse, Python compile, `git diff --check`, Odoo 20 test-database module upgrade, and browser verification on `al_yamen_test`.
 - Test backup: `/var/backups/odoo/al_yamen_test_pre_salesperson_team_report_20261112.dump`.
+
+## 2026-11-16 — Customer salesperson defaults to payment collector
+
+- Customer payments now inherit `res.partner.user_id` into the accounting payment `salesperson_id` collector when the field is blank.
+- The rule runs through the ORM for normal creation, Register Payment, imports, and partner changes; a manually selected collector is preserved and supplier payments remain unchanged.
+- Added focused Odoo 20 tests for customer defaulting, manual override, supplier exclusion, and server-side partner changes.
