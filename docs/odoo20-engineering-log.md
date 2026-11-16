@@ -83,3 +83,9 @@
 ## 2026-11-16 — Hide collector on internal transfers
 
 - Internal bank/cash transfers no longer display the customer payment collector field; it remains available on ordinary customer payments only.
+
+## 2026-11-16 — Arabic accounting settings translations
+
+- Added Arabic translations for salesperson credit-limit settings, analytic-account requirements, GCC invoice format, and invoice-total-in-words settings, including their explanatory help text.
+- Kept the English source strings unchanged so the settings remain bilingual by user language and upgrade-safe.
+- Validation: targeted source inspection and `git diff --check`; the existing `ar_001.po` contains pre-existing duplicate catalog entries, so `msgfmt` still reports those unrelated baseline errors.

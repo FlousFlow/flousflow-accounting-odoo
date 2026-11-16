@@ -1658,6 +1658,105 @@ msgid "Close"
 msgstr "إغلاق"
 
 #. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__salesperson_credit_limit_block
+#: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__salesperson_credit_limit_block
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid "Enforce Salesperson Credit Limits"
+msgstr "تفعيل حدود ائتمان مندوبي المبيعات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,help:flousflow_accounting.field_res_company__salesperson_credit_limit_block
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid "Refuse confirming a sales order when the salesperson's open exposure exceeds the configured limit. Sales managers and accounting managers can override the block."
+msgstr "رفض تأكيد أمر البيع عندما يتجاوز الرصيد المفتوح لمندوب المبيعات الحد المحدد. ويمكن لمديري المبيعات ومديري الحسابات تجاوز هذا المنع."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid ""
+"          Refuse confirming a sales order when the salesperson's open exposure exceeds the configured limit.\n"
+"                                Sales managers and accounting managers can override the block.\n"
+"                          "
+msgstr ""
+"          رفض تأكيد أمر البيع عندما يتجاوز الرصيد المفتوح لمندوب المبيعات الحد المحدد.\n"
+"                                ويمكن لمديري المبيعات ومديري الحسابات تجاوز هذا المنع.\n"
+"                          "
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid ""
+"Refuse confirming a sales order when the salesperson's open exposure exceeds the configured limit.\n"
+"                                Sales managers and accounting managers can override the block."
+msgstr ""
+"رفض تأكيد أمر البيع عندما يتجاوز الرصيد المفتوح لمندوب المبيعات الحد المحدد.\n"
+"                                ويمكن لمديري المبيعات ومديري الحسابات تجاوز هذا المنع."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,selection:flousflow_accounting.selection__res_company__credit_limit_scope__global
+msgid "One limit for all customers"
+msgstr "حد واحد على جميع العملاء"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,selection:flousflow_accounting.selection__res_company__credit_limit_scope__partner
+msgid "Individual limit per contact"
+msgstr "حد مستقل لكل جهة اتصال"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid "Use the company default for all customers, or choose a specific limit on each contact."
+msgstr "استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز الحد العام."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__res_config_settings_view_form_branch_analytic
+msgid "Require Analytic Account on POS"
+msgstr "طلب حساب تحليلي في نقطة البيع"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__res_config_settings_view_form_branch_analytic
+msgid "Prevent closing a POS session whose configuration has no Analytic Account."
+msgstr "منع إغلاق جلسة نقطة البيع إذا لم يتضمن إعدادها حسابًا تحليليًا."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__res_config_settings_view_form_branch_analytic
+msgid "Require Analytic Account on Customer Invoices"
+msgstr "طلب حساب تحليلي في فواتير العملاء"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__res_config_settings_view_form_branch_analytic
+msgid "Prevent posting a customer invoice or credit note without an Analytic Account."
+msgstr "منع ترحيل فاتورة العميل أو إشعار الدائن دون حساب تحليلي."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__res_config_settings_view_form_branch_analytic
+msgid "Require Analytic Account on Sales Orders"
+msgstr "طلب حساب تحليلي في أوامر البيع"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.fba__res_config_settings_view_form_branch_analytic
+msgid "Prevent confirming a sales order without an Analytic Account."
+msgstr "منع تأكيد أمر البيع دون حساب تحليلي."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:l10n_gcc_invoice.res_config_settings_view_form_inherit_l10n_gcc_invoice
+msgid "Gulf Cooperation Council Format"
+msgstr "تنسيق مجلس التعاون الخليجي"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:l10n_gcc_invoice.res_config_settings_view_form_inherit_l10n_gcc_invoice
+msgid "Add Arabic as a secondary language to your invoices, credit notes, debit notes, vendor bills, and refund bills"
+msgstr "إضافة اللغة العربية كلغة ثانية إلى فواتيرك، وإشعارات الدائن، وإشعارات المدين، وفواتير الموردين، وفواتير المبالغ المستردة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:account.field_res_company__display_invoice_amount_total_words
+#: model:ir.model.fields,field_description:account.field_res_config_settings__display_invoice_amount_total_words
+msgid "Total amount of invoice in words"
+msgstr "إجمالي قيمة الفاتورة بالحروف"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:account.res_config_settings_view_form
+msgid "Display the total amount of an invoice in words"
+msgstr "عرض إجمالي قيمة الفاتورة بالحروف"
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_payment__transfer_fee
 msgid "Transfer Fee"
 msgstr "مصروف التحويل"
