@@ -176,11 +176,6 @@ class AccountPayment(models.Model):
                 raise UserError(_(
                     "Configure the internal transfer fee expense account before posting a transfer with a fee."
                 ))
-            if account.company_id and account.company_id != payment.company_id:
-                raise UserError(_(
-                    "The internal transfer fee expense account must belong to company '%s'.",
-                    payment.company_id.name,
-                ))
             if account.account_type not in ('expense', 'expense_direct_cost'):
                 raise UserError(_("The internal transfer fee account must be an expense account."))
 
