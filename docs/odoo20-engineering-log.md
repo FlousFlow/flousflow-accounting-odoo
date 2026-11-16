@@ -95,3 +95,4 @@
 - Replaced the report's bespoke top toolbar with Odoo 20's standard `ControlPanel` component while keeping the existing ledger filters, XLSX export, print action, partner drill-down, and report data service unchanged.
 - Updated responsive styling so the standard control-panel actions remain visible on small screens.
 - Validation: JavaScript syntax check, XML parse, and `git diff --check`; deployment and browser smoke test pending.
+- Follow-up: replaced the report-options menu with Odoo's `Dropdown`/`DropdownItem` components and changed the fiscal-year navigation to a native button group with Odoo icons.

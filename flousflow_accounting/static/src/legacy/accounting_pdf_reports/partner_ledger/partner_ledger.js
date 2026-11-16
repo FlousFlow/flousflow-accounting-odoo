@@ -3,6 +3,8 @@ import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { ControlPanel } from "@web/search/control_panel/control_panel";
+import { Dropdown } from "@web/core/dropdown/dropdown";
+import { DropdownItem } from "@web/core/dropdown/dropdown_item";
 import { formatMonetary } from "@web/views/fields/formatters";
 import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
 import { deserializeDate } from "@web/core/l10n/dates";
@@ -10,7 +12,7 @@ import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 export class PartnerLedger extends Component {
     static template = "flousflow_accounting.apr__PartnerLedger";
-    static components = { ControlPanel };
+    static components = { ControlPanel, Dropdown, DropdownItem };
     props = useProps(standardActionServiceProps);
     setup() {
         this.orm = useService("orm"); this.action = useService("action"); this.notification = useService("notification");
