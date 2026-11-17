@@ -83,5 +83,8 @@ class PosOrder(models.Model):
 
     def _process_order(self, order, existing_order):
         pos_session = self.env["pos.session"].browse(order.get("session_id")).exists()
-        self._check_partner_credit_pos(order, pos_session)
+        check_order = dict(order)
+        if not check_order.get("partner_id") and existing_order:
+            check_order["partner_id"] = existing_order.partner_id.id
+        self._check_partner_credit_pos(check_order, pos_session)
         return super()._process_order(order, existing_order)
