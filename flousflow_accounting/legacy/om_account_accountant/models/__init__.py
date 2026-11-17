@@ -10,3 +10,4 @@ from . import res_partner
 from . import dashboard_kpi
 from . import settings
 from . import salesperson_credit_limit
+from . import pos_credit_restriction

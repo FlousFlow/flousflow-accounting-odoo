@@ -29,6 +29,9 @@
             <xpath expr="//page[@name='accounting']" position="attributes">
                 <attribute name="string">Accounting</attribute>
             </xpath>
+            <xpath expr="//page[@name='accounting']//group" position="inside">
+                <field name="pos_credit_config_id" invisible="customer_rank == 0"/>
+            </xpath>
         </field>
     </record>
 

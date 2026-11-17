@@ -799,3 +799,19 @@ msgstr "جارٍ تحميل فحوصات المراجعة…"
 #. module: om_account_accountant
 msgid "No review checks are available."
 msgstr "لا توجد فحوصات مراجعة متاحة."
+
+#. module: flousflow_accounting
+msgid "Credit Point of Sale"
+msgstr "منفذ البيع المسموح بالآجل"
+
+#. module: flousflow_accounting
+msgid "Restrict POS credit by point of sale"
+msgstr "تقييد البيع الآجل حسب منفذ البيع"
+
+#. module: flousflow_accounting
+msgid "Allow Customer Account credit only at the point of sale assigned to the customer. Immediate payment methods remain available at all points of sale."
+msgstr "السماح بالبيع على حساب العميل فقط من منفذ البيع المرتبط به، مع استمرار إتاحة طرق الدفع الفوري من جميع المنافذ."
+
+#. module: flousflow_accounting
+msgid "This customer may use Customer Account credit only at this point of sale. Leave empty when the restriction is not applicable to this contact."
+msgstr "يمكن لهذا العميل استخدام البيع على الحساب من منفذ البيع هذا فقط. اترك الحقل فارغًا إذا لم ينطبق التقييد على جهة الاتصال."

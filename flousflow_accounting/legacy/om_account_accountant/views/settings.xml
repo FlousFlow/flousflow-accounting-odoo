@@ -44,6 +44,22 @@
                 </div>
             </app>
             <app name="account" position="inside">
+                <div class="row mt16 o_settings_container" name="pos_credit_restriction_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="pos_credit_restriction">
+                        <div class="o_setting_left_pane">
+                            <field name="pos_credit_restriction_block"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="pos_credit_restriction_block" string="Restrict POS credit by point of sale"/>
+                            <div class="text-muted">
+                                Allow Customer Account credit only at the point of sale assigned to the customer.
+                                Immediate payment methods remain available at all points of sale.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </app>
+            <app name="account" position="inside">
                 <h2>Anglo-Saxon Accounting</h2>
                 <div class="row mt16 o_settings_container"
                     name="anglo_saxon_setting_container">
