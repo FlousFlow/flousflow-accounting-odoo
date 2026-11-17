@@ -1660,6 +1660,7 @@ msgstr "إغلاق"
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__pos_credit_restriction_block
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__pos_credit_restriction_block
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
 msgid "Restrict POS credit by point of sale"
 msgstr "تقييد البيع الآجل حسب منفذ البيع"
 
@@ -1673,6 +1674,15 @@ msgstr "عند التفعيل، يُسمح بدفع حساب العميل فقط
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
 msgid "Allow Customer Account credit only at the point of sale assigned to the customer. Immediate payment methods remain available at all points of sale."
 msgstr "السماح بالبيع على الحساب فقط من منفذ البيع المرتبط بالعميل. تظل طرق الدفع الفوري متاحة من جميع المنافذ."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
+msgid ""
+"Allow Customer Account credit only at the point of sale assigned to the customer.\n"
+"                                Immediate payment methods remain available at all points of sale."
+msgstr ""
+"السماح بالبيع على الحساب فقط من منفذ البيع المرتبط بالعميل.\n"
+"                                تظل طرق الدفع الفوري متاحة من جميع المنافذ."
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_partner__pos_credit_config_id

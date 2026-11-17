@@ -50,7 +50,7 @@
                             <field name="pos_credit_restriction_block"/>
                         </div>
                         <div class="o_setting_right_pane">
-                            <label for="pos_credit_restriction_block"/>
+                            <label for="pos_credit_restriction_block" string="Restrict POS credit by point of sale"/>
                             <div class="text-muted">Allow Customer Account credit only at the point of sale assigned to the customer. Immediate payment methods remain available at all points of sale.</div>
                         </div>
                     </div>
