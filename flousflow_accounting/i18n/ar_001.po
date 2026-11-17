@@ -1676,13 +1676,19 @@ msgstr "السماح بالبيع على الحساب فقط من منفذ ال�
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_partner__pos_credit_config_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_partner_property_form
 msgid "Credit Point of Sale"
-msgstr "منفذ البيع المسموح بالآجل"
+msgstr "منفذ البيع المسموح بالبيع الآجل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_partner__pos_credit_config_id
 msgid "This customer may use Customer Account credit only at this point of sale. Leave empty when the restriction is not applicable to this contact."
 msgstr "يمكن لهذا العميل استخدام البيع على الحساب من منفذ البيع هذا فقط. اترك الحقل فارغًا إذا لم ينطبق التقييد على جهة الاتصال."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_partner_property_form
+msgid "Select the point of sale allowed for credit sales"
+msgstr "اختر منفذ البيع المسموح له بالبيع الآجل"
 
 #. module: flousflow_accounting
 #. odoo-javascript

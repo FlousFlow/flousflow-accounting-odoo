@@ -29,8 +29,11 @@
             <xpath expr="//page[@name='accounting']" position="attributes">
                 <attribute name="string">Accounting</attribute>
             </xpath>
-            <xpath expr="//page[@name='accounting']//group" position="inside">
-                <field name="pos_credit_config_id"/>
+            <xpath expr="//group[@name='credit_limits']" position="inside">
+                <label for="pos_credit_config_id" string="Credit Point of Sale"/>
+                <field name="pos_credit_config_id"
+                       options="{'no_create': True, 'no_open': True}"
+                       placeholder="Select the point of sale allowed for credit sales"/>
             </xpath>
         </field>
     </record>

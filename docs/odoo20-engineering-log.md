@@ -97,3 +97,11 @@
 - Validation: JavaScript syntax check, XML parse, and `git diff --check`; deployment and browser smoke test pending.
 - Follow-up: replaced the report-options menu with Odoo's `Dropdown`/`DropdownItem` components and changed the fiscal-year navigation to a native button group with Odoo icons.
 - Follow-up verification found the first icon names were not rendered in the deployed theme; switched the period controls to the supported `arrow_left`/`arrow_right` icons and removed the caret class that collapsed the options button.
+## 2026-11-17 - POS credit field visibility
+
+- Problem: `pos_credit_config_id` existed on contacts but was appended to the outer accounting group, so Odoo rendered an unlabeled full-width combobox.
+- Evidence: Odoo 20 standard `account.view_partner_property_form` places credit controls in `group[name='credit_limits']`; browser AX tree exposed the field ID without a visible label.
+- Change: moved the field into the standard credit-limits group with an explicit label, safe no-create/no-open options, and an Arabic placeholder.
+- Validation: XML well-formedness and diff checks passed. Existing translation catalogs contain unrelated historical duplicate msgids, so full `msgfmt --check` remains noisy; the new entries are unique.
+- Follow-up: upgrade the addon and verify the Arabic contact form after assets/cache refresh.
+
