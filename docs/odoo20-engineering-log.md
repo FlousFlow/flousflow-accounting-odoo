@@ -141,3 +141,9 @@
 - Added the view domain `company_id in allowed_company_ids` to the contact POS-credit selector. This uses the active Odoo company context and works for contacts whose own `company_id` is empty.
 - Bumped the module to `20.0.1.0.61`.
 
+# 2026-11-19 — POS credit company validation
+
+- Removed `check_company=True` from the contact POS-credit field because a contact can legitimately have no own company while selecting a POS belonging to the active company.
+- Added an explicit constraint to reject POS configurations outside the user's active companies, while retaining the view domain for selection.
+- Bumped the module to `20.0.1.0.62`.
+

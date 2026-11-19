@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -29,12 +29,21 @@ class ResPartner(models.Model):
     pos_credit_config_id = fields.Many2one(
         "pos.config",
         string="Credit Point of Sale",
-        check_company=True,
         help=(
             "This customer may use Customer Account credit only at this point of sale. "
             "Leave empty when the restriction is not applicable to this contact."
         ),
     )
+
+    @api.constrains("pos_credit_config_id")
+    def _check_pos_credit_company(self):
+        allowed_companies = self.env.companies
+        for partner in self:
+            pos_config = partner.pos_credit_config_id
+            if pos_config.company_id and pos_config.company_id not in allowed_companies:
+                raise UserError(_(
+                    "The allowed credit point of sale must belong to one of your active companies."
+                ))
 
 
 class PosOrder(models.Model):
