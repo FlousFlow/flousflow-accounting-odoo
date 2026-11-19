@@ -69,7 +69,7 @@ class PosOrder(models.Model):
             return
 
         payment_commands = order.get("payment_ids") or []
-        payment_ids = []
+        payment_lines = []
         for command in payment_commands:
             if isinstance(command, (list, tuple)) and len(command) >= 3 and command[0] == 0:
                 vals = command[2] or {}
@@ -78,12 +78,29 @@ class PosOrder(models.Model):
                 # line is not a credit sale and must not block the order.
                 amount = vals.get("amount")
                 if amount is not None and not self.env.company.currency_id.is_zero(amount):
-                    payment_ids.append(vals.get("payment_method_id"))
-        credit_methods = self.env["pos.payment.method"].search(
-            [("id", "in", [payment_id for payment_id in payment_ids if payment_id]),
-             ("type", "=", "pay_later")]
+                    payment_lines.append((vals.get("payment_method_id"), amount))
+        payment_methods = self.env["pos.payment.method"].browse(
+            [method_id for method_id, amount in payment_lines if method_id]
         )
-        if credit_methods:
+        methods_by_id = {method.id: method for method in payment_methods}
+        credit_amount = sum(
+            amount for method_id, amount in payment_lines
+            if methods_by_id.get(method_id) and methods_by_id[method_id].type == "pay_later"
+        )
+        immediate_amount = sum(
+            amount for method_id, amount in payment_lines
+            if methods_by_id.get(method_id) and methods_by_id[method_id].type != "pay_later"
+        )
+        order_total = order.get("amount_total")
+        # A POS order can retain a stale Customer Account line after the cashier
+        # switches to cash/card. If immediate payment covers the full order,
+        # treat that stale line as inactive; partial credit remains blocked.
+        fully_paid_immediately = (
+            order_total is not None
+            and immediate_amount >= order_total
+            and self.env.company.currency_id.is_zero(order_total - immediate_amount)
+        )
+        if credit_amount > 0 and not fully_paid_immediately:
             raise UserError(
                 _(
                     "Customer %(customer)s is assigned to %(assigned_pos)s for credit sales. "

@@ -73,7 +73,27 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
     def test_zero_credit_line_does_not_block_immediate_payment(self):
         session = self._session(self.other_pos)
         order = self._order_data(session, self.cash_method)
+        order["amount_total"] = 10.0
         order["payment_ids"].append(
             [0, 0, {"payment_method_id": self.credit_method.id, "amount": 0.0}]
         )
         self.env["pos.order"]._check_partner_credit_pos(order, session)
+
+    def test_stale_credit_line_does_not_block_full_immediate_payment(self):
+        session = self._session(self.other_pos)
+        order = self._order_data(session, self.cash_method)
+        order["amount_total"] = 10.0
+        order["payment_ids"].append(
+            [0, 0, {"payment_method_id": self.credit_method.id, "amount": 10.0}]
+        )
+        self.env["pos.order"]._check_partner_credit_pos(order, session)
+
+    def test_partial_credit_remains_blocked_with_immediate_payment(self):
+        session = self._session(self.other_pos)
+        order = self._order_data(session, self.cash_method)
+        order["amount_total"] = 20.0
+        order["payment_ids"].append(
+            [0, 0, {"payment_method_id": self.credit_method.id, "amount": 10.0}]
+        )
+        with self.assertRaisesRegex(UserError, "not allowed"):
+            self.env["pos.order"]._check_partner_credit_pos(order, session)
