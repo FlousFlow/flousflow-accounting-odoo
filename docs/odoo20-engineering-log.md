@@ -131,3 +131,8 @@
 - Removed the explicit label because Odoo's standard group renderer already generates the field label once. This leaves one `مصروف التحويل` label beside the fee value.
 - Bumped the module to `20.0.1.0.59`.
 
+# 2026-11-19 — POS credit contact selector
+
+- Fixed the contact POS-credit selector domain. It was using the contact's `company_id`, which is empty for many individual contacts and hid all company POS configurations. Replaced it with Odoo's standard `check_company=True` behavior.
+- Bumped the module to `20.0.1.0.60`.
+

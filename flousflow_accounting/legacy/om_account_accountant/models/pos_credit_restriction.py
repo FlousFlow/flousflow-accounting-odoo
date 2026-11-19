@@ -29,7 +29,7 @@ class ResPartner(models.Model):
     pos_credit_config_id = fields.Many2one(
         "pos.config",
         string="Credit Point of Sale",
-        domain="[('company_id', 'in', [False, company_id])]",
+        check_company=True,
         help=(
             "This customer may use Customer Account credit only at this point of sale. "
             "Leave empty when the restriction is not applicable to this contact."
