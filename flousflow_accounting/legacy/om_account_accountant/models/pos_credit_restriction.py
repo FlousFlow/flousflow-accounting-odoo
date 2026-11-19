@@ -14,6 +14,10 @@ class ResCompany(models.Model):
         ),
     )
 
+    def _load_pos_data_fields(self, config):
+        fields_to_load = super()._load_pos_data_fields(config)
+        return fields_to_load + ["pos_credit_restriction_block"]
+
 
 class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
@@ -34,6 +38,11 @@ class ResPartner(models.Model):
             "Leave empty when the restriction is not applicable to this contact."
         ),
     )
+
+    @api.model
+    def _load_pos_data_fields(self, config):
+        fields_to_load = super()._load_pos_data_fields(config)
+        return fields_to_load + ["pos_credit_config_id"]
 
     @api.constrains("pos_credit_config_id")
     def _check_pos_credit_company(self):

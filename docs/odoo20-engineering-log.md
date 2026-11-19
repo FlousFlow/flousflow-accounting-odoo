@@ -147,3 +147,9 @@
 - Added an explicit constraint to reject POS configurations outside the user's active companies, while retaining the view domain for selection.
 - Bumped the module to `20.0.1.0.62`.
 
+# 2026-11-20 — POS credit restriction architecture
+
+- Added POS data loading for the company restriction flag and the contact's assigned credit POS.
+- Added a standard PaymentScreen patch that hides the Customer Account method when the selected contact is assigned to another POS; immediate payment methods remain available.
+- Kept the server-side order-sync validation as the security boundary. Split payments with a real credit portion remain subject to the restriction.
+
