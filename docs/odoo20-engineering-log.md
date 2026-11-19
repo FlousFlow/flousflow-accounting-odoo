@@ -107,7 +107,7 @@
 
 # 2026-11-19 — Internal transfer fee posting
 
-- Changed `ff_account_transfer` so outbound transfer fees are included in the source payment move: debit the transfer-in-transit account and fee expense, credit the source journal liquidity account for transfer amount plus fee.
-- Kept Odoo's paired destination payment and Funds in Transit flow; removed the extra standalone fee move for new transfers. Existing posted fee moves are not rewritten.
-- Added a focused regression test and bumped the module to `20.0.1.0.54`.
+- Changed `ff_account_transfer` so outbound transfers with a fee use one direct three-line move: debit the destination journal liquidity account and fee expense, credit the source journal liquidity account for transfer amount plus fee.
+- Transfers without a fee retain Odoo's paired payment and Funds in Transit flow. Existing posted transfers are not rewritten.
+- Added a focused regression test and bumped the module to `20.0.1.0.55`.
 
