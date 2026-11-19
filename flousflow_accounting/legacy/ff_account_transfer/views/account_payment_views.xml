@@ -11,6 +11,8 @@
                        invisible="not is_internal_transfer"
                        required="is_internal_transfer"
                        readonly="state != 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='amount']" position="after">
                 <field name="transfer_fee"
                        invisible="not is_internal_transfer"
                        readonly="state != 'draft'"/>

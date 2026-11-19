@@ -111,3 +111,8 @@
 - Transfers without a fee retain Odoo's paired payment and Funds in Transit flow. Existing posted transfers are not rewritten.
 - Added a focused regression test and bumped the module to `20.0.1.0.55`.
 
+# 2026-11-19 — Transfer form field order
+
+- Moved the internal transfer fee field directly below the amount field to reduce data-entry confusion; the change is limited to the payment form view.
+- Bumped the module to `20.0.1.0.56`.
+
