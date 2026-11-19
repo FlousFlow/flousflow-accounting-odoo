@@ -51,6 +51,9 @@ class AccountPayment(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('is_internal_transfer'):
+                vals.update(partner_id=False, partner_bank_id=False, salesperson_id=False)
         payments = super().create(vals_list)
         payments._autofill_salesperson_from_partner()
         return payments
@@ -285,13 +288,6 @@ class AccountPayment(models.Model):
             if paired and paired.state != 'draft':
                 paired.action_draft()
         return result
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            if vals.get('is_internal_transfer'):
-                vals.update(partner_id=False, partner_bank_id=False, salesperson_id=False)
-        return super().create(vals_list)
 
     def unlink(self):
         paired_payments = self.mapped('paired_internal_transfer_payment_id')
