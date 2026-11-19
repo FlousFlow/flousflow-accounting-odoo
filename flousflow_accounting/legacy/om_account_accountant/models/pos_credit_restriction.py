@@ -96,20 +96,10 @@ class PosOrder(models.Model):
             amount for method_id, amount in payment_lines
             if methods_by_id.get(method_id) and methods_by_id[method_id].type == "pay_later"
         )
-        immediate_amount = sum(
-            amount for method_id, amount in payment_lines
-            if methods_by_id.get(method_id) and methods_by_id[method_id].type != "pay_later"
-        )
-        order_total = order.get("amount_total")
-        # A POS order can retain a stale Customer Account line after the cashier
-        # switches to cash/card. If immediate payment covers the full order,
-        # treat that stale line as inactive; partial credit remains blocked.
-        fully_paid_immediately = (
-            order_total is not None
-            and immediate_amount >= order_total
-            and self.env.company.currency_id.is_zero(order_total - immediate_amount)
-        )
-        if credit_amount > 0 and not fully_paid_immediately:
+        # Odoo supports split payments. Any positive Customer Account amount is
+        # therefore a real credit portion and must be rejected at an unassigned
+        # POS; immediate payments do not cancel or mask that credit portion.
+        if credit_amount > 0:
             raise UserError(
                 _(
                     "Customer %(customer)s is assigned to %(assigned_pos)s for credit sales. "
