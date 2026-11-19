@@ -7,6 +7,16 @@ from odoo.exceptions import UserError
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
+    @api.model
+    def default_get(self, fields_list):
+        values = super().default_get(fields_list)
+        if self.env.context.get('default_internal_transfer_action'):
+            values['is_internal_transfer'] = True
+            values['partner_id'] = False
+            values['partner_bank_id'] = False
+            values['salesperson_id'] = False
+        return values
+
     salesperson_id = fields.Many2one(
         'res.users',
         string='Collector',
