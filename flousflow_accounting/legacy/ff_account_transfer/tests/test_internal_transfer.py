@@ -77,18 +77,24 @@ class TestInternalTransfer(AccountTestInvoicingCommon):
         self.assertEqual(payment.paired_internal_transfer_payment_id, paired)
         self._assert_pair_posted(payment, 'inbound')
 
-    def test_internal_transfer_fee_posts_separately_on_source_journal(self):
+    def test_internal_transfer_fee_is_included_in_source_transfer_move(self):
         payment = self._create_transfer('outbound', transfer_fee=7.5)
 
         payment.action_post()
 
         self.assertEqual(payment.amount, 125.0)
         self.assertEqual(payment.paired_internal_transfer_payment_id.amount, 125.0)
-        fee_move = payment.transfer_fee_move_id
-        self.assertTrue(fee_move)
-        self.assertEqual(fee_move.journal_id, self.source_journal)
-        self.assertEqual(fee_move.state, 'posted')
-        expense_line = fee_move.line_ids.filtered(lambda line: line.account_id == self.transfer_fee_account)
+        self.assertFalse(payment.transfer_fee_move_id)
+        source_move = payment.move_id
+        self.assertEqual(source_move.journal_id, self.source_journal)
+        self.assertEqual(source_move.state, 'posted')
+        expense_line = source_move.line_ids.filtered(lambda line: line.account_id == self.transfer_fee_account)
         self.assertAlmostEqual(sum(expense_line.mapped('debit')), 7.5)
-        liquidity_line = fee_move.line_ids.filtered(lambda line: line.account_id != self.transfer_fee_account)
-        self.assertAlmostEqual(sum(liquidity_line.mapped('credit')), 7.5)
+        liquidity_line = source_move.line_ids.filtered(
+            lambda line: line.account_id == payment.outstanding_account_id
+        )
+        self.assertAlmostEqual(sum(liquidity_line.mapped('credit')), 132.5)
+        transit_line = source_move.line_ids.filtered(
+            lambda line: line.account_id == self.transfer_account
+        )
+        self.assertAlmostEqual(sum(transit_line.mapped('debit')), 125.0)

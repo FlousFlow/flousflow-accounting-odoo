@@ -86,7 +86,7 @@ class AccountPayment(models.Model):
     transfer_fee = fields.Monetary(
         string='Transfer Fee', currency_field='currency_id', default=0.0,
         tracking=True,
-        help='Additional bank fee charged on the source journal. It is posted separately to the configured expense account.',
+        help='Additional bank fee charged on the source journal and posted in the source transfer journal entry.',
     )
     transfer_fee_move_id = fields.Many2one(
         'account.move', string='Transfer Fee Journal Entry', readonly=True,
@@ -111,6 +111,55 @@ class AccountPayment(models.Model):
                 payment.partner_id = False
                 payment.partner_bank_id = False
                 payment.salesperson_id = False
+
+    def _prepare_move_line_default_vals(self, write_off_line_vals=None, force_balance=None):
+        """Include an outbound transfer fee in the source payment move.
+
+        Odoo's standard internal transfer still creates the paired destination
+        payment and uses the Funds in Transit account. The source move now
+        carries the complete posting for the transfer fee, so the accounting
+        result is visible as Dr transit + Dr expense / Cr source journal for
+        transfer amount plus fee, without creating a separate fee move.
+        """
+        line_vals = super()._prepare_move_line_default_vals(
+            write_off_line_vals=write_off_line_vals,
+            force_balance=force_balance,
+        )
+        if not self.is_internal_transfer or self.transfer_fee <= 0:
+            return line_vals
+        if self.payment_type != 'outbound':
+            raise UserError(_(
+                "Transfer fees are supported for outbound internal transfers only."
+            ))
+        if not self.company_id.transfer_fee_account_id:
+            raise UserError(_(
+                "Configure the internal transfer fee expense account before posting a transfer with a fee."
+            ))
+        fee_company_amount = self.currency_id._convert(
+            self.transfer_fee,
+            self.company_id.currency_id,
+            self.company_id,
+            self.date,
+        )
+        liquidity_lines = [
+            line for line in line_vals
+            if line.get('account_id') == self.outstanding_account_id.id
+        ]
+        if len(liquidity_lines) != 1:
+            raise UserError(_(
+                "Unable to determine the source journal liquidity line for the transfer fee."
+            ))
+        liquidity_line = liquidity_lines[0]
+        liquidity_line['balance'] -= fee_company_amount
+        liquidity_line['amount_currency'] -= self.transfer_fee
+        line_vals.append({
+            'name': _('Internal transfer fee'),
+            'account_id': self.company_id.transfer_fee_account_id.id,
+            'currency_id': self.currency_id.id,
+            'balance': fee_company_amount,
+            'amount_currency': self.transfer_fee,
+        })
+        return line_vals
 
     def _auto_reconcile_open_invoices(self):
         """Match a posted payment against the partner's open invoices/bills.
@@ -203,50 +252,6 @@ class AccountPayment(models.Model):
             if account.account_type not in ('expense', 'expense_direct_cost'):
                 raise UserError(_("The internal transfer fee account must be an expense account."))
 
-    def _post_transfer_fee(self):
-        self.ensure_one()
-        if not self.is_internal_transfer or self.transfer_fee <= 0:
-            return
-        fee_move = self.transfer_fee_move_id
-        if fee_move and fee_move.state == 'canceled':
-            fee_move.button_draft()
-        if fee_move and fee_move.state == 'posted':
-            return
-        liquidity_line = self._seek_for_lines()[0][:1]
-        if not liquidity_line:
-            raise UserError(_("Unable to determine the source journal liquidity account for the transfer fee."))
-        fee_company_amount = self.currency_id._convert(
-            self.transfer_fee, self.company_id.currency_id, self.company_id, self.date,
-        )
-        fee_move_vals = {
-            'move_type': 'entry',
-            'journal_id': self.journal_id.id,
-            'company_id': self.company_id.id,
-            'date': self.date,
-            'ref': _("Transfer fee: %s", self.name),
-            'line_ids': [
-                (0, 0, {
-                    'name': _("Internal transfer fee"),
-                    'account_id': self.company_id.transfer_fee_account_id.id,
-                    'debit': fee_company_amount,
-                    'credit': 0.0,
-                    'currency_id': self.currency_id.id,
-                    'amount_currency': self.transfer_fee,
-                }),
-                (0, 0, {
-                    'name': _("Internal transfer fee"),
-                    'account_id': liquidity_line.account_id.id,
-                    'debit': 0.0,
-                    'credit': fee_company_amount,
-                    'currency_id': self.currency_id.id,
-                    'amount_currency': -self.transfer_fee,
-                }),
-            ],
-        }
-        fee_move = self.env['account.move'].create(fee_move_vals)
-        fee_move.action_post()
-        self.transfer_fee_move_id = fee_move
-
     def action_post(self):
         for payment in self:
             if payment.is_internal_transfer:
@@ -265,7 +270,6 @@ class AccountPayment(models.Model):
                 for transfer_payment in payment | paired_payment:
                     if transfer_payment.state == 'draft':
                         super(AccountPayment, transfer_payment).action_post()
-                payment._post_transfer_fee()
             else:
                 super(AccountPayment, payment).action_post()
                 payment._auto_reconcile_open_invoices()

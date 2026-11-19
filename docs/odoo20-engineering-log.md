@@ -105,3 +105,9 @@
 - Validation: XML well-formedness and diff checks passed. Existing translation catalogs contain unrelated historical duplicate msgids, so full `msgfmt --check` remains noisy; the new entries are unique.
 - Follow-up: upgrade the addon and verify the Arabic contact form after assets/cache refresh.
 
+# 2026-11-19 — Internal transfer fee posting
+
+- Changed `ff_account_transfer` so outbound transfer fees are included in the source payment move: debit the transfer-in-transit account and fee expense, credit the source journal liquidity account for transfer amount plus fee.
+- Kept Odoo's paired destination payment and Funds in Transit flow; removed the extra standalone fee move for new transfers. Existing posted fee moves are not rewritten.
+- Added a focused regression test and bumped the module to `20.0.1.0.54`.
+
