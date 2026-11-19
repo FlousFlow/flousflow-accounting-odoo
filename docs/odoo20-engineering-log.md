@@ -121,3 +121,8 @@
 - Corrected the inherited payment view anchor so `transfer_fee` is inserted after the complete amount row, not inside the amount widget. This restores the standard Odoo label/value layout and makes the Arabic fee label visible.
 - Bumped the module to `20.0.1.0.57`.
 
+# 2026-11-19 — Explicit transfer fee label
+
+- Added an explicit Arabic label for `transfer_fee` because the inherited field was visible without a label in the resolved Odoo form architecture.
+- Bumped the module to `20.0.1.0.58`.
+

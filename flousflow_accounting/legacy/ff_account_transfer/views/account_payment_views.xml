@@ -13,6 +13,7 @@
                        readonly="state != 'draft'"/>
             </xpath>
             <xpath expr="//div[@name='amount_div']" position="after">
+                <label for="transfer_fee" string="مصروف التحويل" invisible="not is_internal_transfer"/>
                 <field name="transfer_fee"
                        invisible="not is_internal_transfer"
                        readonly="state != 'draft'"/>
