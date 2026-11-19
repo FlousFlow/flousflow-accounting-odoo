@@ -91,6 +91,14 @@ class AccountPayment(models.Model):
                 ))
             payment.destination_account_id = payment.company_id.transfer_account_id
 
+    @api.onchange('is_internal_transfer')
+    def _onchange_is_internal_transfer(self):
+        for payment in self:
+            if payment.is_internal_transfer:
+                payment.partner_id = False
+                payment.partner_bank_id = False
+                payment.salesperson_id = False
+
     def _auto_reconcile_open_invoices(self):
         """Match a posted payment against the partner's open invoices/bills.
 
@@ -167,6 +175,9 @@ class AccountPayment(models.Model):
             'paired_internal_transfer_payment_id': self.id,
             'payment_method_line_id': lines[0].id,
             'currency_id': self.currency_id.id,
+            'partner_id': False,
+            'partner_bank_id': False,
+            'salesperson_id': False,
         }
 
     def _check_transfer_fee_configuration(self):
@@ -264,6 +275,13 @@ class AccountPayment(models.Model):
             if paired and paired.state != 'draft':
                 paired.action_draft()
         return result
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('is_internal_transfer'):
+                vals.update(partner_id=False, partner_bank_id=False, salesperson_id=False)
+        return super().create(vals_list)
 
     def unlink(self):
         paired_payments = self.mapped('paired_internal_transfer_payment_id')
