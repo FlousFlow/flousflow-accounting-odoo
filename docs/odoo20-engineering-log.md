@@ -126,3 +126,8 @@
 - Added an explicit Arabic label for `transfer_fee` because the inherited field was visible without a label in the resolved Odoo form architecture.
 - Bumped the module to `20.0.1.0.58`.
 
+# 2026-11-19 — Remove duplicate transfer fee label
+
+- Removed the explicit label because Odoo's standard group renderer already generates the field label once. This leaves one `مصروف التحويل` label beside the fee value.
+- Bumped the module to `20.0.1.0.59`.
+
