@@ -73,7 +73,12 @@ class PosOrder(models.Model):
         for command in payment_commands:
             if isinstance(command, (list, tuple)) and len(command) >= 3 and command[0] == 0:
                 vals = command[2] or {}
-                payment_ids.append(vals.get("payment_method_id"))
+                # The POS can keep a zero-valued Customer Account line in the
+                # payload after the cashier switches to cash/card.  A zero
+                # line is not a credit sale and must not block the order.
+                amount = vals.get("amount")
+                if amount is not None and not self.env.company.currency_id.is_zero(amount):
+                    payment_ids.append(vals.get("payment_method_id"))
         credit_methods = self.env["pos.payment.method"].search(
             [("id", "in", [payment_id for payment_id in payment_ids if payment_id]),
              ("type", "=", "pay_later")]

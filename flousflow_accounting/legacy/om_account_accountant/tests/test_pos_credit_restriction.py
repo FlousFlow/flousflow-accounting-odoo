@@ -69,3 +69,11 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
     def test_cash_remains_allowed_at_other_pos(self):
         session = self._session(self.other_pos)
         self.env["pos.order"]._check_partner_credit_pos(self._order_data(session, self.cash_method), session)
+
+    def test_zero_credit_line_does_not_block_immediate_payment(self):
+        session = self._session(self.other_pos)
+        order = self._order_data(session, self.cash_method)
+        order["payment_ids"].append(
+            [0, 0, {"payment_method_id": self.credit_method.id, "amount": 0.0}]
+        )
+        self.env["pos.order"]._check_partner_credit_pos(order, session)
