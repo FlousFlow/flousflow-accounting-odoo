@@ -32,6 +32,7 @@
             <xpath expr="//group[@name='credit_limits']" position="inside">
                 <label for="pos_credit_config_id" string="Credit Point of Sale"/>
                 <field name="pos_credit_config_id"
+                       domain="[('company_id', 'in', allowed_company_ids)]"
                        nolabel="1"
                        options="{'no_create': True, 'no_open': True}"
                        placeholder="Select the point of sale allowed for credit sales"/>

@@ -136,3 +136,8 @@
 - Fixed the contact POS-credit selector domain. It was using the contact's `company_id`, which is empty for many individual contacts and hid all company POS configurations. Replaced it with Odoo's standard `check_company=True` behavior.
 - Bumped the module to `20.0.1.0.60`.
 
+# 2026-11-19 — POS selector company domain
+
+- Added the view domain `company_id in allowed_company_ids` to the contact POS-credit selector. This uses the active Odoo company context and works for contacts whose own `company_id` is empty.
+- Bumped the module to `20.0.1.0.61`.
+
