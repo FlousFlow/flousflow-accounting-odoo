@@ -16,6 +16,26 @@
                        readonly="state != 'draft'"/>
                 <field name="transfer_fee_move_id" invisible="1"/>
             </xpath>
+            <!-- Internal transfers are not customer/vendor payments. Keep the
+                 standard payment fields for normal payments only. -->
+            <xpath expr="//field[@name='payment_type']" position="attributes">
+                <attribute name="invisible">is_internal_transfer</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
+                <attribute name="invisible">is_internal_transfer or partner_type != 'customer'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
+                <attribute name="invisible">is_internal_transfer or partner_type != 'supplier'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id'][1]" position="attributes">
+                <attribute name="invisible">is_internal_transfer or not show_partner_bank_account or partner_type != 'customer' or payment_type == 'inbound'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id'][2]" position="attributes">
+                <attribute name="invisible">is_internal_transfer or not show_partner_bank_account or partner_type != 'supplier' or payment_type == 'inbound'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id'][3]" position="attributes">
+                <attribute name="invisible">is_internal_transfer or not show_partner_bank_account or payment_type == 'outbound'</attribute>
+            </xpath>
             <xpath expr="//field[@name='partner_id'][1]" position="after">
                 <field name="salesperson_id" invisible="partner_type != 'customer' or is_internal_transfer" readonly="state != 'draft'"/>
             </xpath>
