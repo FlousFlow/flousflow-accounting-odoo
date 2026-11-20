@@ -13,6 +13,10 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         super().setUpClass()
         cls.company.pos_credit_restriction_block = True
         cls.cash_journal = cls.company_data["default_journal_cash"]
+        cls.other_cash_journal = cls.cash_journal.copy({
+            "name": "Other POS Credit Restriction Cash",
+            "code": "CRSH2",
+        })
         receivable = cls.company_data["default_account_receivable"]
         cls.cash_method = cls.env["pos.payment.method"].sudo().create({
             "name": "POS Credit Restriction Cash",
@@ -24,7 +28,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         cls.other_cash_method = cls.env["pos.payment.method"].sudo().create({
             "name": "Other POS Credit Restriction Cash",
             "type": "cash",
-            "journal_id": cls.cash_journal.id,
+            "journal_id": cls.other_cash_journal.id,
             "receivable_account_id": receivable.id,
             "company_id": cls.company.id,
         })
