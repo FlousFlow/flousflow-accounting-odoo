@@ -153,3 +153,26 @@
 - Added a standard PaymentScreen patch that hides the Customer Account method when the selected contact is assigned to another POS; immediate payment methods remain available.
 - Kept the server-side order-sync validation as the security boundary. Odoo split payments with any real credit portion remain subject to the restriction; immediate payments do not mask a credit line.
 
+# 2026-11-20 — Refresh POS credit restriction data
+
+- Root-cause investigation found that Odoo 20 POS can reuse locally cached partner and company records. Timestamp-based cache refresh can miss same-second updates, leaving an assigned POS or restriction setting stale in the cashier UI.
+- Marked `res.partner` and `res.company` POS data for server refresh whenever POS data loads. This refreshes only those records and preserves the IndexedDB store containing unsynchronized orders.
+- Added a regression test for force-loaded restriction data and required POS fields; retained server-side validation and existing cash/credit split-payment tests.
+- Bumped the module to `20.0.1.0.69`.
+
+### 2026-11-20 — Arabic POS credit restriction error
+
+- Added the Arabic translation for the server-side POS credit restriction error in `ar.po` and `ar_001.po`, preserving the customer and POS placeholders.
+- Marked the entry as an Odoo Python code translation so Odoo loads it in server-side errors, and preserved its named formatting placeholders.
+- Bumped the consolidated accounting module to `20.0.1.0.71` for the translation update.
+
+### 2026-11-20 — POS immediate-payment false rejection
+
+- Restrict server-side enforcement to the paid/final confirmation payload; draft POS synchronization must not reject a ticket while the cashier is still changing its payment method.
+- Reconstruct effective payment lines from the existing draft order plus ORM commands. This ensures a removed/changed `pay_later` line is not counted as credit, while a remaining positive `pay_later` portion in a split payment stays blocked at a non-assigned POS.
+- In the POS PaymentScreen, when an immediate method is selected for a customer assigned to another POS, remove any stale Customer Account lines before adding cash/bank payment; show a translated warning. The server remains authoritative.
+- Added regression coverage for cash, bank, assigned/unassigned POS, draft sync, split pay-later, stale-line replacement and stale-line deletion plus new immediate payment.
+- Local Odoo 20 run on isolated database `ff_accounting_product_install_20261120_pos_credit_fix`: 12 tests passed, 0 failures/errors. `node --check` and `git diff --check` passed.
+- Deployed to production database `aghsan` after a verified PostgreSQL dump at `/var/backups/odoo/aghsan_pre_pos_credit_fix_v72_20261120.dump`. Upgrade completed at `20.0.1.0.72`; Odoo is active and `/web/login` returns HTTP 200.
+- Read-only production validator checks against POS 8 / Turkey / assigned POS 5: cash allowed, bank allowed, pay-later blocked, draft sync allowed. No POS orders or accounting entries were created by this probe.
+

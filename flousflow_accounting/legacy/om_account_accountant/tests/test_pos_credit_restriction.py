@@ -32,6 +32,13 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
             "receivable_account_id": receivable.id,
             "company_id": cls.company.id,
         })
+        cls.bank_method = cls.env["pos.payment.method"].sudo().create({
+            "name": "POS Credit Restriction Bank",
+            "type": "bank",
+            "journal_id": cls.company_data["default_journal_bank"].id,
+            "receivable_account_id": receivable.id,
+            "company_id": cls.company.id,
+        })
         cls.credit_method = cls.env["pos.payment.method"].sudo().create({
             "name": "POS Credit Restriction Account",
             "type": "pay_later",
@@ -46,7 +53,9 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         cls.other_pos = cls.env["pos.config"].sudo().create({
             "name": "Other Credit POS",
             "journal_id": cls.company_data["default_journal_sale"].id,
-            "payment_method_ids": [Command.set([cls.other_cash_method.id, cls.credit_method.id])],
+            "payment_method_ids": [Command.set([
+                cls.other_cash_method.id, cls.bank_method.id, cls.credit_method.id,
+            ])],
         })
         cls.partner_a.pos_credit_config_id = cls.allowed_pos
 
@@ -55,10 +64,23 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
 
     def _order_data(self, session, payment_method):
         return {
+            "state": "paid",
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "payment_ids": [[0, 0, {"payment_method_id": payment_method.id, "amount": 10.0}]],
         }
+
+    def test_credit_restriction_data_is_refreshed_for_pos(self):
+        self.assertTrue(self.env["res.company"].load_pos_data_force_loading())
+        self.assertTrue(self.env["res.partner"].load_pos_data_force_loading())
+        self.assertIn(
+            "pos_credit_restriction_block",
+            self.env["res.company"]._load_pos_data_fields(self.allowed_pos),
+        )
+        self.assertIn(
+            "pos_credit_config_id",
+            self.env["res.partner"]._load_pos_data_fields(self.allowed_pos),
+        )
 
     def test_credit_is_allowed_at_assigned_pos(self):
         session = self._session(self.allowed_pos)
@@ -70,6 +92,100 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         session = self._session(self.other_pos)
         with self.assertRaisesRegex(UserError, "not allowed"):
             self.env["pos.order"].sudo()._check_partner_credit_pos(self._order_data(session, self.credit_method), session)
+
+    def test_unconfirmed_credit_draft_can_sync_at_other_pos(self):
+        session = self._session(self.other_pos)
+        order = self._order_data(session, self.credit_method)
+        order["state"] = "draft"
+        self.env["pos.order"].sudo()._check_partner_credit_pos(order, session)
+
+    def test_existing_credit_payment_is_checked_when_order_is_confirmed(self):
+        session = self._session(self.other_pos)
+        order = self.env["pos.order"].sudo().create({
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "lines": [],
+            "amount_paid": 10.0,
+            "amount_total": 10.0,
+            "amount_tax": 0.0,
+            "amount_return": 0.0,
+            "payment_ids": [[0, 0, {
+                "payment_method_id": self.credit_method.id,
+                "amount": 10.0,
+            }]],
+        })
+        update_payload = {
+            "id": order.id,
+            "state": "paid",
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "payment_ids": [],
+        }
+        with self.assertRaisesRegex(UserError, "not allowed"):
+            self.env["pos.order"]._check_partner_credit_pos(
+                update_payload, session, existing_order=order
+            )
+
+    def test_replacing_stale_credit_line_with_bank_payment_allows_confirmation(self):
+        session = self._session(self.other_pos)
+        order = self.env["pos.order"].sudo().create({
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "lines": [],
+            "amount_paid": 10.0,
+            "amount_total": 10.0,
+            "amount_tax": 0.0,
+            "amount_return": 0.0,
+            "payment_ids": [[0, 0, {
+                "payment_method_id": self.credit_method.id,
+                "amount": 10.0,
+            }]],
+        })
+        update_payload = {
+            "id": order.id,
+            "state": "paid",
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "payment_ids": [[1, order.payment_ids.id, {
+                "payment_method_id": self.bank_method.id,
+                "amount": 10.0,
+            }]],
+        }
+        self.env["pos.order"]._check_partner_credit_pos(
+            update_payload, session, existing_order=order
+        )
+
+    def test_removing_stale_credit_line_and_adding_bank_payment_allows_confirmation(self):
+        session = self._session(self.other_pos)
+        order = self.env["pos.order"].sudo().create({
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "lines": [],
+            "amount_paid": 10.0,
+            "amount_total": 10.0,
+            "amount_tax": 0.0,
+            "amount_return": 0.0,
+            "payment_ids": [[0, 0, {
+                "payment_method_id": self.credit_method.id,
+                "amount": 10.0,
+            }]],
+        })
+        update_payload = {
+            "id": order.id,
+            "state": "paid",
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "payment_ids": [
+                [2, order.payment_ids.id, False],
+                [0, 0, {
+                    "payment_method_id": self.bank_method.id,
+                    "amount": 10.0,
+                }],
+            ],
+        }
+        self.env["pos.order"]._check_partner_credit_pos(
+            update_payload, session, existing_order=order
+        )
 
     def test_cash_remains_allowed_at_other_pos(self):
         session = self._session(self.other_pos)
@@ -111,6 +227,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         })
         update_payload = {
             "id": order.id,
+            "state": "paid",
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "payment_ids": [[1, order.payment_ids.id, {
@@ -118,7 +235,9 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
                 "amount": 10.0,
             }]],
         }
-        self.env["pos.order"]._check_partner_credit_pos(update_payload, session)
+        self.env["pos.order"]._check_partner_credit_pos(
+            update_payload, session, existing_order=order
+        )
 
     def test_deleting_existing_credit_line_allows_order(self):
         session = self._session(self.other_pos)
@@ -137,8 +256,11 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         })
         update_payload = {
             "id": order.id,
+            "state": "paid",
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "payment_ids": [[2, order.payment_ids.id, False]],
         }
-        self.env["pos.order"]._check_partner_credit_pos(update_payload, session)
+        self.env["pos.order"]._check_partner_credit_pos(
+            update_payload, session, existing_order=order
+        )

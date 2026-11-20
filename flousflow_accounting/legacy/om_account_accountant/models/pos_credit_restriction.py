@@ -18,6 +18,13 @@ class ResCompany(models.Model):
         fields_to_load = super()._load_pos_data_fields(config)
         return fields_to_load + ["pos_credit_restriction_block"]
 
+    @api.model
+    def load_pos_data_force_loading(self):
+        # The restriction flag controls which payment methods are available.
+        # Always refresh it from the server when a POS starts, without clearing
+        # the IndexedDB store that may contain unsynchronized orders.
+        return True
+
 
 class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
@@ -44,6 +51,13 @@ class ResPartner(models.Model):
         fields_to_load = super()._load_pos_data_fields(config)
         return fields_to_load + ["pos_credit_config_id"]
 
+    @api.model
+    def load_pos_data_force_loading(self):
+        # POS caches contacts locally. Refresh the assigned credit POS on each
+        # POS data load so a contact reassignment cannot leave stale credit
+        # permissions in the browser.
+        return True
+
     @api.constrains("pos_credit_config_id")
     def _check_pos_credit_company(self):
         allowed_companies = self.env.companies
@@ -58,13 +72,18 @@ class ResPartner(models.Model):
 class PosOrder(models.Model):
     _inherit = "pos.order"
 
-    def _check_partner_credit_pos(self, order, pos_session):
+    def _check_partner_credit_pos(self, order, pos_session, existing_order=None):
         """Reject only Customer Account payments at an unassigned POS.
 
         This runs server-side while the POS order is being synced, so changing the
         browser or POS JavaScript cannot bypass the restriction. Cash/card payments
         are intentionally unaffected.
         """
+        # Draft tickets are synchronized while the cashier is still choosing a
+        # payment method. Enforce the restriction only on the final validation
+        # request, otherwise a stale credit line can block unrelated POS syncs.
+        if order.get("state") != "paid":
+            return
         if not pos_session or not pos_session.company_id.pos_credit_restriction_block:
             return
         partner_id = order.get("partner_id")
@@ -83,8 +102,10 @@ class PosOrder(models.Model):
         # to cash/card (or deleting it) removes the credit exposure before the
         # restriction is evaluated.
         effective_lines = {}
-        if self and isinstance(order.get("id"), int):
-            existing_order = self.browse(order["id"]).exists()
+        if existing_order is None:
+            order_id = order.get("id")
+            existing_order = self.browse(order_id).exists() if isinstance(order_id, int) else self.browse()
+        if existing_order:
             for payment in existing_order.payment_ids:
                 effective_lines[payment.id] = {
                     "payment_method_id": payment.payment_method_id.id,
@@ -113,7 +134,7 @@ class PosOrder(models.Model):
             (line.get("payment_method_id"), line.get("amount", 0.0))
             for line in payment_lines
             if line.get("payment_method_id")
-            and not self.env.company.currency_id.is_zero(line.get("amount", 0.0))
+            and not pos_session.company_id.currency_id.is_zero(line.get("amount", 0.0))
         ]
         payment_methods = self.env["pos.payment.method"].browse(
             [method_id for method_id, amount in payment_lines if method_id]
@@ -145,5 +166,5 @@ class PosOrder(models.Model):
             check_order["partner_id"] = existing_order.partner_id.id
         if existing_order:
             check_order["id"] = existing_order.id
-        self._check_partner_credit_pos(check_order, pos_session)
+        self._check_partner_credit_pos(check_order, pos_session, existing_order=existing_order)
         return super()._process_order(order, existing_order)

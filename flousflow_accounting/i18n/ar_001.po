@@ -1671,6 +1671,19 @@ msgid "When enabled, a customer's Customer Account payment is allowed only from 
 msgstr "عند التفعيل، يُسمح بدفع حساب العميل فقط من منفذ البيع المرتبط بجهة الاتصال. وتظل طرق الدفع النقدية والفورية الأخرى متاحة من جميع المنافذ."
 
 #. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/om_account_accountant/models/pos_credit_restriction.py:0
+#, python-format
+msgid "Customer %(customer)s is assigned to %(assigned_pos)s for credit sales. Customer Account credit is not allowed at %(current_pos)s. Use an immediate payment method or process the credit sale from the assigned point of sale."
+msgstr "العميل %(customer)s مخصص للبيع الآجل من خلال منفذ البيع %(assigned_pos)s. لا يُسمح بالبيع على الحساب من منفذ البيع %(current_pos)s. استخدم وسيلة دفع فورية أو أتمّ البيع الآجل من منفذ البيع المخصص."
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/app/pos_credit_restriction/payment_screen.js:0
+msgid "The previous Customer Account payment was removed. This customer can only use immediate payment at this point of sale."
+msgstr "تمت إزالة دفعة حساب العميل السابقة. يمكن لهذا العميل الدفع بوسيلة فورية فقط من منفذ البيع هذا."
+
+#. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
 msgid "Allow Customer Account credit only at the point of sale assigned to the customer. Immediate payment methods remain available at all points of sale."
 msgstr "السماح بالبيع على الحساب فقط من منفذ البيع المرتبط بالعميل. تظل طرق الدفع الفوري متاحة من جميع المنافذ."
