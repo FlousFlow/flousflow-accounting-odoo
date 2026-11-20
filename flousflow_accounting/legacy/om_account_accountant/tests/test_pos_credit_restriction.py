@@ -88,3 +88,44 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         )
         with self.assertRaisesRegex(UserError, "not allowed"):
             self.env["pos.order"]._check_partner_credit_pos(order, session)
+
+    def test_switching_existing_credit_line_to_cash_allows_order(self):
+        session = self._session(self.other_pos)
+        order = self.env["pos.order"].create({
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "lines": [],
+            "payment_ids": [[0, 0, {
+                "payment_method_id": self.credit_method.id,
+                "amount": 10.0,
+            }]],
+        })
+        update_payload = {
+            "id": order.id,
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "payment_ids": [[1, order.payment_ids.id, {
+                "payment_method_id": self.cash_method.id,
+                "amount": 10.0,
+            }]],
+        }
+        self.env["pos.order"]._check_partner_credit_pos(update_payload, session)
+
+    def test_deleting_existing_credit_line_allows_order(self):
+        session = self._session(self.other_pos)
+        order = self.env["pos.order"].create({
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "lines": [],
+            "payment_ids": [[0, 0, {
+                "payment_method_id": self.credit_method.id,
+                "amount": 10.0,
+            }]],
+        })
+        update_payload = {
+            "id": order.id,
+            "session_id": session.id,
+            "partner_id": self.partner_a.id,
+            "payment_ids": [[2, order.payment_ids.id, False]],
+        }
+        self.env["pos.order"]._check_partner_credit_pos(update_payload, session)

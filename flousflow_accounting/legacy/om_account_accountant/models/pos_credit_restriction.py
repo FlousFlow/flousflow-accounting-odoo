@@ -78,16 +78,43 @@ class PosOrder(models.Model):
             return
 
         payment_commands = order.get("payment_ids") or []
-        payment_lines = []
+        # Existing draft orders are synchronized with ORM commands. Rebuild
+        # their effective payment lines so changing an existing pay_later line
+        # to cash/card (or deleting it) removes the credit exposure before the
+        # restriction is evaluated.
+        effective_lines = {}
+        if self and isinstance(order.get("id"), int):
+            existing_order = self.browse(order["id"]).exists()
+            for payment in existing_order.payment_ids:
+                effective_lines[payment.id] = {
+                    "payment_method_id": payment.payment_method_id.id,
+                    "amount": payment.amount,
+                }
+
+        new_lines = []
         for command in payment_commands:
-            if isinstance(command, (list, tuple)) and len(command) >= 3 and command[0] == 0:
-                vals = command[2] or {}
-                # The POS can keep a zero-valued Customer Account line in the
-                # payload after the cashier switches to cash/card.  A zero
-                # line is not a credit sale and must not block the order.
-                amount = vals.get("amount")
-                if amount is not None and not self.env.company.currency_id.is_zero(amount):
-                    payment_lines.append((vals.get("payment_method_id"), amount))
+            if not isinstance(command, (list, tuple)) or not command:
+                continue
+            operation = command[0]
+            if operation == 0 and len(command) >= 3:
+                new_lines.append(dict(command[2] or {}))
+            elif operation == 1 and len(command) >= 3:
+                line = effective_lines.get(command[1])
+                if line is not None:
+                    line.update(command[2] or {})
+            elif operation in (2, 3) and len(command) >= 2:
+                effective_lines.pop(command[1], None)
+            elif operation == 5:
+                effective_lines.clear()
+                new_lines.clear()
+
+        payment_lines = [*effective_lines.values(), *new_lines]
+        payment_lines = [
+            (line.get("payment_method_id"), line.get("amount", 0.0))
+            for line in payment_lines
+            if line.get("payment_method_id")
+            and not self.env.company.currency_id.is_zero(line.get("amount", 0.0))
+        ]
         payment_methods = self.env["pos.payment.method"].browse(
             [method_id for method_id, amount in payment_lines if method_id]
         )
@@ -116,5 +143,7 @@ class PosOrder(models.Model):
         check_order = dict(order)
         if not check_order.get("partner_id") and existing_order:
             check_order["partner_id"] = existing_order.partner_id.id
+        if existing_order:
+            check_order["id"] = existing_order.id
         self._check_partner_credit_pos(check_order, pos_session)
         return super()._process_order(order, existing_order)
