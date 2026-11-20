@@ -12,13 +12,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.company.pos_credit_restriction_block = True
-        cls.cash_journal = cls.env["account.journal"].create({
-            "name": "POS Credit Restriction Cash",
-            "type": "cash",
-            "code": "PCRC",
-            "company_id": cls.company.id,
-            "default_account_id": cls.company_data["default_account_cash"].id,
-        })
+        cls.cash_journal = cls.company_data["default_journal_cash"]
         receivable = cls.company_data["default_account_receivable"]
         cls.cash_method = cls.env["pos.payment.method"].create({
             "name": "POS Credit Restriction Cash",
