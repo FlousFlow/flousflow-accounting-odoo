@@ -14,25 +14,25 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         cls.company.pos_credit_restriction_block = True
         cls.cash_journal = cls.company_data["default_journal_cash"]
         receivable = cls.company_data["default_account_receivable"]
-        cls.cash_method = cls.env["pos.payment.method"].create({
+        cls.cash_method = cls.env["pos.payment.method"].sudo().create({
             "name": "POS Credit Restriction Cash",
             "type": "cash",
             "journal_id": cls.cash_journal.id,
             "receivable_account_id": receivable.id,
             "company_id": cls.company.id,
         })
-        cls.credit_method = cls.env["pos.payment.method"].create({
+        cls.credit_method = cls.env["pos.payment.method"].sudo().create({
             "name": "POS Credit Restriction Account",
             "type": "pay_later",
             "receivable_account_id": receivable.id,
             "company_id": cls.company.id,
         })
-        cls.allowed_pos = cls.env["pos.config"].create({
+        cls.allowed_pos = cls.env["pos.config"].sudo().create({
             "name": "Allowed Credit POS",
             "journal_id": cls.company_data["default_journal_sale"].id,
             "payment_method_ids": [Command.set([cls.cash_method.id, cls.credit_method.id])],
         })
-        cls.other_pos = cls.env["pos.config"].create({
+        cls.other_pos = cls.env["pos.config"].sudo().create({
             "name": "Other Credit POS",
             "journal_id": cls.company_data["default_journal_sale"].id,
             "payment_method_ids": [Command.set([cls.cash_method.id, cls.credit_method.id])],
