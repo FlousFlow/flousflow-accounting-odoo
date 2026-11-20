@@ -21,6 +21,13 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
             "receivable_account_id": receivable.id,
             "company_id": cls.company.id,
         })
+        cls.other_cash_method = cls.env["pos.payment.method"].sudo().create({
+            "name": "Other POS Credit Restriction Cash",
+            "type": "cash",
+            "journal_id": cls.cash_journal.id,
+            "receivable_account_id": receivable.id,
+            "company_id": cls.company.id,
+        })
         cls.credit_method = cls.env["pos.payment.method"].sudo().create({
             "name": "POS Credit Restriction Account",
             "type": "pay_later",
@@ -35,7 +42,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         cls.other_pos = cls.env["pos.config"].sudo().create({
             "name": "Other Credit POS",
             "journal_id": cls.company_data["default_journal_sale"].id,
-            "payment_method_ids": [Command.set([cls.cash_method.id, cls.credit_method.id])],
+            "payment_method_ids": [Command.set([cls.other_cash_method.id, cls.credit_method.id])],
         })
         cls.partner_a.pos_credit_config_id = cls.allowed_pos
 
@@ -62,11 +69,11 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
 
     def test_cash_remains_allowed_at_other_pos(self):
         session = self._session(self.other_pos)
-        self.env["pos.order"]._check_partner_credit_pos(self._order_data(session, self.cash_method), session)
+        self.env["pos.order"]._check_partner_credit_pos(self._order_data(session, self.other_cash_method), session)
 
     def test_zero_credit_line_does_not_block_immediate_payment(self):
         session = self._session(self.other_pos)
-        order = self._order_data(session, self.cash_method)
+        order = self._order_data(session, self.other_cash_method)
         order["amount_total"] = 10.0
         order["payment_ids"].append(
             [0, 0, {"payment_method_id": self.credit_method.id, "amount": 0.0}]
@@ -75,7 +82,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
 
     def test_credit_remains_blocked_when_mixed_with_immediate_payment(self):
         session = self._session(self.other_pos)
-        order = self._order_data(session, self.cash_method)
+        order = self._order_data(session, self.other_cash_method)
         order["amount_total"] = 20.0
         order["payment_ids"].append(
             [0, 0, {"payment_method_id": self.credit_method.id, "amount": 10.0}]
@@ -99,7 +106,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "payment_ids": [[1, order.payment_ids.id, {
-                "payment_method_id": self.cash_method.id,
+                "payment_method_id": self.other_cash_method.id,
                 "amount": 10.0,
             }]],
         }
