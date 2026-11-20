@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {'name': 'FlousFlow Accounting',
- 'version': '20.0.1.0.67',
+ 'version': '20.0.1.0.68',
  'category': 'Accounting',
  'summary': 'Odoo 20 accounting suite with reports, payments, assets, budgets and reconciliation.',
  'description': 'FlousFlow accounting features consolidated from the 20.0 source addons. Spreadsheet dashboards '

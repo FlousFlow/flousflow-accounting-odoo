@@ -62,18 +62,18 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
 
     def test_credit_is_allowed_at_assigned_pos(self):
         session = self._session(self.allowed_pos)
-        self.env["pos.order"]._check_partner_credit_pos(
+        self.env["pos.order"].sudo()._check_partner_credit_pos(
             self._order_data(session, self.credit_method), session
         )
 
     def test_credit_is_refused_at_other_pos(self):
         session = self._session(self.other_pos)
         with self.assertRaisesRegex(UserError, "not allowed"):
-            self.env["pos.order"]._check_partner_credit_pos(self._order_data(session, self.credit_method), session)
+            self.env["pos.order"].sudo()._check_partner_credit_pos(self._order_data(session, self.credit_method), session)
 
     def test_cash_remains_allowed_at_other_pos(self):
         session = self._session(self.other_pos)
-        self.env["pos.order"]._check_partner_credit_pos(self._order_data(session, self.other_cash_method), session)
+        self.env["pos.order"].sudo()._check_partner_credit_pos(self._order_data(session, self.other_cash_method), session)
 
     def test_zero_credit_line_does_not_block_immediate_payment(self):
         session = self._session(self.other_pos)
@@ -82,7 +82,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         order["payment_ids"].append(
             [0, 0, {"payment_method_id": self.credit_method.id, "amount": 0.0}]
         )
-        self.env["pos.order"]._check_partner_credit_pos(order, session)
+        self.env["pos.order"].sudo()._check_partner_credit_pos(order, session)
 
     def test_credit_remains_blocked_when_mixed_with_immediate_payment(self):
         session = self._session(self.other_pos)
@@ -92,7 +92,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
             [0, 0, {"payment_method_id": self.credit_method.id, "amount": 10.0}]
         )
         with self.assertRaisesRegex(UserError, "not allowed"):
-            self.env["pos.order"]._check_partner_credit_pos(order, session)
+            self.env["pos.order"].sudo()._check_partner_credit_pos(order, session)
 
     def test_switching_existing_credit_line_to_cash_allows_order(self):
         session = self._session(self.other_pos)
@@ -100,6 +100,10 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "lines": [],
+            "amount_paid": 10.0,
+            "amount_total": 10.0,
+            "amount_tax": 0.0,
+            "amount_return": 0.0,
             "payment_ids": [[0, 0, {
                 "payment_method_id": self.credit_method.id,
                 "amount": 10.0,
@@ -122,6 +126,10 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "lines": [],
+            "amount_paid": 10.0,
+            "amount_total": 10.0,
+            "amount_tax": 0.0,
+            "amount_return": 0.0,
             "payment_ids": [[0, 0, {
                 "payment_method_id": self.credit_method.id,
                 "amount": 10.0,
