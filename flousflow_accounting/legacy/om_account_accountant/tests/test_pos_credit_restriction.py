@@ -51,7 +51,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
         cls.partner_a.pos_credit_config_id = cls.allowed_pos
 
     def _session(self, config):
-        return self.env["pos.session"].create({"config_id": config.id})
+        return self.env["pos.session"].sudo().create({"config_id": config.id})
 
     def _order_data(self, session, payment_method):
         return {
@@ -96,7 +96,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
 
     def test_switching_existing_credit_line_to_cash_allows_order(self):
         session = self._session(self.other_pos)
-        order = self.env["pos.order"].create({
+        order = self.env["pos.order"].sudo().create({
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "lines": [],
@@ -118,7 +118,7 @@ class TestPosCreditRestriction(AccountTestInvoicingCommon):
 
     def test_deleting_existing_credit_line_allows_order(self):
         session = self._session(self.other_pos)
-        order = self.env["pos.order"].create({
+        order = self.env["pos.order"].sudo().create({
             "session_id": session.id,
             "partner_id": self.partner_a.id,
             "lines": [],
