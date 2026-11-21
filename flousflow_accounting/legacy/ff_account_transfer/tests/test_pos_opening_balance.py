@@ -49,7 +49,6 @@ class TestPosOpeningBalanceIncludesTransfers(AccountTestInvoicingCommon):
         destination_journal = self.company_data['default_journal_bank']
 
         self.assertTrue(source_method_line)
-        self.assertTrue(self.env.company.transfer_account_id)
 
         first_session = self.env['pos.session'].create({
             'config_id': config.id,

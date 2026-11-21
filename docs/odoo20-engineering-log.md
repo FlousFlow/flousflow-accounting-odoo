@@ -176,3 +176,13 @@
 - Deployed to production database `aghsan` after a verified PostgreSQL dump at `/var/backups/odoo/aghsan_pre_pos_credit_fix_v72_20261120.dump`. Upgrade completed at `20.0.1.0.72`; Odoo is active and `/web/login` returns HTTP 200.
 - Read-only production validator checks against POS 8 / Turkey / assigned POS 5: cash allowed, bank allowed, pay-later blocked, draft sync allowed. No POS orders or accounting entries were created by this probe.
 
+### 2026-11-21 — Direct internal journal transfers
+
+- Replaced new internal-transfer posting through paired payments and the Funds in Transit account with one balanced journal entry between the selected and destination journals' configured bank/cash accounts.
+- Outbound transfers debit the destination account and credit the selected source account; inbound transfers reverse those two lines. Outbound transfer fees add an expense debit and increase the source credit. The configured internal-transfer clearing account is no longer required for this flow.
+- Reject mismatched currencies and prevent reposting legacy paired transfers; historical posted entries are not rewritten. A canceled legacy transfer must be recreated to use direct posting.
+- Updated transfer tests to assert two direct liquidity lines (or three lines when a fee is present), no paired payment/clearing line, correct inbound/outbound signs, cancellation/repost on the same move, and the POS cash opening-balance effect.
+- Verified on an isolated clone of local Odoo 20 database `ff_dev_local20_20261119`, database `ff_transfer_direct_20261121_01`: 4 focused tests passed, 0 failures/errors (inbound, outbound/cancel/repost, fee, POS opening balance). Python compilation and `git diff --check` passed.
+- A wider selection including the existing automatic-reconciliation and collector suites could not initialize: Odoo's `AccountTestInvoicingCommon.setup_armageddon_tax` attempted to create an `account.tax` without the required `tax_group_id`; those suites did not run. Production and Al-Yamen databases were not used or changed.
+- Bumped the consolidated module to `20.0.1.0.73`.
+

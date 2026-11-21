@@ -1658,6 +1658,66 @@ msgid "Close"
 msgstr "إغلاق"
 
 #. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Choose two different bank or cash journals for an internal transfer."
+msgstr "اختر دفترين مختلفين من نوع بنك أو نقدية للتحويل الداخلي."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "This transfer was created with the previous two-payment workflow. Cancel it and create a new transfer to post directly between journal accounts."
+msgstr "تم إنشاء هذا التحويل بالطريقة القديمة التي تنشئ دفعتين. ألغِه وأنشئ تحويلًا جديدًا لترحيل قيد مباشر بين حسابي الدفترين."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "The transfer amount must be positive and the transfer fee cannot be negative."
+msgstr "يجب أن يكون مبلغ التحويل موجبًا، ولا يجوز أن يكون مصروف التحويل سالبًا."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Both journals and the transfer must use the same currency for a direct internal transfer."
+msgstr "يجب أن يستخدم الدفتران والتحويل العملة نفسها لإجراء تحويل داخلي مباشر."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Configure a bank or cash account on both journals before posting an internal transfer."
+msgstr "حدد حساب بنك أو نقدية في كلا الدفترين قبل ترحيل التحويل الداخلي."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Both journal accounts and the transfer must use the same currency for a direct internal transfer."
+msgstr "يجب أن يستخدم حسابا الدفترين والتحويل العملة نفسها لإجراء تحويل داخلي مباشر."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Configure the internal transfer fee expense account before posting a transfer with a fee."
+msgstr "اضبط حساب مصروف التحويل الداخلي قبل ترحيل تحويل يتضمن مصروفًا."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "The internal transfer fee account must be an expense account."
+msgstr "يجب أن يكون حساب مصروف التحويل الداخلي من نوع المصروفات."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Transfer fees are supported for outbound internal transfers only."
+msgstr "مصروف التحويل متاح للتحويلات الداخلية الصادرة فقط."
+
+#. module: flousflow_accounting
+#. odoo-python
+#: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
+msgid "Reset the transfer to draft before posting it again."
+msgstr "أعد التحويل إلى حالة المسودة قبل ترحيله مرة أخرى."
+
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_company__pos_credit_restriction_block
 #: model:ir.model.fields,field_description:flousflow_accounting.field_res_config_settings__pos_credit_restriction_block
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form

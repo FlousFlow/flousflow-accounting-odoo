@@ -93,16 +93,15 @@ class AccountPayment(models.Model):
         copy=False, check_company=True,
     )
 
-    @api.depends('is_internal_transfer', 'destination_journal_id', 'company_id')
+    @api.depends(
+        'is_internal_transfer', 'destination_journal_id', 'company_id',
+    )
     def _compute_destination_account_id(self):
         super()._compute_destination_account_id()
         for payment in self.filtered('is_internal_transfer'):
-            if not payment.company_id.transfer_account_id:
-                raise UserError(_(
-                    "There is no default Internal Transfer Account configured for company '%s'.",
-                    payment.company_id.name,
-                ))
-            payment.destination_account_id = payment.company_id.transfer_account_id
+            payment.destination_account_id = (
+                payment.destination_journal_id.default_account_id
+            )
 
     @api.onchange('is_internal_transfer')
     def _onchange_is_internal_transfer(self):
@@ -161,38 +160,6 @@ class AccountPayment(models.Model):
                     if payment_line.reconciled:
                         break
 
-    def _prepare_paired_transfer_vals(self):
-        self.ensure_one()
-        paired_payment_type = (
-            'inbound' if self.payment_type == 'outbound' else 'outbound'
-        )
-        lines = (
-            self.destination_journal_id.inbound_payment_method_line_ids
-            if paired_payment_type == 'inbound'
-            else self.destination_journal_id.outbound_payment_method_line_ids
-        )
-        if not lines:
-            raise UserError(_(
-                "The destination journal '%(journal)s' must have at least one %(payment_type)s payment method configured.",
-                journal=self.destination_journal_id.name,
-                payment_type=paired_payment_type,
-            ))
-        return {
-            'amount': self.amount,
-            'payment_type': paired_payment_type,
-            'journal_id': self.destination_journal_id.id,
-            'destination_journal_id': self.journal_id.id,
-            'is_internal_transfer': True,
-            'date': self.date,
-            'memo': self.memo,
-            'paired_internal_transfer_payment_id': self.id,
-            'payment_method_line_id': lines[0].id,
-            'currency_id': self.currency_id.id,
-            'partner_id': False,
-            'partner_bank_id': False,
-            'salesperson_id': False,
-        }
-
     def _check_transfer_fee_configuration(self):
         for payment in self.filtered(lambda pay: pay.is_internal_transfer and pay.transfer_fee > 0):
             account = payment.company_id.transfer_fee_account_id
@@ -203,81 +170,120 @@ class AccountPayment(models.Model):
             if account.account_type not in ('expense', 'expense_direct_cost'):
                 raise UserError(_("The internal transfer fee account must be an expense account."))
 
-    def _get_internal_transfer_liquidity_account(self, journal, payment_type):
+    def _get_internal_transfer_liquidity_account(self, journal):
         self.ensure_one()
-        method_lines = (
-            journal.inbound_payment_method_line_ids
-            if payment_type == 'inbound'
-            else journal.outbound_payment_method_line_ids
-        )
-        account = method_lines.mapped('payment_account_id')[:1]
-        return account or journal.default_account_id
+        # Internal transfers post directly between the bank/cash control
+        # accounts. Payment method accounts are often outstanding accounts,
+        # which would recreate the intermediary balance this flow removes.
+        return journal.default_account_id
 
-    def _post_internal_transfer_with_fee(self):
-        """Post a direct three-line transfer when a fee is entered.
-
-        This is intentionally used only for outbound transfers with a fee.
-        The source journal is credited for transfer plus fee, while the
-        destination journal liquidity account and configured expense account
-        are debited. Transfers without a fee retain Odoo's paired payment and
-        Funds in Transit behavior.
-        """
+    def _post_internal_transfer_direct(self):
+        """Post one balanced move directly between the two journal accounts."""
         self.ensure_one()
-        if self.payment_type != 'outbound':
+        if not self.destination_journal_id or self.journal_id == self.destination_journal_id:
             raise UserError(_(
-                "Transfer fees are supported for outbound internal transfers only."
+                "Choose two different bank or cash journals for an internal transfer."
             ))
         if self.paired_internal_transfer_payment_id:
             raise UserError(_(
-                "Cancel and recreate this transfer before posting it with a fee."
+                "This transfer was created with the previous two-payment workflow. Cancel it and create a new transfer to post directly between journal accounts."
             ))
-        source_account = self.outstanding_account_id
-        destination_account = self._get_internal_transfer_liquidity_account(
-            self.destination_journal_id, 'inbound'
+        if self.amount <= 0 or self.transfer_fee < 0:
+            raise UserError(_(
+                "The transfer amount must be positive and the transfer fee cannot be negative."
+            ))
+        if (
+            self.journal_id.type not in ('bank', 'cash')
+            or self.destination_journal_id.type not in ('bank', 'cash')
+            or self.journal_id.company_id != self.company_id
+            or self.destination_journal_id.company_id != self.company_id
+        ):
+            raise UserError(_(
+                "Choose two different bank or cash journals for an internal transfer."
+            ))
+        company_currency = self.company_id.currency_id
+        journal_currencies = (
+            self.journal_id.currency_id or company_currency,
+            self.destination_journal_id.currency_id or company_currency,
+        )
+        if any(currency != self.currency_id for currency in journal_currencies):
+            raise UserError(_(
+                "Both journals and the transfer must use the same currency for a direct internal transfer."
+            ))
+
+        selected_account = self._get_internal_transfer_liquidity_account(
+            self.journal_id,
+        )
+        other_account = self._get_internal_transfer_liquidity_account(
+            self.destination_journal_id,
         )
         expense_account = self.company_id.transfer_fee_account_id
-        if not source_account or not destination_account or not expense_account:
+        if not selected_account or not other_account:
             raise UserError(_(
-                "Configure the source journal, destination journal, and transfer fee expense accounts before posting."
+                "Configure a bank or cash account on both journals before posting an internal transfer."
             ))
-        amount_company = self.currency_id._convert(
-            self.amount, self.company_id.currency_id, self.company_id, self.date,
-        )
-        fee_company = self.currency_id._convert(
-            self.transfer_fee, self.company_id.currency_id, self.company_id, self.date,
-        )
-        move = self.env['account.move'].create({
-            'move_type': 'entry',
+        if any(
+            account.currency_id and account.currency_id != self.currency_id
+            for account in (selected_account, other_account)
+        ):
+            raise UserError(_(
+                "Both journal accounts and the transfer must use the same currency for a direct internal transfer."
+            ))
+        if self.transfer_fee and self.payment_type != 'outbound':
+            raise UserError(_(
+                "Transfer fees are supported for outbound internal transfers only."
+            ))
+
+        line_specs = []
+        if self.payment_type == 'outbound':
+            line_specs.append((other_account, _('Internal transfer'), self.amount))
+            if self.transfer_fee:
+                line_specs.append((expense_account, _('Internal transfer fee'), self.transfer_fee))
+            line_specs.append((
+                selected_account,
+                _('Internal transfer'),
+                -(self.amount + self.transfer_fee),
+            ))
+        else:
+            line_specs.extend((
+                (selected_account, _('Internal transfer'), self.amount),
+                (other_account, _('Internal transfer'), -self.amount),
+            ))
+
+        line_commands = []
+        for account, label, amount_currency in line_specs:
+            balance = self.currency_id._convert(
+                amount_currency, company_currency, self.company_id, self.date,
+            )
+            line_commands.append((0, 0, {
+                'name': label,
+                'account_id': account.id,
+                'currency_id': self.currency_id.id,
+                'balance': balance,
+                'amount_currency': amount_currency,
+            }))
+
+        move_vals = {
             'ref': self.memo or _('Internal transfer'),
             'date': self.date,
-            'journal_id': self.journal_id.id,
-            'company_id': self.company_id.id,
             'currency_id': self.currency_id.id,
-            'line_ids': [
-                (0, 0, {
-                    'name': _('Internal transfer'),
-                    'account_id': destination_account.id,
-                    'currency_id': self.currency_id.id,
-                    'balance': amount_company,
-                    'amount_currency': self.amount,
-                }),
-                (0, 0, {
-                    'name': _('Internal transfer fee'),
-                    'account_id': expense_account.id,
-                    'currency_id': self.currency_id.id,
-                    'balance': fee_company,
-                    'amount_currency': self.transfer_fee,
-                }),
-                (0, 0, {
-                    'name': _('Internal transfer'),
-                    'account_id': source_account.id,
-                    'currency_id': self.currency_id.id,
-                    'balance': -(amount_company + fee_company),
-                    'amount_currency': -(self.amount + self.transfer_fee),
-                }),
-            ],
-            'origin_payment_id': self.id,
-        })
+            'line_ids': [(5, 0, 0), *line_commands],
+        }
+        move = self.move_id
+        if move:
+            if move.state != 'draft':
+                raise UserError(_(
+                    "Reset the transfer to draft before posting it again."
+                ))
+            move.write(move_vals)
+        else:
+            move = self.env['account.move'].create({
+                **move_vals,
+                'move_type': 'entry',
+                'journal_id': self.journal_id.id,
+                'company_id': self.company_id.id,
+                'origin_payment_id': self.id,
+            })
         move.action_post()
         self.write({'move_id': move.id, 'state': 'paid'})
 
@@ -285,23 +291,7 @@ class AccountPayment(models.Model):
         for payment in self:
             if payment.is_internal_transfer:
                 payment._check_transfer_fee_configuration()
-                if payment.transfer_fee > 0:
-                    payment._post_internal_transfer_with_fee()
-                    continue
-                paired_payment = payment.paired_internal_transfer_payment_id
-                if not paired_payment:
-                    paired_payment = self.with_context(
-                        skip_pairing_sync=True
-                    ).create(payment._prepare_paired_transfer_vals())
-                    payment.paired_internal_transfer_payment_id = paired_payment
-                    paired_payment.paired_internal_transfer_payment_id = payment
-
-                # Posting one leg must always post its counterpart too. This
-                # also keeps both entries in sync when a canceled transfer is
-                # reset to draft and posted again.
-                for transfer_payment in payment | paired_payment:
-                    if transfer_payment.state == 'draft':
-                        super(AccountPayment, transfer_payment).action_post()
+                payment._post_internal_transfer_direct()
             else:
                 super(AccountPayment, payment).action_post()
                 payment._auto_reconcile_open_invoices()
