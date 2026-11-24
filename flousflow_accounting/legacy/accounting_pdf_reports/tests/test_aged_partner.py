@@ -69,3 +69,64 @@ class TestAgedPartnerBalance(AccountTestInvoicingCommon):
         self.assertEqual(line['3'], 200.0)  # 31-60 days
         self.assertEqual(line['0'], 300.0)  # more than 120 days
         self.assertEqual(line['total'], 650.0)
+
+    def test_interactive_report_custom_periods_for_customers_and_suppliers(self):
+        """Custom period lengths classify customer and vendor balances consistently."""
+        date_from = '2025-12-31'
+        amounts_by_date = [
+            ('2025-12-20', 100.0),  # 1-15 days
+            ('2025-12-15', 200.0),  # 16-30 days
+            ('2025-12-01', 50.0),   # 16-30 days, lower boundary
+            ('2025-11-30', 300.0),  # 31-45 days
+            ('2025-11-01', 400.0),  # 46-60 days
+            ('2025-10-31', 500.0),  # older than 60 days
+            (date_from, 25.0),      # not due as of the report date
+        ]
+        customer = self.partner_a
+        supplier = self.partner_b
+
+        for move_type, partner in (('out_invoice', customer), ('in_invoice', supplier)):
+            for invoice_date, amount in amounts_by_date:
+                self.init_invoice(
+                    move_type,
+                    partner=partner,
+                    amounts=[amount],
+                    taxes=[],
+                    invoice_date=invoice_date,
+                    post=True,
+                )
+
+        report = self.env['report.flousflow_accounting.apr__report_agedpartnerbalance']
+        customer_data = report.get_interactive_data(
+            result_selection='customer',
+            date_from=date_from,
+            period_length=15,
+            date_basis='due_date',
+        )
+        customer_row = next(row for row in customer_data['rows'] if row['partner_id'] == customer.id)
+        self.assertEqual(customer_data['period_length'], 15)
+        self.assertEqual(customer_row['buckets'], [100.0, 250.0, 300.0, 400.0, 500.0])
+        self.assertEqual(customer_row['not_due'], 25.0)
+        self.assertEqual(customer_row['total'], 1575.0)
+        self.assertEqual(
+            customer_row['total'],
+            customer_row['not_due'] + sum(customer_row['buckets']),
+        )
+
+        supplier_data = report.get_interactive_data(
+            result_selection='supplier',
+            date_from=date_from,
+            period_length=15,
+            date_basis='due_date',
+        )
+        supplier_row = next(row for row in supplier_data['rows'] if row['partner_id'] == supplier.id)
+        self.assertEqual(supplier_data['period_length'], 15)
+        # partner_b uses 30% due immediately and 70% due at the end of the
+        # following month, so supplier installments fall into different buckets.
+        self.assertEqual(supplier_row['buckets'], [-30.0, -75.0, -440.0, -120.0, -150.0])
+        self.assertEqual(supplier_row['not_due'], -760.0)
+        self.assertEqual(supplier_row['total'], -1575.0)
+        self.assertEqual(
+            supplier_row['total'],
+            supplier_row['not_due'] + sum(supplier_row['buckets']),
+        )
