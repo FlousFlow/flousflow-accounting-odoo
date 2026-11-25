@@ -15288,66 +15288,66 @@ msgstr "عرض الحركات"
 msgid "Close"
 msgstr "إغلاق"
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Aging Summary"
 msgstr "ملخص الأعمار"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Aging Details"
 msgstr "تفاصيل الأعمار"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "As of date"
 msgstr "كما في تاريخ"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Aging basis"
 msgstr "أساس احتساب الأعمار"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Target moves"
 msgstr "القيود المستهدفة"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Period length"
 msgstr "طول الفترة"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "days"
 msgstr "يوم"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Scale"
 msgstr "المقياس"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Based on due date"
 msgstr "حسب تاريخ الاستحقاق"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Based on invoice date"
 msgstr "حسب تاريخ الفاتورة"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Receivable and Payable"
 msgstr "المدين والدائن"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Aging Bucket"
 msgstr "فترة الاستحقاق"
 
 #. module: flousflow_accounting
-#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py
+#: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "No data found"
 msgstr "لا توجد بيانات"
