@@ -4,3 +4,4 @@ from . import partner_ledger
 from . import customer_statement
 from . import open_items
 from . import tax_report
+from . import aged_partner

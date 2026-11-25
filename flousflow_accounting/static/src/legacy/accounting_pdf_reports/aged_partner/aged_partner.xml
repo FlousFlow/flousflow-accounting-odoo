@@ -4,6 +4,7 @@
         <div class="o_action ff_aged_partner_report">
             <div class="ff_aged_toolbar">
                 <button class="btn btn-primary" t-on-click="this.printReport">Print</button>
+                <button class="btn btn-secondary" t-on-click="this.exportXlsx">Export Excel</button>
                 <h2 t-out="this.title"/>
                 <div class="ff_aged_filters">
                     <input class="form-control" type="date" aria-label="As of date"

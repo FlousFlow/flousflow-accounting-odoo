@@ -186,3 +186,10 @@
 - A wider selection including the existing automatic-reconciliation and collector suites could not initialize: Odoo's `AccountTestInvoicingCommon.setup_armageddon_tax` attempted to create an `account.tax` without the required `tax_group_id`; those suites did not run. Production and Al-Yamen databases were not used or changed.
 - Bumped the consolidated module to `20.0.1.0.73`.
 
+### 2026-11-25 — Aged partner report Excel export
+
+- Added an authenticated XLSX download for the aged receivable/payable report, with a summary sheet and invoice/journal-item detail sheet.
+- The export reuses the report's server-side calculation and carries through the current report type, as-of date, posted/all selection, aging period, partner filter, date basis, and display scale. Workbook amounts remain numeric and the sheets are right-to-left.
+- Added Arabic translations and bumped the module to `20.0.1.0.74`.
+- Python, JavaScript, and XML syntax checks passed. The translation catalogs contain pre-existing duplicate message definitions, so `msgfmt --check` cannot pass cleanly; no Odoo runtime, database upgrade, or end-to-end browser download was performed.
+

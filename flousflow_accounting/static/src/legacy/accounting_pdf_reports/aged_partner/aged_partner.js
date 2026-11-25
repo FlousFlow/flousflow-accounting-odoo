@@ -184,6 +184,23 @@ export class AgedPartnerReport extends Component {
             this.notification.add(error.message || _t("The report could not be printed."), { type: "danger" });
         }
     }
+
+    exportXlsx() {
+        const params = new URLSearchParams({
+            result_selection: this.state.resultSelection,
+            date_from: this.state.dateFrom,
+            target_move: this.state.targetMove,
+            period_length: String(Number(this.state.periodLength)),
+            partner_ids: this.state.partnerIds.join(","),
+            date_basis: this.state.dateBasis,
+            scale: this.state.scale,
+        });
+        return this.action.doAction({
+            type: "ir.actions.act_url",
+            url: `/accounting_pdf_reports/aged_partner/export?${params.toString()}`,
+            target: "download",
+        });
+    }
 }
 
 registry.category("actions").add("flousflow_accounting.apr__aged_partner", AgedPartnerReport);
