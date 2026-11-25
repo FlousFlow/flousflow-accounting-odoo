@@ -66,7 +66,7 @@
                             </field>
                         </page>
                         <page string="How This Plan Works">
-                            <div class="alert alert-info" role="note">
+                            <div class="alert alert-info" role="status">
                                 <strong>Sales target first:</strong> eligibility is based on net sales; the commission tier is selected by collection achievement.<br/>
                                 <strong>Combined:</strong> eligibility and commission tier use net sales plus collections including VAT against the combined targets.<br/>
                                 In both methods, the commission amount is calculated on actual collections excluding VAT. Only reconciled inbound payments and bank transactions count as collections.
@@ -217,7 +217,7 @@
                 <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
                 <filter name="calculated" string="Calculated" domain="[('state', '=', 'calculated')]"/>
                 <filter name="posted" string="Posted" domain="[('state', '=', 'posted')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter name="group_plan" string="Commission Plan" context="{'group_by': 'plan_id'}"/>
                     <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
                     <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
