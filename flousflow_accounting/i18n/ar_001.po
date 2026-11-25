@@ -486,7 +486,7 @@ msgstr "تسمية العمود"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_flousflow_account_loan_line__company_id
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_company_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__company_id
 msgid "Company"
 msgstr "الشركة"
 
@@ -1428,7 +1428,7 @@ msgstr "إجراء مطلوب"
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__active
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_category__active
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_active
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__active
 msgid "Active"
 msgstr "نشط"
 
@@ -3023,7 +3023,7 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__code
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_name
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__name
 msgid "Reference"
 msgstr "الرقم المرجعي"
 
@@ -6665,171 +6665,171 @@ msgid "Close"
 msgstr "إغلاق"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_name
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__name
 msgid "Plan Name"
 msgstr "اسم الخطة"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_method
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__method
 msgid "Commission Method"
 msgstr "طريقة حساب العمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_minimum_achievement
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__minimum_achievement
 msgid "Minimum Achievement (%)"
 msgstr "الحد الأدنى للإنجاز (%)"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_target_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__target_ids
 msgid "Salesperson Targets"
 msgstr "أهداف المناديب"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_tier_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__tier_ids
 msgid "Commission Tiers"
 msgstr "شرائح العمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_journal_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__journal_id
 msgid "Commission Journal"
 msgstr "دفتر يومية العمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_expense_account_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__expense_account_id
 msgid "Commission Expense Account"
 msgstr "حساب مصروف العمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_payable_account_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan__payable_account_id
 msgid "Commission Payable Account"
 msgstr "حساب مستحقات العمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target_salesperson_id
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_salesperson_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target__salesperson_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__salesperson_id
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "Salesperson"
 msgstr "المندوب"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target_sales_target
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_target_sales
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target__sales_target
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__target_sales
 msgid "Net Sales Target"
 msgstr "هدف صافي المبيعات"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target_collection_target
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_target_collection
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target__collection_target
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__target_collection
 msgid "Collection Target"
 msgstr "هدف التحصيل"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_tier_minimum_achievement
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_tier__minimum_achievement
 msgid "From Achievement (%)"
 msgstr "يبدأ عند إنجاز (%)"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_tier_rate_percent
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_commission_rate
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_tier__rate_percent
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__commission_rate
 msgid "Commission Rate (%)"
 msgstr "نسبة العمولة (%)"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_date_from
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__date_from
 msgid "Period From"
 msgstr "بداية الفترة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_date_to
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__date_to
 msgid "Period To"
 msgstr "نهاية الفترة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_calculated_at
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__calculated_at
 msgid "Last Calculated On"
 msgstr "آخر احتساب"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_salesperson_count
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__salesperson_count
 msgid "Salespeople"
 msgstr "عدد المناديب"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_total_sales
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_sales_net
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_sales_net
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__total_sales
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__sales_net
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source__sales_net
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "Net Sales"
 msgstr "صافي المبيعات"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_collected_gross
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__collected_gross
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "Collections Incl. VAT"
 msgstr "التحصيل شامل ضريبة القيمة المضافة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_collected_net
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__collected_net
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "Collections Excl. VAT"
 msgstr "التحصيل بدون ضريبة القيمة المضافة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_sales_achievement
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__sales_achievement
 msgid "Sales Achievement (%)"
 msgstr "نسبة تحقيق المبيعات (%)"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_collection_achievement
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__collection_achievement
 msgid "Collection Achievement (%)"
 msgstr "نسبة تحقيق التحصيل (%)"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_combined_achievement
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__combined_achievement
 msgid "Combined Achievement (%)"
 msgstr "نسبة الإنجاز المجمع (%)"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_eligible
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__eligible
 msgid "Eligible"
 msgstr "مستحق"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_total_commission
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_commission_amount
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__total_commission
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__commission_amount
 msgid "Commission Amount"
 msgstr "مبلغ العمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_move_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__move_id
 msgid "Commission Journal Entry"
 msgstr "القيد المحاسبي للعمولة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_source_date
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source__source_date
 msgid "Source Date"
 msgstr "تاريخ المستند"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_invoice_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source__invoice_id
 msgid "Customer Invoice / Credit Note"
 msgstr "فاتورة العميل / إشعار دائن"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_collection_move_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source__collection_move_id
 msgid "Receipt / Bank Transaction"
 msgstr "سند قبض / حركة بنكية"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_collected_gross
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source__collected_gross
 msgid "Collection Incl. VAT"
 msgstr "التحصيل شامل الضريبة"
 
 #. module: flousflow_accounting
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_collected_net
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source__collected_net
 msgid "Collection Excl. VAT"
 msgstr "التحصيل بدون الضريبة"
 
@@ -6846,6 +6846,7 @@ msgstr "نسبة إنجاز إجمالي المبيعات والتحصيل"
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_list
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_action
+#: model:ir.actions.act_window,name:flousflow_accounting.ff_sales_commission_plan_action
 msgid "Sales Commission Plans"
 msgstr "خطط عمولات المبيعات"
 
@@ -6863,6 +6864,7 @@ msgstr "طريقة عمل الخطة"
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_list
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_action
+#: model:ir.actions.act_window,name:flousflow_accounting.ff_sales_commission_batch_action
 msgid "Sales Commission Runs"
 msgstr "كشوف عمولات المبيعات"
 
@@ -6904,6 +6906,7 @@ msgstr "عرض القيد المحاسبي"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_action
+#: model:ir.actions.act_window,help:flousflow_accounting.ff_sales_commission_batch_action
 msgid "Start a commission run"
 msgstr "ابدأ كشف عمولات جديدًا"
 
@@ -6924,7 +6927,7 @@ msgstr "خطط العمولات"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
-#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_source_ids
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line__source_ids
 msgid "Source Documents"
 msgstr "المستندات المصدر"
 
@@ -7103,6 +7106,7 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_action
+#: model:ir.actions.act_window,help:flousflow_accounting.ff_sales_commission_batch_action
 msgid ""
 "Select a plan and date range, calculate the results, review their source "
 "documents, then post the journal entry."
@@ -7112,11 +7116,13 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_action
+#: model:ir.actions.act_window,help:flousflow_accounting.ff_sales_commission_plan_action
 msgid "Create a commission plan"
 msgstr "أنشئ خطة عمولة"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_action
+#: model:ir.actions.act_window,help:flousflow_accounting.ff_sales_commission_plan_action
 msgid ""
 "Choose the calculation method, set targets per salesperson, and configure "
 "the commission tiers and accounts."
