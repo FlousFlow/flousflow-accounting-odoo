@@ -65,11 +65,21 @@
                                 <th>Partner</th>
                                 <th class="text-end">Not Due</th>
                                 <th t-foreach="this.bucketLabels" t-as="label" t-key="label" class="text-end">
-                                    <button class="btn btn-link p-0 text-nowrap ff_aged_bucket_button"
-                                            t-on-click="() => this.openBucketEditor(label_index)">
+                                    <t t-if="this.state.editingBucket === label_index">
+                                        <span><t t-out="label.split('-')[0]"/>-</span>
+                                        <input class="form-control ff_aged_bucket_inline_input" type="number"
+                                               min="1" max="14640" aria-label="Aging period end day"
+                                               t-ref="bucketInput"
+                                               t-att-value="this.state.draftBucketEnd"
+                                               t-on-input="this.onBucketDraftChange"
+                                               t-on-keydown="this.onBucketKeydown"/>
+                                    </t>
+                                    <button t-elif="label_index &lt; 4" class="btn btn-link p-0 text-nowrap ff_aged_bucket_button"
+                                            t-on-click="() => this.openBucketEditor(label_index)"
+                                            t-att-aria-label="'Edit aging period ' + label">
                                         <t t-out="label"/>
-                                        <i t-if="label_index &lt; 4" class="fa fa-pencil ms-1 small"/>
                                     </button>
+                                    <span t-else="" t-out="label"/>
                                 </th>
                                 <th class="text-end">Total</th>
                             </tr>
@@ -118,34 +128,6 @@
                     </table>
                 </div>
             </div>
-            <div t-if="this.state.editingBucket !== false" class="modal d-block ff_aged_bucket_modal"
-                 tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Set aging periods</h4>
-                            <button type="button" class="btn-close" aria-label="Close"
-                                    t-on-click="this.closeBucketEditor"/>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-muted">Set the last day for this period. The next period starts on the following day.</p>
-                            <div class="input-group">
-                                <span class="input-group-text" t-out="this.editingBucketLabel"/>
-                                <input class="form-control" type="number" min="1" max="14640"
-                                       t-att-value="this.state.draftBucketEnd"
-                                       t-on-change="this.onBucketDraftChange"/>
-                                <span class="input-group-text">days</span>
-                            </div>
-                            <div class="form-text mt-2">Older is calculated automatically after the last period.</div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" t-on-click="this.closeBucketEditor">Cancel</button>
-                            <button type="button" class="btn btn-primary" t-on-click="this.applyBucketEnds">Apply periods</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div t-if="this.state.editingBucket !== false" class="modal-backdrop show"/>
         </div>
     </t>
 </templates>

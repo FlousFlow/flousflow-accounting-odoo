@@ -6,7 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { formatMonetary } from "@web/views/fields/formatters";
 import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
 import { deserializeDate } from "@web/core/l10n/dates";
-import { Component, onWillStart, proxy, useProps } from "@odoo/owl";
+import { Component, onWillStart, proxy, useEffect, useProps, useRef } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class AgedPartnerReport extends Component {
@@ -17,6 +17,14 @@ export class AgedPartnerReport extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
         this.notification = useService("notification");
+        this.bucketInput = useRef("bucketInput");
+        useEffect(() => {
+            const input = this.bucketInput.el;
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        }, () => [this.state.editingBucket]);
         const context = this.props.action.context || {};
         this.state = proxy({
             resultSelection: context.default_result_selection || "customer",
@@ -49,12 +57,6 @@ export class AgedPartnerReport extends Component {
         return ends.map((end, index) => `${index ? ends[index - 1] + 1 : 1}-${end}`).concat(_t("Older"));
     }
 
-    get editingBucketLabel() {
-        const index = Math.min(this.state.editingBucket, 3);
-        const previousEnd = index ? this.state.bucketEnds[index - 1] : 0;
-        return `${previousEnd + 1}-${this.state.draftBucketEnd}`;
-    }
-
     openBucketEditor(index) {
         this.state.editingBucket = Math.min(index, 3);
         this.state.draftBucketEnd = this.state.bucketEnds[this.state.editingBucket];
@@ -66,6 +68,17 @@ export class AgedPartnerReport extends Component {
 
     onBucketDraftChange(event) {
         this.state.draftBucketEnd = event.target.value;
+    }
+
+    onBucketKeydown(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            return this.applyBucketEnds();
+        }
+        if (event.key === "Escape") {
+            event.preventDefault();
+            this.closeBucketEditor();
+        }
     }
 
     async applyBucketEnds() {

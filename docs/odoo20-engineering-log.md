@@ -227,3 +227,9 @@
 - Added server-side validation for four ascending boundaries and reused them for report totals, invoice detail classification, PDF printing, and Excel export. Existing wizard reports still accept the legacy period-length setting.
 - Added Arabic labels for the new period editor and regression coverage for custom ranges, balance conservation, and invalid boundaries. Bumped the module to `20.0.1.0.85`.
 - Python compilation, JavaScript syntax, XML parsing, PO entry parsing, and `git diff --check` passed. Full Odoo tests and database upgrade are pending because this checkout has no Odoo runtime; the Arabic PO catalogs already contain duplicate message definitions, so GNU `msgfmt` reports the pre-existing duplicates.
+
+### 2026-11-25 — Inline editing for aging period headers
+
+- Replaced the period pop-up with in-place editing of the selected bucket's end day, matching the direct number-edit interaction in Odoo's pager.
+- Enter applies and reloads the report; Escape restores the prior value. The start of the next bucket remains derived and contiguous. Focus and selection move to the input when a header is clicked.
+- Bumped the module to `20.0.1.0.86`.

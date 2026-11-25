@@ -55,8 +55,7 @@
     .ff_aged_table { min-width: 60rem; }
     .ff_aged_bucket_button { color: inherit; font-weight: 600; text-decoration: none; }
     .ff_aged_bucket_button:hover { color: var(--o-brand-primary); }
-    .ff_aged_bucket_modal { z-index: 1055; }
-    .ff_aged_bucket_modal + .modal-backdrop { z-index: 1050; }
+    .ff_aged_bucket_inline_input { display: inline-block; width: 4.5rem; min-width: 4.5rem; padding: 0.1rem 0.25rem; text-align: center; }
     .ff_aged_partner_row { border-top: 1px solid var(--border-color, #dee2e6); }
     .ff_aged_detail_row td:first-child { padding-inline-start: 2.5rem; }
 }
