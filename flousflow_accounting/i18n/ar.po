@@ -10460,6 +10460,11 @@ msgstr "طباعة كشف العمولة"
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Print Commission"
+msgstr "طباعة العمولة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "Print this salesperson's detailed commission statement"
 msgstr "اطبع كشف العمولة التفصيلي لهذا المندوب"
 
