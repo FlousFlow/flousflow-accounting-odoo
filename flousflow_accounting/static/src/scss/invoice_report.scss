@@ -1,0 +1,17 @@
+/* Keep Saudi invoice headings readable without wasting vertical space. */
+table[name="invoice_line_table"] thead th {
+    padding: 0.3rem 0.35rem !important;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    vertical-align: middle;
+}
+
+#total table.o_total_table tr.o_total td {
+    padding: 0.35rem 0.5rem !important;
+    line-height: 1.2;
+    font-size: 0.9rem;
+}
+
+#total table.o_total_table tr.o_total td strong {
+    white-space: normal !important;
+}

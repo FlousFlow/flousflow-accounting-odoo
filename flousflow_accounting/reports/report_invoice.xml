@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Invoice print language follows the active user's interface language. -->
+    <template id="ff_report_invoice_user_language" inherit_id="account.report_invoice">
+        <xpath expr="//t[@t-set='lang']" position="attributes">
+            <attribute name="t-value">env.user.lang or 'en_US'</attribute>
+        </xpath>
+    </template>
+
+    <!-- Saudi tax invoices remain Arabic; English users get a bilingual copy. -->
+    <template id="ff_sa_invoice_language_and_compact_headers" inherit_id="l10n_sa.l10n_sa_report_invoice_document">
+        <xpath expr="//t[@t-set='display_in_lang_sec']" position="attributes">
+            <attribute name="t-value">o.company_id.country_id.code == 'SA' and not lang.startswith('ar')</attribute>
+        </xpath>
+        <xpath expr="//span[@name='th_description_ar']" position="replace">
+            <span name="th_description_ar" t-if="display_in_ar" t-translation="off" dir="rtl">الوصف</span>
+        </xpath>
+        <xpath expr="//span[@name='th_description_en']" position="replace">
+            <span name="th_description_en" t-if="display_in_en" t-translation="off">Description</span>
+        </xpath>
+        <xpath expr="//span[@name='th_quantity_ar']" position="replace">
+            <span name="th_quantity_ar" t-if="display_in_ar" t-translation="off" dir="rtl">الكمية</span>
+        </xpath>
+        <xpath expr="//span[@name='th_quantity_en']" position="replace">
+            <span name="th_quantity_en" t-if="display_in_en" t-translation="off">Quantity</span>
+        </xpath>
+        <xpath expr="//span[@name='th_priceunit_ar']" position="replace">
+            <span name="th_priceunit_ar" t-if="display_in_ar" t-translation="off" dir="rtl">سعر الوحدة</span>
+        </xpath>
+        <xpath expr="//span[@name='th_priceunit_en']" position="replace">
+            <span name="th_priceunit_en" t-if="display_in_en" t-translation="off">Unit price</span>
+        </xpath>
+        <xpath expr="//span[@name='th_discount_amount_ar']" position="replace">
+            <span name="th_discount_amount_ar" t-if="display_in_ar" t-translation="off" dir="rtl">قيمة الخصم</span>
+        </xpath>
+        <xpath expr="//span[@name='th_discount_amount_en']" position="replace">
+            <span name="th_discount_amount_en" t-if="display_in_en" t-translation="off">Discount</span>
+        </xpath>
+        <xpath expr="//span[@name='th_vat_amount_ar']" position="replace">
+            <span name="th_vat_amount_ar" t-if="display_in_ar" t-translation="off" dir="rtl">قيمة الضريبة</span>
+        </xpath>
+        <xpath expr="//span[@name='th_vat_amount_en']" position="replace">
+            <span name="th_vat_amount_en" t-if="display_in_en" t-translation="off">VAT amount</span>
+        </xpath>
+        <xpath expr="//span[@name='th_vat_excl_ar']" position="replace">
+            <span name="th_vat_excl_ar" t-if="display_in_ar" t-translation="off" dir="rtl">المبلغ غير شامل الضريبة</span>
+        </xpath>
+        <xpath expr="//span[@name='th_vat_excl_en']" position="replace">
+            <span name="th_vat_excl_en" t-if="display_in_en" t-translation="off">Amount excl. VAT</span>
+        </xpath>
+        <xpath expr="//span[@name='th_vat_incl_ar']" position="replace">
+            <span name="th_vat_incl_ar" t-if="display_in_ar" t-translation="off" dir="rtl">المبلغ شامل الضريبة</span>
+        </xpath>
+        <xpath expr="//span[@name='th_vat_incl_en']" position="replace">
+            <span name="th_vat_incl_en" t-if="display_in_en" t-translation="off">Amount incl. VAT</span>
+        </xpath>
+    </template>
+
+    <template id="ff_sa_invoice_compact_totals" inherit_id="l10n_sa.l10n_sa_document_tax_totals">
+        <xpath expr="//tr[hasclass('o_taxes')]/t[1]/td/span[@t-out=&quot;tax_group['group_name']&quot;]" position="replace">
+            <span t-if="lang.startswith('ar')" t-translation="off" dir="rtl">ضريبة القيمة المضافة</span>
+            <span t-else="" t-out="tax_group['group_name']"/>
+        </xpath>
+        <xpath expr="//tr[hasclass('o_taxes')]/t[@t-else='']//span[@t-out=&quot;tax_group['group_name']&quot;]" position="replace">
+            <span t-if="lang.startswith('ar')" t-translation="off" dir="rtl">ضريبة القيمة المضافة</span>
+            <span t-else="" t-out="tax_group['group_name']"/>
+        </xpath>
+        <xpath expr="//tr[hasclass('o_total')]/td/strong[1]" position="replace">
+            <strong class="text-nowrap">
+                <span t-if="lang.startswith('ar')" t-translation="off" dir="rtl">الإجمالي شامل الضريبة</span>
+                <span t-else="" t-translation="off">Total incl. VAT</span>
+                <span t-if="display_in_lang_sec"> / </span>
+            </strong>
+        </xpath>
+        <xpath expr="//strong[@name='total_ar']" position="replace">
+            <strong name="total_ar" t-if="display_in_ar" t-translation="off" dir="rtl">الإجمالي شامل الضريبة</strong>
+        </xpath>
+        <xpath expr="//strong[@name='total_en']" position="replace">
+            <strong name="total_en" t-if="display_in_en" t-translation="off" dir="ltr">Total incl. VAT</strong>
+        </xpath>
+    </template>
+
+    <template id="ff_sa_invoice_compact_company_totals" inherit_id="l10n_sa.l10n_sa_document_tax_totals_company_currency_template">
+        <xpath expr="//tr[hasclass('o_taxes')]/t[1]/td/span[@t-out=&quot;tax_group['group_name']&quot;]" position="replace">
+            <span t-if="lang.startswith('ar')" t-translation="off" dir="rtl">ضريبة القيمة المضافة</span>
+            <span t-else="" t-out="tax_group['group_name']"/>
+        </xpath>
+        <xpath expr="//tr[hasclass('o_taxes')]/t[@t-else='']//span[@t-out=&quot;tax_group['group_name']&quot;]" position="replace">
+            <span t-if="lang.startswith('ar')" t-translation="off" dir="rtl">ضريبة القيمة المضافة</span>
+            <span t-else="" t-out="tax_group['group_name']"/>
+        </xpath>
+        <xpath expr="//tr[hasclass('o_total')]/td/strong[1]" position="replace">
+            <strong class="text-nowrap">
+                <span t-if="lang.startswith('ar')" t-translation="off" dir="rtl">الإجمالي شامل الضريبة</span>
+                <span t-else="" t-translation="off">Total incl. VAT</span>
+                <span t-if="display_in_lang_sec"> / </span>
+            </strong>
+        </xpath>
+        <xpath expr="//strong[@name='total_ar']" position="replace">
+            <strong name="total_ar" t-if="display_in_ar" t-translation="off" dir="rtl">الإجمالي شامل الضريبة</strong>
+        </xpath>
+        <xpath expr="//strong[@name='total_en']" position="replace">
+            <strong name="total_en" t-if="display_in_en" t-translation="off" dir="ltr">Total incl. VAT</strong>
+        </xpath>
+    </template>
+</odoo>

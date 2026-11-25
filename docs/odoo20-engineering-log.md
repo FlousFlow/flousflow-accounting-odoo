@@ -212,3 +212,10 @@
 - Upgraded only training database `al_yamen_test` to `20.0.1.0.83` after a verified backup at `/var/backups/odoo/flousflow_commission_statement_20261125/al_yamen_test_before_statement.dump`. Confirmed the Turki statement generated as PDF through the live UI (`/report/download` HTTP 200, 152651 bytes); the browser returned to the commission run. Training service returned HTTP 200. Production was not upgraded.
 - Python compilation, manifest/XML parsing, new PO entries, and `git diff --check` passed. The legacy PO catalogs contain pre-existing duplicate message IDs, so `polib` duplicate validation was disabled for parsing while the new entries were checked for exact uniqueness and translation.
 
+
+### 2026-11-25 — Saudi invoice language and compact layout
+
+- Invoice PDF language follows the active Odoo user's language. Arabic users get Arabic labels; English users get English with Arabic retained for Saudi tax-invoice compliance.
+- Shortened bilingual table headings and grand-total text, and reduced header/total row padding.
+- Upgraded training database `al_yamen_test` to `20.0.1.0.84`; rendered the same posted invoice in Arabic and English and restored the test user's original language. The account move and totals were not changed.
+- Static manifest/XML checks and `git diff --check` passed. Training database backup: `/var/backups/odoo-invoice-preview-20261125-141410/al_yamen_test.dump`.
