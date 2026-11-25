@@ -244,6 +244,6 @@
               parent="ff_sales_commission_menu" action="ff_sales_commission_batch_action" sequence="10"
               groups="account.group_account_invoice,account.group_account_manager"/>
     <menuitem id="ff_sales_commission_plan_menu" name="Commission Plans"
-              parent="ff_sales_commission_menu" action="ff_sales_commission_plan_action" sequence="20"
+              parent="account.menu_finance_configuration" action="ff_sales_commission_plan_action" sequence="75"
               groups="account.group_account_manager"/>
 </odoo>

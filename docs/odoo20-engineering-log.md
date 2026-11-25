@@ -199,3 +199,8 @@
 - Fixed missing `module:` comments for new PO entries in both `ar.po` and `ar_001.po`. Odoo 20's PO importer requires this metadata and crashed while parsing the second catalog; the test database remains at `20.0.1.0.78` until a clean upgrade succeeds.
 - Bumped the module to `20.0.1.0.81` for the corrected translation catalogs.
 
+### 2026-11-25 — Commission plan configuration menu
+
+- Moved the manager-only Commission Plans menu to Odoo's standard Accounting Configuration menu (`account.menu_finance_configuration`). Commission Runs remain under the accounting reports/operations menu.
+- Bumped the module to `20.0.1.0.82`.
+
