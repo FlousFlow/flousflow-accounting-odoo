@@ -219,3 +219,4 @@
 - Shortened bilingual table headings and grand-total text, and reduced header/total row padding.
 - Upgraded training database `al_yamen_test` to `20.0.1.0.84`; rendered the same posted invoice in Arabic and English and restored the test user's original language. The account move and totals were not changed.
 - Static manifest/XML checks and `git diff --check` passed. Training database backup: `/var/backups/odoo-invoice-preview-20261125-141410/al_yamen_test.dump`.
+- Published commit `192a07e` to GitHub branch `20.0`, then upgraded production database `al_yamen` to `20.0.1.0.84`. Production backup: `/var/backups/odoo/flousflow-accounting-invoice-20261125/al_yamen-before-invoice-192a07e.dump`; `pg_restore --list` confirmed its archive. Odoo service is active, `/web/login` returned HTTP 303, the upgrade log reached `Registry loaded` with no errors, and the production checkout matched the branch commit.
