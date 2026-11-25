@@ -131,7 +131,7 @@
                         <label for="name"/>
                         <h1><field name="name"/></h1>
                     </div>
-                    <group>
+                    <group col="4">
                         <group>
                             <field name="plan_id" readonly="state != 'draft'" options="{'no_create': True}"/>
                             <field name="company_id" readonly="state != 'draft'" groups="base.group_multi_company"/>
@@ -142,11 +142,11 @@
                             <field name="calculated_at" readonly="1" invisible="not calculated_at"/>
                         </group>
                     </group>
-                    <group string="Run Totals" class="oe_subtotal_footer">
+                    <group string="Run Totals" col="4">
                         <field name="salesperson_count" readonly="1"/>
                         <field name="total_sales" readonly="1"/>
                         <field name="total_collected" readonly="1"/>
-                        <field name="total_commission" readonly="1" class="oe_subtotal_footer_separator"/>
+                        <field name="total_commission" readonly="1"/>
                         <field name="currency_id" invisible="1"/>
                     </group>
                     <field name="move_id" readonly="1" invisible="not move_id"/>
@@ -170,9 +170,15 @@
                                     <field name="eligible" widget="boolean_toggle"/>
                                     <field name="commission_rate"/>
                                     <field name="commission_amount" sum="Commission"/>
+                                    <button name="action_print_statement" type="object" string="Print"
+                                            icon="fa-print" title="Print this salesperson's detailed commission statement"/>
                                     <field name="currency_id" column_invisible="True"/>
                                 </list>
                                 <form string="Commission Result">
+                                    <header>
+                                        <button name="action_print_statement" type="object" string="Print"
+                                                icon="fa-print" class="btn-secondary"/>
+                                    </header>
                                     <sheet>
                                         <group>
                                             <group><field name="salesperson_id"/><field name="eligible"/></group>

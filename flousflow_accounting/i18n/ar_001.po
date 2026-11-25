@@ -7171,6 +7171,96 @@ msgid "Add at least one commission tier to the plan."
 msgstr "أضف شريحة عمولة واحدة على الأقل إلى الخطة."
 
 #. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Print Commission Statement"
+msgstr "طباعة كشف العمولة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Print this salesperson's detailed commission statement"
+msgstr "اطبع كشف العمولة التفصيلي لهذا المندوب"
+
+#. module: flousflow_accounting
+#: model:ir.actions.report,name:flousflow_accounting.ff_sales_commission_statement_report
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Salesperson Commission Statement"
+msgstr "كشف عمولة مندوب المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Commission Run:"
+msgstr "كشف العمولات:"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Plan:"
+msgstr "الخطة:"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Period:"
+msgstr "الفترة:"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Calculation Method:"
+msgstr "طريقة الاحتساب:"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Achievement Summary"
+msgstr "ملخص الإنجاز"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Commission Payout"
+msgstr "مستحق العمولة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Commission Base (Excl. VAT)"
+msgstr "أساس العمولة بدون ضريبة القيمة المضافة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Sales Invoices and Credit Notes"
+msgstr "فواتير البيع والإشعارات الدائنة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Document Total"
+msgstr "إجمالي المستند"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Net Sales Included"
+msgstr "صافي المبيعات المحتسب"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Reconciled Collections"
+msgstr "التحصيلات المسوّاة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Collection Date"
+msgstr "تاريخ التحصيل"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid "Applied Invoice"
+msgstr "الفاتورة المسددة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
+msgid ""
+"Commission is calculated on actual collections excluding VAT. Only "
+"reconciled inbound payments and bank transactions count as collections."
+msgstr ""
+"تُحسب العمولة على التحصيل الفعلي بدون ضريبة القيمة المضافة. ويُحتسب فقط "
+"القبض الوارد وحركات البنك التي تمت تسويتها محاسبيًا."
+
+#. module: flousflow_accounting
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_batch__state__calculated
 msgid "Calculated"
 msgstr "تم الاحتساب"

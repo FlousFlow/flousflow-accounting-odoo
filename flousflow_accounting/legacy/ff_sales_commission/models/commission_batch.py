@@ -359,6 +359,12 @@ class SalesCommissionLine(models.Model):
     commission_amount = fields.Monetary(string="Commission Amount", currency_field="currency_id", readonly=True)
     source_ids = fields.One2many("ff.sales.commission.source", "line_id", string="Source Documents", readonly=True)
 
+    def action_print_statement(self):
+        self.ensure_one()
+        return self.env.ref(
+            "flousflow_accounting.ff_sales_commission_statement_report"
+        ).report_action(self)
+
     _batch_salesperson_unique = models.Constraint(
         "unique(batch_id, salesperson_id)", "Each salesperson can appear only once in a commission run."
     )

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ff_sales_commission_statement_paperformat" model="report.paperformat">
+        <field name="name">Sales Commission Statement (A4 Landscape)</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">18</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="ff_sales_commission_statement_report" model="ir.actions.report">
+        <field name="name">Salesperson Commission Statement</field>
+        <field name="model">ff.sales.commission.line</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flousflow_accounting.ff_sales_commission_statement</field>
+        <field name="report_file">flousflow_accounting.ff_sales_commission_statement</field>
+        <field name="paperformat_id" ref="ff_sales_commission_statement_paperformat"/>
+        <field name="print_report_name">'Commission - %s' % (object.salesperson_id.name)</field>
+        <field name="binding_model_id" ref="model_ff_sales_commission_line"/>
+        <field name="binding_type">report</field>
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice')), (4, ref('account.group_account_manager'))]"/>
+    </record>
+
+    <template id="ff_sales_commission_statement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="company" t-value="o.company_id"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-3">
+                            <h2>Salesperson Commission Statement</h2>
+                            <h3><span t-field="o.salesperson_id"/></h3>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <strong>Commission Run:</strong>
+                                <span t-field="o.batch_id.name"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Plan:</strong>
+                                <span t-field="o.batch_id.plan_id"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Period:</strong>
+                                <span t-field="o.batch_id.date_from"/> - <span t-field="o.batch_id.date_to"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Calculation Method:</strong>
+                                <span t-field="o.batch_id.plan_id.method"/>
+                            </div>
+                        </div>
+
+                        <h4>Achievement Summary</h4>
+                        <table class="table table-sm table-bordered mb-3">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Net Sales Target</th>
+                                    <th>Net Sales</th>
+                                    <th>Sales Achievement (%)</th>
+                                    <th>Collection Target</th>
+                                    <th>Collections Incl. VAT</th>
+                                    <th>Collections Excl. VAT</th>
+                                    <th>Collection Achievement (%)</th>
+                                    <th>Combined Achievement (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-field="o.target_sales" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td><span t-field="o.sales_net" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td><span t-field="o.sales_achievement"/>%</td>
+                                    <td><span t-field="o.target_collection" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td><span t-field="o.collected_gross" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td><span t-field="o.collected_net" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td><span t-field="o.collection_achievement"/>%</td>
+                                    <td><span t-field="o.combined_achievement"/>%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Commission Payout</h4>
+                        <table class="table table-sm table-bordered mb-3" style="width: 55%;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Eligible</th>
+                                    <th>Commission Rate (%)</th>
+                                    <th>Commission Base (Excl. VAT)</th>
+                                    <th>Commission Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-if="o.eligible">Yes</span><span t-else="">No</span></td>
+                                    <td><span t-field="o.commission_rate"/>%</td>
+                                    <td><span t-field="o.collected_net" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td class="fw-bold"><span t-field="o.commission_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Sales Invoices and Credit Notes</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Document</th>
+                                    <th>Customer</th>
+                                    <th>Document Total</th>
+                                    <th>Net Sales Included</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.source_ids" t-as="source">
+                                    <tr t-if="source.sales_net">
+                                        <td><span t-field="source.source_date"/></td>
+                                        <td><span t-field="source.invoice_id.name"/></td>
+                                        <td><span t-field="source.invoice_id.partner_id"/></td>
+                                        <td><span t-field="source.invoice_id.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        <td><span t-field="source.sales_net" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-3">Reconciled Collections</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Collection Date</th>
+                                    <th>Receipt / Bank Transaction</th>
+                                    <th>Applied Invoice</th>
+                                    <th>Collections Incl. VAT</th>
+                                    <th>Collections Excl. VAT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.source_ids" t-as="source">
+                                    <tr t-if="source.collection_move_id">
+                                        <td><span t-field="source.source_date"/></td>
+                                        <td><span t-field="source.collection_move_id.name"/></td>
+                                        <td><span t-field="source.invoice_id.name"/></td>
+                                        <td><span t-field="source.collected_gross" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        <td><span t-field="source.collected_net" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <div class="text-muted mt-3">
+                            Commission is calculated on actual collections excluding VAT. Only reconciled inbound payments and bank transactions count as collections.
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {'name': 'FlousFlow Accounting',
- 'version': '20.0.1.0.82',
+ 'version': '20.0.1.0.83',
  'category': 'Accounting',
  'summary': 'Odoo 20 accounting suite with reports, payments, assets, budgets and reconciliation.',
  'description': 'FlousFlow accounting features consolidated from the 20.0 source addons. Spreadsheet dashboards '
@@ -27,6 +27,7 @@
           'legacy/ff_sales_commission/security/ir.access.csv',
           'legacy/ff_sales_commission/data/commission_sequence.xml',
           'legacy/ff_sales_commission/views/sales_commission_views.xml',
+          'legacy/ff_sales_commission/report/commission_statement.xml',
           'legacy/accounting_pdf_reports/security/annual_report_document_rules.xml',
           'legacy/accounting_pdf_reports/data/annual_report_document_template.xml',
           'legacy/accounting_pdf_reports/data/account_account_type.xml',
