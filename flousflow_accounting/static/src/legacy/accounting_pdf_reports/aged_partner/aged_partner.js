@@ -17,16 +17,6 @@ export class AgedPartnerReport extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
         this.notification = useService("notification");
-        useEffect(() => {
-            if (this.state.editingBucket !== false) {
-                const input = document.querySelector(".ff_aged_bucket_inline_input");
-                if (!input) {
-                    return;
-                }
-                input.focus();
-                input.select();
-            }
-        });
         const context = this.props.action.context || {};
         this.state = proxy({
             resultSelection: context.default_result_selection || "customer",
@@ -46,6 +36,16 @@ export class AgedPartnerReport extends Component {
             currencyId: false,
             expandedIds: [],
             loading: true,
+        });
+        useEffect(() => {
+            if (this.state.editingBucket !== false) {
+                const input = document.querySelector(".ff_aged_bucket_inline_input");
+                if (!input) {
+                    return;
+                }
+                input.focus();
+                input.select();
+            }
         });
         onWillStart(() => this.loadReport());
     }

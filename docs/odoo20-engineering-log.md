@@ -233,3 +233,8 @@
 - Replaced the period pop-up with in-place editing of the selected bucket's end day, matching the direct number-edit interaction in Odoo's pager.
 - Enter applies and reloads the report; Escape restores the prior value. The start of the next bucket remains derived and contiguous. Focus and selection move to the input when a header is clicked.
 - Bumped the module to `20.0.1.0.87`; use the installed OWL effect hook to focus the inline editor because this server's OWL bundle does not export `useRef`.
+
+### 2026-11-25 — Aged partner inline editor lifecycle fix
+
+- Training UI confirmed OWL invokes `useEffect` during component setup; register it only after initializing the reactive report state, otherwise the first render reads `editingBucket` from an undefined state.
+- Bumped module to `20.0.1.0.88`. Validate the report render and inline Enter/Escape flow on training before production deployment.
