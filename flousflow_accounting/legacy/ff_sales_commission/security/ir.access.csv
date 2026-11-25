@@ -1,0 +1,10 @@
+id,name,model_id,group_id/id,operation,domain
+acc__commission_plan_manager,Commission plans accounting manager,model_ff_sales_commission_plan,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__commission_target_manager,Commission targets accounting manager,model_ff_sales_commission_target,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__commission_tier_manager,Commission tiers accounting manager,model_ff_sales_commission_tier,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__commission_batch_accountant,Commission runs accounting user,model_ff_sales_commission_batch,account.group_account_invoice,cru,"[('company_id', 'in', company_ids)]"
+acc__commission_batch_manager,Commission runs accounting manager,model_ff_sales_commission_batch,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
+acc__commission_line_accountant,Commission results accounting user,model_ff_sales_commission_line,account.group_account_invoice,r,"[('company_id', 'in', company_ids)]"
+acc__commission_line_readonly,Commission results accounting read only,model_ff_sales_commission_line,account.group_account_readonly,r,"[('company_id', 'in', company_ids)]"
+acc__commission_source_accountant,Commission sources accounting user,model_ff_sales_commission_source,account.group_account_invoice,r,"[('company_id', 'in', company_ids)]"
+acc__commission_source_readonly,Commission sources accounting read only,model_ff_sales_commission_source,account.group_account_readonly,r,"[('company_id', 'in', company_ids)]"

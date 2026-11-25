@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ff_sales_commission_plan_list" model="ir.ui.view">
+        <field name="name">ff.sales.commission.plan.list</field>
+        <field name="model">ff.sales.commission.plan</field>
+        <field name="arch" type="xml">
+            <list string="Sales Commission Plans" decoration-muted="not active">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="method"/>
+                <field name="minimum_achievement"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ff_sales_commission_plan_form" model="ir.ui.view">
+        <field name="name">ff.sales.commission.plan.form</field>
+        <field name="model">ff.sales.commission.plan</field>
+        <field name="arch" type="xml">
+            <form string="Sales Commission Plan">
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Example: Standard Sales Commission"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="method"/>
+                            <field name="minimum_achievement"/>
+                        </group>
+                        <group>
+                            <field name="journal_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="expense_account_id" options="{'no_create': True}"/>
+                            <field name="payable_account_id" options="{'no_create': True}"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salesperson Targets">
+                            <div class="text-muted mb-2">
+                                Set each salesperson's net sales and collection target. Sales are net of customer credit notes.
+                            </div>
+                            <field name="target_ids">
+                                <list editable="bottom">
+                                    <field name="salesperson_id" options="{'no_create': True}"/>
+                                    <field name="sales_target"/>
+                                    <field name="collection_target"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Commission Tiers">
+                            <div class="text-muted mb-2">
+                                The highest reached threshold selects one rate, applied to the salesperson's collected amount excluding VAT.
+                            </div>
+                            <field name="tier_ids">
+                                <list editable="bottom">
+                                    <field name="minimum_achievement"/>
+                                    <field name="rate_percent"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="How This Plan Works">
+                            <div class="alert alert-info" role="note">
+                                <strong>Sales target first:</strong> eligibility is based on net sales; the commission tier is selected by collection achievement.<br/>
+                                <strong>Combined:</strong> eligibility and commission tier use net sales plus collections including VAT against the combined targets.<br/>
+                                In both methods, the commission amount is calculated on actual collections excluding VAT. Only reconciled inbound payments and bank transactions count as collections.
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ff_sales_commission_plan_action" model="ir.actions.act_window">
+        <field name="name">Sales Commission Plans</field>
+        <field name="res_model">ff.sales.commission.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a commission plan</p>
+            <p>Choose the calculation method, set targets per salesperson, and configure the commission tiers and accounts.</p>
+        </field>
+    </record>
+
+    <record id="ff_sales_commission_batch_list" model="ir.ui.view">
+        <field name="name">ff.sales.commission.batch.list</field>
+        <field name="model">ff.sales.commission.batch</field>
+        <field name="arch" type="xml">
+            <list string="Sales Commission Runs"
+                  decoration-success="state == 'posted'"
+                  decoration-info="state == 'calculated'">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="plan_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="salesperson_count"/>
+                <field name="total_sales" sum="Net Sales"/>
+                <field name="total_collected" sum="Collections"/>
+                <field name="total_commission" sum="Commission"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ff_sales_commission_batch_form" model="ir.ui.view">
+        <field name="name">ff.sales.commission.batch.form</field>
+        <field name="model">ff.sales.commission.batch</field>
+        <field name="arch" type="xml">
+            <form string="Sales Commission Run">
+                <header>
+                    <button name="action_calculate" string="Calculate Commissions" type="object"
+                            class="btn-primary" data-hotkey="g" invisible="state == 'posted'"/>
+                    <button name="action_post" string="Post Commission Entry" type="object"
+                            class="btn-primary" data-hotkey="p" groups="account.group_account_manager"
+                            invisible="state != 'calculated'"/>
+                    <button name="action_view_move" string="View Journal Entry" type="object"
+                            groups="account.group_account_invoice" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,calculated,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="plan_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="company_id" readonly="state != 'draft'" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Selected Period">
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="calculated_at" readonly="1" invisible="not calculated_at"/>
+                        </group>
+                    </group>
+                    <group string="Run Totals" class="oe_subtotal_footer">
+                        <field name="salesperson_count" readonly="1"/>
+                        <field name="total_sales" readonly="1"/>
+                        <field name="total_collected" readonly="1"/>
+                        <field name="total_commission" readonly="1" class="oe_subtotal_footer_separator"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <field name="move_id" readonly="1" invisible="not move_id"/>
+                    <notebook>
+                        <page string="Commission Results">
+                            <div class="text-muted mb-2">
+                                Review the figures and source documents before posting. Recalculate to include any accounting changes made after the last calculation.
+                            </div>
+                            <field name="line_ids" readonly="1">
+                                <list create="0" edit="0" delete="0"
+                                      decoration-success="eligible and commission_amount &gt; 0">
+                                    <field name="salesperson_id"/>
+                                    <field name="target_sales" optional="hide"/>
+                                    <field name="sales_net" sum="Net Sales"/>
+                                    <field name="sales_achievement"/>
+                                    <field name="target_collection" optional="hide"/>
+                                    <field name="collected_gross" sum="Collections Incl. VAT"/>
+                                    <field name="collected_net" sum="Collections Excl. VAT" optional="show"/>
+                                    <field name="collection_achievement" optional="hide"/>
+                                    <field name="combined_achievement" optional="hide"/>
+                                    <field name="eligible" widget="boolean_toggle"/>
+                                    <field name="commission_rate"/>
+                                    <field name="commission_amount" sum="Commission"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                                <form string="Commission Result">
+                                    <sheet>
+                                        <group>
+                                            <group><field name="salesperson_id"/><field name="eligible"/></group>
+                                            <group><field name="commission_rate"/><field name="commission_amount"/></group>
+                                        </group>
+                                        <group string="Achievement">
+                                            <field name="target_sales"/><field name="sales_net"/><field name="sales_achievement"/>
+                                            <field name="target_collection"/><field name="collected_gross"/><field name="collected_net"/>
+                                            <field name="collection_achievement"/><field name="combined_achievement"/>
+                                        </group>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="source_ids">
+                                            <list create="0" edit="0" delete="0">
+                                                <field name="source_date"/>
+                                                <field name="invoice_id"/>
+                                                <field name="collection_move_id"/>
+                                                <field name="sales_net" sum="Net Sales"/>
+                                                <field name="collected_gross" sum="Collections Incl. VAT"/>
+                                                <field name="collected_net" sum="Collections Excl. VAT"/>
+                                                <field name="currency_id" column_invisible="True"/>
+                                            </list>
+                                        </field>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ff_sales_commission_batch_search" model="ir.ui.view">
+        <field name="name">ff.sales.commission.batch.search</field>
+        <field name="model">ff.sales.commission.batch</field>
+        <field name="arch" type="xml">
+            <search string="Sales Commission Runs">
+                <field name="name"/>
+                <field name="plan_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="calculated" string="Calculated" domain="[('state', '=', 'calculated')]"/>
+                <filter name="posted" string="Posted" domain="[('state', '=', 'posted')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_plan" string="Commission Plan" context="{'group_by': 'plan_id'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ff_sales_commission_batch_action" model="ir.actions.act_window">
+        <field name="name">Sales Commission Runs</field>
+        <field name="res_model">ff.sales.commission.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ff_sales_commission_batch_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Start a commission run</p>
+            <p>Select a plan and date range, calculate the results, review their source documents, then post the journal entry.</p>
+        </field>
+    </record>
+
+    <menuitem id="ff_sales_commission_menu" name="Sales Commissions"
+              parent="account.account_reports_management_menu" sequence="32"
+              groups="account.group_account_invoice,account.group_account_manager"/>
+    <menuitem id="ff_sales_commission_batch_menu" name="Commission Runs"
+              parent="ff_sales_commission_menu" action="ff_sales_commission_batch_action" sequence="10"
+              groups="account.group_account_invoice,account.group_account_manager"/>
+    <menuitem id="ff_sales_commission_plan_menu" name="Commission Plans"
+              parent="ff_sales_commission_menu" action="ff_sales_commission_plan_action" sequence="20"
+              groups="account.group_account_manager"/>
+</odoo>

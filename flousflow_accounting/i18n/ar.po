@@ -149,8 +149,12 @@ msgstr "حد مستقل لكل جهة اتصال"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_company__credit_limit_scope
-msgid "Choose whether the company default applies to every customer or each contact can use a specific limit."
-msgstr "استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز الحد العام."
+msgid ""
+"Choose whether the company default applies to every customer or each contact"
+" can use a specific limit."
+msgstr ""
+"استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز"
+" الحد العام."
 
 #. module: flousflow_accounting
 #: model:ir.ui.menu,name:flousflow_accounting.acc__menu_accounting_statement_cash
@@ -344,8 +348,12 @@ msgstr ""
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
-msgid "Use the company default for all customers, or choose a specific limit on each contact."
-msgstr "استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز الحد العام."
+msgid ""
+"Use the company default for all customers, or choose a specific limit on "
+"each contact."
+msgstr ""
+"استخدم حد الشركة لجميع العملاء، مع السماح لحد خاص مفعّل على جهة اتصال بتجاوز"
+" الحد العام."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
@@ -1490,6 +1498,7 @@ msgstr "تقرير دفتر اليومية المشترك"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_tax_report_wizard__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_accounting_report__company_id
 #: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__company_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_company_id
 msgid "Company"
 msgstr "شركة"
 
@@ -1630,6 +1639,7 @@ msgid "Custom"
 msgstr "مُخصص"
 
 #. module: flousflow_accounting
+#. odoo-javascript
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_print_journal__sort_selection__date
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_report_general_ledger__sortby__sort_date
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__accounting_report__filter_cmp__filter_date
@@ -1637,7 +1647,6 @@ msgstr "مُخصص"
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_general_ledger
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_journal
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__report_partnerledger
-#. odoo-javascript
 #: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/customer_statement/customer_statement.xml:0
 msgid "Date"
 msgstr "التاريخ"
@@ -3106,6 +3115,7 @@ msgstr "إجراءات قيد اليومية"
 #. module: flousflow_accounting
 #. odoo-javascript
 #: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/static/src/partner_ledger/partner_ledger.xml:0
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "View Journal Entry"
 msgstr "عرض قيد اليومية"
 
@@ -3542,6 +3552,7 @@ msgstr "إجراء مطلوب"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_category__active
 #: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__active
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_active
 msgid "Active"
 msgstr "نشط"
 
@@ -3558,12 +3569,28 @@ msgid "A portal user cannot be assigned as a salesperson credit owner."
 msgstr "لا يمكن تعيين مستخدم البوابة كمسؤول عن حد ائتماني لمندوب."
 
 #. module: flousflow_accounting
-msgid "Salesperson %(salesperson)s cannot confirm this order.\nCredit limit: %(limit)s\nAlready used: %(used)s\nThis order: %(order)s\nProjected exposure: %(projected)s\nAvailable before this order: %(available)s"
-msgstr "لا يستطيع المندوب %(salesperson)s تأكيد هذا الأمر.\nالحد الائتماني: %(limit)s\nالمستخدم حاليًا: %(used)s\nهذا الأمر: %(order)s\nالتعرض المتوقع: %(projected)s\nالمتاح قبل هذا الأمر: %(available)s"
+msgid ""
+"Salesperson %(salesperson)s cannot confirm this order.\n"
+"Credit limit: %(limit)s\n"
+"Already used: %(used)s\n"
+"This order: %(order)s\n"
+"Projected exposure: %(projected)s\n"
+"Available before this order: %(available)s"
+msgstr ""
+"لا يستطيع المندوب %(salesperson)s تأكيد هذا الأمر.\n"
+"الحد الائتماني: %(limit)s\n"
+"المستخدم حاليًا: %(used)s\n"
+"هذا الأمر: %(order)s\n"
+"التعرض المتوقع: %(projected)s\n"
+"المتاح قبل هذا الأمر: %(available)s"
 
 #. module: flousflow_accounting
-msgid "Credit limit override used by %(user)s.\n%(message)s"
-msgstr "تم تجاوز حد الائتمان بواسطة %(user)s.\n%(message)s"
+msgid ""
+"Credit limit override used by %(user)s.\n"
+"%(message)s"
+msgstr ""
+"تم تجاوز حد الائتمان بواسطة %(user)s.\n"
+"%(message)s"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__activity_ids
@@ -3994,37 +4021,54 @@ msgstr "اختر دفترين مختلفين من نوع بنك أو نقدية 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
-msgid "This transfer was created with the previous two-payment workflow. Cancel it and create a new transfer to post directly between journal accounts."
-msgstr "تم إنشاء هذا التحويل بالطريقة القديمة التي تنشئ دفعتين. ألغِه وأنشئ تحويلًا جديدًا لترحيل قيد مباشر بين حسابي الدفترين."
+msgid ""
+"This transfer was created with the previous two-payment workflow. Cancel it "
+"and create a new transfer to post directly between journal accounts."
+msgstr ""
+"تم إنشاء هذا التحويل بالطريقة القديمة التي تنشئ دفعتين. ألغِه وأنشئ تحويلًا "
+"جديدًا لترحيل قيد مباشر بين حسابي الدفترين."
 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
-msgid "The transfer amount must be positive and the transfer fee cannot be negative."
-msgstr "يجب أن يكون مبلغ التحويل موجبًا، ولا يجوز أن يكون مصروف التحويل سالبًا."
+msgid ""
+"The transfer amount must be positive and the transfer fee cannot be "
+"negative."
+msgstr ""
+"يجب أن يكون مبلغ التحويل موجبًا، ولا يجوز أن يكون مصروف التحويل سالبًا."
 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
-msgid "Both journals and the transfer must use the same currency for a direct internal transfer."
-msgstr "يجب أن يستخدم الدفتران والتحويل العملة نفسها لإجراء تحويل داخلي مباشر."
+msgid ""
+"Both journals and the transfer must use the same currency for a direct "
+"internal transfer."
+msgstr ""
+"يجب أن يستخدم الدفتران والتحويل العملة نفسها لإجراء تحويل داخلي مباشر."
 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
-msgid "Configure a bank or cash account on both journals before posting an internal transfer."
+msgid ""
+"Configure a bank or cash account on both journals before posting an internal"
+" transfer."
 msgstr "حدد حساب بنك أو نقدية في كلا الدفترين قبل ترحيل التحويل الداخلي."
 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
-msgid "Both journal accounts and the transfer must use the same currency for a direct internal transfer."
-msgstr "يجب أن يستخدم حسابا الدفترين والتحويل العملة نفسها لإجراء تحويل داخلي مباشر."
+msgid ""
+"Both journal accounts and the transfer must use the same currency for a "
+"direct internal transfer."
+msgstr ""
+"يجب أن يستخدم حسابا الدفترين والتحويل العملة نفسها لإجراء تحويل داخلي مباشر."
 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/ff_account_transfer/models/account_payment.py:0
-msgid "Configure the internal transfer fee expense account before posting a transfer with a fee."
+msgid ""
+"Configure the internal transfer fee expense account before posting a "
+"transfer with a fee."
 msgstr "اضبط حساب مصروف التحويل الداخلي قبل ترحيل تحويل يتضمن مصروفًا."
 
 #. module: flousflow_accounting
@@ -4055,26 +4099,45 @@ msgstr "تقييد البيع الآجل حسب منفذ البيع"
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_company__pos_credit_restriction_block
 #: model:ir.model.fields,help:flousflow_accounting.field_res_config_settings__pos_credit_restriction_block
-msgid "When enabled, a customer's Customer Account payment is allowed only from the point of sale assigned on the customer's contact. Cash and other immediate payment methods remain available everywhere."
-msgstr "عند التفعيل، يُسمح بدفع حساب العميل فقط من منفذ البيع المرتبط بجهة الاتصال. وتظل طرق الدفع النقدية والفورية الأخرى متاحة من جميع المنافذ."
+msgid ""
+"When enabled, a customer's Customer Account payment is allowed only from the"
+" point of sale assigned on the customer's contact. Cash and other immediate "
+"payment methods remain available everywhere."
+msgstr ""
+"عند التفعيل، يُسمح بدفع حساب العميل فقط من منفذ البيع المرتبط بجهة الاتصال. "
+"وتظل طرق الدفع النقدية والفورية الأخرى متاحة من جميع المنافذ."
 
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/om_account_accountant/models/pos_credit_restriction.py:0
 #, python-format
-msgid "Customer %(customer)s is assigned to %(assigned_pos)s for credit sales. Customer Account credit is not allowed at %(current_pos)s. Use an immediate payment method or process the credit sale from the assigned point of sale."
-msgstr "العميل %(customer)s مخصص للبيع الآجل من خلال منفذ البيع %(assigned_pos)s. لا يُسمح بالبيع على الحساب من منفذ البيع %(current_pos)s. استخدم وسيلة دفع فورية أو أتمّ البيع الآجل من منفذ البيع المخصص."
+msgid ""
+"Customer %(customer)s is assigned to %(assigned_pos)s for credit sales. "
+"Customer Account credit is not allowed at %(current_pos)s. Use an immediate "
+"payment method or process the credit sale from the assigned point of sale."
+msgstr ""
+"العميل %(customer)s مخصص للبيع الآجل من خلال منفذ البيع %(assigned_pos)s. لا"
+" يُسمح بالبيع على الحساب من منفذ البيع %(current_pos)s. استخدم وسيلة دفع "
+"فورية أو أتمّ البيع الآجل من منفذ البيع المخصص."
 
 #. module: flousflow_accounting
 #. odoo-javascript
 #: code:addons/flousflow_accounting/static/src/app/pos_credit_restriction/payment_screen.js:0
-msgid "The previous Customer Account payment was removed. This customer can only use immediate payment at this point of sale."
-msgstr "تمت إزالة دفعة حساب العميل السابقة. يمكن لهذا العميل الدفع بوسيلة فورية فقط من منفذ البيع هذا."
+msgid ""
+"The previous Customer Account payment was removed. This customer can only "
+"use immediate payment at this point of sale."
+msgstr ""
+"تمت إزالة دفعة حساب العميل السابقة. يمكن لهذا العميل الدفع بوسيلة فورية فقط "
+"من منفذ البيع هذا."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
-msgid "Allow Customer Account credit only at the point of sale assigned to the customer. Immediate payment methods remain available at all points of sale."
-msgstr "السماح بالبيع على الحساب فقط من منفذ البيع المرتبط بالعميل. تظل طرق الدفع الفوري متاحة من جميع المنافذ."
+msgid ""
+"Allow Customer Account credit only at the point of sale assigned to the "
+"customer. Immediate payment methods remain available at all points of sale."
+msgstr ""
+"السماح بالبيع على الحساب فقط من منفذ البيع المرتبط بالعميل. تظل طرق الدفع "
+"الفوري متاحة من جميع المنافذ."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__res_config_settings_view_form
@@ -4093,8 +4156,12 @@ msgstr "منفذ البيع المسموح بالبيع الآجل"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_partner__pos_credit_config_id
-msgid "This customer may use Customer Account credit only at this point of sale. Leave empty when the restriction is not applicable to this contact."
-msgstr "يمكن لهذا العميل استخدام البيع على الحساب من منفذ البيع هذا فقط. اترك الحقل فارغًا إذا لم ينطبق التقييد على جهة الاتصال."
+msgid ""
+"This customer may use Customer Account credit only at this point of sale. "
+"Leave empty when the restriction is not applicable to this contact."
+msgstr ""
+"يمكن لهذا العميل استخدام البيع على الحساب من منفذ البيع هذا فقط. اترك الحقل "
+"فارغًا إذا لم ينطبق التقييد على جهة الاتصال."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_partner_property_form
@@ -4131,6 +4198,9 @@ msgstr "مبيعات المندوبين والفرق"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_salesperson_credit_limit__salesperson_id
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_list
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_search
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target_salesperson_id
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_salesperson_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
 msgid "Salesperson"
 msgstr "مندوب المبيعات"
 
@@ -4212,18 +4282,30 @@ msgstr "تفعيل حدود ائتمان مندوبي المبيعات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_res_company__salesperson_credit_limit_block
-msgid "Refuse confirming sales orders when the salesperson's open exposure exceeds their configured limit."
-msgstr "رفض تأكيد أوامر البيع عندما يتجاوز الرصيد المفتوح للمندوب الحد المحدد له."
+msgid ""
+"Refuse confirming sales orders when the salesperson's open exposure exceeds "
+"their configured limit."
+msgstr ""
+"رفض تأكيد أوامر البيع عندما يتجاوز الرصيد المفتوح للمندوب الحد المحدد له."
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,help:flousflow_accounting.field_salesperson_credit_limit__credit_limit
-msgid "Maximum open credit exposure this salesperson may confirm. Zero means no limit."
-msgstr "أقصى رصيد ائتماني مفتوح يمكن لهذا المندوب تأكيده. الصفر يعني عدم وجود حد."
+msgid ""
+"Maximum open credit exposure this salesperson may confirm. Zero means no "
+"limit."
+msgstr ""
+"أقصى رصيد ائتماني مفتوح يمكن لهذا المندوب تأكيده. الصفر يعني عدم وجود حد."
 
 #. module: flousflow_accounting
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.acc__view_salesperson_credit_limit_form
-msgid "The used amount includes unpaid customer invoices assigned to this salesperson and the un-invoiced balance of confirmed sales orders. Payments release the limit when they reduce the accounting residual."
-msgstr "يشمل المبلغ المستخدم فواتير العملاء غير المسددة المسندة إلى هذا المندوب والرصيد غير المفوتر من أوامر البيع المؤكدة. تُحرر المدفوعات الحد عندما تخفض الرصيد المتبقي محاسبياً."
+msgid ""
+"The used amount includes unpaid customer invoices assigned to this "
+"salesperson and the un-invoiced balance of confirmed sales orders. Payments "
+"release the limit when they reduce the accounting residual."
+msgstr ""
+"يشمل المبلغ المستخدم فواتير العملاء غير المسددة المسندة إلى هذا المندوب "
+"والرصيد غير المفوتر من أوامر البيع المؤكدة. تُحرر المدفوعات الحد عندما تخفض "
+"الرصيد المتبقي محاسبياً."
 
 #. module: flousflow_accounting
 #: model_terms:ir.actions.act_window,help:flousflow_accounting.acc__action_salesperson_credit_limit
@@ -4232,7 +4314,9 @@ msgstr "أنشئ حداً ائتمانياً لمندوب مبيعات"
 
 #. module: flousflow_accounting
 #: model_terms:ir.actions.act_window,help:flousflow_accounting.acc__action_salesperson_credit_limit
-msgid "Confirmed sales orders are blocked when the salesperson's open exposure exceeds this limit."
+msgid ""
+"Confirmed sales orders are blocked when the salesperson's open exposure "
+"exceeds this limit."
 msgstr "يُمنع تأكيد أوامر البيع عندما يتجاوز الرصيد المفتوح للمندوب هذا الحد."
 
 #. module: flousflow_accounting
@@ -4694,6 +4778,7 @@ msgstr "تم إغلاق المستند."
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__account_asset_asset__state__draft
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__asset_asset_report__state__draft
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_asset_asset_report_search
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_batch__state__draft
 msgid "Draft"
 msgstr "مسودة"
 
@@ -5286,6 +5371,7 @@ msgstr "الدورية"
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_asset_asset_report__move_check
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ast__view_asset_asset_report_search
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_batch__state__posted
 msgid "Posted"
 msgstr "مُرحّل"
 
@@ -5349,6 +5435,7 @@ msgstr "حساب دخل الإثبات"
 
 #. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__code
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_name
 msgid "Reference"
 msgstr "الرقم المرجعي"
 
@@ -14954,6 +15041,7 @@ msgstr "إنشاء القوائم المالية"
 #: model:ir.ui.menu,name:flousflow_accounting.apr__menu_annual_report_templates
 msgid "Annual Report Templates"
 msgstr "قوالب التقارير السنوية"
+
 #. module: flousflow_accounting
 #. odoo-python
 #: code:addons/flousflow_accounting/legacy/om_account_accountant/models/dashboard_kpi.py:0
@@ -15287,6 +15375,7 @@ msgstr "عرض الحركات"
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.apr__view_analytic_profitability_form
 msgid "Close"
 msgstr "إغلاق"
+
 #. module: flousflow_accounting
 #: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "Aging Summary"
@@ -15351,3 +15440,495 @@ msgstr "فترة الاستحقاق"
 #: code:addons/flousflow_accounting/legacy/accounting_pdf_reports/controllers/aged_partner.py:0
 msgid "No data found"
 msgstr "لا توجد بيانات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_name
+msgid "Plan Name"
+msgstr "اسم الخطة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_method
+msgid "Commission Method"
+msgstr "طريقة حساب العمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_minimum_achievement
+msgid "Minimum Achievement (%)"
+msgstr "الحد الأدنى للإنجاز (%)"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_target_ids
+msgid "Salesperson Targets"
+msgstr "أهداف المناديب"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_tier_ids
+msgid "Commission Tiers"
+msgstr "شرائح العمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_journal_id
+msgid "Commission Journal"
+msgstr "دفتر يومية العمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_expense_account_id
+msgid "Commission Expense Account"
+msgstr "حساب مصروف العمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_plan_payable_account_id
+msgid "Commission Payable Account"
+msgstr "حساب مستحقات العمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target_sales_target
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_target_sales
+msgid "Net Sales Target"
+msgstr "هدف صافي المبيعات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_target_collection_target
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_target_collection
+msgid "Collection Target"
+msgstr "هدف التحصيل"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_tier_minimum_achievement
+msgid "From Achievement (%)"
+msgstr "يبدأ عند إنجاز (%)"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_tier_rate_percent
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_commission_rate
+msgid "Commission Rate (%)"
+msgstr "نسبة العمولة (%)"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_date_from
+msgid "Period From"
+msgstr "بداية الفترة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_date_to
+msgid "Period To"
+msgstr "نهاية الفترة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_calculated_at
+msgid "Last Calculated On"
+msgstr "آخر احتساب"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_salesperson_count
+msgid "Salespeople"
+msgstr "عدد المناديب"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_total_sales
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_sales_net
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_sales_net
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Net Sales"
+msgstr "صافي المبيعات"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_collected_gross
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Collections Incl. VAT"
+msgstr "التحصيل شامل ضريبة القيمة المضافة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_collected_net
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Collections Excl. VAT"
+msgstr "التحصيل بدون ضريبة القيمة المضافة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_sales_achievement
+msgid "Sales Achievement (%)"
+msgstr "نسبة تحقيق المبيعات (%)"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_collection_achievement
+msgid "Collection Achievement (%)"
+msgstr "نسبة تحقيق التحصيل (%)"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_combined_achievement
+msgid "Combined Achievement (%)"
+msgstr "نسبة الإنجاز المجمع (%)"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_eligible
+msgid "Eligible"
+msgstr "مستحق"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_total_commission
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_commission_amount
+msgid "Commission Amount"
+msgstr "مبلغ العمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch_move_id
+msgid "Commission Journal Entry"
+msgstr "القيد المحاسبي للعمولة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_source_date
+msgid "Source Date"
+msgstr "تاريخ المستند"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_invoice_id
+msgid "Customer Invoice / Credit Note"
+msgstr "فاتورة العميل / إشعار دائن"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_collection_move_id
+msgid "Receipt / Bank Transaction"
+msgstr "سند قبض / حركة بنكية"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_collected_gross
+msgid "Collection Incl. VAT"
+msgstr "التحصيل شامل الضريبة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_source_collected_net
+msgid "Collection Excl. VAT"
+msgstr "التحصيل بدون الضريبة"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_plan__method__sales_then_collection
+msgid "Sales target first, then collection achievement"
+msgstr "شرط المبيعات أولًا ثم نسبة تحقيق التحصيل"
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_plan__method__combined
+msgid "Combined sales and collection achievement"
+msgstr "نسبة إنجاز إجمالي المبيعات والتحصيل"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_list
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_action
+msgid "Sales Commission Plans"
+msgstr "خطط عمولات المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+#: model:ir.model,name:flousflow_accounting.model_ff_sales_commission_plan
+msgid "Sales Commission Plan"
+msgstr "خطة عمولة المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid "How This Plan Works"
+msgstr "طريقة عمل الخطة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_list
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_action
+msgid "Sales Commission Runs"
+msgstr "كشوف عمولات المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+#: model:ir.model,name:flousflow_accounting.model_ff_sales_commission_batch
+msgid "Sales Commission Run"
+msgstr "كشف عمولات المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Selected Period"
+msgstr "الفترة المحددة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Run Totals"
+msgstr "إجماليات الكشف"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Commission Results"
+msgstr "نتائج العمولات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Calculate Commissions"
+msgstr "احتساب العمولات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid "Post Commission Entry"
+msgstr "ترحيل قيد العمولة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_action
+msgid "Start a commission run"
+msgstr "ابدأ كشف عمولات جديدًا"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ff_sales_commission_menu
+msgid "Sales Commissions"
+msgstr "عمولات المبيعات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ff_sales_commission_batch_menu
+msgid "Commission Runs"
+msgstr "كشوف العمولات"
+
+#. module: flousflow_accounting
+#: model:ir.ui.menu,name:flousflow_accounting.ff_sales_commission_plan_menu
+msgid "Commission Plans"
+msgstr "خطط العمولات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_line_source_ids
+msgid "Source Documents"
+msgstr "المستندات المصدر"
+
+#. module: flousflow_accounting
+#: model:ir.model,name:flousflow_accounting.model_ff_sales_commission_target
+msgid "Salesperson Commission Target"
+msgstr "هدف عمولة المندوب"
+
+#. module: flousflow_accounting
+#: model:ir.model,name:flousflow_accounting.model_ff_sales_commission_tier
+msgid "Sales Commission Tier"
+msgstr "شريحة عمولة المبيعات"
+
+#. module: flousflow_accounting
+#: model:ir.model,name:flousflow_accounting.model_ff_sales_commission_line
+msgid "Sales Commission Result"
+msgstr "نتيجة عمولة المندوب"
+
+#. module: flousflow_accounting
+#: model:ir.model,name:flousflow_accounting.model_ff_sales_commission_source
+msgid "Sales Commission Source"
+msgstr "مستند مصدر العمولة"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid ""
+"Minimum achievement must be greater than 0 and no more than 100 percent."
+msgstr "الحد الأدنى للإنجاز يجب أن يكون أكبر من 0 ولا يتجاوز 100٪."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "Commission tier thresholds must be unique."
+msgstr "يجب ألا تتكرر حدود شرائح العمولة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "Each commission tier must start at or above the minimum achievement."
+msgstr "يجب أن تبدأ كل شريحة عمولة من الحد الأدنى للإنجاز أو أعلى منه."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "Choose a general journal belonging to the plan company."
+msgstr "اختر دفتر يومية عامًّا تابعًا لشركة الخطة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "The commission expense account must be an expense account."
+msgstr "حساب العمولة المحدد يجب أن يكون حساب مصروفات."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "The commission payable account must be a payable account."
+msgstr "حساب مستحقات العمولة المحدد يجب أن يكون حسابًا دائنًا مستحقًا."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "Portal users cannot be commission salespersons."
+msgstr "لا يمكن تعيين مستخدم بوابة كمندوب عمولة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "The salesperson must have access to the commission plan company."
+msgstr "يجب أن يكون للمندوب صلاحية الوصول إلى شركة خطة العمولة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "Set at least one sales or collection target for each salesperson."
+msgstr "حدد هدف مبيعات أو تحصيل واحدًا على الأقل لكل مندوب."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "This method requires both a sales target and a collection target."
+msgstr "هذه الطريقة تتطلب تحديد هدف للمبيعات وهدف للتحصيل."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "The period start date must be on or before the end date."
+msgstr "يجب أن يكون تاريخ بداية الفترة قبل تاريخ نهايتها أو مساويًا له."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "Only accounting users can calculate salesperson commissions."
+msgstr "يقتصر احتساب عمولات المناديب على مستخدمي المحاسبة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "Posted commission runs cannot be recalculated."
+msgstr "لا يمكن إعادة احتساب كشف عمولات مرحّل."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "Add salesperson targets to the commission plan before calculating."
+msgstr "أضف أهداف المناديب إلى خطة العمولة قبل الاحتساب."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_plan.py:0
+msgid "Only an accounting manager can post a commission run."
+msgstr "يقتصر ترحيل كشف العمولات على مدير المحاسبة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "There are no earned commissions to post in this run."
+msgstr "لا توجد عمولات مستحقة لترحيلها في هذا الكشف."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid ""
+"Use a non-overlapping period to avoid paying the same commission twice."
+msgstr "اختر فترة غير متداخلة لتجنب صرف العمولة نفسها مرتين."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid ""
+"Set each salesperson's net sales and collection target. Sales are net of "
+"customer credit notes."
+msgstr ""
+"أدخل هدف صافي المبيعات والتحصيل لكل مندوب. صافي المبيعات يخصم إشعارات "
+"العملاء الدائنة."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid ""
+"The highest reached threshold selects one rate, applied to the salesperson's"
+" collected amount excluding VAT."
+msgstr ""
+"تحدد أعلى شريحة وصل إليها المندوب نسبة العمولة، وتُطبق على التحصيل الفعلي "
+"بدون ضريبة القيمة المضافة."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid "Sales target first:"
+msgstr "أولًا: هدف المبيعات"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid ""
+"eligibility is based on net sales; the commission tier is selected by "
+"collection achievement."
+msgstr ""
+"يتحدد الاستحقاق على أساس صافي المبيعات، وتُختار شريحة العمولة حسب نسبة تحقيق"
+" التحصيل."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid "Combined:"
+msgstr "الطريقة المجمعة:"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid ""
+"eligibility and commission tier use net sales plus collections including VAT"
+" against the combined targets."
+msgstr ""
+"يتحدد الاستحقاق وشريحة العمولة على أساس صافي المبيعات مضافًا إليه التحصيل "
+"شامل الضريبة مقارنة بإجمالي الهدفين."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_form
+msgid ""
+"In both methods, the commission amount is calculated on actual collections "
+"excluding VAT. Only reconciled inbound payments and bank transactions count "
+"as collections."
+msgstr ""
+"في الطريقتين، تُحسب قيمة العمولة على التحصيل الفعلي بدون ضريبة. ويُحتسب فقط "
+"القبض الوارد وحركات البنك التي تمت تسويتها محاسبيًا."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_form
+msgid ""
+"Review the figures and source documents before posting. Recalculate to "
+"include any accounting changes made after the last calculation."
+msgstr ""
+"راجع الأرقام والمستندات المصدر قبل الترحيل. أعد الاحتساب إذا حدثت تغييرات "
+"محاسبية بعد آخر احتساب."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_action
+msgid ""
+"Select a plan and date range, calculate the results, review their source "
+"documents, then post the journal entry."
+msgstr ""
+"اختر الخطة والفترة، واحتسب النتائج، وراجع المستندات المصدر، ثم رحّل القيد "
+"المحاسبي."
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_action
+msgid "Create a commission plan"
+msgstr "أنشئ خطة عمولة"
+
+#. module: flousflow_accounting
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_plan_action
+msgid ""
+"Choose the calculation method, set targets per salesperson, and configure "
+"the commission tiers and accounts."
+msgstr "اختر طريقة الاحتساب، وحدد أهداف كل مندوب وشرائح العمولة والحسابات."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "The selected plan belongs to a different company."
+msgstr "الخطة المحددة تابعة لشركة أخرى."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid ""
+"This method requires both a sales and a collection target for every "
+"salesperson."
+msgstr "هذه الطريقة تتطلب هدف مبيعات وهدف تحصيل لكل مندوب."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid ""
+"A posted commission run already covers part of this period for one or more "
+"salespeople. Use a non-overlapping period to avoid paying the same "
+"commission twice."
+msgstr ""
+"يوجد كشف عمولات مرحّل يغطي جزءًا من هذه الفترة لمندوب أو أكثر. اختر فترة غير"
+" متداخلة لتجنب صرف العمولة نفسها مرتين."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "A calculated or posted commission run is locked."
+msgstr "كشف العمولات بعد احتسابه أو ترحيله مقفل."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "Use the Calculate and Post actions to change a commission run."
+msgstr "استخدم زري الاحتساب والترحيل لتغيير حالة كشف العمولات."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "Add at least one commission tier to the plan."
+msgstr "أضف شريحة عمولة واحدة على الأقل إلى الخطة."
+
+#. module: flousflow_accounting
+#: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_batch__state__calculated
+msgid "Calculated"
+msgstr "تم الاحتساب"
