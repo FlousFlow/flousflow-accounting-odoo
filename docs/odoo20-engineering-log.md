@@ -193,3 +193,9 @@
 - Added Arabic translations and bumped the module to `20.0.1.0.74`.
 - Python, JavaScript, and XML syntax checks passed. The translation catalogs contain pre-existing duplicate message definitions, so `msgfmt --check` cannot pass cleanly; no Odoo runtime, database upgrade, or end-to-end browser download was performed.
 
+### 2026-11-25 — Commission labels and translation import
+
+- Added explicit Arabic translations for the commission run plan, collected total, and status labels.
+- Fixed the final PO entry's missing `module:` comment. Odoo 20's PO importer requires this metadata and crashed while parsing the entry; the test database remains at `20.0.1.0.78` until a clean upgrade succeeds.
+- Bumped the module to `20.0.1.0.80` for the corrected translation catalog.
+
