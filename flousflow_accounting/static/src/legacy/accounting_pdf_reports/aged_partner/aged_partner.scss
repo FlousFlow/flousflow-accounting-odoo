@@ -24,7 +24,6 @@
         gap: 0.5rem;
 
         > * { flex: 1 1 9rem; max-width: 16rem; }
-        .ff_aged_period { max-width: 10rem; }
         .ff_aged_scale { max-width: 7rem; }
     }
 
@@ -54,6 +53,10 @@
 
     .ff_aged_content { flex: 1; overflow: auto; padding: 1rem; }
     .ff_aged_table { min-width: 60rem; }
+    .ff_aged_bucket_button { color: inherit; font-weight: 600; text-decoration: none; }
+    .ff_aged_bucket_button:hover { color: var(--o-brand-primary); }
+    .ff_aged_bucket_modal { z-index: 1055; }
+    .ff_aged_bucket_modal + .modal-backdrop { z-index: 1050; }
     .ff_aged_partner_row { border-top: 1px solid var(--border-color, #dee2e6); }
     .ff_aged_detail_row td:first-child { padding-inline-start: 2.5rem; }
 }

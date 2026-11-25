@@ -24,7 +24,9 @@ export class AgedPartnerReport extends Component {
             targetMove: "posted",
             scale: "unit",
             dateBasis: "due_date",
-            periodLength: 30,
+            bucketEnds: [30, 60, 90, 120],
+            draftBucketEnd: 30,
+            editingBucket: false,
             partnerQuery: "",
             partnerOptions: [],
             partnerIds: [],
@@ -43,14 +45,40 @@ export class AgedPartnerReport extends Component {
     }
 
     get bucketLabels() {
-        const period = Number(this.state.periodLength) || 30;
-        return [
-            `1-${period}`,
-            `${period + 1}-${period * 2}`,
-            `${period * 2 + 1}-${period * 3}`,
-            `${period * 3 + 1}-${period * 4}`,
-            _t("Older"),
-        ];
+        const ends = this.state.bucketEnds;
+        return ends.map((end, index) => `${index ? ends[index - 1] + 1 : 1}-${end}`).concat(_t("Older"));
+    }
+
+    get editingBucketLabel() {
+        const index = Math.min(this.state.editingBucket, 3);
+        const previousEnd = index ? this.state.bucketEnds[index - 1] : 0;
+        return `${previousEnd + 1}-${this.state.draftBucketEnd}`;
+    }
+
+    openBucketEditor(index) {
+        this.state.editingBucket = Math.min(index, 3);
+        this.state.draftBucketEnd = this.state.bucketEnds[this.state.editingBucket];
+    }
+
+    closeBucketEditor() {
+        this.state.editingBucket = false;
+    }
+
+    onBucketDraftChange(event) {
+        this.state.draftBucketEnd = event.target.value;
+    }
+
+    async applyBucketEnds() {
+        const ends = [...this.state.bucketEnds];
+        ends[this.state.editingBucket] = Number(this.state.draftBucketEnd);
+        if (ends.some((value) => !Number.isInteger(value) || value < 1 || value > 14640)
+                || ends.some((value, index) => index && value <= ends[index - 1])) {
+            this.notification.add(_t("Enter a valid period end day between 1 and 14640."), { type: "warning" });
+            return;
+        }
+        this.state.bucketEnds = ends;
+        this.closeBucketEditor();
+        await this.loadReport();
     }
 
     async loadReport() {
@@ -64,7 +92,7 @@ export class AgedPartnerReport extends Component {
                     result_selection: this.state.resultSelection,
                     date_from: this.state.dateFrom,
                     target_move: this.state.targetMove,
-                    period_length: Number(this.state.periodLength),
+                    bucket_ends: this.state.bucketEnds,
                     partner_ids: this.state.partnerIds,
                     date_basis: this.state.dateBasis,
                 }
@@ -174,7 +202,7 @@ export class AgedPartnerReport extends Component {
                     result_selection: this.state.resultSelection,
                     date_from: this.state.dateFrom,
                     target_move: this.state.targetMove,
-                    period_length: Number(this.state.periodLength),
+                    bucket_ends: this.state.bucketEnds,
                     partner_ids: this.state.partnerIds,
                     date_basis: this.state.dateBasis,
                     scale: this.state.scale,
@@ -190,7 +218,7 @@ export class AgedPartnerReport extends Component {
             result_selection: this.state.resultSelection,
             date_from: this.state.dateFrom,
             target_move: this.state.targetMove,
-            period_length: String(Number(this.state.periodLength)),
+            bucket_ends: this.state.bucketEnds.join(","),
             partner_ids: this.state.partnerIds.join(","),
             date_basis: this.state.dateBasis,
             scale: this.state.scale,

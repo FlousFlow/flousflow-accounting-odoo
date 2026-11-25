@@ -45,13 +45,10 @@ def _parse_ids(value):
 def build_aged_partner_xlsx(data, currency, scale="unit"):
     """Build an XLSX workbook from the interactive aged report result."""
     divisor, number_format = SCALES[scale]
-    period_length = data["period_length"]
+    bucket_ends = data["bucket_ends"]
     bucket_labels = [
-        f"1-{period_length}",
-        f"{period_length + 1}-{period_length * 2}",
-        f"{period_length * 2 + 1}-{period_length * 3}",
-        f"{period_length * 3 + 1}-{period_length * 4}",
-        f"{_('Older')} > {period_length * 4}",
+        *(f"{bucket_ends[index - 1] + 1 if index else 1}-{end}" for index, end in enumerate(bucket_ends)),
+        f"{_('Older')} > {bucket_ends[-1]}",
     ]
     amount_headers = [
         f"{_('Not Due')} ({currency.name})",
@@ -77,7 +74,7 @@ def build_aged_partner_xlsx(data, currency, scale="unit"):
     sheet.write_string(2, 0, f"{_('Aging basis')}: {_(BASIS_LABELS[data['date_basis']])}", metadata_format)
     entry_state = "Posted Entries" if data["target_move"] == "posted" else "All Entries"
     sheet.write_string(3, 0, f"{_('Target moves')}: {_(entry_state)}", metadata_format)
-    sheet.write_string(4, 0, f"{_('Period length')}: {period_length} {_('days')} | {_('Currency')}: {currency.name} | {_('Scale')}: {scale}", metadata_format)
+    sheet.write_string(4, 0, f"{_('Aging periods')}: {', '.join(str(end) for end in bucket_ends)} {_('days')} | {_('Currency')}: {currency.name} | {_('Scale')}: {scale}", metadata_format)
 
     headers = [_('Partner'), *amount_headers]
     header_row = 6
@@ -154,7 +151,7 @@ class AgedPartnerExportController(Controller):
     @route("/accounting_pdf_reports/aged_partner/export", type="http", auth="user")
     def export_aged_partner(
         self, result_selection="customer", date_from=None, target_move="posted",
-        period_length="30", partner_ids="", date_basis="due_date", scale="unit", **kwargs,
+        bucket_ends="30,60,90,120", partner_ids="", date_basis="due_date", scale="unit", **kwargs,
     ):
         if not any(request.env.user.has_group(group) for group in READ_GROUPS):
             raise Forbidden()
@@ -162,11 +159,11 @@ class AgedPartnerExportController(Controller):
                 or date_basis not in ("due_date", "invoice_date") or scale not in SCALES):
             raise NotFound()
         try:
-            period_length = int(period_length)
+            ends = [int(value) for value in bucket_ends.split(",")]
             report_date = fields.Date.to_date(date_from) if date_from else fields.Date.context_today(request.env.user)
-        except (TypeError, ValueError):
+        except (AttributeError, TypeError, ValueError):
             raise NotFound() from None
-        if not 1 <= period_length <= 3660:
+        if len(ends) != 4 or any(value <= 0 or value > 14640 for value in ends) or ends != sorted(set(ends)):
             raise NotFound()
 
         report = request.env["report.flousflow_accounting.apr__report_agedpartnerbalance"]
@@ -174,7 +171,7 @@ class AgedPartnerExportController(Controller):
             result_selection=result_selection,
             date_from=report_date,
             target_move=target_move,
-            period_length=period_length,
+            bucket_ends=ends,
             partner_ids=_parse_ids(partner_ids),
             date_basis=date_basis,
         )

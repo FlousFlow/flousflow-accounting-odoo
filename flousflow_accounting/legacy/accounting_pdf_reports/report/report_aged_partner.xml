@@ -15,8 +15,14 @@
                             <div t-out="data['date_from']" t-options="{'widget': 'date'}"/>
                         </div>
                         <div class="col">
-                            <strong>Period Length (days):</strong>
-                            <div t-out="data['period_length']"/>
+                            <t t-if="data.get('bucket_ends')">
+                                <strong>Aging Period Ends (days):</strong>
+                                <div t-out="data['bucket_ends_label']"/>
+                            </t>
+                            <t t-else="">
+                                <strong>Period Length (days):</strong>
+                                <div t-out="data['period_length']"/>
+                            </t>
                         </div>
                         <div class="col">
                             <strong>Partners:</strong>

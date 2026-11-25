@@ -16046,3 +16046,29 @@ msgstr "تم الاحتساب"
 #: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__total_collected
 msgid "Total Collected"
 msgstr "إجمالي التحصيل"
+
+#. module: flousflow_accounting
+#. odoo-javascript
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/aged_partner/aged_partner.js:0
+msgid "Enter a valid period end day between 1 and 14640."
+msgstr "أدخل نهاية فترة صحيحة بين يوم واحد و14640 يومًا."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/aged_partner/aged_partner.xml:0
+msgid "Set aging periods"
+msgstr "تحديد فترات أعمار الديون"
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/aged_partner/aged_partner.xml:0
+msgid "Set the last day for this period. The next period starts on the following day."
+msgstr "حدد آخر يوم في هذه الفترة، وتبدأ الفترة التالية في اليوم الذي يليه."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/aged_partner/aged_partner.xml:0
+msgid "Older is calculated automatically after the last period."
+msgstr "يتم احتساب فئة الأقدم تلقائيًا بعد آخر فترة."
+
+#. module: flousflow_accounting
+#: code:addons/flousflow_accounting/static/src/legacy/accounting_pdf_reports/aged_partner/aged_partner.xml:0
+msgid "Apply periods"
+msgstr "تطبيق الفترات"

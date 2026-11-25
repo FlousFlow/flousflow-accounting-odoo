@@ -220,3 +220,10 @@
 - Upgraded training database `al_yamen_test` to `20.0.1.0.84`; rendered the same posted invoice in Arabic and English and restored the test user's original language. The account move and totals were not changed.
 - Static manifest/XML checks and `git diff --check` passed. Training database backup: `/var/backups/odoo-invoice-preview-20261125-141410/al_yamen_test.dump`.
 - Published commit `192a07e` to GitHub branch `20.0`, then upgraded production database `al_yamen` to `20.0.1.0.84`. Production backup: `/var/backups/odoo/flousflow-accounting-invoice-20261125/al_yamen-before-invoice-192a07e.dump`; `pg_restore --list` confirmed its archive. Odoo service is active, `/web/login` returned HTTP 303, the upgrade log reached `Registry loaded` with no errors, and the production checkout matched the branch commit.
+
+### 2026-11-25 — Editable aged report periods
+
+- Replaced the interactive report's single day-length control with clickable aging bucket headers. Each header opens an editor for that bucket's ending day; later ranges recalculate from the previous boundary, and the final Older bucket remains automatic.
+- Added server-side validation for four ascending boundaries and reused them for report totals, invoice detail classification, PDF printing, and Excel export. Existing wizard reports still accept the legacy period-length setting.
+- Added Arabic labels for the new period editor and regression coverage for custom ranges, balance conservation, and invalid boundaries. Bumped the module to `20.0.1.0.85`.
+- Python compilation, JavaScript syntax, XML parsing, PO entry parsing, and `git diff --check` passed. Full Odoo tests and database upgrade are pending because this checkout has no Odoo runtime; the Arabic PO catalogs already contain duplicate message definitions, so GNU `msgfmt` reports the pre-existing duplicates.

@@ -11,8 +11,30 @@ class ReportAgedPartnerBalance(models.AbstractModel):
     _name = 'report.flousflow_accounting.apr__report_agedpartnerbalance'
     _description = 'Aged Partner Balance Report'
 
+    @api.model
+    def _normalize_bucket_ends(self, bucket_ends=None, period_length=30):
+        """Return four strictly increasing inclusive aging boundaries."""
+        if bucket_ends is None:
+            try:
+                period_length = int(period_length)
+            except (TypeError, ValueError):
+                period_length = 0
+            if period_length <= 0 or period_length > 3660:
+                raise UserError(_('Period length must be between 1 and 3660 days.'))
+            return [period_length * index for index in range(1, 5)]
+        if not isinstance(bucket_ends, (list, tuple)) or len(bucket_ends) != 4:
+            raise UserError(_('Enter four aging period end days.'))
+        try:
+            ends = [int(value) for value in bucket_ends]
+        except (TypeError, ValueError):
+            raise UserError(_('Aging period end days must be whole numbers.')) from None
+        if any(value <= 0 or value > 14640 for value in ends) or ends != sorted(set(ends)):
+            raise UserError(_('Aging period end days must increase from 1 to 14640 without duplicates.'))
+        return ends
+
     def _get_partner_move_lines(self, account_type, partner_ids,
-                                date_from, target_move, period_length, date_basis='due_date'):
+                                date_from, target_move, period_length, date_basis='due_date',
+                                bucket_ends=None):
         # This method can receive the context key 'include_nullified_amount' {Boolean}
         # Do an invoice and a payment and unreconcile. The amount will be nullified
         # By default, the partner wouldn't appear in this report.
@@ -24,21 +46,28 @@ class ReportAgedPartnerBalance(models.AbstractModel):
         # 61 - 90  : 2018-12-09 - 2018-11-10
         # 91 - 120 : 2018-11-09 - 2018-10-11
         # +120     : 2018-10-10
+        bucket_ends = self._normalize_bucket_ends(bucket_ends, period_length)
         periods = {}
         start = datetime.strptime(str(date_from), "%Y-%m-%d")
         date_from = datetime.strptime(str(date_from), "%Y-%m-%d").date()
-        for i in range(5)[::-1]:
-            stop = start - relativedelta(days=period_length)
-            period_name = str((5-(i+1)) * period_length + 1) + '-' + str((5-i) * period_length)
-            period_stop = (start - relativedelta(days=1)).strftime('%Y-%m-%d')
-            if i == 0:
-                period_name = '+' + str(4 * period_length)
-            periods[str(i)] = {
-                'name': period_name,
-                'stop': period_stop,
-                'start': (i!=0 and stop.strftime('%Y-%m-%d') or False),
+        # The legacy SQL indexes periods oldest-to-newest (0..4), while
+        # bucket_ends is ordered newest-to-oldest in the UI.
+        for index in range(5):
+            if index == 0:
+                periods[str(index)] = {
+                    'name': '+' + str(bucket_ends[3]),
+                    'stop': (start - relativedelta(days=bucket_ends[3] + 1)).strftime('%Y-%m-%d'),
+                    'start': False,
+                }
+                continue
+            ui_index = 4 - index
+            upper = bucket_ends[ui_index]
+            lower = bucket_ends[ui_index - 1] + 1 if ui_index else 1
+            periods[str(index)] = {
+                'name': f'{lower}-{upper}',
+                'stop': (start - relativedelta(days=lower)).strftime('%Y-%m-%d'),
+                'start': (start - relativedelta(days=upper)).strftime('%Y-%m-%d'),
             }
-            start = stop
 
         res = []
         total = []
@@ -470,7 +499,7 @@ class ReportAgedPartnerBalance(models.AbstractModel):
     @api.model
     def get_interactive_data(self, result_selection='customer', date_from=None,
                              target_move='posted', period_length=30,
-                             partner_ids=None, date_basis='due_date'):
+                             partner_ids=None, date_basis='due_date', bucket_ends=None):
         self._check_interactive_report_access()
         if result_selection not in ('customer', 'supplier', 'customer_supplier'):
             raise UserError(_('Choose a valid partner account type.'))
@@ -478,12 +507,7 @@ class ReportAgedPartnerBalance(models.AbstractModel):
             raise UserError(_('Choose a valid journal entry state.'))
         if date_basis not in ('due_date', 'invoice_date'):
             raise UserError(_('Choose a valid aging date basis.'))
-        try:
-            period_length = int(period_length)
-        except (TypeError, ValueError):
-            period_length = 0
-        if period_length <= 0 or period_length > 3660:
-            raise UserError(_('Period length must be between 1 and 3660 days.'))
+        bucket_ends = self._normalize_bucket_ends(bucket_ends, period_length)
         date_from = fields.Date.to_date(date_from) if date_from else fields.Date.context_today(self)
         account_types = {
             'customer': ['asset_receivable'],
@@ -494,7 +518,8 @@ class ReportAgedPartnerBalance(models.AbstractModel):
             partner_ids = []
         partner_ids = [int(partner_id) for partner_id in partner_ids if str(partner_id).isdigit()]
         rows, totals, line_map = self.with_context(company_id=self.env.company.id)._get_partner_move_lines(
-            account_types, partner_ids, date_from, target_move, period_length, date_basis=date_basis,
+            account_types, partner_ids, date_from, target_move, period_length,
+            date_basis=date_basis, bucket_ends=bucket_ends,
         )
         if partner_ids:
             rows = [row for row in rows if row.get('partner_id') in partner_ids]
@@ -532,6 +557,7 @@ class ReportAgedPartnerBalance(models.AbstractModel):
             },
             'date_from': fields.Date.to_string(date_from),
             'period_length': period_length,
+            'bucket_ends': bucket_ends,
             'date_basis': date_basis,
             'target_move': target_move,
             'result_selection': result_selection,
@@ -565,7 +591,8 @@ class ReportAgedPartnerBalance(models.AbstractModel):
     @api.model
     def print_interactive_report(self, result_selection='customer', date_from=None,
                                  target_move='posted', period_length=30,
-                                 partner_ids=None, date_basis='due_date', scale='unit'):
+                                 partner_ids=None, date_basis='due_date', scale='unit',
+                                 bucket_ends=None):
         self._check_interactive_report_access()
         if result_selection not in ('customer', 'supplier', 'customer_supplier'):
             raise UserError(_('Choose a valid partner account type.'))
@@ -575,12 +602,7 @@ class ReportAgedPartnerBalance(models.AbstractModel):
             raise UserError(_('Choose a valid aging date basis.'))
         if scale not in ('unit', 'rounded', 'thousand', 'million'):
             raise UserError(_('Choose a valid currency scale.'))
-        try:
-            period_length = int(period_length)
-        except (TypeError, ValueError):
-            raise UserError(_('Period length must be between 1 and 3660 days.'))
-        if period_length <= 0 or period_length > 3660:
-            raise UserError(_('Period length must be between 1 and 3660 days.'))
+        bucket_ends = self._normalize_bucket_ends(bucket_ends, period_length)
         date_from = fields.Date.to_date(date_from) if date_from else fields.Date.context_today(self)
         if not isinstance(partner_ids, (list, tuple)):
             partner_ids = []
@@ -603,7 +625,18 @@ class ReportAgedPartnerBalance(models.AbstractModel):
         # Carry the UI scale into the QWeb report without changing the accounting
         # values used by the aged-balance calculation.
         action_data = action.setdefault('data', {})
-        action_data.setdefault('form', {})['scale'] = scale
+        form = action_data.setdefault('form', {})
+        form['scale'] = scale
+        form['bucket_ends'] = bucket_ends
+        form['bucket_ends_label'] = ', '.join(str(end) for end in bucket_ends)
+        for sql_index in range(5):
+            if sql_index == 0:
+                label = '+' + str(bucket_ends[3])
+            else:
+                ui_index = 4 - sql_index
+                lower = bucket_ends[ui_index - 1] + 1 if ui_index else 1
+                label = f'{lower}-{bucket_ends[ui_index]}'
+            form.setdefault(str(sql_index), {})['name'] = label
         return action
 
     @api.model
@@ -635,6 +668,7 @@ class ReportAgedPartnerBalance(models.AbstractModel):
         )._get_partner_move_lines(
             account_type, partner_ids, date_from, target_move, data['form']['period_length'],
             date_basis=self.env.context.get('date_basis', 'due_date'),
+            bucket_ends=data['form'].get('bucket_ends'),
         )
         scale = data['form'].get('scale', 'unit')
         scale_divisor = {'unit': 1, 'rounded': 1, 'thousand': 1000, 'million': 1000000}[scale]

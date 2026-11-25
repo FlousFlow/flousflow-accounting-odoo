@@ -1,4 +1,5 @@
 from odoo.tests import tagged
+from odoo.exceptions import UserError
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -130,3 +131,34 @@ class TestAgedPartnerBalance(AccountTestInvoicingCommon):
             supplier_row['total'],
             supplier_row['not_due'] + sum(supplier_row['buckets']),
         )
+
+    def test_interactive_report_uses_individually_configured_bucket_ends(self):
+        date_from = '2025-12-31'
+        for invoice_date, amount in (
+            ('2025-12-26', 10.0),  # 1-10
+            ('2025-12-16', 20.0),  # 11-20
+            ('2025-12-01', 30.0),  # 21-40
+            ('2025-11-11', 40.0),  # 41-60
+            ('2025-10-01', 50.0),  # older than 60
+        ):
+            self.init_invoice(
+                'out_invoice', partner=self.partner_a, amounts=[amount], taxes=[],
+                invoice_date=invoice_date, post=True,
+            )
+
+        report = self.env['report.flousflow_accounting.apr__report_agedpartnerbalance']
+        data = report.get_interactive_data(
+            result_selection='customer', date_from=date_from, date_basis='invoice_date',
+            bucket_ends=[10, 20, 40, 60],
+        )
+        row = next(item for item in data['rows'] if item['partner_id'] == self.partner_a.id)
+
+        self.assertEqual(data['bucket_ends'], [10, 20, 40, 60])
+        self.assertEqual(row['buckets'], [10.0, 20.0, 30.0, 40.0, 50.0])
+        self.assertEqual(row['total'], row['not_due'] + sum(row['buckets']))
+
+    def test_interactive_report_rejects_invalid_bucket_ends(self):
+        report = self.env['report.flousflow_accounting.apr__report_agedpartnerbalance']
+        for bucket_ends in ([30, 20, 90, 120], [30, 30, 90, 120], [30, 60, 90], [30, 60, 90, 16000]):
+            with self.subTest(bucket_ends=bucket_ends), self.assertRaises(UserError):
+                report.get_interactive_data(bucket_ends=bucket_ends)
