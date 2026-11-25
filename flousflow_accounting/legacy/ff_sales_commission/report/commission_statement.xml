@@ -18,7 +18,6 @@
         <field name="model">ff.sales.commission.line</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">flousflow_accounting.ff_sales_commission_statement</field>
-        <field name="report_file">flousflow_accounting.ff_sales_commission_statement</field>
         <field name="paperformat_id" ref="ff_sales_commission_statement_paperformat"/>
         <field name="print_report_name">'Commission - %s' % (object.salesperson_id.name)</field>
         <field name="binding_model_id" ref="model_ff_sales_commission_line"/>
