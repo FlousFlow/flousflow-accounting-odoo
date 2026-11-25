@@ -2,7 +2,7 @@
 
 ## 2026-11-25 — Salesperson commission plans and runs
 
-- Module/version: `flousflow_accounting` 20.0.1.0.78.
+- Module/version: `flousflow_accounting` 20.0.1.0.79.
 - Requirement: configurable sales-first or combined sales/collection commission methods; user-selected date range; net sales after credit notes; payout on collected amount excluding VAT.
 - Evidence: Odoo 20 account move exposes stored `invoice_user_id`, `amount_untaxed_signed`, and `amount_total_signed`; payment reconciliation exposes `account.partial.reconcile` debit/credit lines, `amount`, `max_date`, and payment/bank-statement origin fields.
 - Design: added plan targets per salesperson, configurable thresholds, a reviewable commission run with source documents, and a standard `account.move` journal entry using configured company accounts and journal.
@@ -12,3 +12,4 @@
 - Upgrade follow-up: the first staging upgrade exposed a CSV header mismatch (`model_id` instead of Odoo 20's `model_id/id`) before applying the module update. Corrected the access CSV and removed unsupported One2many ordering metadata; staging DB remained at 20.0.1.0.74 and the service recovered.
 - Upgrade follow-up: the next staging pass loaded access and sequence data, then rejected legacy search-group attributes. Removed those attributes and assigned the informational alert an appropriate accessibility role; staging DB remained unchanged and service recovered.
 - UI follow-up: Arabic screen labels were not applied because custom field references lacked Odoo's model/field separator, and action labels/help lacked action-field references. Corrected the Arabic catalogs and will verify the visible screen after staging refresh.
+- UI follow-up: shortened and translated the remaining run-list columns (`Plan`, `Total Collected`, and `Status`) after checking the refreshed Arabic list view.

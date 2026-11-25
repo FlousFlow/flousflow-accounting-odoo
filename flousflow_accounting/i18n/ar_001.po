@@ -3096,6 +3096,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:flousflow_accounting.field_account_asset_asset__state
 #: model:ir.model.fields,field_description:flousflow_accounting.field_asset_asset_report__state
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.loan_search_view
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__state
 msgid "Status"
 msgstr "الحالة"
 
@@ -7173,3 +7174,12 @@ msgstr "أضف شريحة عمولة واحدة على الأقل إلى الخ�
 #: model:ir.model.fields.selection,name:flousflow_accounting.selection__ff_sales_commission_batch__state__calculated
 msgid "Calculated"
 msgstr "تم الاحتساب"
+
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__plan_id
+#: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_search
+msgid "Plan"
+msgstr "الخطة"
+
+#: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__total_collected
+msgid "Total Collected"
+msgstr "إجمالي التحصيل"

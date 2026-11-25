@@ -218,7 +218,7 @@
                 <filter name="calculated" string="Calculated" domain="[('state', '=', 'calculated')]"/>
                 <filter name="posted" string="Posted" domain="[('state', '=', 'posted')]"/>
                 <group>
-                    <filter name="group_plan" string="Commission Plan" context="{'group_by': 'plan_id'}"/>
+                    <filter name="group_plan" string="Plan" context="{'group_by': 'plan_id'}"/>
                     <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
                     <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
                 </group>

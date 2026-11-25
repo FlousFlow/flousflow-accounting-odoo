@@ -16,14 +16,14 @@ class SalesCommissionBatch(models.Model):
     )
     currency_id = fields.Many2one(related="company_id.currency_id", store=True)
     plan_id = fields.Many2one(
-        "ff.sales.commission.plan", string="Commission Plan", required=True, check_company=True,
+        "ff.sales.commission.plan", string="Plan", required=True, check_company=True,
         domain="[('active', '=', True), ('company_id', '=', company_id)]",
     )
     date_from = fields.Date(string="Period From", required=True, default=fields.Date.context_today)
     date_to = fields.Date(string="Period To", required=True, default=fields.Date.context_today)
     state = fields.Selection(
         [("draft", "Draft"), ("calculated", "Calculated"), ("posted", "Posted")],
-        default="draft", required=True, readonly=True, copy=False, index=True,
+        string="Status", default="draft", required=True, readonly=True, copy=False, index=True,
     )
     calculated_at = fields.Datetime(string="Last Calculated On", readonly=True, copy=False)
     line_ids = fields.One2many("ff.sales.commission.line", "batch_id", string="Salespeople", readonly=True)
@@ -32,7 +32,9 @@ class SalesCommissionBatch(models.Model):
     )
     salesperson_count = fields.Integer(compute="_compute_totals", store=True)
     total_sales = fields.Monetary(compute="_compute_totals", currency_field="currency_id", store=True)
-    total_collected = fields.Monetary(compute="_compute_totals", currency_field="currency_id", store=True)
+    total_collected = fields.Monetary(
+        string="Total Collected", compute="_compute_totals", currency_field="currency_id", store=True,
+    )
     total_commission = fields.Monetary(compute="_compute_totals", currency_field="currency_id", store=True)
 
     @api.model_create_multi
