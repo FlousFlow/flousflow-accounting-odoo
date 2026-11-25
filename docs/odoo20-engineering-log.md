@@ -232,4 +232,4 @@
 
 - Replaced the period pop-up with in-place editing of the selected bucket's end day, matching the direct number-edit interaction in Odoo's pager.
 - Enter applies and reloads the report; Escape restores the prior value. The start of the next bucket remains derived and contiguous. Focus and selection move to the input when a header is clicked.
-- Bumped the module to `20.0.1.0.86`.
+- Bumped the module to `20.0.1.0.87`; use the installed OWL effect hook to focus the inline editor because this server's OWL bundle does not export `useRef`.

@@ -6,7 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { formatMonetary } from "@web/views/fields/formatters";
 import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
 import { deserializeDate } from "@web/core/l10n/dates";
-import { Component, onWillStart, proxy, useEffect, useProps, useRef } from "@odoo/owl";
+import { Component, onWillStart, proxy, useEffect, useProps } from "@odoo/owl";
 const { DateTime } = luxon;
 
 export class AgedPartnerReport extends Component {
@@ -17,14 +17,16 @@ export class AgedPartnerReport extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
         this.notification = useService("notification");
-        this.bucketInput = useRef("bucketInput");
         useEffect(() => {
-            const input = this.bucketInput.el;
-            if (input) {
+            if (this.state.editingBucket !== false) {
+                const input = document.querySelector(".ff_aged_bucket_inline_input");
+                if (!input) {
+                    return;
+                }
                 input.focus();
                 input.select();
             }
-        }, () => [this.state.editingBucket]);
+        });
         const context = this.props.action.context || {};
         this.state = proxy({
             resultSelection: context.default_result_selection || "customer",
