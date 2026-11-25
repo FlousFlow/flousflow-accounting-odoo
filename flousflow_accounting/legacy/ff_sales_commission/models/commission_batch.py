@@ -361,6 +361,11 @@ class SalesCommissionLine(models.Model):
 
     def action_print_statement(self):
         self.ensure_one()
+        if not (
+            self.env.user.has_group("account.group_account_invoice")
+            or self.env.user.has_group("account.group_account_manager")
+        ):
+            raise UserError(_("Only accounting users can print salesperson commission statements."))
         return self.env.ref(
             "flousflow_accounting.ff_sales_commission_statement_report"
         ).report_action(self)

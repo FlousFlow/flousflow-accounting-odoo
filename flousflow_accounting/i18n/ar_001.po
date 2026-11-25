@@ -7181,6 +7181,11 @@ msgid "Print this salesperson's detailed commission statement"
 msgstr "اطبع كشف العمولة التفصيلي لهذا المندوب"
 
 #. module: flousflow_accounting
+#: code:addons/flousflow_accounting/legacy/ff_sales_commission/models/commission_batch.py:0
+msgid "Only accounting users can print salesperson commission statements."
+msgstr "لا يمكن طباعة كشوف عمولات المناديب إلا لمستخدمي المحاسبة."
+
+#. module: flousflow_accounting
 #: model:ir.actions.report,name:flousflow_accounting.ff_sales_commission_statement_report
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_statement
 msgid "Salesperson Commission Statement"

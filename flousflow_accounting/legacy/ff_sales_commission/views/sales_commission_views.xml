@@ -171,13 +171,15 @@
                                     <field name="commission_rate"/>
                                     <field name="commission_amount" sum="Commission"/>
                                     <button name="action_print_statement" type="object" string="Print"
-                                            icon="fa-print" title="Print this salesperson's detailed commission statement"/>
+                                            icon="fa-print" title="Print this salesperson's detailed commission statement"
+                                            groups="account.group_account_invoice,account.group_account_manager"/>
                                     <field name="currency_id" column_invisible="True"/>
                                 </list>
                                 <form string="Commission Result">
                                     <header>
                                         <button name="action_print_statement" type="object" string="Print"
-                                                icon="fa-print" class="btn-secondary"/>
+                                                icon="fa-print" class="btn-secondary"
+                                                groups="account.group_account_invoice,account.group_account_manager"/>
                                     </header>
                                     <sheet>
                                         <group>
