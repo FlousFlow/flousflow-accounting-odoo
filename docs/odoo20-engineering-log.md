@@ -237,4 +237,6 @@
 ### 2026-11-25 — Aged partner inline editor lifecycle fix
 
 - Training UI confirmed OWL invokes `useEffect` during component setup; register it only after initializing the reactive report state, otherwise the first render reads `editingBucket` from an undefined state.
-- Bumped module to `20.0.1.0.88`. Validate the report render and inline Enter/Escape flow on training before production deployment.
+- Bumped module to `20.0.1.0.88`. Verified the training aged payable UI loads, Enter changes `1-30` to `1-10` and recalculates ranges/totals, and Escape cancels an unsubmitted edit; restored default ranges afterward.
+- Upgraded `al_yamen_test` and production `al_yamen` to `20.0.1.0.88`; both Odoo services are active and local `/web/login` returned HTTP 200 (training) and 303 (production). Backups: `/var/backups/odoo/flousflow-aging-inline-20261125/al_yamen_test-before-fe05a52.dump` and `/var/backups/odoo/flousflow-aging-inline-20261125/al_yamen-before-fe05a52.dump`; `pg_restore --list` validated both archives.
+- Release commit: `fe05a52` on branch `20.0`; static JavaScript syntax and `git diff --check` passed. The full automated Odoo test suite was not run.
