@@ -196,6 +196,6 @@
 ### 2026-11-25 — Commission labels and translation import
 
 - Added explicit Arabic translations for the commission run plan, collected total, and status labels.
-- Fixed the final PO entry's missing `module:` comment. Odoo 20's PO importer requires this metadata and crashed while parsing the entry; the test database remains at `20.0.1.0.78` until a clean upgrade succeeds.
-- Bumped the module to `20.0.1.0.80` for the corrected translation catalog.
+- Fixed missing `module:` comments for new PO entries in both `ar.po` and `ar_001.po`. Odoo 20's PO importer requires this metadata and crashed while parsing the second catalog; the test database remains at `20.0.1.0.78` until a clean upgrade succeeds.
+- Bumped the module to `20.0.1.0.81` for the corrected translation catalogs.
 

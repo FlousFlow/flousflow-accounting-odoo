@@ -7175,11 +7175,13 @@ msgstr "أضف شريحة عمولة واحدة على الأقل إلى الخ�
 msgid "Calculated"
 msgstr "تم الاحتساب"
 
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__plan_id
 #: model_terms:ir.ui.view,arch_db:flousflow_accounting.ff_sales_commission_batch_search
 msgid "Plan"
 msgstr "الخطة"
 
+#. module: flousflow_accounting
 #: model:ir.model.fields,field_description:flousflow_accounting.field_ff_sales_commission_batch__total_collected
 msgid "Total Collected"
 msgstr "إجمالي التحصيل"
