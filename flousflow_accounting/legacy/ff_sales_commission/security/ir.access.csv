@@ -1,4 +1,4 @@
-id,name,model_id,group_id/id,operation,domain
+id,name,model_id/id,group_id/id,operation,domain
 acc__commission_plan_manager,Commission plans accounting manager,model_ff_sales_commission_plan,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
 acc__commission_target_manager,Commission targets accounting manager,model_ff_sales_commission_target,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"
 acc__commission_tier_manager,Commission tiers accounting manager,model_ff_sales_commission_tier,account.group_account_manager,crud,"[('company_id', 'in', company_ids)]"

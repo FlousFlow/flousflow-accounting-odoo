@@ -31,7 +31,6 @@ class SalesCommissionPlan(models.Model):
     )
     tier_ids = fields.One2many(
         "ff.sales.commission.tier", "plan_id", string="Commission Tiers", copy=True,
-        order="minimum_achievement asc, id asc",
     )
     journal_id = fields.Many2one(
         "account.journal", string="Commission Journal", required=True,

@@ -30,7 +30,7 @@ class SalesCommissionBatch(models.Model):
     move_id = fields.Many2one(
         "account.move", string="Commission Journal Entry", readonly=True, copy=False, check_company=True,
     )
-    salesperson_count = fields.Integer(compute="_compute_totals")
+    salesperson_count = fields.Integer(compute="_compute_totals", store=True)
     total_sales = fields.Monetary(compute="_compute_totals", currency_field="currency_id", store=True)
     total_collected = fields.Monetary(compute="_compute_totals", currency_field="currency_id", store=True)
     total_commission = fields.Monetary(compute="_compute_totals", currency_field="currency_id", store=True)
