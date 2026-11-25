@@ -204,3 +204,11 @@
 - Moved the manager-only Commission Plans menu to Odoo's standard Accounting Configuration menu (`account.menu_finance_configuration`). Commission Runs remain under the accounting reports/operations menu.
 - Bumped the module to `20.0.1.0.82`.
 
+### 2026-11-25 — Salesperson commission statement
+
+- Aligned commission run summary fields with standard Odoo form groups and added an accounting-user-only Print action on each salesperson result.
+- Added an A4 landscape PDF statement with plan, chosen period, targets, achievements, eligibility, commission basis/rate/amount, each invoice or credit note, and each reconciled payment/bank transaction.
+- Verified report action fields against the installed Odoo 20 source (`group_ids`; no `report_file`) and enforced accounting-group access in both the view and model method.
+- Upgraded only training database `al_yamen_test` to `20.0.1.0.83` after a verified backup at `/var/backups/odoo/flousflow_commission_statement_20261125/al_yamen_test_before_statement.dump`. Confirmed the Turki statement generated as PDF through the live UI (`/report/download` HTTP 200, 152651 bytes); the browser returned to the commission run. Training service returned HTTP 200. Production was not upgraded.
+- Python compilation, manifest/XML parsing, new PO entries, and `git diff --check` passed. The legacy PO catalogs contain pre-existing duplicate message IDs, so `polib` duplicate validation was disabled for parsing while the new entries were checked for exact uniqueness and translation.
+
